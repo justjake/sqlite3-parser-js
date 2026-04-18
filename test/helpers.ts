@@ -79,7 +79,7 @@ export interface TokenTriple {
  * Tokenise `sql` and return lemonjs-shaped triples
  * `{tokenName, rawTokenName, lexeme}`.  Exists so the ported SQLite TCL
  * test files read close to their originals.  `tokenName` and
- * `rawTokenName` are always equal for us — claude-lemon doesn't do the
+ * `rawTokenName` are always equal for us — sqlite3-parser doesn't do the
  * context-aware WINDOW/OVER/FILTER retokenization lemonjs performs —
  * but the field is kept so existing assertions transfer verbatim.
  */

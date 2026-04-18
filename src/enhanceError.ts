@@ -11,7 +11,7 @@
 // message when nothing pattern-matches.
 //
 // Adapted from the lemonjs port; the algorithms are unchanged, but the
-// data access has been rewritten against claude-lemon's LemonDump / CST
+// data access has been rewritten against sqlite3-parser's LemonDump / CST
 // shapes (see src/lempar.ts, src/parser.ts).
 
 import type { LemonDump, SymbolId, TokenId } from './lempar.ts';

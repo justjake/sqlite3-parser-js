@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "claude-lemon/keywords.prod/v1",
+  "$id": "sqlite3-parser/keywords.prod/v1",
   "title": "keywords.prod",
   "type": "object",
   "required": [

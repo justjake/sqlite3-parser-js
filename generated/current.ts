@@ -4,6 +4,6 @@
 // `current`.  The vendor flow regenerates this whenever a new
 // version is onboarded.  Consumers who want to pin a specific
 // version explicitly should import from the versioned subpath
-// instead: `claude-lemon/sqlite-<version>`.
+// instead: `sqlite3-parser/sqlite-<version>`.
 
 export * from './3.54.0/index.ts';

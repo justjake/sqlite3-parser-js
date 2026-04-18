@@ -3,7 +3,7 @@
 // This module wraps the SQLite 3.54.0 parser + tokenizer with the
 // JSON dumps for that version pre-bound, so consumers can just:
 //
-//   import { parse } from 'claude-lemon/sqlite-3.54.0';
+//   import { parse } from 'sqlite3-parser/sqlite-3.54.0';
 //   parse('SELECT 1');
 //
 // Advanced consumers can reach for createParser() / createTokenizer()
@@ -46,7 +46,7 @@ export const KEYWORDS_DUMP = keywordsDump as unknown as KeywordsDump;
  * separator or enabled-flag set live on the tokenizer side; the parser
  * creates one internally using the tokenizer defaults.  If you need to
  * customise the tokenizer, use `createTokenizer(opts)` directly and
- * feed its output to the lower-level API in `claude-lemon/parser`.
+ * feed its output to the lower-level API in `sqlite3-parser/parser`.
  */
 export function createParser() {
   return _createParser(PARSER_DUMP, KEYWORDS_DUMP);

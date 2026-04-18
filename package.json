@@ -1,5 +1,5 @@
 {
-  "name": "claude-lemon",
+  "name": "sqlite3-parser",
   "version": "0.0.0",
   "private": true,
   "type": "module",

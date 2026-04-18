@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "claude-lemon",
+      "name": "sqlite3-parser",
       "devDependencies": {
         "@types/bun": "latest",
         "typebox": "1.1.28",

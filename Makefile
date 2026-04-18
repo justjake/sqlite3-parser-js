@@ -1,5 +1,5 @@
 #
-# Makefile for claude-lemon's version-parameterised build graph.
+# Makefile for sqlite3-parser's version-parameterised build graph.
 #
 # The interesting targets are pattern rules over a `<version>` wildcard
 # (e.g. `3.54.0`) — invoke them with the version baked into the path:
@@ -73,7 +73,7 @@ build/lemon-%: vendor/patched/%/tool/lemon.c
 	cc -O2 -Wall -o $@ $<
 
 # Compile the patched mkkeywordhash.  Define SQLITE_ENABLE_ORDERED_SET_AGGREGATES
-# so the WITHIN keyword lands in the dump (claude-lemon always ships
+# so the WITHIN keyword lands in the dump (sqlite3-parser always ships
 # "maximum keyword set" dumps; runtime flag filtering selects which are
 # active).
 build/mkkeywordhash-%: vendor/patched/%/tool/mkkeywordhash.c

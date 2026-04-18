@@ -419,7 +419,7 @@ function main(): void {
     const schema = SCHEMAS[name];
     const annotated = {
       $schema: 'http://json-schema.org/draft-07/schema#',
-      $id: `claude-lemon/${name}/v${JSON_SCHEMA_VERSION}`,
+      $id: `sqlite3-parser/${name}/v${JSON_SCHEMA_VERSION}`,
       title: name,
       ...schema,
     };

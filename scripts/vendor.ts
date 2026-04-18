@@ -1,7 +1,7 @@
 #!/usr/bin/env -S bun run
 // scripts/vendor.ts — the `bun run vendor <ref>` entry point.
 //
-// Onboards a new SQLite release into claude-lemon:
+// Onboards a new SQLite release into sqlite3-parser:
 //
 //   1. Ensures vendor/submodule/<ref>/ exists.  If missing, adds it as
 //      a git submodule pointing at sqlite.org's GitHub mirror and
