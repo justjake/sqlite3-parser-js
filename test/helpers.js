@@ -53,6 +53,36 @@ export function lexNames(sql, opts, t = tk) {
 }
 
 /**
+ * Tokenise `sql` and return lemonjs-shaped triples
+ * `{tokenName, rawTokenName, lexeme}`.  Exists so the ported SQLite TCL
+ * test files read close to their originals.  `tokenName` and
+ * `rawTokenName` are always equal for us — claude-lemon doesn't do the
+ * context-aware WINDOW/OVER/FILTER retokenization lemonjs performs —
+ * but the field is kept so existing assertions transfer verbatim.
+ */
+export function tokenTriples(sql, t = tk) {
+  const out = [];
+  for (const tok of t.tokenize(sql)) {
+    const name = t.tokenName(tok.type) ?? String(tok.type);
+    out.push({
+      tokenName: name,
+      rawTokenName: name,
+      lexeme: sql.slice(tok.start, tok.start + tok.length),
+    });
+  }
+  return out;
+}
+
+/** Return the lexeme of the first ILLEGAL token in `sql`, or null. */
+export function firstIllegalLexeme(sql, t = tk) {
+  for (const tok of t.tokenize(sql)) {
+    const name = t.tokenName(tok.type);
+    if (name === 'ILLEGAL') return sql.slice(tok.start, tok.start + tok.length);
+  }
+  return null;
+}
+
+/**
  * Shortcut for single-token tests: tokenise `sql`, assert there is
  * exactly one token, return that token.  Trivia is skipped.
  */

@@ -378,6 +378,13 @@ export function createEngine(dump: LemonDump): LalrEngine {
       let act = stack[stack.length - 1].stateno;
       let settled = false;
       while (!settled) {
+        // Capture the state we're about to query *before* findShiftAction
+        // rewrites `act` into an action code.  Needed for error reporting
+        // (diagnostics want the state at the point of failure, not the
+        // YY_ERROR_ACTION sentinel).  Inside this loop, at this point,
+        // `act` is always a state number: either the initial
+        // stack[top].stateno, or the post-reduce state we fetched below.
+        const stateBeforeLookup = act;
         act = findShiftAction(major, act);
 
         if (act >= K.YY_MIN_REDUCE) {
@@ -413,7 +420,7 @@ export function createEngine(dump: LemonDump): LalrEngine {
         }
 
         // (4) Anything else is YY_ERROR_ACTION or YY_NO_ACTION.
-        errors.push({ stateno: act, major, value, inputIndex });
+        errors.push({ stateno: stateBeforeLookup, major, value, inputIndex });
         return { accepted: false, errors };
       }
 

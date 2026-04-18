@@ -25,6 +25,7 @@ import {
   type SymbolId,
   type TokenId,
 } from './lempar.ts';
+import { enhanceParseError } from './enhanceError.ts';
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -38,12 +39,21 @@ export interface TokenNode {
   readonly type: TokenId;
   /** Stringified TK_* name, e.g. `"SELECT"`, `"ID"`, `"INTEGER"`. */
   readonly name: string;
-  /** Source text covered by the token. */
+  /** Source text covered by the token.  Empty string for synthetic tokens. */
   readonly text: string;
   /** Byte offset of the token in the original source string. */
   readonly start: number;
-  /** Length of the token in source characters. */
+  /** Length of the token in source characters.  Zero for synthetic tokens. */
   readonly length: number;
+  /**
+   * True iff this token was injected by the parser rather than read from
+   * the source.  At end-of-input we inject a virtual SEMI (to close the
+   * current statement) and a virtual `$` (to trigger YY_ACCEPT_ACTION);
+   * both carry `synthetic: true`, `text: ""`, `length: 0`, `start:
+   * sql.length`.  `tokenLeaves()` filters these out by default so existing
+   * callers see only source tokens.
+   */
+  readonly synthetic: boolean;
 }
 
 /** An internal node — the result of a grammar reduction. */
@@ -69,10 +79,31 @@ export interface RuleNode {
 export type CstNode = TokenNode | RuleNode;
 
 export interface ParseError {
-  /** Human-readable error message. */
+  /**
+   * Short human-readable summary (`message` is used for back-compat;
+   * prefer `canonical` + `hint` for new code).  Kept in sync with
+   * `canonical` for engine-level errors.
+   */
   readonly message: string;
   /** The offending token, if we had one when the error was raised. */
   readonly token?: TokenNode;
+  /**
+   * SQLite-style canonical summary, e.g. `near "FROM": syntax error`
+   * or `incomplete input`.  Only set for errors that came from the
+   * LALR engine; tokenizer errors (e.g. unrecognised token) only set
+   * `message`.
+   */
+  readonly canonical?: string;
+  /** Grammar-aware hint.  See enhanceError.ts for the heuristics. */
+  readonly hint?: string;
+  /** 1-based line of the failing token, or end of input. */
+  readonly line?: number;
+  /** 1-based column. */
+  readonly col?: number;
+  /** Half-open source range `[start, end)`. */
+  readonly range?: readonly [number, number];
+  /** Display names of terminals that would have been accepted here. */
+  readonly expected?: readonly string[];
 }
 
 export interface ParseResult {
@@ -82,11 +113,12 @@ export interface ParseResult {
   readonly errors: readonly ParseError[];
 }
 
-// Internal — the stack-value type we hand to the engine.  `null`
-// represents a virtual token (the synthetic SEMI or EOF marker we inject
-// at end of input); those never become CST children but they still
-// ride the stack so the engine can dispatch correctly.
-type EngineValue = CstNode | null;
+// Internal — the stack-value type we hand to the engine.  Virtual
+// SEMI/EOF markers ride the stack as real TokenNodes with
+// `synthetic: true`; they appear as CST children like any other token
+// (filtered by `tokenLeaves` by default), and survive into the parse
+// result so diagnostics can see them.
+type EngineValue = CstNode;
 
 // ---------------------------------------------------------------------------
 // createParser — bind the driver to a specific parser.json + keywords.json.
@@ -215,14 +247,12 @@ export function createParser(
     const rule = rules[ruleId];
 
     // Walk popped entries alongside the rule's declared RHS.  Each
-    // non-null entry becomes a child, possibly wrapped in synthetic
-    // unit-rule nodes that Lemon elided.  Null entries — the virtual
-    // SEMI/EOF the parse loop injects — have no source representation
-    // and drop out.
+    // entry becomes a child, possibly wrapped in synthetic unit-rule
+    // nodes that Lemon elided.  Synthetic tokens (injected SEMI/EOF)
+    // ride along with `synthetic: true` and zero-length spans.
     const children: CstNode[] = [];
     for (let i = 0; i < popped.length; i++) {
       const entry = popped[i];
-      if (entry.value === null) continue;
       const rhsPos = rule.rhs[i];
       children.push(
         rhsPos
@@ -296,6 +326,7 @@ export function createParser(
         text: sql.slice(tok.start, tok.start + tok.length),
         start: tok.start,
         length: tok.length,
+        synthetic: false,
       };
       inputs.push({ major: tok.type, value: node });
       lastMajor = tok.type;
@@ -304,29 +335,74 @@ export function createParser(
     // EOF tail — mirrors tokenize.c:674 sqlite3RunParser.  If the last
     // real token wasn't a SEMI, feed a virtual one to close the
     // current statement.  Then feed 0 (end-of-input marker) to trigger
-    // the final reduce/accept.
+    // the final reduce/accept.  Both are real TokenNodes with
+    // `synthetic: true` and zero-length span at `sql.length`.
+    const endPos = sql.length;
     if (lastMajor !== TK_SEMI) {
-      inputs.push({ major: TK_SEMI, value: null });
+      const semiNode: TokenNode = {
+        kind: 'token',
+        type: TK_SEMI,
+        name: symbolName[TK_SEMI] ?? 'SEMI',
+        text: '',
+        start: endPos,
+        length: 0,
+        synthetic: true,
+      };
+      inputs.push({ major: TK_SEMI, value: semiNode });
     }
-    inputs.push({ major: TK_EOF, value: null });
+    const eofNode: TokenNode = {
+      kind: 'token',
+      type: TK_EOF,
+      name: symbolName[TK_EOF] ?? '$',
+      text: '',
+      start: endPos,
+      length: 0,
+      synthetic: true,
+    };
+    inputs.push({ major: TK_EOF, value: eofNode });
 
     const result = engine.run<EngineValue>(inputs, buildRuleNode);
 
-    // Translate engine errors into user-facing ParseErrors.  The engine
-    // tells us what state/major/value were at the point of failure; we
-    // frame it as a syntax-error message with token text for context.
+    // Translate engine errors into user-facing ParseErrors with
+    // grammar-aware diagnostics.  The token list we feed enhanceError
+    // is the same chronological stream we fed the engine, so it can
+    // scan backward for open groups, trailing commas, FILTER-after-OVER,
+    // etc.  `inputs[i].value` is always a TokenNode (real or synthetic).
+    const tokenStream: TokenNode[] = inputs.map((input) => {
+      const v = input.value;
+      // Engine inputs are always terminals, so value is always a
+      // TokenNode; the cast is just to satisfy TypeScript.
+      return v as TokenNode;
+    });
     for (const e of result.errors) {
       const v = e.value;
-      const tokName = symbolName[e.major] ?? String(e.major);
-      errors.push({
-        message:
-          v && v.kind === 'token'
-            ? `syntax error near "${v.text}"`
-            : v && v.kind === 'rule'
-              ? `syntax error near ${v.name}`
-              : `syntax error at end of input (unexpected ${tokName})`,
-        token: v && v.kind === 'token' ? v : undefined,
-      });
+      const tokForError = v.kind === 'token' ? v : undefined;
+      if (tokForError) {
+        const diag = enhanceParseError({
+          sql,
+          token: tokForError,
+          state: e.stateno,
+          dump: parserDump,
+          tokens: tokenStream,
+          tokenIndex: e.inputIndex,
+        });
+        errors.push({
+          message: diag.canonical,
+          token: tokForError,
+          canonical: diag.canonical,
+          hint: diag.hint,
+          line: diag.line,
+          col: diag.col,
+          range: diag.range,
+          expected: diag.expected,
+        });
+      } else {
+        // Shouldn't happen — engine input values are always TokenNodes —
+        // but fall back to a plain message so we don't swallow the error.
+        errors.push({
+          message: `syntax error near ${v.name}`,
+        });
+      }
     }
 
     if (result.accepted && result.root) {
@@ -355,12 +431,14 @@ export function createParser(
 
 /**
  * Pretty-print a CST as indented S-expression-ish text.  Useful for
- * snapshot-style tests and quick inspection in a REPL.
+ * snapshot-style tests and quick inspection in a REPL.  Synthetic tokens
+ * (injected SEMI/EOF) are marked so they stand out from source tokens.
  */
 export function formatCst(node: CstNode, indent = 0): string {
   const pad = '  '.repeat(indent);
   if (node.kind === 'token') {
-    return `${pad}${node.name} ${JSON.stringify(node.text)}`;
+    const marker = node.synthetic ? ' /*synthetic*/' : '';
+    return `${pad}${node.name} ${JSON.stringify(node.text)}${marker}`;
   }
   if (node.children.length === 0) {
     return `${pad}(${node.name})`;
@@ -377,15 +455,23 @@ export function* walkCst(node: CstNode): Generator<CstNode> {
   }
 }
 
-/** Yield only leaf tokens, in source order. */
-export function* tokenLeaves(node: CstNode): Generator<TokenNode> {
+/**
+ * Yield leaf tokens in source order.  Synthetic tokens (injected SEMI/EOF)
+ * are skipped by default; pass `{ includeSynthetic: true }` to see them.
+ */
+export function* tokenLeaves(
+  node: CstNode,
+  opts: { includeSynthetic?: boolean } = {},
+): Generator<TokenNode> {
+  const includeSynthetic = opts.includeSynthetic === true;
   if (node.kind === 'token') {
-    yield node;
+    if (includeSynthetic || !node.synthetic) yield node;
     return;
   }
-  for (const c of node.children) yield* tokenLeaves(c);
+  for (const c of node.children) yield* tokenLeaves(c, opts);
 }
 
 // Re-export the dump type so callers can import it without reaching
 // into the engine module.
 export type { LemonDump } from './lempar.ts';
+export type { EnhancedParseDiagnostic } from './enhanceError.ts';
