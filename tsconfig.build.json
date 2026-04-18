@@ -1,0 +1,37 @@
+{
+  // Build tsconfig — only emits .d.ts files for the shippable set of
+  // modules (src/ + generated/).  Test files, build scripts, and bin
+  // helpers are intentionally excluded so downstream consumers don't
+  // accidentally pick up types for internal tooling.
+  //
+  // `allowImportingTsExtensions` is off here because the corresponding
+  // emitted .d.ts files reference `.d.ts` via Node's usual extension
+  // rewriting, and leaving the .ts extensions in would trip up tsc's
+  // own downstream consumers.  The base tsconfig keeps them on for
+  // dev ergonomics; we override just for the emit pass.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+    "allowImportingTsExtensions": false,
+    "rewriteRelativeImportExtensions": true,
+    "outDir": "./dist",
+    "rootDir": "."
+  },
+  "include": [
+    "src/**/*.ts",
+    "generated/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "vendor",
+    "test/**",
+    "scripts/**",
+    "bin/**",
+    "build/**",
+    "dist/**",
+    "generated/**/lemon"
+  ]
+}

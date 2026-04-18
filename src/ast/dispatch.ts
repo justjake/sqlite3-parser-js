@@ -34,10 +34,16 @@ export type StableKey = string;
  */
 export type SymbolName = (id: SymbolId) => string;
 
-/** Build a `SymbolName` lookup from a dump's `symbols[]` table. */
+/**
+ * Build a `SymbolName` lookup from a dump's `symbols[]` table.  The
+ * symbol id IS the array index — prod dumps don't ship a redundant
+ * `id` field.
+ */
 export function buildSymbolName(dump: Pick<LemonDump, 'symbols'>): SymbolName {
   const byId: string[] = [];
-  for (const s of dump.symbols) byId[s.id] = s.name;
+  for (let i = 0; i < dump.symbols.length; i++) {
+    byId[i] = dump.symbols[i]!.name;
+  }
   return (id) => byId[id] ?? `?${id}`;
 }
 

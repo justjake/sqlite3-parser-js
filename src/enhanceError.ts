@@ -177,8 +177,9 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): EnhancedParse
   // displayExpectedToken for every terminal we probe, so avoid the
   // O(N²) linear scan the lemonjs version does.
   const symbolById = new Map<number, { name: string; isTerminal: boolean }>();
-  for (const s of dump.symbols) {
-    symbolById.set(s.id, { name: s.name, isTerminal: s.isTerminal });
+  for (let i = 0; i < dump.symbols.length; i++) {
+    const s = dump.symbols[i]!;
+    symbolById.set(i, { name: s.name, isTerminal: s.isTerminal });
   }
   const idSymbolId = findIdSymbol(dump);
 
@@ -239,9 +240,10 @@ function collectExpectedTerminals(
 ): string[] {
   const tokenIds = new Set<number>();
   tokenIds.add(0); // end-of-input marker
-  for (const s of dump.symbols) {
-    if (s.isTerminal && s.id < dump.constants.YYNTOKEN) {
-      tokenIds.add(s.id);
+  for (let i = 0; i < dump.symbols.length; i++) {
+    const s = dump.symbols[i]!;
+    if (s.isTerminal && i < dump.constants.YYNTOKEN) {
+      tokenIds.add(i);
     }
   }
 
@@ -295,8 +297,8 @@ function displayExpectedToken(
 }
 
 function findIdSymbol(dump: LemonDump): SymbolId | null {
-  for (const s of dump.symbols) {
-    if (s.name === 'ID') return s.id;
+  for (let i = 0; i < dump.symbols.length; i++) {
+    if (dump.symbols[i]!.name === 'ID') return i as SymbolId;
   }
   return null;
 }

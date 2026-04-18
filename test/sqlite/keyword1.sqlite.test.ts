@@ -19,11 +19,10 @@
 import { describe, test, expect } from 'bun:test';
 import { parserDump, tokenTriples } from '../helpers.ts';
 
-const idSymbol = (parserDump.symbols as Array<{ id: number; name: string }>).find(
-  (s) => s.name === 'ID',
-);
-if (!idSymbol) throw new Error('parser dump is missing the ID terminal');
-const idTokenId = idSymbol.id;
+// Symbol ids are array indices in the prod dump; no explicit `id` field.
+const idTokenId = (parserDump.symbols as Array<{ name: string }>)
+  .findIndex((s) => s.name === 'ID');
+if (idTokenId < 0) throw new Error('parser dump is missing the ID terminal');
 
 const yyFallback = (parserDump.tables.yyFallback ?? []) as number[];
 
@@ -55,11 +54,10 @@ describe('SQLite test/keyword1.test tokenizer-adjacent cases', () => {
       expect(kw.tokenName).toBe(kw.rawTokenName);
 
       // Look up the numeric id for the token via the symbol table.
-      const kwSymbol = (
-        parserDump.symbols as Array<{ id: number; name: string }>
-      ).find((s) => s.name === kw.rawTokenName);
-      expect(kwSymbol).toBeDefined();
-      expect(yyFallback[kwSymbol!.id]).toBe(idTokenId);
+      const kwId = (parserDump.symbols as Array<{ name: string }>)
+        .findIndex((s) => s.name === kw.rawTokenName);
+      expect(kwId).toBeGreaterThanOrEqual(0);
+      expect(yyFallback[kwId]).toBe(idTokenId);
     });
   }
 });

@@ -4,24 +4,32 @@
   "private": true,
   "type": "module",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
-  "main": "./generated/current.ts",
-  "types": "./generated/current.ts",
+  "main": "./dist/generated/current.js",
+  "types": "./dist/generated/current.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    ".":                    "./generated/current.ts",
-    "./sqlite-*":           "./generated/*/index.ts",
-    "./sqlite-*/parser.dev.json":    "./generated/*/parser.dev.json",
-    "./sqlite-*/parser.prod.json":   "./generated/*/parser.prod.json",
-    "./sqlite-*/keywords.dev.json":  "./generated/*/keywords.dev.json",
-    "./sqlite-*/keywords.prod.json": "./generated/*/keywords.prod.json"
+    ".": {
+      "types":   "./dist/generated/current.d.ts",
+      "default": "./dist/generated/current.js"
+    },
+    "./sqlite-*": {
+      "types":   "./dist/generated/*/index.d.ts",
+      "default": "./dist/generated/*/index.js"
+    }
   },
   "scripts": {
+    "build": "bun scripts/build.ts",
     "test": "bun test",
+    "typecheck": "tsc --noEmit",
     "vendor": "bun scripts/vendor.ts",
     "diff:ast": "bun scripts/diff-ast.ts",
     "coverage:ast": "bun scripts/ast-coverage.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "typebox": "1.1.28"
+    "typebox": "1.1.28",
+    "typescript": "^6.0.3"
   }
 }

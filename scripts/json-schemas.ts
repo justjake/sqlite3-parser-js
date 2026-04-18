@@ -33,11 +33,32 @@
 // sqlite release to the JSON_SCHEMA_VERSION it was imported under so
 // version N consumers keep working after we ship version N+1.
 
-import Type from 'typebox';
+import Type, { type Static, type TSchema } from 'typebox';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
 import { PACKAGE_NAME } from './package-info.ts';
+
+// Runtime source-of-truth types.  The *.prod schemas below are locked
+// to these via the `matches<T>()` helper: any drift (schema field
+// added/removed, type widened/narrowed) becomes a TypeScript compile
+// error at the `matches<T>()(...)` call site.
+import type {
+  DumpRhsPos,
+  DumpRule,
+  DumpSymbol,
+  LemonConstants,
+  LemonDump,
+  LemonTables,
+  RuleId   as BrandedRuleId,
+  SymbolId as BrandedSymbolId,
+  TokenId  as BrandedTokenId,
+} from '../src/lempar.ts';
+import type {
+  KeywordEntry,
+  KeywordsDump,
+  MaskFlag,
+} from '../src/tokenize.ts';
 
 // ---------------------------------------------------------------------------
 // Schema version.  Bump on any breaking change to any of the schemas
@@ -67,14 +88,55 @@ function Strict<P extends PropsMap>(props: P) {
 const NullableString = Type.Union([Type.String(), Type.Null()]);
 
 // ---------------------------------------------------------------------------
-// Branded integer namespaces from src/lempar.ts.  JSON Schema can't
-// represent the TypeScript branding; the brand is purely a compile-time
-// aid.  All three ids are non-negative integers at runtime.
+// Schema / runtime-type equality check.
+//
+// Bidirectional structural equality: `IsEqual<A, B>` is `true` iff `A`
+// and `B` are the same shape.  Uses the "function bivariance" trick —
+// TypeScript compares `<T>() => T extends A ? 1 : 2` to the same
+// expression over `B`, which catches drift in either direction.
 // ---------------------------------------------------------------------------
 
-const SymbolId = Type.Integer({ minimum: 0, title: 'SymbolId' });
-const TokenId  = Type.Integer({ minimum: 0, title: 'TokenId'  });
-const RuleId   = Type.Integer({ minimum: 0, title: 'RuleId'   });
+type IsEqual<A, B> =
+  (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2)
+    ? true
+    : false;
+
+/**
+ * Wrap a TypeBox schema and assert its `Static<>` type is structurally
+ * equal to the runtime type `T`.  Pattern:
+ *
+ *   const Foo = matches<RuntimeFoo>()(Strict({ ... }));
+ *
+ * If the schema gains or drops a field (or widens / narrows a field
+ * type) relative to `T`, the call produces a compile error at the
+ * schema expression rather than the schema silently drifting from the
+ * runtime contract.
+ */
+function matches<T>() {
+  return <S extends TSchema>(
+    schema: S &
+      (IsEqual<Static<S>, T> extends true
+        ? unknown
+        : { __schemaMismatch: { expected: T; got: Static<S> } }),
+  ): S => schema as S;
+}
+
+// ---------------------------------------------------------------------------
+// Branded integer namespaces from src/lempar.ts.  JSON Schema can't
+// represent TypeScript branding at the wire level; `Type.Unsafe<T>`
+// produces a schema whose Static carries the brand, so schemas that
+// reference these scalars match the runtime type exactly.
+// ---------------------------------------------------------------------------
+
+const SymbolId = Type.Unsafe<BrandedSymbolId>(
+  Type.Integer({ minimum: 0, title: 'SymbolId' }),
+);
+const TokenId = Type.Unsafe<BrandedTokenId>(
+  Type.Integer({ minimum: 0, title: 'TokenId' }),
+);
+const RuleId = Type.Unsafe<BrandedRuleId>(
+  Type.Integer({ minimum: 0, title: 'RuleId' }),
+);
 
 // ===========================================================================
 // PARSER DEV SCHEMA — mirrors tool/lemon.c::ReportTableJSON (patched).
@@ -250,7 +312,7 @@ const ParserDevSchema = Strict({
 // scripts/slim-dump.ts walks to produce *.prod.json from *.dev.json.
 // ===========================================================================
 
-const ParserProdConstants = Strict({
+const ParserProdConstants = matches<LemonConstants>()(Strict({
   YYNSTATE:           Type.Integer(),
   YYNRULE:            Type.Integer(),
   YYNTOKEN:           Type.Integer(),
@@ -268,52 +330,58 @@ const ParserProdConstants = Strict({
   YY_REDUCE_COUNT:    Type.Integer(),
   YYWILDCARD:         Type.Integer(),
   YYFALLBACK:         Type.Union([Type.Literal(0), Type.Literal(1)]),
-});
+}));
 
-const ParserProdTables = Strict({
+const ParserProdTables = matches<LemonTables>()(Strict({
   yy_action:      Type.Array(Type.Integer()),
   yy_lookahead:   Type.Array(SymbolId),
   yy_shift_ofst:  Type.Array(Type.Integer()),
   yy_reduce_ofst: Type.Array(Type.Integer()),
   yy_default:     Type.Array(Type.Integer()),
   yyFallback:     Type.Optional(Type.Array(TokenId)),
-});
+}));
 
-const ParserProdSymbol = Strict({
-  id:         SymbolId,
+// `id` is redundant with the symbol's array index and is stripped from
+// prod dumps.  Callers that need a SymbolId use the array position.
+const ParserProdSymbol = matches<DumpSymbol>()(Strict({
   name:       Type.String(),
   isTerminal: Type.Boolean(),
-});
+}));
+
+// The multi-entry element shape lives inline on `DumpRhsPos.multi` in
+// src/lempar.ts; pull it out for the schema match.
+type DumpRhsPosMulti = NonNullable<DumpRhsPos['multi']>[number];
 
 // The runtime resolves symbol names via the top-level `symbols[]` table
 // (see buildSymbolName in src/ast/dispatch.ts), so rhs positions carry
 // only the numeric ids.  Stripping the redundant names shaves ~18 KB raw
 // / ~1.7 KB gzipped per version from parser.prod.json.
-const ParserProdMultiEntry = Strict({
+const ParserProdMultiEntry = matches<DumpRhsPosMulti>()(Strict({
   symbol: SymbolId,
-});
+}));
 
-const ParserProdRhsPos = Strict({
-  pos:    Type.Integer(),
+// `pos` is redundant with the RHS position's array index and is
+// stripped from prod dumps.
+const ParserProdRhsPos = matches<DumpRhsPos>()(Strict({
   symbol: Type.Optional(SymbolId),
   multi:  Type.Optional(Type.Array(ParserProdMultiEntry)),
-});
+}));
 
-const ParserProdRule = Strict({
-  id:         RuleId,
+// `id` is redundant with the rule's array index; `nrhs` is redundant
+// with `rhs.length`.  Both stripped from prod dumps.
+const ParserProdRule = matches<DumpRule>()(Strict({
   lhs:        SymbolId,
   lhsName:    Type.String(),
-  nrhs:       Type.Integer(),
   rhs:        Type.Array(ParserProdRhsPos),
   doesReduce: Type.Boolean(),
-});
+}));
 
-const ParserProdSchema = Strict({
+const ParserProdSchema = matches<LemonDump>()(Strict({
   constants: ParserProdConstants,
   tables:    ParserProdTables,
   symbols:   Type.Array(ParserProdSymbol),
   rules:     Type.Array(ParserProdRule),
-});
+}));
 
 // ===========================================================================
 // KEYWORDS DEV SCHEMA — mirrors tool/mkkeywordhash.c::dump_keywords_json.
@@ -330,10 +398,16 @@ const KW_MASK_FLAG_NAMES = [
   'GENCOL', 'RETURNING', 'ORDERSET',
 ] as const;
 
+// The cast preserves the literal-keyed shape so `Static<>` produces
+// `{ ALTER: number; ALWAYS: number; … }` — structurally equal to
+// `Record<MaskFlag, number>` — instead of a loose `Record<string, number>`.
+// Runtime behaviour is unchanged (`Object.fromEntries` returns an object
+// keyed by the 24 flag names regardless of the TS cast).
+type MaskFlagsProps = { [K in MaskFlag]: ReturnType<typeof Type.Integer> };
 const KeywordsDevMaskFlags = Strict(
   Object.fromEntries(
     KW_MASK_FLAG_NAMES.map((n) => [n, Type.Integer()]),
-  ) as PropsMap,
+  ) as MaskFlagsProps,
 );
 
 const KeywordsDevMeta = Strict({
@@ -368,20 +442,26 @@ const KeywordsDevSchema = Strict({
 // Matches src/tokenize.ts::KeywordsDump minus the debug-only fields.
 // ===========================================================================
 
-const KeywordsProdMeta = Strict({
+const KeywordsProdMeta = matches<KeywordsDump['meta']>()(Strict({
   maskFlags: KeywordsDevMaskFlags,
-});
+}));
 
-const KeywordsProdEntry = Strict({
+// `Type.Unsafe<MaskFlag>(Type.String())` is a plain-string JSON Schema
+// whose Static is the `MaskFlag` literal union, so the array element's
+// TS type matches the runtime contract.  The wire format is still a
+// JSON string; validation here doesn't enforce the enum — the runtime
+// handles unknown flags via the same "hex literal" path used for dev
+// dumps (mkkeywordhash.c:514).
+const KeywordsProdEntry = matches<KeywordEntry>()(Strict({
   name:      Type.String(),
   tokenName: Type.String(),
-  flags:     Type.Array(Type.String()),
-});
+  flags:     Type.Array(Type.Unsafe<MaskFlag>(Type.String())),
+}));
 
-const KeywordsProdSchema = Strict({
+const KeywordsProdSchema = matches<KeywordsDump>()(Strict({
   meta:     KeywordsProdMeta,
   keywords: Type.Array(KeywordsProdEntry),
-});
+}));
 
 // ---------------------------------------------------------------------------
 // Schema registry.  Keys match what validate-json.ts accepts as its

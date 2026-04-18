@@ -132,9 +132,12 @@ export function createParser(
   const rules = parserDump.rules;
 
   // Symbol-id → display name (used to build the CST token names).
-  // Mirrors yyTokenName[] in the generated parse.c.
+  // Mirrors yyTokenName[] in the generated parse.c.  Symbols are
+  // keyed on array index — the prod dump has no explicit `id` field.
   const symbolName: string[] = [];
-  for (const sym of parserDump.symbols) symbolName[sym.id] = sym.name;
+  for (let i = 0; i < parserDump.symbols.length; i++) {
+    symbolName[i] = parserDump.symbols[i]!.name;
+  }
 
   // -------------------------------------------------------------------------
   // CST DIVERGENCE #1 — Unit-rule-elimination recovery.
@@ -153,15 +156,22 @@ export function createParser(
   // all 14 collapsed rules are 1:1 unit rules; a single lookup
   // suffices.
   // -------------------------------------------------------------------------
-  const unitWrapper = new Map<SymbolId, Map<SymbolId, DumpRule>>();
-  for (const r of rules) {
+  // Each entry carries the rule plus the rule id (its index in `rules`),
+  // since we drop `rule.id` from the prod dump and still need to stamp
+  // the wrapper's `RuleNode.rule` at synthesis time.
+  const unitWrapper = new Map<
+    SymbolId,
+    Map<SymbolId, { rule: DumpRule; ruleId: RuleId }>
+  >();
+  for (let i = 0; i < rules.length; i++) {
+    const r = rules[i]!;
     if (r.doesReduce) continue;
-    if (r.nrhs !== 1) continue;
+    if (r.rhs.length !== 1) continue;
     const src = r.rhs[0]?.symbol;
     if (src === undefined) continue;
     let inner = unitWrapper.get(r.lhs);
     if (!inner) unitWrapper.set(r.lhs, (inner = new Map()));
-    inner.set(src, r);
+    inner.set(src, { rule: r, ruleId: i as RuleId });
   }
 
   // -------------------------------------------------------------------------
@@ -206,11 +216,12 @@ export function createParser(
       // rather than an elision.
       const target = expected.symbol;
       if (target === undefined) break;
-      const wrapperRule = unitWrapper.get(target)?.get(curMajor);
-      if (!wrapperRule) break;
+      const wrapperEntry = unitWrapper.get(target)?.get(curMajor);
+      if (!wrapperEntry) break;
+      const { rule: wrapperRule, ruleId: wrapperId } = wrapperEntry;
       cur = {
         kind: 'rule',
-        rule: wrapperRule.id,
+        rule: wrapperId,
         name: wrapperRule.lhsName,
         lhs: wrapperRule.lhs,
         children: [cur],

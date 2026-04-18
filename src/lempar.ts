@@ -118,14 +118,16 @@ export interface LemonTables {
   yyFallback?: TokenId[];
 }
 
+// Symbol / rule / rhs-position shapes after slim-dump strips the
+// fields that are recoverable from array position.  Callers that need
+// a SymbolId / RuleId use the element's index in the owning array.
+
 export interface DumpSymbol {
-  id: SymbolId;
   name: string;
   isTerminal: boolean;
 }
 
 export interface DumpRhsPos {
-  pos: number;
   /** Single terminal/nonterminal symbol id at this position. */
   symbol?: SymbolId;
   /** For `%token_class foo A|B|C` positions, the set of accepted symbols. */
@@ -133,10 +135,8 @@ export interface DumpRhsPos {
 }
 
 export interface DumpRule {
-  id: RuleId;
   lhs: SymbolId;
   lhsName: string;
-  nrhs: number;
   rhs: DumpRhsPos[];
   /**
    * `false` when Lemon's unit-rule elimination proved this reduction
@@ -344,7 +344,7 @@ export function createEngine(dump: LemonDump): LalrEngine {
     function doReduce(ruleId: RuleId): void {
       const rule = rules[ruleId];
       const lhs = rule.lhs;
-      const nrhs = rule.nrhs;
+      const nrhs = rule.rhs.length;
 
       // Pop nrhs entries into `popped`, in source order.  We pop
       // last-first and reverse so that popped[i] corresponds to the

@@ -153,16 +153,10 @@
       "items": {
         "type": "object",
         "required": [
-          "id",
           "name",
           "isTerminal"
         ],
         "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "SymbolId"
-          },
           "name": {
             "type": "string"
           },
@@ -178,19 +172,12 @@
       "items": {
         "type": "object",
         "required": [
-          "id",
           "lhs",
           "lhsName",
-          "nrhs",
           "rhs",
           "doesReduce"
         ],
         "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "RuleId"
-          },
           "lhs": {
             "type": "integer",
             "minimum": 0,
@@ -199,20 +186,11 @@
           "lhsName": {
             "type": "string"
           },
-          "nrhs": {
-            "type": "integer"
-          },
           "rhs": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": [
-                "pos"
-              ],
               "properties": {
-                "pos": {
-                  "type": "integer"
-                },
                 "symbol": {
                   "type": "integer",
                   "minimum": 0,

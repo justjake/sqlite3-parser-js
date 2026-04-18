@@ -36,30 +36,37 @@ export type MaskFlag =
   | 'VTAB' | 'AUTOVACUUM' | 'CTE' | 'UPSERT'
   | 'WINDOWFUNC' | 'GENCOL' | 'RETURNING' | 'ORDERSET';
 
-/** One keyword entry in the dump produced by the patched mkkeywordhash. */
+/**
+ * One keyword entry in the runtime (prod) keyword dump.
+ *
+ * The dev dump also carries `priority` (hash-chain ordering) and `mask`
+ * (raw bitmask); both are stripped by scripts/slim-dump.ts because the
+ * runtime only needs the decoded `flags` array.  The prod JSON Schema
+ * in scripts/json-schemas.ts is locked to this shape via `matches<>`.
+ */
 export interface KeywordEntry {
   /** Uppercase ASCII keyword text, e.g. `"SELECT"`, `"BEGIN"`. */
-  readonly name: string;
+  name: string;
   /** Lemon TK_* symbol name with the `TK_` prefix, e.g. `"TK_SELECT"`. */
-  readonly tokenName: string;
-  /** mkkeywordhash's hash-chain priority (higher = probed first). */
-  readonly priority: number;
-  /** Raw bitmask; bit positions are documented on MaskFlag. */
-  readonly mask: number;
-  /** Symbolic flag names equivalent to `mask`. */
-  readonly flags: readonly MaskFlag[];
+  tokenName: string;
+  /** Symbolic flag names equivalent to the mask. */
+  flags: MaskFlag[];
 }
 
-/** Shape of the keywords.json file produced by mkkeywordhash -J. */
+/**
+ * Shape of keywords.prod.json (what the JS runtime reads).
+ *
+ * Strict subset of the dev dump: `meta.sourceFile`,
+ * `meta.schemaVersion`, and `meta.keywordCount` are debug-only and
+ * stripped by slim-dump.  Keep this type in lockstep with
+ * scripts/json-schemas.ts's `KeywordsProdSchema`.
+ */
 export interface KeywordsDump {
-  readonly meta: {
-    readonly sourceFile: string;
-    readonly schemaVersion: number;
-    readonly keywordCount: number;
+  meta: {
     /** Bit-name → bit-value map; mirrors the maskFlags in the C patch. */
-    readonly maskFlags: Readonly<Record<MaskFlag, number>>;
+    maskFlags: Record<MaskFlag, number>;
   };
-  readonly keywords: readonly KeywordEntry[];
+  keywords: KeywordEntry[];
 }
 
 /** Options for `createTokenizer`. */
@@ -288,9 +295,10 @@ export function createTokenizer(
   // TS can't prove that, so we do the cast at the assignment boundary.
   const tokenCode = new Map<string, TokenId>();
   const tokenNameMap = new Map<TokenId, string>();
-  for (const sym of parserDump.symbols) {
+  for (let i = 0; i < parserDump.symbols.length; i++) {
+    const sym = parserDump.symbols[i]!;
     if (!sym.isTerminal) continue;
-    const id = sym.id as TokenId;
+    const id = i as TokenId;
     tokenCode.set(sym.name, id);
     tokenNameMap.set(id, sym.name);
   }
