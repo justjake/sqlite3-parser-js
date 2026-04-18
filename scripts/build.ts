@@ -42,9 +42,10 @@
 // 'browser'` produces JS that also runs on Node ≥ 18 and Bun without
 // a per-platform build matrix.
 
-import { mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { mkdirSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { gzipSync } from 'node:zlib';
 
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const GENERATED = join(ROOT, 'generated');
@@ -100,7 +101,12 @@ async function buildJs(versions: string[]): Promise<void> {
     format: 'esm',
     splitting: true,
     sourcemap: 'linked',
-    minify: false,
+    // Minify whitespace + rename identifiers + drop dead code.  Gives
+    // a meaningful reduction in raw bundle bytes; the gzipped delta is
+    // smaller because gzip already squeezes whitespace and repetitive
+    // identifiers.  Sourcemaps are emitted alongside so debuggers and
+    // error reporters can still show original symbol names.
+    minify: true,
   });
 
   if (!r.success) {
@@ -125,6 +131,83 @@ function buildTypes(): void {
   if (r.status !== 0) throw new Error('tsc --emitDeclarationOnly failed');
 }
 
+// ---------------------------------------------------------------------------
+// Size reporting.
+// ---------------------------------------------------------------------------
+
+/** Human-readable bytes, rounded to one decimal place for KB and up. */
+function fmtBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  return `${(n / 1024).toFixed(1)} KB`;
+}
+
+/** Walk `dir` recursively, returning every non-sourcemap .js file. */
+function walkJs(dir: string): string[] {
+  const out: string[] = [];
+  const stack: string[] = [dir];
+  while (stack.length) {
+    const d = stack.pop()!;
+    for (const entry of readdirSync(d)) {
+      const p = join(d, entry);
+      if (statSync(p).isDirectory()) stack.push(p);
+      else if (p.endsWith('.js')) out.push(p);
+    }
+  }
+  return out;
+}
+
+/**
+ * Print the per-file size table and per-entrypoint effective totals.
+ *
+ * An "entrypoint" file is one that consumers name directly (matched to
+ * package.json's `exports`); a "chunk" is bun's shared code extracted
+ * by `splitting: true`.  We tell them apart by filename — bun emits
+ * chunks as `chunk-<hash>.js`.
+ *
+ * The effective per-entrypoint size assumes every entry loads every
+ * chunk.  This is exact for our current tree (one shared chunk serves
+ * both entries) and over-reports for grammars where bun produces
+ * multiple disjoint chunks — refine later if that changes.
+ */
+function reportSizes(): void {
+  const jsFiles = walkJs(DIST).sort();
+  const entries = jsFiles.filter((f) => !basename(f).startsWith('chunk-'));
+  const chunks  = jsFiles.filter((f) =>  basename(f).startsWith('chunk-'));
+
+  // Pre-read to avoid hitting disk twice per file for raw + gzip calcs.
+  const bytes = new Map<string, Buffer>();
+  for (const f of jsFiles) bytes.set(f, readFileSync(f));
+
+  log('');
+  log('bundle sizes:');
+  log(`  ${'file'.padEnd(42)}  ${'raw'.padStart(9)}  ${'gzipped'.padStart(11)}`);
+  for (const f of [...entries, ...chunks]) {
+    const b = bytes.get(f)!;
+    const raw = b.byteLength;
+    const gz = gzipSync(b).byteLength;
+    log(
+      `  ${relative(ROOT, f).padEnd(42)}  ` +
+      `${fmtBytes(raw).padStart(9)}  ` +
+      `(${fmtBytes(gz).padStart(8)} gz)`,
+    );
+  }
+
+  if (entries.length === 0 || chunks.length === 0) return;
+
+  // Concatenate all chunks once — every entry's effective download is
+  // "this entry" + "all the chunks" because (for now) every entry
+  // transitively imports every chunk.
+  const chunkBytes = Buffer.concat(chunks.map((c) => bytes.get(c)!));
+
+  log('');
+  log('effective entrypoint download (entry + shared chunks, gzipped):');
+  for (const e of entries) {
+    const combined = Buffer.concat([bytes.get(e)!, chunkBytes]);
+    const gz = gzipSync(combined).byteLength;
+    log(`  ${relative(ROOT, e).padEnd(42)}  ${fmtBytes(gz).padStart(9)} gz`);
+  }
+}
+
 async function main(): Promise<void> {
   clean();
   const versions = discoverVersions();
@@ -134,6 +217,7 @@ async function main(): Promise<void> {
   }
   await buildJs(versions);
   buildTypes();
+  reportSizes();
   log('done.');
 }
 
