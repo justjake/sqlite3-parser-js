@@ -37,6 +37,8 @@ import Type from 'typebox';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
+import { PACKAGE_NAME } from './package-info.ts';
+
 // ---------------------------------------------------------------------------
 // Schema version.  Bump on any breaking change to any of the schemas
 // below.  scripts/vendor.ts stamps this into every manifest entry so
@@ -283,16 +285,18 @@ const ParserProdSymbol = Strict({
   isTerminal: Type.Boolean(),
 });
 
+// The runtime resolves symbol names via the top-level `symbols[]` table
+// (see buildSymbolName in src/ast/dispatch.ts), so rhs positions carry
+// only the numeric ids.  Stripping the redundant names shaves ~18 KB raw
+// / ~1.7 KB gzipped per version from parser.prod.json.
 const ParserProdMultiEntry = Strict({
   symbol: SymbolId,
-  name:   Type.String(),
 });
 
 const ParserProdRhsPos = Strict({
   pos:    Type.Integer(),
   symbol: Type.Optional(SymbolId),
   multi:  Type.Optional(Type.Array(ParserProdMultiEntry)),
-  name:   Type.Optional(Type.String()),
 });
 
 const ParserProdRule = Strict({
@@ -419,7 +423,10 @@ function main(): void {
     const schema = SCHEMAS[name];
     const annotated = {
       $schema: 'http://json-schema.org/draft-07/schema#',
-      $id: `sqlite3-parser/${name}/v${JSON_SCHEMA_VERSION}`,
+      // Version segment sits BEFORE the schema name so that a future
+      // schema-version bump can freely drop, rename, or add schemas
+      // without stepping on v1's $id namespace.
+      $id: `${PACKAGE_NAME}/v${JSON_SCHEMA_VERSION}/${name}`,
       title: name,
       ...schema,
     };

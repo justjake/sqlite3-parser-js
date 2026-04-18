@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "sqlite3-parser/parser.prod/v1",
+  "$id": "sqlite3-parser/v1/parser.prod",
   "title": "parser.prod",
   "type": "object",
   "required": [
@@ -223,24 +223,17 @@
                   "items": {
                     "type": "object",
                     "required": [
-                      "symbol",
-                      "name"
+                      "symbol"
                     ],
                     "properties": {
                       "symbol": {
                         "type": "integer",
                         "minimum": 0,
                         "title": "SymbolId"
-                      },
-                      "name": {
-                        "type": "string"
                       }
                     },
                     "additionalProperties": false
                   }
-                },
-                "name": {
-                  "type": "string"
                 }
               },
               "additionalProperties": false

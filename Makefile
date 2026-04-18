@@ -51,6 +51,10 @@ help:
 	  '  make json-schemas                       # (re)generate JSON Schemas' \
 	  '  make clean                              # delete build/, keep generated/' \
 	  '' \
+	  'AST layer:' \
+	  '  make diff-ast OLD=<ver> NEW=<ver>       # grammar-shape diff' \
+	  '  make ast-coverage VER=<ver>             # unhit-rule report' \
+	  '' \
 	  'For onboarding a new sqlite release, use:' \
 	  '  bun run vendor <ref>                    # full workflow' \
 	  ''
@@ -175,3 +179,30 @@ generated/current.ts: \
 
 .PHONY: current
 current: generated/current.ts
+
+# ---------------------------------------------------------------------------
+# AST layer helpers.  The AST code itself is version-agnostic (see
+# src/ast/); these targets are just thin wrappers around the scripts
+# that inspect generated/<ver>/parser.dev.json.
+# ---------------------------------------------------------------------------
+
+# Diff the grammar-shape stable keys between two parser.dev.json dumps.
+#   make diff-ast OLD=3.54.0 NEW=3.55.0
+.PHONY: diff-ast
+diff-ast:
+	@test -n "$(OLD)" -a -n "$(NEW)" \
+	  || { echo 'usage: make diff-ast OLD=<ver> NEW=<ver>'; exit 2; }
+	bun scripts/diff-ast.ts \
+	  generated/$(OLD)/parser.dev.json \
+	  generated/$(NEW)/parser.dev.json
+
+# Report which action-bearing rules were NOT exercised by the test
+# suite.  Expects tests to have written build/test/ast-coverage.json —
+# a JSON array of stable keys.
+#   make ast-coverage VER=3.54.0
+.PHONY: ast-coverage
+ast-coverage:
+	@test -n "$(VER)" || { echo 'usage: make ast-coverage VER=<ver>'; exit 2; }
+	bun scripts/ast-coverage.ts \
+	  generated/$(VER)/parser.dev.json \
+	  build/test/ast-coverage.json

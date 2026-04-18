@@ -129,8 +129,7 @@ export interface DumpRhsPos {
   /** Single terminal/nonterminal symbol id at this position. */
   symbol?: SymbolId;
   /** For `%token_class foo A|B|C` positions, the set of accepted symbols. */
-  multi?: Array<{ symbol: SymbolId; name: string }>;
-  name?: string;
+  multi?: Array<{ symbol: SymbolId }>;
 }
 
 export interface DumpRule {

@@ -1,7 +1,8 @@
 #!/usr/bin/env -S bun run
 // scripts/vendor.ts — the `bun run vendor <ref>` entry point.
 //
-// Onboards a new SQLite release into sqlite3-parser:
+// Onboards a new SQLite release into this package (name taken from
+// package.json via PACKAGE_NAME):
 //
 //   1. Ensures vendor/submodule/<ref>/ exists.  If missing, adds it as
 //      a git submodule pointing at sqlite.org's GitHub mirror and
@@ -53,6 +54,7 @@ import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 import { JSON_SCHEMA_VERSION } from './json-schemas.ts';
+import { PACKAGE_NAME } from './package-info.ts';
 
 // ---------------------------------------------------------------------------
 // Paths.  Resolve everything relative to the package root so the script
@@ -405,7 +407,7 @@ async function main(): Promise<void> {
   ], { cwd: ROOT });
 
   console.log(
-    `\nDone.  Version ${cli.ref} is now the current version.  Next:\n` +
+    `\n${PACKAGE_NAME}: version ${cli.ref} is now current.  Next:\n` +
     `  * review vendor/patched/${cli.ref}/tool/*.c for correctness\n` +
     `  * run \`bun test\`\n` +
     `  * commit the new files + manifest if everything looks right`,

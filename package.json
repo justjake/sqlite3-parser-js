@@ -16,7 +16,9 @@
   },
   "scripts": {
     "test": "bun test",
-    "vendor": "bun scripts/vendor.ts"
+    "vendor": "bun scripts/vendor.ts",
+    "diff:ast": "bun scripts/diff-ast.ts",
+    "coverage:ast": "bun scripts/ast-coverage.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",

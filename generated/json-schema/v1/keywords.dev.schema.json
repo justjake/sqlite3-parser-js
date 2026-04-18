@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "sqlite3-parser/keywords.dev/v1",
+  "$id": "sqlite3-parser/v1/keywords.dev",
   "title": "keywords.dev",
   "type": "object",
   "required": [
