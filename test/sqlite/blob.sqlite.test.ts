@@ -6,7 +6,7 @@
 // surfaces as ILLEGAL with the *same* lexeme span sqlite reports.
 
 import { describe, test, expect } from 'bun:test';
-import { tokenTriples, firstIllegalLexeme } from '../helpers.js';
+import { tokenTriples, firstIllegalLexeme } from '../helpers.ts';
 
 describe('SQLite test/blob.test tokenizer cases', () => {
   test('blob-1.3.x recognizes valid blob literals', () => {

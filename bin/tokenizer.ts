@@ -3,7 +3,7 @@
 // `bin/tokenizer.ts "SELECT 1_2_3"` answers "does this produce QNUMBER
 // or ILLEGAL?" without a full parse.
 //
-// Reads parser.json + keywords.json from --dir (default: ../fixtures
+// Reads parser.json + keywords.json from --dir (default: ../generated
 // relative to this file) and prints every token as JSON
 // `{type, name, start, length, text}`.  By default trivia (SPACE /
 // COMMENT) is skipped; pass --include-trivia to see it.
@@ -15,7 +15,7 @@ import { dirname, join, resolve } from 'node:path';
 import { createTokenizer } from '../src/tokenize.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_DIR = join(here, '..', 'fixtures');
+const DEFAULT_DIR = join(here, '..', 'generated');
 
 interface CliOptions {
   dir: string;
@@ -29,7 +29,7 @@ function usage(): string {
     'usage: bin/tokenizer.ts [--dir <path>] [--include-trivia]\n' +
     '                       [--digit-separator <char>] ["<sql>"]\n' +
     '  --dir               directory containing parser.json + keywords.json\n' +
-    '                      (default: ../fixtures relative to this script)\n' +
+    '                      (default: ../generated relative to this script)\n' +
     '  --include-trivia    emit SPACE / COMMENT tokens (default: skip)\n' +
     '  --digit-separator   single-char separator for numeric literals\n' +
     '                      (default: disabled; pass "_" for sqlite 3.45+)\n' +

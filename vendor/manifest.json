@@ -1,0 +1,15 @@
+{
+  "sqliteVersion": "3.54.0",
+  "upstreamCommit": "8c6a6b85db408ebbea76fb67e4c3a2d5cb656665",
+  "upstreamUrl": "https://sqlite.org/src/timeline",
+  "jsonSchemaVersion": 1,
+  "notes": "Our patches to tool/lemon.c and tool/mkkeywordhash.c add a `-J<path>` flag that writes a machine-readable JSON dump of the parser tables / keyword table for the JS build.  Nothing else is modified.  See claude-lemon/vendor/patched/*.c for the patched versions; claude-lemon/vendor/upstream/<version>/ holds the pristine upstream baseline for 3-way merge purposes.  tool/lempar.c and src/parse.y are vendored read-only — we don't patch them, but the JSON emitter and JS runtime depend on their shapes, so changes trigger an audit (see scripts/updateSqliteSource.ts).",
+  "fileHashes": {
+    "patched/tool/lemon.c":                  "b4de914b61cbce129eb01399aa50cf2a01ead405401cf0a3a4591be9c69cbe7e",
+    "patched/tool/mkkeywordhash.c":          "4c69f550e5f340487b60bf9ad9c420711e03cf30ab714c59adf0dc0db9c94c9a",
+    "upstream/3.54.0/tool/lemon.c":          "4d754e12d4693a12c2ca2e02dd132dd251e6329ff2d8ae5874bf0d0fa58face6",
+    "upstream/3.54.0/tool/mkkeywordhash.c":  "099f834d82274c1c4dd1a31fb7f2ad59cf1e71db30f5fd87772d2dfc70c35cae",
+    "upstream/3.54.0/tool/lempar.c":         "72e998c9c61753acd8d3ee8f6b2057269669dae8aa1bb833c01d793f1a341498",
+    "upstream/3.54.0/src/parse.y":           "e91e0e0e308462d250aa98d3707575ec6c0ce0b252251d4414f90908ce4e8510"
+  }
+}

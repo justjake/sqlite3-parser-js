@@ -16,15 +16,15 @@
 // is produced at top level (outside any string/comment).
 
 import { describe, test, expect } from 'bun:test';
-import { lex } from '../helpers.js';
+import { lex } from '../helpers.ts';
 
 /** Does the token stream contain a top-level (non-trivia) SEMI? */
-function hasTopLevelSemi(sql) {
+function hasTopLevelSemi(sql: string): boolean {
   return lex(sql).some((t) => t.name === 'SEMI');
 }
 
 /** Does the token stream contain any ILLEGAL token? */
-function hasIllegal(sql) {
+function hasIllegal(sql: string): boolean {
   return lex(sql).some((t) => t.name === 'ILLEGAL');
 }
 

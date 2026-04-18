@@ -1,8 +1,8 @@
 // Slim a parser.json or keywords.json dump down to only the fields
 // the JS runtime actually reads.  Intended for the build pipeline:
 //
-//     bun scripts/slim-dump.ts fixtures/parser.json   dist/parser.slim.json
-//     bun scripts/slim-dump.ts fixtures/keywords.json dist/keywords.slim.json
+//     bun scripts/slim-dump.ts generated/parser.json   dist/parser.slim.json
+//     bun scripts/slim-dump.ts generated/keywords.json dist/keywords.slim.json
 //
 // The output is the same JSON schema with unused fields stripped, so
 // the runtime modules don't need to know whether they're reading a

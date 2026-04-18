@@ -12,10 +12,10 @@
 // code can reparse with separators stripped.
 
 import { describe, test, expect } from 'bun:test';
-import { lex, tkSep } from '../helpers.js';
+import { lex, tkSep } from '../helpers.ts';
 
 /** Tokenise with the digit separator enabled (matches literal-3.* cases). */
-function lexSep(sql) {
+function lexSep(sql: string) {
   return lex(sql, undefined, tkSep);
 }
 
@@ -131,7 +131,7 @@ describe('literal-4 (malformed numeric literals)', () => {
   // "ILLEGAL at lex time" and (b) "QNUMBER at lex time, rejected later".
 
   describe('(a) ILLEGAL at the tokenizer — exponent without digits', () => {
-    const rows = [
+    const rows: Array<[number, string, string]> = [
       [ 0, '123a456', '123a456'],   // literal-4.0 — digit-then-letter
       [ 3, '1e_4',    '1e_4'    ],  // literal-4.3
       [ 6, '1.4e+_4', '1.4e'    ],  // literal-4.6
@@ -150,7 +150,7 @@ describe('literal-4 (malformed numeric literals)', () => {
     // These mirror util.c:339 sqlite3DequoteNumber's rejection of any
     // separator whose left or right neighbour isn't a digit, but our
     // tokenizer stops short of that validation (matches tokenize.c).
-    const rows = [
+    const rows: Array<[number, string]> = [
       [ 1, '1_'           ],  // trailing separator
       [ 2, '1_.4'         ],  // separator before dot
       [ 4, '1_e4'         ],  // separator before exponent

@@ -15,10 +15,11 @@ import {
   sqlite3GetInt32,
   sqlite3AtoF,
   ATOI_OK, ATOI_EXCESS_TEXT, ATOI_OVERFLOW, ATOI_AT_INT64_MIN,
-} from '../../src/util.js';
-import { tkSep, lex } from '../helpers.js';
+} from '../../src/util.ts';
+import { tkSep, lex } from '../helpers.ts';
+import type { NumericOp } from '../../src/util.ts';
 
-const lexSep = (sql) => lex(sql, undefined, tkSep);
+const lexSep = (sql: string) => lex(sql, undefined, tkSep);
 
 describe('sqlite3Dequote', () => {
   test("single-quoted strings collapse '' to '", () => {
@@ -281,7 +282,7 @@ describe('tokenizer → util pipeline', () => {
   });
 
   test('valid QNUMBERs round-trip through DequoteNumber', () => {
-    const rows = [
+    const rows: Array<[string, NumericOp, string]> = [
       ['1_000',   'INTEGER', '1000'],
       ['1.1_1',   'FLOAT',   '1.11'],
       ['1_0.1_1', 'FLOAT',   '10.11'],

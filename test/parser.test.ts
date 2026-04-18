@@ -23,9 +23,9 @@ import {
 } from '../src/parser.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const fixtures = join(here, '..', 'fixtures');
-const parserDump   = JSON.parse(readFileSync(join(fixtures, 'parser.json'), 'utf8'));
-const keywordsDump = JSON.parse(readFileSync(join(fixtures, 'keywords.json'), 'utf8'));
+const generated = join(here, '..', 'generated');
+const parserDump   = JSON.parse(readFileSync(join(generated, 'parser.json'), 'utf8'));
+const keywordsDump = JSON.parse(readFileSync(join(generated, 'keywords.json'), 'utf8'));
 
 const parser = createParser(parserDump, keywordsDump);
 

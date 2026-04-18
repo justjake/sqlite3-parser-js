@@ -10,7 +10,7 @@
 // correspond to the `do_test` rows in test/normalize.test.
 
 import { describe, test, expect } from 'bun:test';
-import { lex, lexNames } from '../helpers.js';
+import { lex, lexNames } from '../helpers.ts';
 
 describe('normalize-120 (comments scattered through a SELECT)', () => {
   const sql = `SELECT NULL, b FROM t1 -- comment text

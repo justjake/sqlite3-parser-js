@@ -6,29 +6,43 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { createTokenizer } from '../src/tokenize.js';
+import {
+  createTokenizer,
+  type CreateTokenizerOptions,
+  type KeywordsDump,
+  type TokenSpan,
+  type TokenizeOpts,
+  type Tokenizer,
+} from '../src/tokenize.ts';
+import type { LemonDump } from '../src/lempar.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const fixtures = join(here, '..', 'fixtures');
+const generated = join(here, '..', 'generated');
 
-export const parserDump = JSON.parse(
-  readFileSync(join(fixtures, 'parser.json')),
+export const parserDump: LemonDump = JSON.parse(
+  readFileSync(join(generated, 'parser.json'), 'utf8'),
 );
-export const keywordsDump = JSON.parse(
-  readFileSync(join(fixtures, 'keywords.json')),
+export const keywordsDump: KeywordsDump = JSON.parse(
+  readFileSync(join(generated, 'keywords.json'), 'utf8'),
 );
 
 /** Default tokenizer: every feature flag enabled, no digit separator. */
-export const tk = createTokenizer(parserDump, keywordsDump);
+export const tk: Tokenizer = createTokenizer(parserDump, keywordsDump);
 
 /** Tokenizer with the `_` digit separator (SQLite 3.45+ default). */
-export const tkSep = createTokenizer(parserDump, keywordsDump, {
+export const tkSep: Tokenizer = createTokenizer(parserDump, keywordsDump, {
   digitSeparator: '_',
 });
 
 /** Build a tokenizer with custom options (flags, digit separator). */
-export function makeTokenizer(opts = {}) {
+export function makeTokenizer(opts: CreateTokenizerOptions = {}): Tokenizer {
   return createTokenizer(parserDump, keywordsDump, opts);
+}
+
+/** A `{name, text}` pair — the lex() return shape used throughout the suite. */
+export interface LexedToken {
+  name: string;
+  text: string;
 }
 
 /**
@@ -36,11 +50,15 @@ export function makeTokenizer(opts = {}) {
  * (SPACE + COMMENT) suppressed by default.  Pass `{skipTrivia: false}` to
  * include them.
  */
-export function lex(sql, opts, t = tk) {
-  const out = [];
+export function lex(
+  sql: string,
+  opts?: TokenizeOpts,
+  t: Tokenizer = tk,
+): LexedToken[] {
+  const out: LexedToken[] = [];
   for (const tok of t.tokenize(sql, opts)) {
     out.push({
-      name: t.tokenName(tok.type),
+      name: t.tokenName(tok.type) ?? String(tok.type),
       text: sql.slice(tok.start, tok.start + tok.length),
     });
   }
@@ -48,8 +66,19 @@ export function lex(sql, opts, t = tk) {
 }
 
 /** Shortcut for tests that only care about token names, not their text. */
-export function lexNames(sql, opts, t = tk) {
+export function lexNames(
+  sql: string,
+  opts?: TokenizeOpts,
+  t: Tokenizer = tk,
+): string[] {
   return lex(sql, opts, t).map((x) => x.name);
+}
+
+/** One triple yielded by tokenTriples — matches the lemonjs test shape. */
+export interface TokenTriple {
+  tokenName: string;
+  rawTokenName: string;
+  lexeme: string;
 }
 
 /**
@@ -60,8 +89,8 @@ export function lexNames(sql, opts, t = tk) {
  * context-aware WINDOW/OVER/FILTER retokenization lemonjs performs —
  * but the field is kept so existing assertions transfer verbatim.
  */
-export function tokenTriples(sql, t = tk) {
-  const out = [];
+export function tokenTriples(sql: string, t: Tokenizer = tk): TokenTriple[] {
+  const out: TokenTriple[] = [];
   for (const tok of t.tokenize(sql)) {
     const name = t.tokenName(tok.type) ?? String(tok.type);
     out.push({
@@ -74,7 +103,10 @@ export function tokenTriples(sql, t = tk) {
 }
 
 /** Return the lexeme of the first ILLEGAL token in `sql`, or null. */
-export function firstIllegalLexeme(sql, t = tk) {
+export function firstIllegalLexeme(
+  sql: string,
+  t: Tokenizer = tk,
+): string | null {
   for (const tok of t.tokenize(sql)) {
     const name = t.tokenName(tok.type);
     if (name === 'ILLEGAL') return sql.slice(tok.start, tok.start + tok.length);
@@ -86,12 +118,12 @@ export function firstIllegalLexeme(sql, t = tk) {
  * Shortcut for single-token tests: tokenise `sql`, assert there is
  * exactly one token, return that token.  Trivia is skipped.
  */
-export function lexOne(sql, t = tk) {
+export function lexOne(sql: string, t: Tokenizer = tk): LexedToken {
   const toks = lex(sql, undefined, t);
   if (toks.length !== 1) {
     throw new Error(
       `expected exactly one token, got ${toks.length}: ${JSON.stringify(toks)}`,
     );
   }
-  return toks[0];
+  return toks[0]!;
 }

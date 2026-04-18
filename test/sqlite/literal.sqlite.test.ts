@@ -12,7 +12,7 @@
 // QNUMBER assertions — matches sqlite's default build for 3.45+.
 
 import { describe, test, expect } from 'bun:test';
-import { tokenTriples, tkSep } from '../helpers.js';
+import { tokenTriples, tkSep } from '../helpers.ts';
 
 // Digit-separator-enabled triples.  The top-level `tk` used by most
 // helpers has the separator off, but every literal-*.x case in sqlite's

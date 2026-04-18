@@ -4,7 +4,7 @@
 // CST (or the enhanced error diagnostic) without writing a throwaway
 // script.
 //
-// Reads parser.json + keywords.json from --dir (default: ../fixtures
+// Reads parser.json + keywords.json from --dir (default: ../generated
 // relative to this file), parses the SQL, and prints the result as JSON
 // (or pipes through formatCst for --pretty).  Exits non-zero on parse
 // errors and writes each enhanced diagnostic to stderr in a readable
@@ -17,7 +17,7 @@ import { dirname, join, resolve } from 'node:path';
 import { createParser, formatCst, type ParseError } from '../src/parser.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_DIR = join(here, '..', 'fixtures');
+const DEFAULT_DIR = join(here, '..', 'generated');
 
 interface CliOptions {
   dir: string;
@@ -29,7 +29,7 @@ function usage(): string {
   return (
     'usage: bin/parser.ts [--dir <path>] [--pretty] ["<sql>"]\n' +
     '  --dir    directory containing parser.json + keywords.json\n' +
-    '           (default: ../fixtures relative to this script)\n' +
+    '           (default: ../generated relative to this script)\n' +
     '  --pretty print the CST with formatCst() instead of JSON\n' +
     '  <sql>    SQL to parse.  If omitted, read from stdin.'
   );

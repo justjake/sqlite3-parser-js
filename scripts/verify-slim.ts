@@ -3,8 +3,8 @@
 // after editing the field-keep tables there) to catch any field that
 // the runtime reads but the slimmer drops.
 
-import full        from '../fixtures/parser.json'   with { type: 'json' };
-import fullKw      from '../fixtures/keywords.json' with { type: 'json' };
+import full        from '../generated/parser.json'   with { type: 'json' };
+import fullKw      from '../generated/keywords.json' with { type: 'json' };
 import slim        from '../dist/parser.slim.json'   with { type: 'json' };
 import slimKw      from '../dist/keywords.slim.json' with { type: 'json' };
 import { createParser, formatCst } from '../src/parser.ts';

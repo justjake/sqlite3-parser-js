@@ -9,10 +9,10 @@
 // ILLEGAL with text matching the quoted portion of sqlite's message.
 
 import { describe, test, expect } from 'bun:test';
-import { lex, lexNames } from '../helpers.js';
+import { lex, lexNames } from '../helpers.ts';
 
 /** Find the first ILLEGAL token in the stream (or undefined). */
-function firstIllegal(sql) {
+function firstIllegal(sql: string) {
   return lex(sql).find((t) => t.name === 'ILLEGAL');
 }
 

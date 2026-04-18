@@ -17,7 +17,7 @@
 // fire, and the SQL-level behaviour breaks silently.
 
 import { describe, test, expect } from 'bun:test';
-import { parserDump, tokenTriples } from '../helpers.js';
+import { parserDump, tokenTriples } from '../helpers.ts';
 
 const idSymbol = (parserDump.symbols as Array<{ id: number; name: string }>).find(
   (s) => s.name === 'ID',

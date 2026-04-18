@@ -5,7 +5,8 @@ import { describe, test, expect } from 'bun:test';
 import {
   tk, tkSep, makeTokenizer, lex, lexNames,
   keywordsDump,
-} from './helpers.js';
+} from './helpers.ts';
+import type { MaskFlag } from '../src/tokenize.ts';
 
 describe('createTokenizer setup', () => {
   test('common terminal codes resolve from the parser dump', () => {
@@ -221,7 +222,7 @@ describe('non-ASCII identifiers', () => {
 
 describe('flag filtering', () => {
   test('disables WINDOWFUNC keywords when flag dropped', () => {
-    const flags = Object.keys(keywordsDump.meta.maskFlags)
+    const flags = (Object.keys(keywordsDump.meta.maskFlags) as MaskFlag[])
       .filter((f) => f !== 'WINDOWFUNC');
     const tkNoWindow = makeTokenizer({ flags });
     expect(lexNames('FILTER OVER PARTITION', undefined, tkNoWindow))
