@@ -1,0 +1,13 @@
+{
+  "name": "claude-lemon",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
+  "scripts": {
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
