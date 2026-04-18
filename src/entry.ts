@@ -2,13 +2,14 @@
 // time via Bun's JSON import, exporting a ready-to-use parser plus the
 // CST helpers.  Used both for sample bundles and for sizing.
 //
-// Switch the import paths from `generated/` (full dumps) to `dist/`
-// (slim dumps produced by scripts/slim-dump.ts) to ship the slim
-// version — every field the runtime reads is preserved by the slimmer,
-// so no other change is required.
+// This file imports the *.dev.json variants (full dumps, with rule
+// action C source and symbol metadata preserved).  See entry-slim.ts
+// for the production import path that imports *.prod.json — every
+// field the runtime reads is preserved by the slimmer, so switching
+// between them requires no other changes.
 
-import parserDump   from '../generated/parser.json'   with { type: 'json' };
-import keywordsDump from '../generated/keywords.json' with { type: 'json' };
+import parserDump   from '../generated/3.54.0/parser.dev.json'   with { type: 'json' };
+import keywordsDump from '../generated/3.54.0/keywords.dev.json' with { type: 'json' };
 import { createParser } from './parser.ts';
 
 export const parser = createParser(parserDump as any, keywordsDump as any);

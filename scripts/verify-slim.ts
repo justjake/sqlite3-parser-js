@@ -1,12 +1,16 @@
-// Smoke-test that the slim dumps actually parse the same SQL as the
-// full dumps.  Run after every change to scripts/slim-dump.ts (or
-// after editing the field-keep tables there) to catch any field that
-// the runtime reads but the slimmer drops.
+#!/usr/bin/env -S bun run
+// Smoke-test that the slim (prod) dumps actually parse the same SQL as
+// the full (dev) dumps.  Run after every change to scripts/slim-dump.ts
+// (or after editing the field-keep tables there) to catch any field
+// that the runtime reads but the slimmer drops.
+//
+// Pinned to 3.54.0 today.  Add more version imports + a matrix loop
+// when we support additional versions — or better, drive from argv.
 
-import full        from '../generated/parser.json'   with { type: 'json' };
-import fullKw      from '../generated/keywords.json' with { type: 'json' };
-import slim        from '../dist/parser.slim.json'   with { type: 'json' };
-import slimKw      from '../dist/keywords.slim.json' with { type: 'json' };
+import full   from '../generated/3.54.0/parser.dev.json'    with { type: 'json' };
+import fullKw from '../generated/3.54.0/keywords.dev.json'  with { type: 'json' };
+import slim   from '../generated/3.54.0/parser.prod.json'   with { type: 'json' };
+import slimKw from '../generated/3.54.0/keywords.prod.json' with { type: 'json' };
 import { createParser, formatCst } from '../src/parser.ts';
 
 const SAMPLES = [

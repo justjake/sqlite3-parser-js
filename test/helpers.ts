@@ -16,14 +16,21 @@ import {
 } from '../src/tokenize.ts';
 import type { LemonDump } from '../src/lempar.ts';
 
+/**
+ * The sqlite version the test suite runs against.  Change this string
+ * when pinning to a newer dump; every other `generated/…` reference in
+ * the test tree flows from this constant.
+ */
+export const CURRENT_VERSION = '3.54.0';
+
 const here = dirname(fileURLToPath(import.meta.url));
-const generated = join(here, '..', 'generated');
+const generated = join(here, '..', 'generated', CURRENT_VERSION);
 
 export const parserDump: LemonDump = JSON.parse(
-  readFileSync(join(generated, 'parser.json'), 'utf8'),
+  readFileSync(join(generated, 'parser.dev.json'), 'utf8'),
 );
 export const keywordsDump: KeywordsDump = JSON.parse(
-  readFileSync(join(generated, 'keywords.json'), 'utf8'),
+  readFileSync(join(generated, 'keywords.dev.json'), 'utf8'),
 );
 
 /** Default tokenizer: every feature flag enabled, no digit separator. */

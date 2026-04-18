@@ -1,81 +1,93 @@
 # Vendored SQLite tooling
 
-This directory holds a pinned copy of the two SQLite tool files we've
-patched, plus the pristine upstream baseline they were forked from.
-Together they let us 3-way-merge onto future SQLite releases without
-losing our edits, and they produce on-demand `.patch` artifacts when a
-reviewer wants a one-file summary of our divergence.
+This directory holds a pinned copy of each SQLite release we've ever
+patched, plus the pristine upstream baseline each one was forked from.
+Previous versions are never deleted — every version that has ever
+appeared here stays available under `vendor/patched/<version>/` and
+`vendor/upstream/<version>/`, and its regenerated JSON dumps stay
+available under `generated/<version>/`.  This gives us long-lived
+reproducibility ("what exactly did the tokenizer look like when we
+shipped version 0.7?") and makes the 3-way-merge history navigable.
 
 ## Layout
 
 ```
 vendor/
-├── manifest.json                              what upstream commit we're on
-├── upstream/
-│   └── <sqlite-version>/
-│       ├── tool/
-│       │   ├── lemon.c                        pristine — our patched copy's baseline
-│       │   ├── mkkeywordhash.c                pristine — our patched copy's baseline
-│       │   └── lempar.c                       pristine, read-only (no patches; the JS
-│       │                                      engine in src/lempar.ts tracks this file)
-│       └── src/
-│           └── parse.y                        pristine, read-only (data dependency)
-└── patched/
+├── manifest.json                              one source of truth — which versions
+│                                              exist, what commit each is pinned to,
+│                                              sha256 of every tracked file
+├── submodule/
+│   └── <version>/                             git submodule — full sqlite checkout
+│                                              at the tag for <version>.  Only the
+│                                              four files below are vendored out.
+├── upstream/<version>/                        pristine files copied from submodule.
+│   ├── src/parse.y                            read-only
+│   └── tool/
+│       ├── lemon.c                            baseline for 3-way-merge
+│       ├── mkkeywordhash.c                    baseline for 3-way-merge
+│       └── lempar.c                           read-only; JS engine tracks it
+└── patched/<version>/                         our patched copies (3-way-merged per release)
     └── tool/
-        ├── lemon.c                            ours — adds `-J<path>` JSON dump
-        └── mkkeywordhash.c                    ours — adds `-J<path>` JSON dump
+        ├── lemon.c                            adds `-J<path>` JSON dump
+        └── mkkeywordhash.c                    adds `-J<path>` JSON dump
 ```
 
-The two `patched/tool/*.c` files are what you compile to regenerate
-`generated/parser.json` and `generated/keywords.json`.
-
-## Updating to a new SQLite release
-
-See `scripts/updateSqliteSource.ts`.  In short:
+## Onboarding a new SQLite release
 
 ```
-bun scripts/updateSqliteSource.ts <new-sqlite-checkout> <new-version>
+bun run vendor <ref>
 ```
 
-It:
+The script:
 
-1. Verifies `vendor/patched/*` hashes against the manifest (catches
-   accidental out-of-band edits).
-2. Runs `git merge-file` on each file we patch, using the current
-   upstream baseline as the merge ancestor.
-3. On clean merges: overwrites `vendor/patched/*` with the merged
-   result, copies the new upstream sources into `vendor/upstream/<new-version>/`,
-   and updates the manifest.
-4. On conflicts: leaves `<<<<<<<` markers in the patched file and
-   exits non-zero.  Resolve manually, then re-run with the same
-   arguments to commit the new baseline.
-5. Diffs `tool/lempar.c` against its baseline; if it changed, reports
-   it as an *advisory* conflict so someone audits `src/lempar.ts`.
+1. Ensures `vendor/submodule/<ref>/` exists (adds a git submodule if not).
+2. Copies `tool/{lemon,mkkeywordhash,lempar}.c` and `src/parse.y` from
+   the submodule into `vendor/upstream/<ref>/`.
+3. Picks the most recent previous version from `manifest.json` and
+   3-way-merges (that version's patched copy) + (that version's
+   upstream baseline) + (this version's upstream baseline) into
+   `vendor/patched/<ref>/tool/*.c`.  On conflict, leaves `<<<<<<<`
+   markers and exits non-zero; resolve by hand and re-run.
+4. Updates `manifest.json` — adds an entry for `<ref>`, rehashes, sets
+   `current` to `<ref>`.  Previous versions' entries stay.
+5. Invokes `make generated/<ref>/{parser,keywords}.prod.json` to
+   regenerate and slim the JSON dumps for the new version.
 
-## Regenerating the JSON dumps after a merge
+Flags:
 
-After a successful update, rebuild the dumps:
+* `--no-submodule` — skip the submodule setup.  Requires `--from`.
+* `--from <dir>` — copy pristine files from a local sqlite checkout
+  instead.  Useful for testing against a development tree before a
+  release lands.
+* `--commit <sha>` — force-record an upstream commit hash in the
+  manifest instead of asking git.
 
-```
-cc -O2 -o ./bin/lemon           vendor/patched/tool/lemon.c
-cc -O2 -o ./bin/mkkeywordhash   vendor/patched/tool/mkkeywordhash.c -DSQLITE_ENABLE_ORDERED_SET_AGGREGATES
-./bin/lemon           -DSQLITE_ENABLE_ORDERED_SET_AGGREGATES -Jgenerated/parser.json   vendor/upstream/<version>/src/parse.y
-./bin/mkkeywordhash                                          -Jgenerated/keywords.json
-bun test
-```
+The script does NOT auto-commit and does NOT run the test suite —
+review the merge result, run `bun test`, and commit by hand.
 
-If `bun test` still passes, the update landed cleanly.
-
-## Generating a `.patch` view
-
-For review PRs or external consumers who don't want the vendor tree:
+## Re-generating outputs manually (Make)
 
 ```
-diff -u vendor/upstream/<ver>/tool/lemon.c vendor/patched/tool/lemon.c \
-  > patches/lemon.patch
-diff -u vendor/upstream/<ver>/tool/mkkeywordhash.c vendor/patched/tool/mkkeywordhash.c \
-  > patches/mkkeywordhash.patch
+make generated/<ver>/parser.prod.json
+make generated/<ver>/keywords.prod.json
+make generated/<ver>/parser.dev.json          # full dump, useful for debugging
+make generated/<ver>/keywords.dev.json
+make build/lemon-<ver>                        # compile patched lemon
+make build/mkkeywordhash-<ver>                # compile patched mkkeywordhash
+make versions                                 # list everything we have
+make help
 ```
 
-The 3-way-merge source of truth remains the `vendor/` tree — `.patch`
-files are a derived artifact.
+Make's pattern rules cover every step after the 3-way merge has
+produced `vendor/patched/<ver>/tool/*.c`, so any file can be nuked and
+rebuilt independently.
+
+## Generating a reviewable `.patch` artifact
+
+The `.patch` view is derived, not canonical — the 3-way-merge
+machinery is the source of truth.  Produce it on demand:
+
+```
+diff -u vendor/upstream/3.54.0/tool/lemon.c         vendor/patched/3.54.0/tool/lemon.c
+diff -u vendor/upstream/3.54.0/tool/mkkeywordhash.c vendor/patched/3.54.0/tool/mkkeywordhash.c
+```

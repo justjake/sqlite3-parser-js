@@ -5,9 +5,11 @@
   "type": "module",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
   "scripts": {
-    "test": "bun test"
+    "test": "bun test",
+    "vendor": "bun scripts/vendor.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typebox": "1.1.28"
   }
 }

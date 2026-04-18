@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "claude-lemon/keywords.prod/v1",
+  "title": "keywords.prod",
+  "type": "object",
+  "required": [
+    "meta",
+    "keywords"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "maskFlags"
+      ],
+      "properties": {
+        "maskFlags": {
+          "type": "object",
+          "patternProperties": {
+            "^.*$": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "tokenName",
+          "flags"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tokenName": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
