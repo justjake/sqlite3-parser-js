@@ -41,10 +41,12 @@ help:
 	  '  make generated/<ver>/keywords.prod.json # slim keyword list' \
 	  '  make generated/<ver>/parser.dev.json    # full dump for debugging' \
 	  '  make generated/<ver>/keywords.dev.json  # full keyword list' \
-	  '  make build/lemon-<ver>                    # patched lemon compiled' \
-	  '  make build/mkkeywordhash-<ver>            # patched mkkeywordhash' \
+	  '  make generated/<ver>/index.ts           # per-version TS wrapper' \
+	  '  make build/lemon-<ver>                  # patched lemon compiled' \
+	  '  make build/mkkeywordhash-<ver>          # patched mkkeywordhash' \
 	  '' \
 	  'Convenience targets:' \
+	  '  make current                            # regenerate generated/current.ts' \
 	  '  make versions                           # list all versions we have' \
 	  '  make json-schemas                       # (re)generate JSON Schemas' \
 	  '  make clean                              # delete build/, keep generated/' \
@@ -150,3 +152,26 @@ generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.
     generated/json-schema/v1/keywords.prod.schema.json
 	bun scripts/slim-dump.ts $< $@
 	bun scripts/validate-json.ts keywords.prod $@
+
+# ---------------------------------------------------------------------------
+# Per-version TS wrapper.  Codegened from scripts/emit-version-modules.ts.
+# Depends on the prod dumps so the wrapper's JSON imports resolve.
+# ---------------------------------------------------------------------------
+generated/%/index.ts: \
+    scripts/emit-version-modules.ts \
+    generated/%/parser.prod.json \
+    generated/%/keywords.prod.json
+	bun scripts/emit-version-modules.ts $*
+
+# ---------------------------------------------------------------------------
+# The cross-version `current` re-export.  Sourced from
+# vendor/manifest.json's `current` field — rebuild whenever either the
+# manifest or the codegen script changes.
+# ---------------------------------------------------------------------------
+generated/current.ts: \
+    scripts/emit-version-modules.ts \
+    vendor/manifest.json
+	bun scripts/emit-version-modules.ts --current
+
+.PHONY: current
+current: generated/current.ts

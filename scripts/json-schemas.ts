@@ -46,13 +46,20 @@ export const JSON_SCHEMA_VERSION = 1;
 // Small helpers.
 // ---------------------------------------------------------------------------
 
+// TypeBox's per-builder return types (TInteger, TString, TArray, …)
+// don't satisfy a narrow `Record<string, Type.Any>` constraint because
+// Any is its own concrete kind.  Relax to `Record<string, any>` — the
+// helpers are just passthroughs to Type.Object, which accepts any
+// TSchema-shaped value anyway.
+type PropsMap = Record<string, any>;
+
 /** Strict object — disallows properties not listed. */
-function Strict<P extends Record<string, ReturnType<typeof Type.Any>>>(props: P) {
+function Strict<P extends PropsMap>(props: P) {
   return Type.Object(props, { additionalProperties: false });
 }
 
 /** Loose object — tolerates extra properties (used for .dev schemas). */
-function Loose<P extends Record<string, ReturnType<typeof Type.Any>>>(props: P) {
+function Loose<P extends PropsMap>(props: P) {
   return Type.Object(props, { additionalProperties: true });
 }
 

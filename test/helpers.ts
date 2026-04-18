@@ -1,49 +1,36 @@
-// Shared helpers for the tokenizer test suites.  Loads the JSON dumps
-// produced by the patched lemon + mkkeywordhash once, then exposes a
-// pre-built default tokenizer plus factories for tokenizers with
-// custom options (digit separators, reduced flag sets, ...).
+// Shared helpers for the tokenizer/parser test suites.
+//
+// Imports are deliberately routed through `generated/current.ts` so the
+// test suite tracks whatever version `vendor/manifest.json` calls
+// `current`.  To pin tests against a specific older version, import
+// from `../generated/<version>/index.ts` directly — the same surface
+// is available there.
 
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
 import {
   createTokenizer,
+  PARSER_DUMP,
+  KEYWORDS_DUMP,
   type CreateTokenizerOptions,
   type KeywordsDump,
-  type TokenSpan,
-  type TokenizeOpts,
+  type LemonDump,
   type Tokenizer,
-} from '../src/tokenize.ts';
-import type { LemonDump } from '../src/lempar.ts';
+  type TokenizeOpts,
+} from '../generated/current.ts';
 
-/**
- * The sqlite version the test suite runs against.  Change this string
- * when pinning to a newer dump; every other `generated/…` reference in
- * the test tree flows from this constant.
- */
-export const CURRENT_VERSION = '3.54.0';
-
-const here = dirname(fileURLToPath(import.meta.url));
-const generated = join(here, '..', 'generated', CURRENT_VERSION);
-
-export const parserDump: LemonDump = JSON.parse(
-  readFileSync(join(generated, 'parser.dev.json'), 'utf8'),
-);
-export const keywordsDump: KeywordsDump = JSON.parse(
-  readFileSync(join(generated, 'keywords.dev.json'), 'utf8'),
-);
+/** The parser dump used by every helper in this file.  Tracks `current`. */
+export const parserDump: LemonDump = PARSER_DUMP;
+/** The keywords dump used by every helper.  Tracks `current`. */
+export const keywordsDump: KeywordsDump = KEYWORDS_DUMP;
 
 /** Default tokenizer: every feature flag enabled, no digit separator. */
-export const tk: Tokenizer = createTokenizer(parserDump, keywordsDump);
+export const tk: Tokenizer = createTokenizer();
 
 /** Tokenizer with the `_` digit separator (SQLite 3.45+ default). */
-export const tkSep: Tokenizer = createTokenizer(parserDump, keywordsDump, {
-  digitSeparator: '_',
-});
+export const tkSep: Tokenizer = createTokenizer({ digitSeparator: '_' });
 
 /** Build a tokenizer with custom options (flags, digit separator). */
 export function makeTokenizer(opts: CreateTokenizerOptions = {}): Tokenizer {
-  return createTokenizer(parserDump, keywordsDump, opts);
+  return createTokenizer(opts);
 }
 
 /** A `{name, text}` pair — the lex() return shape used throughout the suite. */

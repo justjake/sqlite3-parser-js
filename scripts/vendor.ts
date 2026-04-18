@@ -392,12 +392,16 @@ async function main(): Promise<void> {
     versions: { ...manifest.versions, [cli.ref]: newEntry },
   });
 
-  // 6. Regenerate the JSON dumps.  Delegate to Make so it can
-  // incrementally rebuild and so humans can reproduce just this step.
-  console.log(`Building generated/${cli.ref}/*.prod.json via make…`);
+  // 6. Regenerate the JSON dumps and the per-version TS wrapper.
+  // Delegate to Make so it can incrementally rebuild and so humans
+  // can reproduce just this step.  We also rebuild
+  // `generated/current.ts` since the manifest now points at this ref.
+  console.log(`Building generated/${cli.ref}/* via make…`);
   run('make', [
     `generated/${cli.ref}/parser.prod.json`,
     `generated/${cli.ref}/keywords.prod.json`,
+    `generated/${cli.ref}/index.ts`,
+    `generated/current.ts`,
   ], { cwd: ROOT });
 
   console.log(

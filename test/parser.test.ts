@@ -9,9 +9,6 @@
 // the SQL dialect that the grammar is supposed to accept.
 
 import { describe, test, expect } from 'bun:test';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
 
 import {
   createParser,
@@ -20,14 +17,9 @@ import {
   tokenLeaves,
   type CstNode,
   type RuleNode,
-} from '../src/parser.ts';
+} from '../generated/current.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const generated = join(here, '..', 'generated', '3.54.0');
-const parserDump   = JSON.parse(readFileSync(join(generated, 'parser.dev.json'), 'utf8'));
-const keywordsDump = JSON.parse(readFileSync(join(generated, 'keywords.dev.json'), 'utf8'));
-
-const parser = createParser(parserDump, keywordsDump);
+const parser = createParser();
 
 // --- helpers ---------------------------------------------------------------
 

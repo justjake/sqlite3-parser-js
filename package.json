@@ -4,6 +4,16 @@
   "private": true,
   "type": "module",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
+  "main": "./generated/current.ts",
+  "types": "./generated/current.ts",
+  "exports": {
+    ".":                    "./generated/current.ts",
+    "./sqlite-*":           "./generated/*/index.ts",
+    "./sqlite-*/parser.dev.json":    "./generated/*/parser.dev.json",
+    "./sqlite-*/parser.prod.json":   "./generated/*/parser.prod.json",
+    "./sqlite-*/keywords.dev.json":  "./generated/*/keywords.dev.json",
+    "./sqlite-*/keywords.prod.json": "./generated/*/keywords.prod.json"
+  },
   "scripts": {
     "test": "bun test",
     "vendor": "bun scripts/vendor.ts"
