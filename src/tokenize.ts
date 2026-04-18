@@ -1,4 +1,4 @@
-// Hand-port of src/tokenize.c (sqlite3GetToken) to JavaScript.
+// Hand-port of src/tokenize.c (sqlite3GetToken) to TypeScript.
 //
 // The lex state machine is fixed by SQLite's lexical rules and changes
 // rarely. The token codes (TK_*) and the SQL keyword table are not
@@ -12,6 +12,142 @@
 // writing `i < len` checks everywhere.  Characters ≥ 0x80 in the input
 // are treated as identifier characters (matching SQLite's rule that any
 // high byte is valid inside an identifier).
+
+import type { LemonDump } from './lempar.ts';
+
+// ---------------------------------------------------------------------------
+// Public types — the shape of the keywords-dump, tokenizer options, and
+// the tokenizer itself.  Downstream modules (parser.ts) import these to
+// avoid re-declaring ad-hoc shapes.
+// ---------------------------------------------------------------------------
+
+/**
+ * The set of SQLITE_OMIT_* / SQLITE_ENABLE_* flag names that gate
+ * keywords in SQLite's grammar.  The list is hard-coded in
+ * tool/mkkeywordhash.c's `#define` block (see the patch we apply) and
+ * is stable across sqlite versions; we mirror it here so the compiler
+ * can check flag names at call sites.
+ */
+export type MaskFlag =
+  | 'ALTER' | 'ALWAYS' | 'ANALYZE' | 'ATTACH'
+  | 'AUTOINCR' | 'CAST' | 'COMPOUND' | 'CONFLICT'
+  | 'EXPLAIN' | 'FKEY' | 'PRAGMA' | 'REINDEX'
+  | 'SUBQUERY' | 'TRIGGER' | 'VACUUM' | 'VIEW'
+  | 'VTAB' | 'AUTOVACUUM' | 'CTE' | 'UPSERT'
+  | 'WINDOWFUNC' | 'GENCOL' | 'RETURNING' | 'ORDERSET';
+
+/** One keyword entry in the dump produced by the patched mkkeywordhash. */
+export interface KeywordEntry {
+  /** Uppercase ASCII keyword text, e.g. `"SELECT"`, `"BEGIN"`. */
+  readonly name: string;
+  /** Lemon TK_* symbol name with the `TK_` prefix, e.g. `"TK_SELECT"`. */
+  readonly tokenName: string;
+  /** mkkeywordhash's hash-chain priority (higher = probed first). */
+  readonly priority: number;
+  /** Raw bitmask; bit positions are documented on MaskFlag. */
+  readonly mask: number;
+  /** Symbolic flag names equivalent to `mask`. */
+  readonly flags: readonly MaskFlag[];
+}
+
+/** Shape of the keywords.json file produced by mkkeywordhash -J. */
+export interface KeywordsDump {
+  readonly meta: {
+    readonly sourceFile: string;
+    readonly schemaVersion: number;
+    readonly keywordCount: number;
+    /** Bit-name → bit-value map; mirrors the maskFlags in the C patch. */
+    readonly maskFlags: Readonly<Record<MaskFlag, number>>;
+  };
+  readonly keywords: readonly KeywordEntry[];
+}
+
+/** Options for `createTokenizer`. */
+export interface CreateTokenizerOptions {
+  /**
+   * Which feature flags should be enabled at parse time.  Keywords whose
+   * mask intersects this set are recognised; others fall back to TK_ID.
+   * Defaults to the full set of flags present in the dump (i.e. "every
+   * feature the dump was built with is on").  `ALWAYS` is always added
+   * regardless of the caller's choice.
+   */
+  readonly flags?: readonly MaskFlag[];
+  /**
+   * Single-character digit separator (SQLite 3.45+ supports `'_'`).
+   * Empty string disables the feature.
+   */
+  readonly digitSeparator?: string;
+}
+
+/** Options for one call to `tokenizer.tokenize(sql, opts?)`. */
+export interface TokenizeOpts {
+  /** Drop SPACE and COMMENT tokens from the output stream.  Default: true. */
+  readonly skipTrivia?: boolean;
+}
+
+/** One token as yielded by `tokenizer.tokenize()`. */
+export interface TokenSpan {
+  readonly type: number;
+  readonly start: number;
+  readonly length: number;
+}
+
+/**
+ * The 33 TK_* codes the lexer emits directly.  Every key is required
+ * — their presence is verified at `createTokenizer` time by looking
+ * them up in the parser dump's symbol table.
+ *
+ * Matches the `switch(aiClass[*z])` in src/tokenize.c:276.
+ */
+export interface TokenizerTokens {
+  readonly SPACE:    number;
+  readonly COMMENT:  number;
+  readonly ILLEGAL:  number;
+  readonly PTR:      number;
+  readonly MINUS:    number;
+  readonly LP:       number;
+  readonly RP:       number;
+  readonly SEMI:     number;
+  readonly PLUS:     number;
+  readonly STAR:     number;
+  readonly SLASH:    number;
+  readonly REM:      number;
+  readonly EQ:       number;
+  readonly LE:       number;
+  readonly NE:       number;
+  readonly LT:       number;
+  readonly LSHIFT:   number;
+  readonly GE:       number;
+  readonly RSHIFT:   number;
+  readonly GT:       number;
+  readonly BITOR:    number;
+  readonly CONCAT:   number;
+  readonly COMMA:    number;
+  readonly BITAND:   number;
+  readonly BITNOT:   number;
+  readonly DOT:      number;
+  readonly STRING:   number;
+  readonly ID:       number;
+  readonly INTEGER:  number;
+  readonly FLOAT:    number;
+  readonly QNUMBER:  number;
+  readonly VARIABLE: number;
+  readonly BLOB:     number;
+}
+
+/** Return type of `createTokenizer`. */
+export interface Tokenizer {
+  /** TK_* codes the tokenizer emits directly. */
+  readonly tokens: TokenizerTokens;
+  /** Symbol-id → display name (`"SELECT"`, `"ID"`, …) or undefined. */
+  tokenName(code: number): string | undefined;
+  /** Iterate tokens in `sql`.  Trivia is skipped by default. */
+  tokenize(sql: string, opts?: TokenizeOpts): IterableIterator<TokenSpan>;
+  /** @internal — exposed for tests. */
+  _nextToken(z: string, p: number, outType: [number]): number;
+  /** @internal — exposed for tests. */
+  readonly _keywordCount: number;
+}
 
 // ---------------------------------------------------------------------------
 // Character classes — copied verbatim from src/tokenize.c (SQLITE_ASCII).
@@ -84,7 +220,7 @@ const aiClass = new Uint8Array([
 // CC_ID for non-ASCII characters (matching SQLite's "high byte is
 // identifier" rule).  Used whenever the lex loop needs to dispatch on
 // class rather than compare to a specific character.
-function classAt(z, i) {
+function classAt(z: string, i: number): number {
   const c = z.charCodeAt(i);
   if (c !== c) return CC_NUL;        // NaN -> past end
   if (c > 0xff) return CC_ID;
@@ -96,7 +232,7 @@ function classAt(z, i) {
 // True for: a-z, A-Z, 0-9, '_', '$', and any code point ≥ 0x80.
 // Works on a single character (length-1 string) or `undefined` at EOI.
 // ---------------------------------------------------------------------------
-function isIdChar(ch) {
+function isIdChar(ch: string | undefined): boolean {
   if (ch === undefined) return false;
   if (ch.charCodeAt(0) >= 0x80) return true;
   return (
@@ -107,15 +243,18 @@ function isIdChar(ch) {
   );
 }
 
-function isDigit(ch)  { return ch >= '0' && ch <= '9'; }
-function isXDigit(ch) {
+function isDigit(ch: string | undefined): boolean {
+  return ch !== undefined && ch >= '0' && ch <= '9';
+}
+function isXDigit(ch: string | undefined): boolean {
+  if (ch === undefined) return false;
   return (
     (ch >= '0' && ch <= '9') ||
     (ch >= 'A' && ch <= 'F') ||
     (ch >= 'a' && ch <= 'f')
   );
 }
-function isSpace(ch) {
+function isSpace(ch: string | undefined): boolean {
   // sqlite3Isspace: 0x09..0x0d and 0x20 (space, tab, LF, VT, FF, CR).
   if (ch === ' ') return true;
   if (ch === undefined) return false;
@@ -126,39 +265,37 @@ function isSpace(ch) {
 // SQLite supports `1_000_000` style digit separators when compiled with
 // SQLITE_DIGIT_SEPARATOR set to '_'.  Most builds disable it.  We
 // follow the reference build: separator off by default; settable as a
-// single character or the empty string / null to disable.
+// single character or the empty string to disable.
 const DEFAULT_DIGIT_SEPARATOR = '';
 
 // ---------------------------------------------------------------------------
 // createTokenizer
 //
-// Build a tokenizer bound to a particular sqlite checkout's parser+keyword
-// dumps.  Returns:
-//
-//   {
-//     tokens: { TK_* code constants exposed for the parser side },
-//     tokenName(code) -> string,
-//     tokenize(sql, opts?) -> generator of {type, start, length}
-//   }
+// Build a tokenizer bound to a particular sqlite checkout's parser+
+// keyword dumps.  See the `Tokenizer` interface for the returned shape.
 // ---------------------------------------------------------------------------
-export function createTokenizer(parserDump, keywordsDump, opts = {}) {
+export function createTokenizer(
+  parserDump: LemonDump,
+  keywordsDump: KeywordsDump,
+  opts: CreateTokenizerOptions = {},
+): Tokenizer {
   const digitSep = opts.digitSeparator ?? DEFAULT_DIGIT_SEPARATOR;
   const hasDigitSep = typeof digitSep === 'string' && digitSep.length === 1;
 
   // Resolve TK_* names -> integer codes via the parser dump's symbol table.
   // The dump holds names without the TK_ prefix (e.g. "SELECT", "ID").
-  const tokenCode = new Map();
-  const tokenName = new Map();
+  const tokenCode = new Map<string, number>();
+  const tokenNameMap = new Map<number, string>();
   for (const sym of parserDump.symbols) {
     if (!sym.isTerminal) continue;
     tokenCode.set(sym.name, sym.id);
-    tokenName.set(sym.id, sym.name);
+    tokenNameMap.set(sym.id, sym.name);
   }
-  function require(name) {
+  function requireToken(name: string): number {
     const code = tokenCode.get(name);
     if (code === undefined) {
       throw new Error(
-        `tokenize.js: parser dump is missing terminal token "${name}". ` +
+        `tokenize.ts: parser dump is missing terminal token "${name}". ` +
         `This usually means the parser dump and tokenizer are out of sync.`,
       );
     }
@@ -167,56 +304,56 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
 
   // Token codes the lex loop emits directly.  These names match the
   // TK_* constants the C tokenizer uses; lemon assigns the actual ints.
-  const T = {
-    SPACE:    require('SPACE'),
-    COMMENT:  require('COMMENT'),
-    ILLEGAL:  require('ILLEGAL'),
-    PTR:      require('PTR'),
-    MINUS:    require('MINUS'),
-    LP:       require('LP'),
-    RP:       require('RP'),
-    SEMI:     require('SEMI'),
-    PLUS:     require('PLUS'),
-    STAR:     require('STAR'),
-    SLASH:    require('SLASH'),
-    REM:      require('REM'),
-    EQ:       require('EQ'),
-    LE:       require('LE'),
-    NE:       require('NE'),
-    LT:       require('LT'),
-    LSHIFT:   require('LSHIFT'),
-    GE:       require('GE'),
-    RSHIFT:   require('RSHIFT'),
-    GT:       require('GT'),
-    BITOR:    require('BITOR'),
-    CONCAT:   require('CONCAT'),
-    COMMA:    require('COMMA'),
-    BITAND:   require('BITAND'),
-    BITNOT:   require('BITNOT'),
-    DOT:      require('DOT'),
-    STRING:   require('STRING'),
-    ID:       require('ID'),
-    INTEGER:  require('INTEGER'),
-    FLOAT:    require('FLOAT'),
-    QNUMBER:  require('QNUMBER'),
-    VARIABLE: require('VARIABLE'),
-    BLOB:     require('BLOB'),
+  const T: TokenizerTokens = {
+    SPACE:    requireToken('SPACE'),
+    COMMENT:  requireToken('COMMENT'),
+    ILLEGAL:  requireToken('ILLEGAL'),
+    PTR:      requireToken('PTR'),
+    MINUS:    requireToken('MINUS'),
+    LP:       requireToken('LP'),
+    RP:       requireToken('RP'),
+    SEMI:     requireToken('SEMI'),
+    PLUS:     requireToken('PLUS'),
+    STAR:     requireToken('STAR'),
+    SLASH:    requireToken('SLASH'),
+    REM:      requireToken('REM'),
+    EQ:       requireToken('EQ'),
+    LE:       requireToken('LE'),
+    NE:       requireToken('NE'),
+    LT:       requireToken('LT'),
+    LSHIFT:   requireToken('LSHIFT'),
+    GE:       requireToken('GE'),
+    RSHIFT:   requireToken('RSHIFT'),
+    GT:       requireToken('GT'),
+    BITOR:    requireToken('BITOR'),
+    CONCAT:   requireToken('CONCAT'),
+    COMMA:    requireToken('COMMA'),
+    BITAND:   requireToken('BITAND'),
+    BITNOT:   requireToken('BITNOT'),
+    DOT:      requireToken('DOT'),
+    STRING:   requireToken('STRING'),
+    ID:       requireToken('ID'),
+    INTEGER:  requireToken('INTEGER'),
+    FLOAT:    requireToken('FLOAT'),
+    QNUMBER:  requireToken('QNUMBER'),
+    VARIABLE: requireToken('VARIABLE'),
+    BLOB:     requireToken('BLOB'),
   };
 
   // Build the keyword lookup map.  Keys are uppercase ASCII keyword
   // strings; values are TK_* codes.  We filter by enabled flags so that
   // (e.g.) WINDOWFUNC keywords disappear when SQLITE_OMIT_WINDOWFUNC is
   // configured.
-  const allFlags = Object.keys(keywordsDump.meta?.maskFlags ?? {});
-  const enabledFlags = new Set(opts.flags ?? allFlags);
+  const allFlags = Object.keys(keywordsDump.meta?.maskFlags ?? {}) as MaskFlag[];
+  const enabledFlags = new Set<MaskFlag>(opts.flags ?? allFlags);
   enabledFlags.add('ALWAYS'); // ALWAYS keywords are unconditional.
 
-  const keywordCode = new Map();
+  const keywordCode = new Map<string, number>();
   for (const kw of keywordsDump.keywords) {
     if (!kw.flags?.length) continue;
     if (!kw.flags.some((f) => enabledFlags.has(f))) continue;
     const codeName = kw.tokenName.replace(/^TK_/, '');
-    keywordCode.set(kw.name, require(codeName));
+    keywordCode.set(kw.name, requireToken(codeName));
   }
 
   // -----------------------------------------------------------------------
@@ -227,8 +364,8 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
   // to outType[0].  For consistency with the C version we keep a small
   // mutable holder.
   // -----------------------------------------------------------------------
-  function nextToken(z, p, outType) {
-    let i;
+  function nextToken(z: string, p: number, outType: [number]): number {
+    let i: number;
     switch (classAt(z, p)) {
       case CC_SPACE: {
         for (i = p + 1; isSpace(z[i]); i++) {}
@@ -312,7 +449,7 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
       case CC_QUOTE: {
         // '..', "..", `..`  with doubled-quote escape.
         const delim = z[p];
-        let c;
+        let c: string | undefined;
         for (i = p + 1; (c = z[i]) !== undefined; i++) {
           if (c === delim) {
             if (z[i + 1] === delim) {
@@ -375,7 +512,7 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
           }
           // TCL-style variable expansion:  $foo(...)
           if (c === '(' && n > 0) {
-            let cc;
+            let cc: string | undefined;
             do {
               i++;
               cc = z[i];
@@ -474,7 +611,12 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
   // Numeric literal (integer / float / hex / quoted-number with `_`
   // separator).  Mirrors the CC_DIGIT case in tokenize.c, plus the
   // CC_DOT fall-through for ".5" floats.
-  function scanNumber(z, p, outType, startsWithDot) {
+  function scanNumber(
+    z: string,
+    p: number,
+    outType: [number],
+    startsWithDot: boolean,
+  ): number {
     let i = p;
     outType[0] = T.INTEGER;
 
@@ -547,7 +689,12 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
 
   // Resolve an identifier-shaped token to its keyword code, if any.
   // SQLite keyword matching is ASCII case-insensitive.
-  function finishKeyword(z, p, i, outType) {
+  function finishKeyword(
+    z: string,
+    p: number,
+    i: number,
+    outType: [number],
+  ): number {
     const word = z.slice(p, i);
     if (word.length >= 2) {
       const code = keywordCode.get(word.toUpperCase());
@@ -561,8 +708,11 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
   }
 
   // Public entry: yield successive tokens.
-  function* tokenize(sql, { skipTrivia = true } = {}) {
-    const out = [0];
+  function* tokenize(
+    sql: string,
+    { skipTrivia = true }: TokenizeOpts = {},
+  ): IterableIterator<TokenSpan> {
+    const out: [number] = [0];
     let i = 0;
     const len = sql.length;
     while (i < len) {
@@ -580,9 +730,8 @@ export function createTokenizer(parserDump, keywordsDump, opts = {}) {
 
   return {
     tokens: T,
-    tokenName: (code) => tokenName.get(code),
+    tokenName: (code: number) => tokenNameMap.get(code),
     tokenize,
-    /** @internal — exposed for tests. */
     _nextToken: nextToken,
     _keywordCount: keywordCode.size,
   };

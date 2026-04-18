@@ -13,13 +13,60 @@
 // directly.
 
 // ---------------------------------------------------------------------------
-// Return-code constants shared by the integer parsers.  Values match the
-// constants in util.c:1150–1167 (sqlite3Atoi64 contract).
+// Return-code constants shared by the integer parsers.  Values match
+// the constants in util.c:1150–1167 (sqlite3Atoi64 contract).  Marked
+// `as const` so their types are literal numbers — comparisons narrow.
 // ---------------------------------------------------------------------------
-export const ATOI_OK           = 0;  // fits in 64-bit signed int
-export const ATOI_EXCESS_TEXT  = 1;  // extra non-space chars after number
-export const ATOI_OVERFLOW     = 2;  // > INT64_MAX (or malformed)
-export const ATOI_AT_INT64_MIN = 3;  // exactly 9223372036854775808 unsigned
+export const ATOI_OK           = 0 as const;  // fits in 64-bit signed int
+export const ATOI_EXCESS_TEXT  = 1 as const;  // extra non-space chars after number
+export const ATOI_OVERFLOW     = 2 as const;  // > INT64_MAX (or malformed)
+export const ATOI_AT_INT64_MIN = 3 as const;  // exactly 9223372036854775808 unsigned
+
+/** Return-code union used by sqlite3Atoi64 and sqlite3DecOrHexToI64. */
+export type AtoiRc =
+  | typeof ATOI_OK
+  | typeof ATOI_EXCESS_TEXT
+  | typeof ATOI_OVERFLOW
+  | typeof ATOI_AT_INT64_MIN
+  | -1;  // "no digits at all" — matches C's special -1 return
+
+// ---------------------------------------------------------------------------
+// Result-object types.  Named so call sites can pattern-match without
+// inlining the whole shape.
+// ---------------------------------------------------------------------------
+
+/** Numeric kind reported by sqlite3DequoteNumber. */
+export type NumericOp = 'INTEGER' | 'FLOAT';
+
+export interface DequoteNumberOptions {
+  /** Override the `_` separator char; empty string / 0 disables. */
+  readonly digitSeparator?: string;
+}
+
+export interface DequoteNumberResult {
+  readonly op: NumericOp;
+  readonly text: string;
+  /**
+   * Present iff validation failed (e.g. `12_.34`, `1234_`, `12__34`).
+   * The wording mirrors sqlite3ErrorMsg at util.c:356 exactly.
+   */
+  readonly error?: string;
+}
+
+export interface Atoi64Result {
+  readonly value: bigint;
+  readonly rc: AtoiRc;
+}
+
+export interface GetInt32Result {
+  readonly value: number;
+  readonly ok: boolean;
+}
+
+export interface AtoFResult {
+  readonly value: number;
+  readonly rc: number;
+}
 
 const INT64_MAX = 9223372036854775807n;
 const INT64_MIN = -9223372036854775808n;
@@ -29,21 +76,24 @@ const INT64_MIN = -9223372036854775808n;
 // sqliteInt.h:4675–4680.  Single-char strings come from str[i] indexing;
 // `undefined` at EOI compares false against every predicate.
 // ---------------------------------------------------------------------------
-function isDigit(ch)  { return ch >= '0' && ch <= '9'; }
-function isXDigit(ch) {
+function isDigit(ch: string | undefined): boolean {
+  return ch !== undefined && ch >= '0' && ch <= '9';
+}
+function isXDigit(ch: string | undefined): boolean {
+  if (ch === undefined) return false;
   return (
     (ch >= '0' && ch <= '9') ||
     (ch >= 'A' && ch <= 'F') ||
     (ch >= 'a' && ch <= 'f')
   );
 }
-function isSpace(ch) {
+function isSpace(ch: string | undefined): boolean {
   if (ch === ' ') return true;
   if (ch === undefined) return false;
   const c = ch.charCodeAt(0);
   return c >= 0x09 && c <= 0x0d;
 }
-function isQuote(ch) {
+function isQuote(ch: string | undefined): boolean {
   return ch === "'" || ch === '"' || ch === '`' || ch === '[';
 }
 
@@ -57,7 +107,7 @@ function isQuote(ch) {
 // loop handles them identically).  Non-quoted input is returned
 // unchanged — mirroring the C no-op behaviour.
 // ---------------------------------------------------------------------------
-export function sqlite3Dequote(z) {
+export function sqlite3Dequote(z: string | null | undefined): string | null | undefined {
   if (z == null || z.length === 0) return z;
   if (!isQuote(z[0])) return z;
   const close = z[0] === '[' ? ']' : z[0];
@@ -86,17 +136,18 @@ export function sqlite3Dequote(z) {
 // both sides.  If validation fails, returns the sqlite error text
 // (`unrecognized token: "…"`) rather than throwing — callers decide
 // whether to propagate or ignore.
-//
-// Returns:  { op: 'INTEGER' | 'FLOAT', text: string, error?: string }
 // ---------------------------------------------------------------------------
-export function sqlite3DequoteNumber(z, opts = {}) {
+export function sqlite3DequoteNumber(
+  z: string,
+  opts: DequoteNumberOptions = {},
+): DequoteNumberResult {
   const sep = opts.digitSeparator ?? '_';
   const bHex = z[0] === '0' && (z[1] === 'x' || z[1] === 'X');
   const neighbourOk = bHex ? isXDigit : isDigit;
 
-  let op = 'INTEGER';
+  let op: NumericOp = 'INTEGER';
   let out = '';
-  let error;
+  let error: string | undefined;
   for (let i = 0; i < z.length; i++) {
     const c = z[i];
     if (c !== sep) {
@@ -121,7 +172,7 @@ export function sqlite3DequoteNumber(z, opts = {}) {
 // characters in [0-9A-Fa-f]; non-hex input yields NaN, which matches the
 // "assert" precondition in C with a safer fallthrough.
 // ---------------------------------------------------------------------------
-export function sqlite3HexToInt(h) {
+export function sqlite3HexToInt(h: string | number | undefined): number {
   if (h === undefined) return NaN;
   const c = typeof h === 'string' ? h.charCodeAt(0) : (h | 0);
   if (c >= 0x30 && c <= 0x39) return c - 0x30;       // '0'-'9'
@@ -141,7 +192,7 @@ export function sqlite3HexToInt(h) {
 // literal — that's a different contract from C (which assumes the
 // tokenizer already validated structure).
 // ---------------------------------------------------------------------------
-export function sqlite3HexToBlob(z) {
+export function sqlite3HexToBlob(z: string): Uint8Array {
   if (
     (z[0] !== 'x' && z[0] !== 'X') ||
     z[1] !== "'" ||
@@ -167,12 +218,8 @@ export function sqlite3HexToBlob(z) {
 // optional leading whitespace and sign.  Does NOT accept hex — that's
 // sqlite3DecOrHexToI64's job.  Overflow clamps to ±INT64_MAX and
 // returns the appropriate rc code.
-//
-// Returns:  { value: bigint, rc: number } where rc is one of the
-// ATOI_* constants at the top of this file (0 = exact parse, 1 = extra
-// text after number, 2 = overflow, 3 = exactly 2^63 unsigned).
 // ---------------------------------------------------------------------------
-export function sqlite3Atoi64(z) {
+export function sqlite3Atoi64(z: string): Atoi64Result {
   let i = 0;
   const len = z.length;
   while (i < len && isSpace(z[i])) i++;
@@ -192,7 +239,7 @@ export function sqlite3Atoi64(z) {
   if (numStart === i) return { value: 0n, rc: -1 };
 
   // Capture a possible "extra text" rc before we clamp.
-  let rc = ATOI_OK;
+  let rc: AtoiRc = ATOI_OK;
   if (i < len) {
     let j = i;
     while (j < len && isSpace(z[j])) j++;
@@ -222,7 +269,7 @@ export function sqlite3Atoi64(z) {
 // Dispatches hex (0x…) to a hex-specific loop, everything else to
 // sqlite3Atoi64.  Mirrors C rc codes.
 // ---------------------------------------------------------------------------
-export function sqlite3DecOrHexToI64(z) {
+export function sqlite3DecOrHexToI64(z: string): Atoi64Result {
   if (z[0] === '0' && (z[1] === 'x' || z[1] === 'X')) {
     let i = 2;
     while (z[i] === '0') i++;
@@ -250,10 +297,8 @@ export function sqlite3DecOrHexToI64(z) {
 // Non-numeric trailing characters are *ignored* (unlike Atoi64) — this
 // is how sqlite3DequoteNumber uses it to test whether a number also
 // fits as EP_IntValue after separator stripping.
-//
-// Returns:  { value: number, ok: boolean }
 // ---------------------------------------------------------------------------
-export function sqlite3GetInt32(z) {
+export function sqlite3GetInt32(z: string): GetInt32Result {
   let i = 0;
   let neg = false;
   if (z[i] === '-')      { neg = true;  i++; }
@@ -302,12 +347,11 @@ export function sqlite3GetInt32(z) {
 // same input, so the JS port is a thin wrapper.  We preserve sqlite's
 // rc-style contract so future porters can compare.
 //
-// Returns:  { value: number, rc: number }
-//           rc  > 0  — successful parse (bit flags preserved from C)
-//           rc  = 0  — empty/invalid input
-//           rc  < 0  — "trailing non-space text" sentinel
+// rc  > 0  — successful parse (bit flags preserved from C)
+// rc  = 0  — empty/invalid input
+// rc  < 0  — "trailing non-space text" sentinel
 // ---------------------------------------------------------------------------
-export function sqlite3AtoF(z) {
+export function sqlite3AtoF(z: string): AtoFResult {
   // Strip leading whitespace to match C's loop at util.c:904–906.
   let i = 0;
   while (i < z.length && isSpace(z[i])) i++;

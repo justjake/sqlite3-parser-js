@@ -14,9 +14,7 @@
 // parser.ts when the CST shape changes, or when you want to alter how
 // virtual tokens / error messages / trivia are represented.
 
-// @ts-ignore — tokenize.js is intentionally untyped; see conversation
-// history for the decision to gradually port the surrounding modules.
-import { createTokenizer } from './tokenize.js';
+import { createTokenizer, type KeywordsDump } from './tokenize.ts';
 import {
   createEngine,
   type DumpRhsPos,
@@ -93,8 +91,7 @@ type EngineValue = CstNode | null;
 
 export function createParser(
   parserDump: LemonDump,
-  // @ts-ignore — keywords dump shape lives in the untyped util/tokenizer.
-  keywordsDump: unknown,
+  keywordsDump: KeywordsDump,
 ) {
   const engine = createEngine(parserDump);
   const rules = parserDump.rules;
@@ -192,13 +189,12 @@ export function createParser(
 
   // Bind a tokenizer.  The parser uses the same TK_* ids the dump's
   // symbol table assigns, so everything stays in sync.
-  // @ts-ignore — untyped JS import.
   const tk = createTokenizer(parserDump, keywordsDump);
 
   /** Token id 0 is Lemon's end-of-input marker (`$`). */
   const TK_EOF = 0;
-  const TK_SEMI   = tk.tokens.SEMI   as number;
-  const TK_ILLEGAL = tk.tokens.ILLEGAL as number;
+  const TK_SEMI   = tk.tokens.SEMI;
+  const TK_ILLEGAL = tk.tokens.ILLEGAL;
 
   // -------------------------------------------------------------------------
   // Build the RuleNode for a given reduction.  This is the engine's
@@ -343,8 +339,8 @@ export function createParser(
   // syntax highlighting / diagnostics without running a full parse.
   return {
     parse,
-    tokenize: tk.tokenize as (sql: string) => Iterable<{ type: number; start: number; length: number }>,
-    tokenName: tk.tokenName as (code: number) => string | undefined,
+    tokenize: tk.tokenize,
+    tokenName: tk.tokenName,
   };
 }
 
