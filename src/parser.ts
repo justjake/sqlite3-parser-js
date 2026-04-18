@@ -21,6 +21,9 @@ import {
   type DumpRule,
   type LalrPopped,
   type LemonDump,
+  type RuleId,
+  type SymbolId,
+  type TokenId,
 } from './lempar.ts';
 
 // ---------------------------------------------------------------------------
@@ -32,7 +35,7 @@ import {
 export interface TokenNode {
   readonly kind: 'token';
   /** Numeric TK_* code (matches lemon's terminal symbol id). */
-  readonly type: number;
+  readonly type: TokenId;
   /** Stringified TK_* name, e.g. `"SELECT"`, `"ID"`, `"INTEGER"`. */
   readonly name: string;
   /** Source text covered by the token. */
@@ -47,14 +50,14 @@ export interface TokenNode {
 export interface RuleNode {
   readonly kind: 'rule';
   /** Lemon rule id (matches `rules[ruleId]` in the dump). */
-  readonly rule: number;
+  readonly rule: RuleId;
   /**
    * The nonterminal name on the left-hand side, e.g. `"select"`,
    * `"expr"`, `"cmdlist"`.  This is the natural CST label.
    */
   readonly name: string;
-  /** Nonterminal symbol id. */
-  readonly lhs: number;
+  /** Nonterminal symbol id (always a nonterminal, despite the union type). */
+  readonly lhs: SymbolId;
   /** Direct children, in source order. */
   readonly children: readonly CstNode[];
   /** Source offset of the first child (or 0 for an empty reduction). */
@@ -118,7 +121,7 @@ export function createParser(
   // all 14 collapsed rules are 1:1 unit rules; a single lookup
   // suffices.
   // -------------------------------------------------------------------------
-  const unitWrapper = new Map<number, Map<number, DumpRule>>();
+  const unitWrapper = new Map<SymbolId, Map<SymbolId, DumpRule>>();
   for (const r of rules) {
     if (r.doesReduce) continue;
     if (r.nrhs !== 1) continue;
@@ -142,7 +145,7 @@ export function createParser(
   // -------------------------------------------------------------------------
 
   /** Does `actualMajor` satisfy the RHS-position `expected` constraint? */
-  function rhsMatches(expected: DumpRhsPos, actualMajor: number): boolean {
+  function rhsMatches(expected: DumpRhsPos, actualMajor: SymbolId): boolean {
     if (expected.symbol !== undefined) return expected.symbol === actualMajor;
     if (expected.multi !== undefined) {
       for (const s of expected.multi) if (s.symbol === actualMajor) return true;
@@ -158,7 +161,7 @@ export function createParser(
    */
   function synthesizeWrappers(
     expected: DumpRhsPos,
-    actualMajor: number,
+    actualMajor: SymbolId,
     node: CstNode,
   ): CstNode {
     let cur = node;
@@ -192,7 +195,7 @@ export function createParser(
   const tk = createTokenizer(parserDump, keywordsDump);
 
   /** Token id 0 is Lemon's end-of-input marker (`$`). */
-  const TK_EOF = 0;
+  const TK_EOF: TokenId = 0 as TokenId;
   const TK_SEMI   = tk.tokens.SEMI;
   const TK_ILLEGAL = tk.tokens.ILLEGAL;
 
@@ -206,7 +209,7 @@ export function createParser(
   // synthesis, and tightening the span around non-empty children.
   // -------------------------------------------------------------------------
   function buildRuleNode(
-    ruleId: number,
+    ruleId: RuleId,
     popped: LalrPopped<EngineValue>[],
   ): EngineValue {
     const rule = rules[ruleId];
@@ -270,8 +273,10 @@ export function createParser(
     // Collect inputs into an array so we can pre-check for ILLEGAL
     // tokens and inject virtual SEMI/EOF tails before driving the
     // engine.  SQL strings are small; streaming isn't worth it here.
-    const inputs: Array<{ major: number; value: EngineValue }> = [];
-    let lastMajor = -1;
+    const inputs: Array<{ major: TokenId; value: EngineValue }> = [];
+    // Sentinel `undefined` means "no real token seen yet" — avoids
+    // inventing a bogus -1 that would need a cast to TokenId.
+    let lastMajor: TokenId | undefined;
     for (const tok of tk.tokenize(sql)) {
       if (tok.type === TK_ILLEGAL) {
         // sqlite's tokenize.c:707 formats it as: unrecognized token.

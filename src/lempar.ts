@@ -25,6 +25,53 @@
 // looks inside `V` — the caller's reducer is the only thing that does.
 
 // ---------------------------------------------------------------------------
+// Branded number types.
+//
+// These catch the most common source of silent bugs when refactoring:
+// mixing up the different integer namespaces Lemon uses.  All three
+// are zero-cost at runtime — they're plain `number`s under the hood.
+//
+// * SymbolId covers any grammar symbol (terminal OR nonterminal) in
+//   the single integer namespace Lemon uses for its symbol table.
+// * TokenId is the subset where the symbol is a terminal; it's a
+//   subtype of SymbolId so a TokenId can flow anywhere a SymbolId is
+//   accepted, but not the other way around.
+// * RuleId indexes into `dump.rules[]`.
+//
+// State numbers and action codes are intentionally NOT branded: Lemon
+// packs shift state numbers, `YY_ACCEPT_ACTION`, and pending-reduce
+// encodings (stateno > YY_MAX_SHIFT) into the same field.  Branding
+// them apart would force casts on the main dispatch path for no safety
+// benefit.
+//
+// Brand helpers are exposed for the rare cases where you really do
+// have a raw number (test fixtures, REPL poking) — production code
+// should let the interface types propagate.
+// ---------------------------------------------------------------------------
+declare const __symbolIdBrand: unique symbol;
+declare const __tokenIdBrand: unique symbol;
+declare const __ruleIdBrand: unique symbol;
+
+/** Any grammar symbol — terminal or nonterminal.  0..YYNSYMBOL. */
+export type SymbolId = number & { readonly [__symbolIdBrand]: true };
+
+/**
+ * A terminal symbol (TK_* code) — subtype of SymbolId.  0..YYNTOKEN.
+ * Any API that accepts a SymbolId also accepts a TokenId.
+ */
+export type TokenId = SymbolId & { readonly [__tokenIdBrand]: true };
+
+/** Index into `dump.rules[]`.  0..YYNRULE. */
+export type RuleId = number & { readonly [__ruleIdBrand]: true };
+
+/** Coerce a plain number to `SymbolId` (unsafe — caller asserts range). */
+export const SymbolId = (n: number): SymbolId => n as SymbolId;
+/** Coerce a plain number to `TokenId` (unsafe — caller asserts range). */
+export const TokenId  = (n: number): TokenId  => n as TokenId;
+/** Coerce a plain number to `RuleId` (unsafe — caller asserts range). */
+export const RuleId   = (n: number): RuleId   => n as RuleId;
+
+// ---------------------------------------------------------------------------
 // Dump shapes.  Only the fields the LALR engine actually reads.
 // ---------------------------------------------------------------------------
 
@@ -62,16 +109,17 @@ export interface LemonConstants {
 
 export interface LemonTables {
   yy_action: number[];
-  yy_lookahead: number[];
+  /** Indexed by base+lookahead; each entry is a terminal SymbolId. */
+  yy_lookahead: SymbolId[];
   yy_shift_ofst: number[];
   yy_reduce_ofst: number[];
   yy_default: number[];
   /** Terminal-id → fallback-terminal-id.  Present iff YYFALLBACK=1. */
-  yyFallback?: number[];
+  yyFallback?: TokenId[];
 }
 
 export interface DumpSymbol {
-  id: number;
+  id: SymbolId;
   name: string;
   isTerminal: boolean;
 }
@@ -79,15 +127,15 @@ export interface DumpSymbol {
 export interface DumpRhsPos {
   pos: number;
   /** Single terminal/nonterminal symbol id at this position. */
-  symbol?: number;
+  symbol?: SymbolId;
   /** For `%token_class foo A|B|C` positions, the set of accepted symbols. */
-  multi?: Array<{ symbol: number; name: string }>;
+  multi?: Array<{ symbol: SymbolId; name: string }>;
   name?: string;
 }
 
 export interface DumpRule {
-  id: number;
-  lhs: number;
+  id: RuleId;
+  lhs: SymbolId;
   lhsName: string;
   nrhs: number;
   rhs: DumpRhsPos[];
@@ -111,15 +159,19 @@ export interface LemonDump {
 // Engine API.
 // ---------------------------------------------------------------------------
 
-/** One input token to the engine. */
+/** One input token to the engine.  Inputs are always terminals. */
 export interface LalrInput<V> {
-  readonly major: number;
+  readonly major: TokenId;
   readonly value: V;
 }
 
-/** One popped stack entry handed to the reducer. */
+/**
+ * One popped stack entry handed to the reducer.  `major` is widened to
+ * `SymbolId` because a popped entry may be either the token we shifted
+ * (a TokenId) or a nonterminal we previously reduced (a SymbolId).
+ */
 export interface LalrPopped<V> {
-  readonly major: number;
+  readonly major: SymbolId;
   readonly value: V;
 }
 
@@ -129,14 +181,14 @@ export interface LalrPopped<V> {
  * calling you.  Your return value is pushed back as the LHS entry's
  * `value`.
  */
-export type LalrReduce<V> = (ruleId: number, popped: LalrPopped<V>[]) => V;
+export type LalrReduce<V> = (ruleId: RuleId, popped: LalrPopped<V>[]) => V;
 
 /** A single parse error reported by the engine. */
 export interface LalrError<V> {
   /** Parser state number at the time of failure. */
   readonly stateno: number;
-  /** Major of the token that couldn't be parsed. */
-  readonly major: number;
+  /** Terminal that couldn't be parsed in the current state. */
+  readonly major: TokenId;
   /** Value of that token, as supplied by the caller. */
   readonly value: V;
   /** 0-based index of the failing token within the input iterable. */
@@ -196,13 +248,13 @@ export function createEngine(dump: LemonDump): LalrEngine {
    *
    * lempar.c:549 yy_find_shift_action.
    */
-  function findShiftAction(lookahead: number, stateno: number): number {
+  function findShiftAction(lookahead: TokenId, stateno: number): number {
     // When `stateno` already encodes a pending reduce (> YY_MAX_SHIFT),
     // yy_find_shift_action in C returns it verbatim so the caller can
     // dispatch straight to the reduce branch.
     if (stateno > K.YY_MAX_SHIFT) return stateno;
 
-    let la = lookahead;
+    let la: TokenId = lookahead;
     while (true) {
       const base = T.yy_shift_ofst[stateno];
       const i = base + la;
@@ -241,9 +293,11 @@ export function createEngine(dump: LemonDump): LalrEngine {
    * to return to and the nonterminal we just produced, return the next
    * state (as an action code — see encoding).
    *
-   * lempar.c:614 yy_find_reduce_action.
+   * lempar.c:614 yy_find_reduce_action.  Note: `lookahead` here is the
+   * LHS of the just-reduced rule, so it's a `SymbolId` (nonterminal),
+   * not a `TokenId` like in findShiftAction.
    */
-  function findReduceAction(stateno: number, lookahead: number): number {
+  function findReduceAction(stateno: number, lookahead: SymbolId): number {
     // With no error symbol, lempar.c asserts stateno <= YY_REDUCE_COUNT
     // and the table lookup always succeeds.  We defensively fall back
     // to yy_default on out-of-range input.
@@ -268,7 +322,7 @@ export function createEngine(dump: LemonDump): LalrEngine {
   // -------------------------------------------------------------------------
   interface StackEntry<V> {
     stateno: number;
-    major: number;
+    major: SymbolId;
     value: V;
   }
 
@@ -280,7 +334,7 @@ export function createEngine(dump: LemonDump): LalrEngine {
     // because we never pop it, the caller's reducer never observes the
     // cast.  Using an explicit sentinel matches lempar.c's yystack[0].
     const stack: StackEntry<V>[] = [
-      { stateno: 0, major: 0, value: undefined as V },
+      { stateno: 0, major: 0 as SymbolId, value: undefined as V },
     ];
     const errors: LalrError<V>[] = [];
     let accepted = false;
@@ -288,7 +342,7 @@ export function createEngine(dump: LemonDump): LalrEngine {
 
     // ---- Reduce: pop nrhs entries, call onReduce, run GOTO, push ----
     // The non-action-switch half of lempar.c:742 yy_reduce.
-    function doReduce(ruleId: number): void {
+    function doReduce(ruleId: RuleId): void {
       const rule = rules[ruleId];
       const lhs = rule.lhs;
       const nrhs = rule.nrhs;
@@ -316,7 +370,7 @@ export function createEngine(dump: LemonDump): LalrEngine {
     // ---- Main dispatch loop (lempar.c:915) --------------------------
     let inputIndex = 0;
     for (const tok of tokens) {
-      const major = tok.major;
+      const major: TokenId = tok.major;
       const value = tok.value;
 
       // Equivalent to Parse()'s while(1) loop: keep reducing until the
@@ -328,7 +382,7 @@ export function createEngine(dump: LemonDump): LalrEngine {
 
         if (act >= K.YY_MIN_REDUCE) {
           // (1) Pure reduce, possibly chained.  Rule = act - YY_MIN_REDUCE.
-          const ruleId = act - K.YY_MIN_REDUCE;
+          const ruleId = (act - K.YY_MIN_REDUCE) as RuleId;
           doReduce(ruleId);
           act = stack[stack.length - 1].stateno;
           continue; // retry with the same token against the new state

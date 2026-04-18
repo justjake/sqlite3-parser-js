@@ -13,7 +13,7 @@
 // are treated as identifier characters (matching SQLite's rule that any
 // high byte is valid inside an identifier).
 
-import type { LemonDump } from './lempar.ts';
+import type { LemonDump, TokenId } from './lempar.ts';
 
 // ---------------------------------------------------------------------------
 // Public types — the shape of the keywords-dump, tokenizer options, and
@@ -87,7 +87,7 @@ export interface TokenizeOpts {
 
 /** One token as yielded by `tokenizer.tokenize()`. */
 export interface TokenSpan {
-  readonly type: number;
+  readonly type: TokenId;
   readonly start: number;
   readonly length: number;
 }
@@ -100,51 +100,51 @@ export interface TokenSpan {
  * Matches the `switch(aiClass[*z])` in src/tokenize.c:276.
  */
 export interface TokenizerTokens {
-  readonly SPACE:    number;
-  readonly COMMENT:  number;
-  readonly ILLEGAL:  number;
-  readonly PTR:      number;
-  readonly MINUS:    number;
-  readonly LP:       number;
-  readonly RP:       number;
-  readonly SEMI:     number;
-  readonly PLUS:     number;
-  readonly STAR:     number;
-  readonly SLASH:    number;
-  readonly REM:      number;
-  readonly EQ:       number;
-  readonly LE:       number;
-  readonly NE:       number;
-  readonly LT:       number;
-  readonly LSHIFT:   number;
-  readonly GE:       number;
-  readonly RSHIFT:   number;
-  readonly GT:       number;
-  readonly BITOR:    number;
-  readonly CONCAT:   number;
-  readonly COMMA:    number;
-  readonly BITAND:   number;
-  readonly BITNOT:   number;
-  readonly DOT:      number;
-  readonly STRING:   number;
-  readonly ID:       number;
-  readonly INTEGER:  number;
-  readonly FLOAT:    number;
-  readonly QNUMBER:  number;
-  readonly VARIABLE: number;
-  readonly BLOB:     number;
+  readonly SPACE:    TokenId;
+  readonly COMMENT:  TokenId;
+  readonly ILLEGAL:  TokenId;
+  readonly PTR:      TokenId;
+  readonly MINUS:    TokenId;
+  readonly LP:       TokenId;
+  readonly RP:       TokenId;
+  readonly SEMI:     TokenId;
+  readonly PLUS:     TokenId;
+  readonly STAR:     TokenId;
+  readonly SLASH:    TokenId;
+  readonly REM:      TokenId;
+  readonly EQ:       TokenId;
+  readonly LE:       TokenId;
+  readonly NE:       TokenId;
+  readonly LT:       TokenId;
+  readonly LSHIFT:   TokenId;
+  readonly GE:       TokenId;
+  readonly RSHIFT:   TokenId;
+  readonly GT:       TokenId;
+  readonly BITOR:    TokenId;
+  readonly CONCAT:   TokenId;
+  readonly COMMA:    TokenId;
+  readonly BITAND:   TokenId;
+  readonly BITNOT:   TokenId;
+  readonly DOT:      TokenId;
+  readonly STRING:   TokenId;
+  readonly ID:       TokenId;
+  readonly INTEGER:  TokenId;
+  readonly FLOAT:    TokenId;
+  readonly QNUMBER:  TokenId;
+  readonly VARIABLE: TokenId;
+  readonly BLOB:     TokenId;
 }
 
 /** Return type of `createTokenizer`. */
 export interface Tokenizer {
   /** TK_* codes the tokenizer emits directly. */
   readonly tokens: TokenizerTokens;
-  /** Symbol-id → display name (`"SELECT"`, `"ID"`, …) or undefined. */
-  tokenName(code: number): string | undefined;
+  /** TokenId → display name (`"SELECT"`, `"ID"`, …) or undefined. */
+  tokenName(code: TokenId): string | undefined;
   /** Iterate tokens in `sql`.  Trivia is skipped by default. */
   tokenize(sql: string, opts?: TokenizeOpts): IterableIterator<TokenSpan>;
   /** @internal — exposed for tests. */
-  _nextToken(z: string, p: number, outType: [number]): number;
+  _nextToken(z: string, p: number, outType: [TokenId]): number;
   /** @internal — exposed for tests. */
   readonly _keywordCount: number;
 }
@@ -282,16 +282,19 @@ export function createTokenizer(
   const digitSep = opts.digitSeparator ?? DEFAULT_DIGIT_SEPARATOR;
   const hasDigitSep = typeof digitSep === 'string' && digitSep.length === 1;
 
-  // Resolve TK_* names -> integer codes via the parser dump's symbol table.
-  // The dump holds names without the TK_ prefix (e.g. "SELECT", "ID").
-  const tokenCode = new Map<string, number>();
-  const tokenNameMap = new Map<number, string>();
+  // Resolve TK_* names -> integer codes via the parser dump's symbol
+  // table.  The dump holds names without the TK_ prefix (e.g.
+  // "SELECT", "ID").  isTerminal=true narrows SymbolId down to TokenId;
+  // TS can't prove that, so we do the cast at the assignment boundary.
+  const tokenCode = new Map<string, TokenId>();
+  const tokenNameMap = new Map<TokenId, string>();
   for (const sym of parserDump.symbols) {
     if (!sym.isTerminal) continue;
-    tokenCode.set(sym.name, sym.id);
-    tokenNameMap.set(sym.id, sym.name);
+    const id = sym.id as TokenId;
+    tokenCode.set(sym.name, id);
+    tokenNameMap.set(id, sym.name);
   }
-  function requireToken(name: string): number {
+  function requireToken(name: string): TokenId {
     const code = tokenCode.get(name);
     if (code === undefined) {
       throw new Error(
@@ -348,7 +351,7 @@ export function createTokenizer(
   const enabledFlags = new Set<MaskFlag>(opts.flags ?? allFlags);
   enabledFlags.add('ALWAYS'); // ALWAYS keywords are unconditional.
 
-  const keywordCode = new Map<string, number>();
+  const keywordCode = new Map<string, TokenId>();
   for (const kw of keywordsDump.keywords) {
     if (!kw.flags?.length) continue;
     if (!kw.flags.some((f) => enabledFlags.has(f))) continue;
@@ -364,7 +367,7 @@ export function createTokenizer(
   // to outType[0].  For consistency with the C version we keep a small
   // mutable holder.
   // -----------------------------------------------------------------------
-  function nextToken(z: string, p: number, outType: [number]): number {
+  function nextToken(z: string, p: number, outType: [TokenId]): number {
     let i: number;
     switch (classAt(z, p)) {
       case CC_SPACE: {
@@ -614,7 +617,7 @@ export function createTokenizer(
   function scanNumber(
     z: string,
     p: number,
-    outType: [number],
+    outType: [TokenId],
     startsWithDot: boolean,
   ): number {
     let i = p;
@@ -693,7 +696,7 @@ export function createTokenizer(
     z: string,
     p: number,
     i: number,
-    outType: [number],
+    outType: [TokenId],
   ): number {
     const word = z.slice(p, i);
     if (word.length >= 2) {
@@ -712,7 +715,7 @@ export function createTokenizer(
     sql: string,
     { skipTrivia = true }: TokenizeOpts = {},
   ): IterableIterator<TokenSpan> {
-    const out: [number] = [0];
+    const out: [TokenId] = [0 as TokenId];
     let i = 0;
     const len = sql.length;
     while (i < len) {
@@ -730,7 +733,7 @@ export function createTokenizer(
 
   return {
     tokens: T,
-    tokenName: (code: number) => tokenNameMap.get(code),
+    tokenName: (code: TokenId) => tokenNameMap.get(code),
     tokenize,
     _nextToken: nextToken,
     _keywordCount: keywordCode.size,
