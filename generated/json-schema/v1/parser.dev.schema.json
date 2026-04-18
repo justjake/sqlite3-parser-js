@@ -4,17 +4,184 @@
   "title": "parser.dev",
   "type": "object",
   "required": [
+    "meta",
+    "name",
+    "tokenPrefix",
+    "tokenType",
+    "varType",
+    "start",
+    "stackSize",
+    "reallocFunc",
+    "freeFunc",
+    "stackSizeLimit",
+    "extraArg",
+    "extraContext",
     "constants",
-    "tables",
+    "preamble",
+    "syntaxError",
+    "stackOverflow",
+    "parseFailure",
+    "parseAccept",
+    "extraCode",
+    "tokenDestructor",
+    "defaultDestructor",
     "symbols",
-    "rules"
+    "rules",
+    "tables"
   ],
   "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "lemonVersion",
+        "schemaVersion",
+        "sourceFile",
+        "defines"
+      ],
+      "properties": {
+        "lemonVersion": {
+          "type": "string",
+          "const": "1.0"
+        },
+        "schemaVersion": {
+          "type": "number",
+          "const": 1
+        },
+        "sourceFile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "defines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tokenPrefix": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tokenType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "varType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "start": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stackSize": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reallocFunc": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "freeFunc": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stackSizeLimit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "extraArg": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "extraContext": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "constants": {
       "type": "object",
       "required": [
         "YYNSTATE",
         "YYNRULE",
+        "YYNRULE_WITH_ACTION",
         "YYNTOKEN",
         "YYNSYMBOL",
         "YY_MAX_SHIFT",
@@ -27,8 +194,15 @@
         "YY_MAX_REDUCE",
         "YY_ACTTAB_COUNT",
         "YY_SHIFT_COUNT",
+        "YY_SHIFT_MIN",
+        "YY_SHIFT_MAX",
         "YY_REDUCE_COUNT",
+        "YY_REDUCE_MIN",
+        "YY_REDUCE_MAX",
+        "YY_MIN_DSTRCTR",
+        "YY_MAX_DSTRCTR",
         "YYWILDCARD",
+        "YYERRORSYMBOL",
         "YYFALLBACK"
       ],
       "properties": {
@@ -36,6 +210,9 @@
           "type": "integer"
         },
         "YYNRULE": {
+          "type": "integer"
+        },
+        "YYNRULE_WITH_ACTION": {
           "type": "integer"
         },
         "YYNTOKEN": {
@@ -74,10 +251,31 @@
         "YY_SHIFT_COUNT": {
           "type": "integer"
         },
+        "YY_SHIFT_MIN": {
+          "type": "integer"
+        },
+        "YY_SHIFT_MAX": {
+          "type": "integer"
+        },
         "YY_REDUCE_COUNT": {
           "type": "integer"
         },
+        "YY_REDUCE_MIN": {
+          "type": "integer"
+        },
+        "YY_REDUCE_MAX": {
+          "type": "integer"
+        },
+        "YY_MIN_DSTRCTR": {
+          "type": "integer"
+        },
+        "YY_MAX_DSTRCTR": {
+          "type": "integer"
+        },
         "YYWILDCARD": {
+          "type": "integer"
+        },
+        "YYERRORSYMBOL": {
           "type": "integer"
         },
         "YYFALLBACK": {
@@ -93,7 +291,376 @@
           ]
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
+    },
+    "preamble": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "syntaxError": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stackOverflow": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parseFailure": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parseAccept": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "extraCode": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tokenDestructor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "defaultDestructor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "symbols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "isTerminal",
+          "dtnum",
+          "useCnt",
+          "lambda"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "SymbolId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "TERMINAL"
+              },
+              {
+                "type": "string",
+                "const": "NONTERMINAL"
+              },
+              {
+                "type": "string",
+                "const": "MULTITERMINAL"
+              },
+              {
+                "type": "string",
+                "const": "UNKNOWN"
+              }
+            ]
+          },
+          "isTerminal": {
+            "type": "boolean"
+          },
+          "fallback": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "SymbolId"
+          },
+          "datatype": {
+            "type": "string"
+          },
+          "dtnum": {
+            "type": "integer"
+          },
+          "precedence": {
+            "type": "integer"
+          },
+          "assoc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "LEFT"
+              },
+              {
+                "type": "string",
+                "const": "RIGHT"
+              },
+              {
+                "type": "string",
+                "const": "NONE"
+              },
+              {
+                "type": "string",
+                "const": "UNK"
+              }
+            ]
+          },
+          "destructor": {
+            "type": "string"
+          },
+          "destLineno": {
+            "type": "integer"
+          },
+          "useCnt": {
+            "type": "integer"
+          },
+          "lambda": {
+            "type": "boolean"
+          },
+          "subsym": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "SymbolId"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "lhs",
+          "lhsName",
+          "nrhs",
+          "rhs",
+          "line",
+          "ruleLine",
+          "noCode",
+          "doesReduce",
+          "canReduce",
+          "neverReduce",
+          "lhsStart",
+          "actionC",
+          "codePrefix",
+          "codeSuffix"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "RuleId"
+          },
+          "lhs": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "SymbolId"
+          },
+          "lhsName": {
+            "type": "string"
+          },
+          "lhsAlias": {
+            "type": "string"
+          },
+          "nrhs": {
+            "type": "integer"
+          },
+          "rhs": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "pos",
+                    "alias",
+                    "symbol",
+                    "name"
+                  ],
+                  "properties": {
+                    "pos": {
+                      "type": "integer"
+                    },
+                    "alias": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "symbol": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "title": "SymbolId"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "pos",
+                    "alias",
+                    "multi"
+                  ],
+                  "properties": {
+                    "pos": {
+                      "type": "integer"
+                    },
+                    "alias": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "multi": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "symbol",
+                          "name"
+                        ],
+                        "properties": {
+                          "symbol": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "SymbolId"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "line": {
+            "type": "integer"
+          },
+          "ruleLine": {
+            "type": "integer"
+          },
+          "precSymbol": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "SymbolId"
+          },
+          "noCode": {
+            "type": "boolean"
+          },
+          "doesReduce": {
+            "type": "boolean"
+          },
+          "canReduce": {
+            "type": "boolean"
+          },
+          "neverReduce": {
+            "type": "boolean"
+          },
+          "lhsStart": {
+            "type": "boolean"
+          },
+          "actionC": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "codePrefix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "codeSuffix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
     },
     "tables": {
       "type": "object",
@@ -114,9 +681,7 @@
         "yy_lookahead": {
           "type": "array",
           "items": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "SymbolId"
+            "type": "integer"
           }
         },
         "yy_shift_ofst": {
@@ -146,113 +711,8 @@
           }
         }
       },
-      "additionalProperties": true
-    },
-    "symbols": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "id",
-          "name",
-          "isTerminal"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "SymbolId"
-          },
-          "name": {
-            "type": "string"
-          },
-          "isTerminal": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": true
-      }
-    },
-    "rules": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "id",
-          "lhs",
-          "lhsName",
-          "nrhs",
-          "rhs",
-          "doesReduce"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "RuleId"
-          },
-          "lhs": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "SymbolId"
-          },
-          "lhsName": {
-            "type": "string"
-          },
-          "nrhs": {
-            "type": "integer"
-          },
-          "rhs": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "pos"
-              ],
-              "properties": {
-                "pos": {
-                  "type": "integer"
-                },
-                "symbol": {
-                  "type": "integer",
-                  "minimum": 0,
-                  "title": "SymbolId"
-                },
-                "multi": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "symbol",
-                      "name"
-                    ],
-                    "properties": {
-                      "symbol": {
-                        "type": "integer",
-                        "minimum": 0,
-                        "title": "SymbolId"
-                      },
-                      "name": {
-                        "type": "string"
-                      }
-                    },
-                    "additionalProperties": true
-                  }
-                },
-                "name": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": true
-            }
-          },
-          "doesReduce": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": true
-      }
+      "additionalProperties": false
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

@@ -21,21 +21,118 @@
           "type": "string"
         },
         "schemaVersion": {
-          "type": "integer"
+          "type": "number",
+          "const": 1
         },
         "keywordCount": {
           "type": "integer"
         },
         "maskFlags": {
           "type": "object",
-          "patternProperties": {
-            "^.*$": {
+          "required": [
+            "ALTER",
+            "ALWAYS",
+            "ANALYZE",
+            "ATTACH",
+            "AUTOINCR",
+            "CAST",
+            "COMPOUND",
+            "CONFLICT",
+            "EXPLAIN",
+            "FKEY",
+            "PRAGMA",
+            "REINDEX",
+            "SUBQUERY",
+            "TRIGGER",
+            "VACUUM",
+            "VIEW",
+            "VTAB",
+            "AUTOVACUUM",
+            "CTE",
+            "UPSERT",
+            "WINDOWFUNC",
+            "GENCOL",
+            "RETURNING",
+            "ORDERSET"
+          ],
+          "properties": {
+            "ALTER": {
+              "type": "integer"
+            },
+            "ALWAYS": {
+              "type": "integer"
+            },
+            "ANALYZE": {
+              "type": "integer"
+            },
+            "ATTACH": {
+              "type": "integer"
+            },
+            "AUTOINCR": {
+              "type": "integer"
+            },
+            "CAST": {
+              "type": "integer"
+            },
+            "COMPOUND": {
+              "type": "integer"
+            },
+            "CONFLICT": {
+              "type": "integer"
+            },
+            "EXPLAIN": {
+              "type": "integer"
+            },
+            "FKEY": {
+              "type": "integer"
+            },
+            "PRAGMA": {
+              "type": "integer"
+            },
+            "REINDEX": {
+              "type": "integer"
+            },
+            "SUBQUERY": {
+              "type": "integer"
+            },
+            "TRIGGER": {
+              "type": "integer"
+            },
+            "VACUUM": {
+              "type": "integer"
+            },
+            "VIEW": {
+              "type": "integer"
+            },
+            "VTAB": {
+              "type": "integer"
+            },
+            "AUTOVACUUM": {
+              "type": "integer"
+            },
+            "CTE": {
+              "type": "integer"
+            },
+            "UPSERT": {
+              "type": "integer"
+            },
+            "WINDOWFUNC": {
+              "type": "integer"
+            },
+            "GENCOL": {
+              "type": "integer"
+            },
+            "RETURNING": {
+              "type": "integer"
+            },
+            "ORDERSET": {
               "type": "integer"
             }
-          }
+          },
+          "additionalProperties": false
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "keywords": {
       "type": "array",
@@ -64,14 +161,13 @@
           "flags": {
             "type": "array",
             "items": {
-              "type": "string",
-              "minLength": 1
+              "type": "string"
             }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       }
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }
