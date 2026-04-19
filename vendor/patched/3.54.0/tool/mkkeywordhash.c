@@ -417,6 +417,14 @@ static void reorder(int *pFrom){
 ** mask broken out into symbolic flag names so that the consumer can
 ** filter by SQLITE_OMIT_* features at JS-build time without depending
 ** on which flags were enabled when this binary was compiled.
+**
+** Parser-symbol normalization: `zTokenType` always carries a "TK_"
+** prefix (the generated C code pastes those symbols directly into the
+** SQLite source).  In the JSON dump we strip the prefix and emit the
+** value as `token`, matching lemon.c's `symbols[].name` convention
+** (which has no prefix).  This lets a JS consumer look up a keyword's
+** parser code in the lemon dump's symbol table without any string
+** massaging.
 ** ---------------------------------------------------------------------- */
 
 /* Map a mask bit (as defined by the #defines above) back to its symbolic
@@ -490,11 +498,18 @@ static void emit_json_string(FILE *out, const char *z){
 /* Emit one keyword entry.  Called from inside the keyword loop. */
 static void emit_keyword_json(FILE *out, const Keyword *p){
   int rest, j, first;
+  const char *zTok = p->zTokenType;
+  /* Strip the "TK_" prefix (see file header block for rationale).  The
+  ** strncmp guard is defensive — every entry in aKeywordTable[] uses a
+  ** "TK_*" token type today, but a future SQLite could add one that
+  ** doesn't and we'd rather pass it through verbatim than slice garbage.
+  */
+  if( strncmp(zTok, "TK_", 3)==0 ) zTok += 3;
   fputs("    {", out);
   fputs("\"name\":", out);
   emit_json_string(out, p->zName);
-  fputs(", \"tokenName\":", out);
-  emit_json_string(out, p->zTokenType);
+  fputs(", \"token\":", out);
+  emit_json_string(out, zTok);
   fprintf(out, ", \"priority\":%d, \"mask\":%d, \"flags\":[",
           p->priority, p->mask);
   rest = p->mask;

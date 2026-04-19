@@ -9,6 +9,10 @@
   "files": [
     "dist"
   ],
+  "bin": {
+    "sqlite3-parser":    "./dist/bin/sqlite3-parser.js",
+    "sqlite3-tokenizer": "./dist/bin/sqlite3-tokenizer.js"
+  },
   "exports": {
     ".": {
       "types":   "./dist/generated/current.d.ts",

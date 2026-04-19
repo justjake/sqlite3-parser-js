@@ -421,15 +421,17 @@ const KeywordsDevMeta = Strict({
   maskFlags:     KeywordsDevMaskFlags,
 });
 
-// One keyword entry.  `flags[]` holds the symbolic flag names decoded
-// from `mask`; any bits unrecognised by aMaskNames[] are emitted as
-// hex literals like "0x10000000" (mkkeywordhash.c:514).
+// One keyword entry.  `token` holds the parser symbol name without the
+// "TK_" prefix — see the header block in vendor/patched/.../mkkeywordhash.c
+// for why the prefix is stripped in C.  `flags[]` holds the symbolic
+// flag names decoded from `mask`; any bits unrecognised by aMaskNames[]
+// are emitted as hex literals like "0x10000000" (mkkeywordhash.c:514).
 const KeywordsDevEntry = Strict({
-  name:      Type.String(),
-  tokenName: Type.String(),
-  priority:  Type.Integer(),
-  mask:      Type.Integer(),
-  flags:     Type.Array(Type.String()),
+  name:     Type.String(),
+  token:    Type.String(),
+  priority: Type.Integer(),
+  mask:     Type.Integer(),
+  flags:    Type.Array(Type.String()),
 });
 
 const KeywordsDevSchema = Strict({
@@ -446,16 +448,16 @@ const KeywordsProdMeta = matches<KeywordsDump['meta']>()(Strict({
   maskFlags: KeywordsDevMaskFlags,
 }));
 
-// `Type.Unsafe<MaskFlag>(Type.String())` is a plain-string JSON Schema
-// whose Static is the `MaskFlag` literal union, so the array element's
-// TS type matches the runtime contract.  The wire format is still a
-// JSON string; validation here doesn't enforce the enum — the runtime
-// handles unknown flags via the same "hex literal" path used for dev
-// dumps (mkkeywordhash.c:514).
+// Prod drops the decoded `flags: string[]` array in favour of the raw
+// `mask: number` (bit values defined by `meta.maskFlags`), and strips
+// the redundant `TK_` prefix from `tokenName` — renaming the field to
+// `token` to signal that the value is the parser symbol name directly.
+// See scripts/slim-dump.ts for the pre-Clean transform that builds
+// this shape out of the dev dump.
 const KeywordsProdEntry = matches<KeywordEntry>()(Strict({
-  name:      Type.String(),
-  tokenName: Type.String(),
-  flags:     Type.Array(Type.Unsafe<MaskFlag>(Type.String())),
+  name:  Type.String(),
+  token: Type.String(),
+  mask:  Type.Integer(),
 }));
 
 const KeywordsProdSchema = matches<KeywordsDump>()(Strict({

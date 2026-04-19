@@ -39,18 +39,24 @@ export type MaskFlag =
 /**
  * One keyword entry in the runtime (prod) keyword dump.
  *
- * The dev dump also carries `priority` (hash-chain ordering) and `mask`
- * (raw bitmask); both are stripped by scripts/slim-dump.ts because the
- * runtime only needs the decoded `flags` array.  The prod JSON Schema
- * in scripts/json-schemas.ts is locked to this shape via `matches<>`.
+ * The dev dump additionally carries `priority` (hash-chain ordering),
+ * decoded `flags: string[]`, and the original `tokenName` with the
+ * `TK_` prefix; all three are dropped/transformed by scripts/slim-dump.ts
+ * for the runtime — see the pre-Clean transform there for details.
+ * The prod JSON Schema in scripts/json-schemas.ts is locked to this
+ * shape via `matches<>`.
  */
 export interface KeywordEntry {
   /** Uppercase ASCII keyword text, e.g. `"SELECT"`, `"BEGIN"`. */
   name: string;
-  /** Lemon TK_* symbol name with the `TK_` prefix, e.g. `"TK_SELECT"`. */
-  tokenName: string;
-  /** Symbolic flag names equivalent to the mask. */
-  flags: MaskFlag[];
+  /** Parser symbol name (no `TK_` prefix), e.g. `"SELECT"`, `"JOIN_KW"`. */
+  token: string;
+  /**
+   * Feature-flag bitmask.  Bits come from `meta.maskFlags`; a keyword
+   * is enabled iff `(mask & enabledMask) !== 0` where `enabledMask` is
+   * built from the caller-supplied flag set at createTokenizer time.
+   */
+  mask: number;
 }
 
 /**
@@ -355,16 +361,21 @@ export function createTokenizer(
   // strings; values are TK_* codes.  We filter by enabled flags so that
   // (e.g.) WINDOWFUNC keywords disappear when SQLITE_OMIT_WINDOWFUNC is
   // configured.
-  const allFlags = Object.keys(keywordsDump.meta?.maskFlags ?? {}) as MaskFlag[];
-  const enabledFlags = new Set<MaskFlag>(opts.flags ?? allFlags);
-  enabledFlags.add('ALWAYS'); // ALWAYS keywords are unconditional.
+  //
+  // Both the per-keyword `mask` and the bit assignments in
+  // `meta.maskFlags` come from mkkeywordhash.c's `aMaskNames[]` — we
+  // don't hardcode bit values on the JS side, so if SQLite ever
+  // reassigns a bit we pick up the change via the regenerated dump.
+  const maskFlags = keywordsDump.meta.maskFlags;
+  const allFlags = Object.keys(maskFlags) as MaskFlag[];
+  const enabledFlags: readonly MaskFlag[] = opts.flags ?? allFlags;
+  let enabledMask = maskFlags.ALWAYS ?? 0; // ALWAYS keywords are unconditional.
+  for (const f of enabledFlags) enabledMask |= maskFlags[f] ?? 0;
 
   const keywordCode = new Map<string, TokenId>();
   for (const kw of keywordsDump.keywords) {
-    if (!kw.flags?.length) continue;
-    if (!kw.flags.some((f) => enabledFlags.has(f))) continue;
-    const codeName = kw.tokenName.replace(/^TK_/, '');
-    keywordCode.set(kw.name, requireToken(codeName));
+    if ((kw.mask & enabledMask) === 0) continue;
+    keywordCode.set(kw.name, requireToken(kw.token));
   }
 
   // -----------------------------------------------------------------------

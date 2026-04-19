@@ -8,6 +8,9 @@
 // Output layout:
 //
 //   dist/
+//   ├── bin/
+//   │   ├── sqlite3-parser.js      shipped CLI (shebang: node)
+//   │   └── sqlite3-tokenizer.js   shipped CLI (shebang: node)
 //   ├── generated/
 //   │   ├── current.js             entry for `import 'sqlite3-parser'`
 //   │   ├── current.d.ts           types (colocated with the .js)
@@ -42,14 +45,30 @@
 // 'browser'` produces JS that also runs on Node ≥ 18 and Bun without
 // a per-platform build matrix.
 
-import { mkdirSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
+import {
+  chmodSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { gzipSync } from 'node:zlib';
 
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const GENERATED = join(ROOT, 'generated');
+const BIN = join(ROOT, 'bin');
 const DIST = join(ROOT, 'dist');
+
+/**
+ * Source CLIs that should be bundled and shipped as executables.
+ * Paths are relative to BIN; outputs land at dist/bin/<name>.js.
+ */
+const BIN_ENTRIES = ['sqlite3-parser.ts', 'sqlite3-tokenizer.ts'];
 
 function log(msg: string): void {
   console.log(`[build] ${msg}`);
@@ -90,6 +109,7 @@ async function buildJs(versions: string[]): Promise<void> {
   const entries = [
     join(GENERATED, 'current.ts'),
     ...versions.map((v) => join(GENERATED, v, 'index.ts')),
+    ...BIN_ENTRIES.map((f) => join(BIN, f)),
   ];
   log(`bundling ${entries.length} entrypoint(s) with bun…`);
 
@@ -114,6 +134,25 @@ async function buildJs(versions: string[]): Promise<void> {
     throw new Error('bun build failed');
   }
   log(`  → ${r.outputs.length} output file(s)`);
+}
+
+/**
+ * Rewrite each bundled CLI so it ships a portable node shebang and is
+ * marked executable.  The source files carry `#!/usr/bin/env bun` for
+ * dev ergonomics, but the shipped bundle targets plain node — consumers
+ * who `npm install sqlite3-parser` are not expected to have bun.
+ */
+function finalizeBin(): void {
+  const binDir = join(DIST, 'bin');
+  if (!existsSync(binDir)) return;
+  for (const entry of readdirSync(binDir)) {
+    if (!entry.endsWith('.js')) continue;
+    const p = join(binDir, entry);
+    const src = readFileSync(p, 'utf8');
+    const body = src.startsWith('#!') ? src.slice(src.indexOf('\n') + 1) : src;
+    writeFileSync(p, `#!/usr/bin/env node\n${body}`);
+    chmodSync(p, 0o755);
+  }
 }
 
 /**
@@ -216,6 +255,7 @@ async function main(): Promise<void> {
     throw new Error('No versions found under generated/.  Run `bun run vendor <ref>` first.');
   }
   await buildJs(versions);
+  finalizeBin();
   buildTypes();
   reportSizes();
   log('done.');
