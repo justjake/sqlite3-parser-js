@@ -40,13 +40,7 @@
 // easy to hide a quiet regression.  Run the tests yourself once the
 // script reports success.
 
-import {
-  cpSync,
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs"
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { createHash } from "node:crypto"
 import { dirname, join, resolve } from "node:path"
 import { spawnSync } from "node:child_process"
