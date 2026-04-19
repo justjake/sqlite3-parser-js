@@ -3,8 +3,8 @@
 Parse SQLite query syntax into a concrete syntax tree (CST).
 
 - **Light**: Pure JavaScript, no WebAssembly overhead. Ships ~22 KB gzipped and runs unchanged in Node, Bun, and the browser.
-- **Faithful**: The parser is generated from [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](./vendor/patched/3.54.0/tool/lemon.c) of the [Lemon parser generator](https://sqlite.org/lemon.html). Uses the same LALR(1) parser state tables as SQLite itself.
-- **Helpful**: Greatly improved error messages compared to upstream SQLite, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
+- **Faithful**: The parser is generated from [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/vendor/patched/3.54.0/tool/lemon.c) of the [Lemon parser generator](https://sqlite.org/lemon.html). Uses the same LALR(1) parser state tables as SQLite itself.
+- **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
 
 ## Usage
 
