@@ -340,17 +340,6 @@ export function createParser(
     // inventing a bogus -1 that would need a cast to TokenId.
     let lastMajor: TokenId | undefined
     for (const tok of tk.tokenize(sql)) {
-      if (tok.type === TK_ILLEGAL) {
-        // sqlite's tokenize.c:707 formats it as: unrecognized token.
-        // We record it and bail — attempting to recover typically
-        // cascades into noise.
-        const text = sql.slice(tok.start, tok.start + tok.length)
-        errors.push({
-          message: `unrecognized token: ${JSON.stringify(text)}`,
-        })
-        return { errors }
-      }
-
       const node: TokenNode = {
         kind: "token",
         type: tok.type,
@@ -359,6 +348,23 @@ export function createParser(
         start: tok.start,
         length: tok.length,
         synthetic: false,
+      }
+
+      if (tok.type === TK_ILLEGAL) {
+        // sqlite's tokenize.c:707 formats it as: unrecognized token.
+        // We record it and bail — attempting to recover typically
+        // cascades into noise.
+        const range: [number, number] = [node.start, node.start + node.length]
+        const { line, col } = lineColAt(sql, range[0])
+        errors.push({
+          message: `unrecognized token: ${JSON.stringify(node.text)}`,
+          token: node,
+          hint: illegalTokenHint(node.text),
+          line,
+          col,
+          range,
+        })
+        return { errors }
       }
       inputs.push({ major: tok.type, value: node })
       lastMajor = tok.type
