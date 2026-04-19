@@ -33,6 +33,7 @@ import {
   LalrEngine,
 } from "./lempar.ts"
 import { buildIllegalTokenError, enhanceParseError, type ParseError } from "./enhanceError.ts"
+import { validate } from "./semantic.ts"
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -391,6 +392,13 @@ export function parserModuleForGrammar(args: {
     }
 
     if (session.state === "accepted" && session.root) {
+      // Run the parse.y semantic-action port against the CST.  See
+      // src/semantic.ts and generated/<ver>/semantic-actions.snapshot.json.
+      for (const e of validate(session.root, PARSER_DEFS, sql, {
+        digitSeparator: options.digitSeparator,
+      })) {
+        errors.push(e)
+      }
       return { cst: session.root, errors }
     }
     return { errors }

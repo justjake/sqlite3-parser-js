@@ -200,6 +200,11 @@ export const handlers: Partial<Record<StableKey, SemanticHandler>> = {
 // Entry point.
 // ---------------------------------------------------------------------------
 
+export interface ValidateOptions {
+  /** Forwarded to the `term::QNUMBER` handler; see `SemanticContext`. */
+  readonly digitSeparator?: string
+}
+
 /**
  * Walk a CST and collect every `ParseError` the registered handlers
  * report.  Returns an empty array when no handler matches any rule in
@@ -209,10 +214,11 @@ export function validate(
   cst: CstNode,
   defs: Pick<ParserDefs, "rules" | "symbols">,
   sql: string,
+  opts: ValidateOptions = {},
 ): ParseError[] {
   if (cst.kind === "token") return []
   const symbolName = buildSymbolName(defs)
-  const ctx: SemanticContext = { sql }
+  const ctx: SemanticContext = { sql, digitSeparator: opts.digitSeparator }
   const errors: ParseError[] = []
 
   const walk = (node: CstNode): void => {

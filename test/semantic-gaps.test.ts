@@ -10,16 +10,10 @@
 //      SQL string upstream rejects.
 
 import { describe, test, expect } from "bun:test"
-import { parse, PARSER_DEFS, withOptions } from "../generated/current.ts"
-import { validate } from "../src/semantic.ts"
+import { parse, withOptions } from "../generated/current.ts"
 
 function semanticErrors(sql: string, sqlParser = parse) {
-  const { cst, errors } = sqlParser(sql)
-  if (errors.length) {
-    throw new Error(`expected parse to succeed; got parser errors: ${errors.map((e) => e.canonical).join(", ")}`)
-  }
-  if (!cst) throw new Error("expected a CST")
-  return validate(cst, PARSER_DEFS, sql)
+  return sqlParser(sql).errors
 }
 
 describe("table_option::nm  — parse.y:240", () => {
