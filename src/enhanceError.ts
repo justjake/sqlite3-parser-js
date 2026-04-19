@@ -88,11 +88,11 @@ export class ParseErrorImpl implements ParseError {
   }
 
   get range(): readonly [number, number] {
-    return this.#range ??= tokenRange(this.#sql, this.token)
+    return (this.#range ??= tokenRange(this.#sql, this.token))
   }
 
   get codeBlock(): string {
-    return this.#codeBlock ??= renderCodeBlock(this.#sql, this.range)
+    return (this.#codeBlock ??= renderCodeBlock(this.#sql, this.range))
   }
 
   getMessage(): string {
@@ -403,8 +403,7 @@ export function renderCodeBlock(
   }
 
   const firstLineText = lines[startLoc.line - 1] ?? ""
-  const underlineEndCol =
-    endLoc.line === startLoc.line ? endLoc.col : firstLineText.length + 1
+  const underlineEndCol = endLoc.line === startLoc.line ? endLoc.col : firstLineText.length + 1
   const caretCount = Math.max(1, underlineEndCol - startLoc.col)
   const pad = " ".repeat(gutterWidth) + "│ " + " ".repeat(startLoc.col - 1)
   out.push(pad + "^".repeat(caretCount))

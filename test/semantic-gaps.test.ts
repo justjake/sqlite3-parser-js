@@ -46,8 +46,7 @@ describe("table_option::WITHOUT nm  — parse.y:235", () => {
 
 describe("tridxby::INDEXED BY nm  — parse.y:1786", () => {
   test("INDEXED BY inside trigger UPDATE is rejected", () => {
-    const sql =
-      "CREATE TRIGGER tr AFTER UPDATE ON t BEGIN UPDATE t INDEXED BY i SET x = 1; END"
+    const sql = "CREATE TRIGGER tr AFTER UPDATE ON t BEGIN UPDATE t INDEXED BY i SET x = 1; END"
     const errs = semanticErrors(sql)
     expect(errs).toHaveLength(1)
     expect(errs[0]!.canonical).toBe(
@@ -117,8 +116,6 @@ describe("ASSERT_IS_CREATE entries", () => {
   // not produce user-visible errors.  These statements are valid.
   test("named CONSTRAINT clauses parse cleanly", () => {
     expect(semanticErrors("CREATE TABLE t(x INT CONSTRAINT c1 NOT NULL)")).toHaveLength(0)
-    expect(
-      semanticErrors("CREATE TABLE t(x INT, CONSTRAINT c1 CHECK (x > 0))"),
-    ).toHaveLength(0)
+    expect(semanticErrors("CREATE TABLE t(x INT, CONSTRAINT c1 CHECK (x > 0))")).toHaveLength(0)
   })
 })

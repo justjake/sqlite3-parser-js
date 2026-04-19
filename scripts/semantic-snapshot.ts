@@ -31,11 +31,7 @@ import type { ParserDefs, ParserRule } from "../src/lempar.ts"
 // upstream.  Any rule whose actionC contains at least one of these is
 // tracked in the snapshot.  Broadening this list is a deliberate
 // widening of the safety net.
-const VALIDATION_PATTERNS = [
-  "sqlite3ErrorMsg",
-  "sqlite3DequoteNumber",
-  "ASSERT_IS_CREATE",
-] as const
+const VALIDATION_PATTERNS = ["sqlite3ErrorMsg", "sqlite3DequoteNumber", "ASSERT_IS_CREATE"] as const
 
 interface DevRule extends ParserRule {
   readonly actionC: string | null
@@ -116,9 +112,7 @@ function main(): void {
   if (!version || (mode !== "--check" && mode !== "--write")) usage(2)
 
   if (!existsSync(devDefsPath(version))) {
-    console.error(
-      `missing ${devDefsPath(version)} — run \`make ${devDefsPath(version)}\` first`,
-    )
+    console.error(`missing ${devDefsPath(version)} — run \`make ${devDefsPath(version)}\` first`)
     process.exit(2)
   }
 
