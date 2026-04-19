@@ -281,7 +281,7 @@ function tokenRange(sql: string, token: TokenNode): [number, number] {
 // Location.
 // ---------------------------------------------------------------------------
 
-function lineColAt(sql: string, offset: number): { line: number; col: number } {
+export function lineColAt(sql: string, offset: number): { line: number; col: number } {
   let line = 1
   let col = 1
   for (let i = 0; i < offset; i++) {

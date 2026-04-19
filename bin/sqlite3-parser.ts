@@ -5,33 +5,42 @@
 //
 //   sqlite3-parser "SELECT 1"
 //   sqlite3-parser --pretty "SELECT 1 FROM t"
+//   sqlite3-parser --digit-separator _ "SELECT 1_000"
 //   echo "SELECT 1" | sqlite3-parser
 //
 // Not a production interface — reach for the library API
 // (`import { parse } from 'sqlite3-parser'`) in real code.  This CLI
 // is pinned to whatever `vendor/manifest.json` marks as `current`.
 
-import { parse, formatCst, type ParseError } from "../generated/current.ts"
+import { parse, formatCst, withOptions, type ParseError } from "../generated/current.ts"
 
 interface CliOptions {
   pretty: boolean
+  digitSeparator: string | undefined
   sqlParts: string[]
 }
 
 function usage(): string {
   return (
-    'usage: sqlite3-parser [--pretty] ["<sql>"]\n' +
-    "  --pretty   Print the CST as indented S-expressions instead of JSON.\n" +
-    "  <sql>      SQL string to parse.  If omitted, read from stdin."
+    'usage: sqlite3-parser [--pretty] [--digit-separator <char>] ["<sql>"]\n' +
+    "  --pretty             Print the CST as indented S-expressions instead of JSON.\n" +
+    "  --digit-separator    Single-char separator for numeric literals\n" +
+    '                       (default: disabled; pass "_" for sqlite 3.45+ behaviour).\n' +
+    "  <sql>                SQL string to parse.  If omitted, read from stdin."
   )
 }
 
 function parseCli(argv: string[]): CliOptions {
-  const opts: CliOptions = { pretty: false, sqlParts: [] }
+  const opts: CliOptions = { pretty: false, digitSeparator: undefined, sqlParts: [] }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]!
     if (a === "--pretty") {
       opts.pretty = true
+      continue
+    }
+    if (a === "--digit-separator") {
+      if (i + 1 >= argv.length) throw new Error("missing value after --digit-separator")
+      opts.digitSeparator = argv[++i]!
       continue
     }
     if (a === "-h" || a === "--help") {
@@ -74,7 +83,10 @@ function formatError(e: ParseError): string {
 
 const cli = parseCli(process.argv.slice(2))
 const sql = await readSql(cli.sqlParts)
-const result = parse(sql)
+const result =
+  cli.digitSeparator !== undefined
+    ? withOptions({ digitSeparator: cli.digitSeparator }).parse(sql)
+    : parse(sql)
 
 for (const err of result.errors) {
   console.error(formatError(err))
