@@ -2,7 +2,7 @@
 // The more exhaustive SQLite-ported suites live under test/sqlite/*.
 
 import { describe, test, expect } from "bun:test"
-import { tk, tkSep, makeTokenizer, lex, lexNames, keywordDefs } from "./helpers.ts"
+import { tk, makeTokenizer, lex, lexNames, keywordDefs } from "./helpers.ts"
 import type { MaskFlag } from "../src/tokenize.ts"
 
 describe("createTokenizer setup", () => {

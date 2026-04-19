@@ -932,6 +932,7 @@ export function createTokenizer(
         outType[0] = T.ILLEGAL
         return 0
       }
+      case CC_ILLEGAL:
       default: {
         outType[0] = T.ILLEGAL
         return 1

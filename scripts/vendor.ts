@@ -45,9 +45,7 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
-  readdirSync,
   writeFileSync,
-  statSync,
 } from "node:fs"
 import { createHash } from "node:crypto"
 import { dirname, join, resolve } from "node:path"
