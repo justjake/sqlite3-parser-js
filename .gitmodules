@@ -1,3 +1,6 @@
 [submodule "vendor/lemon-rs"]
 	path = vendor/lemon-rs
 	url = https://github.com/gwenn/lemon-rs
+[submodule "vendor/liteparser"]
+	path = vendor/liteparser
+	url = https://github.com/sqliteai/liteparser.git
