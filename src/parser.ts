@@ -24,7 +24,6 @@ import {
 import {
   engineModuleForGrammar,
   type ParserRhsPos,
-  type ParserRule,
   type LalrPopped,
   type ParserDefs,
   type RuleId,
@@ -139,13 +138,7 @@ export function parserModuleForGrammar(args: {
   const createEngine = engineModuleForGrammar(PARSER_DEFS)
   const rules = PARSER_DEFS.rules
 
-  // Symbol-id → display name (used to build the CST token names).
-  // Mirrors yyTokenName[] in the generated parse.c.  Symbols are
-  // keyed on array index — the prod defs has no explicit `id` field.
-  const symbolName: string[] = []
-  for (let i = 0; i < PARSER_DEFS.symbols.length; i++) {
-    symbolName[i] = PARSER_DEFS.symbols[i]!.name
-  }
+  const symbols = PARSER_DEFS.symbols
 
   // -------------------------------------------------------------------------
   // CST DIVERGENCE #1 — Unit-rule-elimination recovery.
@@ -159,15 +152,12 @@ export function parserModuleForGrammar(args: {
   //
   // For a CST that reflects the authored grammar, we need to put the
   // invisible wrapper nodes back.  `unitWrapper[target][source]` is
-  // the rule to apply when we pop a symbol of type `source` where a
-  // symbol of type `target` was expected.  In SQLite's current grammar
-  // all 14 collapsed rules are 1:1 unit rules; a single lookup
+  // the id of the rule to apply when we pop a symbol of type `source`
+  // where a symbol of type `target` was expected.  In SQLite's current
+  // grammar all 14 collapsed rules are 1:1 unit rules; a single lookup
   // suffices.
   // -------------------------------------------------------------------------
-  // Each entry carries the rule plus the rule id (its index in `rules`),
-  // since we drop `rule.id` from the prod defs and still need to stamp
-  // the wrapper's `RuleNode.rule` at synthesis time.
-  const unitWrapper = new Map<SymbolId, Map<SymbolId, { rule: ParserRule; ruleId: RuleId }>>()
+  const unitWrapper = new Map<SymbolId, Map<SymbolId, RuleId>>()
   for (let i = 0; i < rules.length; i++) {
     const r = rules[i]!
     if (r.doesReduce) continue
@@ -176,7 +166,7 @@ export function parserModuleForGrammar(args: {
     if (src === undefined) continue
     let inner = unitWrapper.get(r.lhs)
     if (!inner) unitWrapper.set(r.lhs, (inner = new Map()))
-    inner.set(src, { rule: r, ruleId: i as RuleId })
+    inner.set(src, i as RuleId)
   }
 
   // -------------------------------------------------------------------------
@@ -221,9 +211,9 @@ export function parserModuleForGrammar(args: {
       // rather than an elision.
       const target = expected.symbol
       if (target === undefined) break
-      const wrapperEntry = unitWrapper.get(target)?.get(curMajor)
-      if (!wrapperEntry) break
-      const { rule: wrapperRule, ruleId: wrapperId } = wrapperEntry
+      const wrapperId = unitWrapper.get(target)?.get(curMajor)
+      if (wrapperId === undefined) break
+      const wrapperRule = rules[wrapperId]!
       cur = {
         kind: "rule",
         rule: wrapperId,
@@ -326,7 +316,7 @@ export function parserModuleForGrammar(args: {
       const node: TokenNode = {
         kind: "token",
         type: tok.type,
-        name: symbolName[tok.type] ?? String(tok.type),
+        name: symbols[tok.type]?.name ?? String(tok.type),
         text: sql.slice(tok.start, tok.start + tok.length),
         start: tok.start,
         length: tok.length,
@@ -359,7 +349,7 @@ export function parserModuleForGrammar(args: {
         const semiNode: TokenNode = {
           kind: "token",
           type: TK_SEMI,
-          name: symbolName[TK_SEMI] ?? "SEMI",
+          name: symbols[TK_SEMI]?.name ?? "SEMI",
           text: "",
           start: endPos,
           length: 0,
@@ -372,7 +362,7 @@ export function parserModuleForGrammar(args: {
         const eofNode: TokenNode = {
           kind: "token",
           type: TK_EOF,
-          name: symbolName[TK_EOF] ?? "$",
+          name: symbols[TK_EOF]?.name ?? "$",
           text: "",
           start: endPos,
           length: 0,

@@ -80,7 +80,7 @@ function readManifest(): Manifest {
  * via the PACKAGE_NAME constant).
  */
 function indexModule(version: string): string {
-  return TEMPLATE_CONTENT.replace("__VERSION__", version).replace("__GENERATOR__", SELF)
+  return TEMPLATE_CONTENT.replaceAll("__VERSION__", version).replaceAll("__GENERATOR__", SELF)
 }
 
 /**

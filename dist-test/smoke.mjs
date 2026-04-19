@@ -1,21 +1,30 @@
 import assert from "node:assert/strict"
 import { execFileSync } from "node:child_process"
 import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 import test from "node:test"
 
+const DIST_TEST_DIR = fileURLToPath(new URL(".", import.meta.url))
+const ROOT = join(DIST_TEST_DIR, "..")
+const DIST = join(ROOT, "dist")
+
 test("main entrypoint parses SQL", async () => {
-  const pkg = await import("sqlite3-parser")
+  const pkg = await import("../dist/generated/current.js")
   const { cst, errors } = pkg.parse("SELECT 1")
 
   assert.equal(errors.length, 0)
   assert.equal(cst?.name, "input")
-  assert.equal(pkg.SQLITE_LIB, "sqlite")
   assert.match(pkg.SQLITE_VERSION, /^\d+\.\d+\.\d+$/)
+  assert.equal(typeof pkg.withOptions, "function")
+  assert.equal(typeof pkg.createEngine, "function")
+  assert.equal("createParser" in pkg, false)
+  assert.equal("createTokenizer" in pkg, false)
+  assert.equal("SQLITE_LIB" in pkg, false)
 })
 
 test("versioned subpath import works", async () => {
-  const main = await import("sqlite3-parser")
-  const pinned = await import(`sqlite3-parser/sqlite-${main.SQLITE_VERSION}`)
+  const main = await import("../dist/generated/current.js")
+  const pinned = await import(`../dist/generated/${main.SQLITE_VERSION}/index.js`)
   const { cst, errors } = pinned.parse("SELECT 1")
 
   assert.equal(errors.length, 0)
@@ -24,37 +33,37 @@ test("versioned subpath import works", async () => {
 })
 
 test("main entrypoint can be required from commonjs", () => {
-  const output = execFileSync(process.execPath, [join(process.cwd(), "require-smoke.cjs")], {
+  const output = execFileSync(process.execPath, [join(DIST_TEST_DIR, "require-smoke.cjs")], {
     encoding: "utf8",
   })
   const result = JSON.parse(output)
 
   assert.equal(result.errors, 0)
   assert.equal(result.cst, "input")
-  assert.equal(result.lib, "sqlite")
   assert.match(result.version, /^\d+\.\d+\.\d+$/)
+  assert.equal(result.withOptions, true)
+  assert.equal(result.createEngine, true)
+  assert.deepEqual(result.legacy, {
+    createParser: false,
+    createTokenizer: false,
+    sqliteLib: false,
+  })
+  assert.deepEqual(result.tokenNames, ["SELECT", "QNUMBER"])
 })
 
-test("tokenizer smoke works", async () => {
-  const pkg = await import("sqlite3-parser")
-  const tokenizer = pkg.createTokenizer({ digitSeparator: "_" })
-  const tokens = Array.from(tokenizer.tokenize("SELECT 1_000"))
+test("withOptions exposes a specialized parser module", async () => {
+  const pkg = await import("../dist/generated/current.js")
+  const mod = pkg.withOptions({ digitSeparator: "_" })
+  const tokens = Array.from(mod.tokenize("SELECT 1_000"))
 
   assert.deepEqual(
-    tokens.map((token) => pkg.tokenName(token.type)),
+    tokens.map((token) => mod.tokenName(token.type)),
     ["SELECT", "QNUMBER"],
   )
 })
 
 test("parser CLI runs under node", () => {
-  const cli = join(
-    process.cwd(),
-    "node_modules",
-    "sqlite3-parser",
-    "dist",
-    "bin",
-    "sqlite3-parser.js",
-  )
+  const cli = join(DIST, "bin", "sqlite3-parser.js")
   const output = execFileSync(process.execPath, [cli, "SELECT 1"], {
     encoding: "utf8",
   })
@@ -63,14 +72,7 @@ test("parser CLI runs under node", () => {
 })
 
 test("tokenizer CLI runs under node", () => {
-  const cli = join(
-    process.cwd(),
-    "node_modules",
-    "sqlite3-parser",
-    "dist",
-    "bin",
-    "sqlite3-tokenizer.js",
-  )
+  const cli = join(DIST, "bin", "sqlite3-tokenizer.js")
   const output = execFileSync(process.execPath, [cli, "SELECT 1"], {
     encoding: "utf8",
   })

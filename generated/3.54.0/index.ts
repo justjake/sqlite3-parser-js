@@ -25,7 +25,7 @@ export type * from "../../src/enhanceError"
 export * from "../../src/extras"
 
 /** The specific SQLite version this bundle was generated from. */
-export const SQLITE_VERSION = "__VERSION__" as const
+export const SQLITE_VERSION = "3.54.0" as const
 
 /**
  * Lemon LALR(1) parser definition.

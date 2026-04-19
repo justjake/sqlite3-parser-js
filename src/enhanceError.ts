@@ -221,17 +221,8 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
   const range = tokenRange(sql, token)
   const { line, col } = lineColAt(sql, range[0])
 
-  // Build a reusable symbol-id → ParserSymbol map once.  We hit it from
-  // displayExpectedToken for every terminal we probe, so avoid the
-  // O(N²) linear scan the lemonjs version does.
-  const symbolById = new Map<number, { name: string; isTerminal: boolean }>()
-  for (let i = 0; i < defs.symbols.length; i++) {
-    const s = defs.symbols[i]!
-    symbolById.set(i, { name: s.name, isTerminal: s.isTerminal })
-  }
   const idSymbolId = findIdSymbol(defs)
-
-  const expected = collectExpectedTerminals(defs, state, symbolById, idSymbolId)
+  const expected = collectExpectedTerminals(defs, state, idSymbolId)
   const previousToken = previousConcreteToken(tokens, tokenIndex)
   const openGroups = scanOpenGroups(tokens, tokenIndex)
 
@@ -316,7 +307,6 @@ function lineColAt(sql: string, offset: number): { line: number; col: number } {
 function collectExpectedTerminals(
   defs: ParserDefs,
   state: number,
-  symbolById: Map<number, { name: string; isTerminal: boolean }>,
   idSymbolId: SymbolId | null,
 ): string[] {
   const tokenIds = new Set<number>()
@@ -335,7 +325,7 @@ function collectExpectedTerminals(
     if (action === defs.constants.YY_ERROR_ACTION || action === defs.constants.YY_NO_ACTION) {
       continue
     }
-    const display = displayExpectedToken(defs, tokenId, symbolById, idSymbolId)
+    const display = displayExpectedToken(defs, tokenId, idSymbolId)
     if (display === null || seen.has(display)) continue
     seen.add(display)
     expected.push(display)
@@ -349,10 +339,9 @@ function collectExpectedTerminals(
 function displayExpectedToken(
   defs: ParserDefs,
   tokenId: number,
-  symbolById: Map<number, { name: string; isTerminal: boolean }>,
   idSymbolId: SymbolId | null,
 ): string | null {
-  const symbol = symbolById.get(tokenId)
+  const symbol = defs.symbols[tokenId]
   if (!symbol) return null
   // Never surface internal tokens as candidates.
   if (symbol.name === "SPACE" || symbol.name === "COMMENT" || symbol.name === "ILLEGAL") {

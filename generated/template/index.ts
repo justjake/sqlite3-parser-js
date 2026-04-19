@@ -4,7 +4,7 @@
  * This module wraps the SQLite __VERSION__ parser + tokenizer with the
  * JSON dumps for that version pre-bound, so consumers can just:
  *
- *   import { parse } from 'sqlite3-parser/sqlite-3.54.0';
+ *   import { parse } from 'sqlite3-parser/sqlite-__VERSION__';
  *   parse('SELECT 1');
  *
  * Advanced consumers can reach for withOptions(opts) to specialize the parser

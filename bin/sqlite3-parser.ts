@@ -53,7 +53,7 @@ async function readStdin(): Promise<string> {
 async function readSql(parts: string[]): Promise<string> {
   if (parts.length > 0) return parts.join(" ")
   if (!process.stdin.isTTY) {
-    return (await readStdin()).trimEnd()
+    return await readStdin()
   }
   console.error(usage())
   process.exit(2)
