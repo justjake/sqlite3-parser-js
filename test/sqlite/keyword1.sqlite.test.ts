@@ -11,20 +11,20 @@
 // the fallback possible:
 //
 //   * the keyword tokenises as its own terminal (not ID),
-//   * parserDump.tables.yyFallback[keywordId] points at ID's symbol id.
+//   * parserDefs.tables.yyFallback[keywordId] points at ID's symbol id.
 //
 // If either invariant breaks, the fallback recovery at runtime won't
 // fire, and the SQL-level behaviour breaks silently.
 
 import { describe, test, expect } from 'bun:test';
-import { parserDump, tokenTriples } from '../helpers.ts';
+import { parserDefs, tokenTriples } from '../helpers.ts';
 
-// Symbol ids are array indices in the prod dump; no explicit `id` field.
-const idTokenId = (parserDump.symbols as Array<{ name: string }>)
+// Symbol ids are array indices in the prod defs; no explicit `id` field.
+const idTokenId = (parserDefs.symbols as Array<{ name: string }>)
   .findIndex((s) => s.name === 'ID');
-if (idTokenId < 0) throw new Error('parser dump is missing the ID terminal');
+if (idTokenId < 0) throw new Error('parser defs are missing the ID terminal');
 
-const yyFallback = (parserDump.tables.yyFallback ?? []) as number[];
+const yyFallback = (parserDefs.tables.yyFallback ?? []) as number[];
 
 // Keyword list lifted from sqlite Tcl test/keyword1.test.  Every entry
 // is a contextual keyword: it has a distinct TK_* code and Lemon's
@@ -54,7 +54,7 @@ describe('SQLite test/keyword1.test tokenizer-adjacent cases', () => {
       expect(kw.tokenName).toBe(kw.rawTokenName);
 
       // Look up the numeric id for the token via the symbol table.
-      const kwId = (parserDump.symbols as Array<{ name: string }>)
+      const kwId = (parserDefs.symbols as Array<{ name: string }>)
         .findIndex((s) => s.name === kw.rawTokenName);
       expect(kwId).toBeGreaterThanOrEqual(0);
       expect(yyFallback[kwId]).toBe(idTokenId);

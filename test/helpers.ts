@@ -8,19 +8,19 @@
 
 import {
   createTokenizer,
-  PARSER_DUMP,
-  KEYWORDS_DUMP,
+  PARSER_DEFS,
+  KEYWORD_DEFS,
   type CreateTokenizerOptions,
-  type KeywordsDump,
-  type LemonDump,
+  type KeywordDefs,
+  type ParserDefs,
   type Tokenizer,
   type TokenizeOpts,
 } from '../generated/current.ts';
 
-/** The parser dump used by every helper in this file.  Tracks `current`. */
-export const parserDump: LemonDump = PARSER_DUMP;
-/** The keywords dump used by every helper.  Tracks `current`. */
-export const keywordsDump: KeywordsDump = KEYWORDS_DUMP;
+/** The parser defs used by every helper in this file.  Tracks `current`. */
+export const parserDefs: ParserDefs = PARSER_DEFS;
+/** The keywords defs used by every helper.  Tracks `current`. */
+export const keywordDefs: KeywordDefs = KEYWORD_DEFS;
 
 /** Default tokenizer: every feature flag enabled, no digit separator. */
 export const tk: Tokenizer = createTokenizer();

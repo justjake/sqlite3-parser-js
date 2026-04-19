@@ -3,8 +3,8 @@
 //
 // Report which rules-with-actions in a parser.dev.json have been
 // exercised by the test suite.  The test suite is expected to opt into
-// `ConvertOptions.onHit` and dump the resulting hit set to a JSON file;
-// this script reads that file and diffs it against the dump.
+// `ConvertOptions.onHit` and dumps the resulting hit set to a JSON file;
+// this script reads that file and diffs it against the parser defs.
 //
 // Usage:
 //   bun scripts/ast-coverage.ts parser.dev.json coverage.json
@@ -18,33 +18,33 @@
 
 import { readFileSync } from 'node:fs';
 import { buildSymbolName, stableKeyForRule } from '../src/ast/dispatch.ts';
-import type { DumpRule, LemonDump } from '../src/lempar.ts';
+import type { ParserRule, ParserDefs } from '../src/lempar.ts';
 
-interface DevRule extends DumpRule {
+interface DevRule extends ParserRule {
   readonly actionC: string | null;
   readonly noCode: boolean;
 }
-interface DevDump {
+interface DevDefs {
   readonly rules: readonly DevRule[];
-  readonly symbols: LemonDump['symbols'];
+  readonly symbols: ParserDefs['symbols'];
 }
 
 function main(): void {
-  const [dumpPath, coveragePath] = process.argv.slice(2);
-  if (!dumpPath || !coveragePath) {
+  const [defsPath, coveragePath] = process.argv.slice(2);
+  if (!defsPath || !coveragePath) {
     console.error('usage: bun scripts/ast-coverage.ts parser.dev.json coverage.json');
     process.exit(2);
   }
 
-  const dump = JSON.parse(readFileSync(dumpPath, 'utf8')) as DevDump;
+  const defs = JSON.parse(readFileSync(defsPath, 'utf8')) as DevDefs;
   const hit = new Set(JSON.parse(readFileSync(coveragePath, 'utf8')) as string[]);
-  const symbolName = buildSymbolName(dump);
+  const symbolName = buildSymbolName(defs);
 
   // "Interesting" rules are those with a non-empty action body.
   // Empty-action rules are either unit rules (no behaviour) or pure
   // structural passes — they don't need a handler of their own, so
   // coverage there would be noise.
-  const interesting = dump.rules.filter(
+  const interesting = defs.rules.filter(
     (r) => !r.noCode && (r.actionC ?? '').trim().length > 0,
   );
   const unhit = interesting.filter(

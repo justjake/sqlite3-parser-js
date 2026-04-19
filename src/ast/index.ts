@@ -1,8 +1,8 @@
 // Public API for the AST layer.
 //
 // This module is version-agnostic — it deals in shapes, not a specific
-// SQLite dump.  The per-version module (`generated/<ver>/index.ts`)
-// binds this API to a concrete dump and exposes a one-call
+// SQLite defs.  The per-version module (`generated/<ver>/index.ts`)
+// binds this API to a concrete defs and exposes a one-call
 // `parseToAst(sql)` on top.
 
 export type {

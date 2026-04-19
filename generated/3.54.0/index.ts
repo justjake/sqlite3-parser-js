@@ -11,8 +11,8 @@
 // separator, …).  The raw prod dumps are also re-exported for
 // consumers that want to plug them into their own tooling.
 
-import parserDump   from './parser.prod.json'   with { type: 'json' };
-import keywordsDump from './keywords.prod.json' with { type: 'json' };
+import parserDefs   from './parser.prod.json'   with { type: 'json' };
+import keywordDefs from './keywords.prod.json' with { type: 'json' };
 import {
   createParser as _createParser,
 } from '../../src/parser.ts';
@@ -26,8 +26,8 @@ import {
   type AstResult,
   type ConvertOptions as _AstConvertOptions,
 } from '../../src/ast/index.ts';
-import type { LemonDump } from '../../src/lempar.ts';
-import type { KeywordsDump } from '../../src/tokenize.ts';
+import type { ParserDefs } from '../../src/lempar.ts';
+import type { KeywordDefs } from '../../src/tokenize.ts';
 
 // --- Constants identifying this version --------------------------------
 
@@ -39,11 +39,11 @@ export const SQLITE_VERSION = '3.54.0' as const;
 
 // --- Raw dumps --------------------------------------------------------
 
-/** The slim parser dump as JSON.  Cast at the boundary. */
-export const PARSER_DUMP = parserDump as unknown as LemonDump;
+/** The slim parser defs as JSON.  Cast at the boundary. */
+export const PARSER_DEFS = parserDefs as unknown as ParserDefs;
 
-/** The slim keywords dump as JSON. */
-export const KEYWORDS_DUMP = keywordsDump as unknown as KeywordsDump;
+/** The slim keywords defs as JSON. */
+export const KEYWORD_DEFS = keywordDefs as unknown as KeywordDefs;
 
 // --- Bound factories ---------------------------------------------------
 
@@ -55,12 +55,12 @@ export const KEYWORDS_DUMP = keywordsDump as unknown as KeywordsDump;
  * feed its output to the lower-level API in `sqlite3-parser/parser`.
  */
 export function createParser() {
-  return _createParser(PARSER_DUMP, KEYWORDS_DUMP);
+  return _createParser(PARSER_DEFS, KEYWORD_DEFS);
 }
 
 /** Create a tokenizer bound to SQLite 3.54.0. */
 export function createTokenizer(opts?: CreateTokenizerOptions) {
-  return _createTokenizer(PARSER_DUMP, KEYWORDS_DUMP, opts);
+  return _createTokenizer(PARSER_DEFS, KEYWORD_DEFS, opts);
 }
 
 // --- Convenience singletons -------------------------------------------
@@ -85,7 +85,7 @@ export function parse(sql: string) {
 let _defaultAstBuilder: ReturnType<typeof _createAstBuilder> | null = null;
 function defaultAstBuilder() {
   return _defaultAstBuilder ?? (
-    _defaultAstBuilder = _createAstBuilder(PARSER_DUMP, _astRegistry)
+    _defaultAstBuilder = _createAstBuilder(PARSER_DEFS, _astRegistry)
   );
 }
 
@@ -110,11 +110,11 @@ export function parseToAst(sql: string): {
 }
 
 /**
- * Low-level AST builder factory, bound to this version's dump.  Use
+ * Low-level AST builder factory, bound to this version's defs.  Use
  * when you want to pass `ConvertOptions` (onHit, strict, …).
  */
 export function createAstBuilder(opts?: _AstConvertOptions) {
-  return _createAstBuilder(PARSER_DUMP, _astRegistry, opts);
+  return _createAstBuilder(PARSER_DEFS, _astRegistry, opts);
 }
 
 /** Iterate tokens in a SQL string using the default tokenizer. */
@@ -143,10 +143,10 @@ export { stableKeyForRule, buildSymbolName } from '../../src/ast/index.ts';
 
 export type {
   Tokenizer, TokenSpan, TokenizeOpts, TokenizerTokens,
-  CreateTokenizerOptions, KeywordsDump, MaskFlag, KeywordMask,
+  CreateTokenizerOptions, KeywordDefs, MaskFlag, KeywordMask,
   KeywordEntry,
 } from '../../src/tokenize.ts';
 
 export type {
-  TokenId, SymbolId, RuleId, LemonDump,
+  TokenId, SymbolId, RuleId, ParserDefs,
 } from '../../src/lempar.ts';

@@ -4,12 +4,12 @@
 import { describe, test, expect } from 'bun:test';
 import {
   tk, tkSep, makeTokenizer, lex, lexNames,
-  keywordsDump,
+  keywordDefs,
 } from './helpers.ts';
 import type { MaskFlag } from '../src/tokenize.ts';
 
 describe('createTokenizer setup', () => {
-  test('common terminal codes resolve from the parser dump', () => {
+  test('common terminal codes resolve from the parser defs', () => {
     expect(typeof tk.tokens.ID).toBe('number');
     expect(typeof tk.tokens.INTEGER).toBe('number');
     expect(tk.tokens.ID).not.toBe(tk.tokens.INTEGER);
@@ -222,7 +222,7 @@ describe('non-ASCII identifiers', () => {
 
 describe('flag filtering', () => {
   test('disables WINDOWFUNC keywords when flag dropped', () => {
-    const flags = (Object.keys(keywordsDump.meta.maskFlags) as MaskFlag[])
+    const flags = (Object.keys(keywordDefs.meta.maskFlags) as MaskFlag[])
       .filter((f) => f !== 'WINDOWFUNC');
     const tkNoWindow = makeTokenizer({ flags });
     expect(lexNames('FILTER OVER PARTITION', undefined, tkNoWindow))

@@ -14,13 +14,13 @@
 // parser.ts when the CST shape changes, or when you want to alter how
 // virtual tokens / error messages / trivia are represented.
 
-import { createTokenizer, type KeywordsDump } from './tokenize.ts';
+import { createTokenizer, type KeywordDefs } from './tokenize.ts';
 import {
   createEngine,
-  type DumpRhsPos,
-  type DumpRule,
+  type ParserRhsPos,
+  type ParserRule,
   type LalrPopped,
-  type LemonDump,
+  type ParserDefs,
   type RuleId,
   type SymbolId,
   type TokenId,
@@ -59,7 +59,7 @@ export interface TokenNode {
 /** An internal node — the result of a grammar reduction. */
 export interface RuleNode {
   readonly kind: 'rule';
-  /** Lemon rule id (matches `rules[ruleId]` in the dump). */
+  /** Lemon rule id (matches `rules[ruleId]` in the defs). */
   readonly rule: RuleId;
   /**
    * The nonterminal name on the left-hand side, e.g. `"select"`,
@@ -125,18 +125,18 @@ type EngineValue = CstNode;
 // ---------------------------------------------------------------------------
 
 export function createParser(
-  parserDump: LemonDump,
-  keywordsDump: KeywordsDump,
+  parserDefs: ParserDefs,
+  keywordDefs: KeywordDefs,
 ) {
-  const engine = createEngine(parserDump);
-  const rules = parserDump.rules;
+  const engine = createEngine(parserDefs);
+  const rules = parserDefs.rules;
 
   // Symbol-id → display name (used to build the CST token names).
   // Mirrors yyTokenName[] in the generated parse.c.  Symbols are
-  // keyed on array index — the prod dump has no explicit `id` field.
+  // keyed on array index — the prod defs has no explicit `id` field.
   const symbolName: string[] = [];
-  for (let i = 0; i < parserDump.symbols.length; i++) {
-    symbolName[i] = parserDump.symbols[i]!.name;
+  for (let i = 0; i < parserDefs.symbols.length; i++) {
+    symbolName[i] = parserDefs.symbols[i]!.name;
   }
 
   // -------------------------------------------------------------------------
@@ -157,11 +157,11 @@ export function createParser(
   // suffices.
   // -------------------------------------------------------------------------
   // Each entry carries the rule plus the rule id (its index in `rules`),
-  // since we drop `rule.id` from the prod dump and still need to stamp
+  // since we drop `rule.id` from the prod defs and still need to stamp
   // the wrapper's `RuleNode.rule` at synthesis time.
   const unitWrapper = new Map<
     SymbolId,
-    Map<SymbolId, { rule: DumpRule; ruleId: RuleId }>
+    Map<SymbolId, { rule: ParserRule; ruleId: RuleId }>
   >();
   for (let i = 0; i < rules.length; i++) {
     const r = rules[i]!;
@@ -187,7 +187,7 @@ export function createParser(
   // -------------------------------------------------------------------------
 
   /** Does `actualMajor` satisfy the RHS-position `expected` constraint? */
-  function rhsMatches(expected: DumpRhsPos, actualMajor: SymbolId): boolean {
+  function rhsMatches(expected: ParserRhsPos, actualMajor: SymbolId): boolean {
     if (expected.symbol !== undefined) return expected.symbol === actualMajor;
     if (expected.multi !== undefined) {
       for (const s of expected.multi) if (s.symbol === actualMajor) return true;
@@ -202,7 +202,7 @@ export function createParser(
    * multi-step unit chains.
    */
   function synthesizeWrappers(
-    expected: DumpRhsPos,
+    expected: ParserRhsPos,
     actualMajor: SymbolId,
     node: CstNode,
   ): CstNode {
@@ -233,9 +233,9 @@ export function createParser(
     return cur;
   }
 
-  // Bind a tokenizer.  The parser uses the same TK_* ids the dump's
+  // Bind a tokenizer.  The parser uses the same TK_* ids the defs'
   // symbol table assigns, so everything stays in sync.
-  const tk = createTokenizer(parserDump, keywordsDump);
+  const tk = createTokenizer(parserDefs, keywordDefs);
 
   /** Token id 0 is Lemon's end-of-input marker (`$`). */
   const TK_EOF: TokenId = 0 as TokenId;
@@ -393,7 +393,7 @@ export function createParser(
           sql,
           token: tokForError,
           state: e.stateno,
-          dump: parserDump,
+          defs: parserDefs,
           tokens: tokenStream,
           tokenIndex: e.inputIndex,
         });
@@ -482,7 +482,7 @@ export function* tokenLeaves(
   for (const c of node.children) yield* tokenLeaves(c, opts);
 }
 
-// Re-export the dump type so callers can import it without reaching
+// Re-export the defs type so callers can import it without reaching
 // into the engine module.
-export type { LemonDump } from './lempar.ts';
+export type { ParserDefs } from './lempar.ts';
 export type { EnhancedParseDiagnostic } from './enhanceError.ts';

@@ -9,7 +9,7 @@
 //
 // e.g. `"expr::LP expr RP"`, `"cmd::BEGIN transtype trans_opt"`.
 //
-// At parser-creation time, `bindRegistry` walks `dump.rules` once,
+// At parser-creation time, `bindRegistry` walks `defs.rules` once,
 // resolves each rule's stable key against the handler registry, and
 // builds a rule-id indexed array for O(1) dispatch.  Rules that have no
 // registered handler are surfaced as `missingKeys` so tests / boot-time
@@ -19,7 +19,7 @@
 // etc.) and are aggregated by ./registry.ts.  This file defines the
 // types and wiring only — no SQL semantics live here.
 
-import type { DumpRule, LemonDump, RuleId, SymbolId } from '../lempar.ts';
+import type { ParserRule, ParserDefs, RuleId, SymbolId } from '../lempar.ts';
 import type { CstNode, RuleNode } from '../parser.ts';
 import type { AstError, AstNode } from './types.ts';
 
@@ -27,7 +27,7 @@ import type { AstError, AstNode } from './types.ts';
 export type StableKey = string;
 
 /**
- * Resolves a symbol id to its display name.  The prod dump strips the
+ * Resolves a symbol id to its display name.  The prod defs strips the
  * redundant `name` field from every RHS position (they're recoverable
  * from the top-level `symbols[]` table), so stable-key construction
  * goes through this lookup rather than reading names inline.
@@ -35,14 +35,14 @@ export type StableKey = string;
 export type SymbolName = (id: SymbolId) => string;
 
 /**
- * Build a `SymbolName` lookup from a dump's `symbols[]` table.  The
- * symbol id IS the array index — prod dumps don't ship a redundant
+ * Build a `SymbolName` lookup from the parser defs' `symbols[]` table.
+ * The symbol id IS the array index — prod defs don't ship a redundant
  * `id` field.
  */
-export function buildSymbolName(dump: Pick<LemonDump, 'symbols'>): SymbolName {
+export function buildSymbolName(defs: Pick<ParserDefs, 'symbols'>): SymbolName {
   const byId: string[] = [];
-  for (let i = 0; i < dump.symbols.length; i++) {
-    byId[i] = dump.symbols[i]!.name;
+  for (let i = 0; i < defs.symbols.length; i++) {
+    byId[i] = defs.symbols[i]!.name;
   }
   return (id) => byId[id] ?? `?${id}`;
 }
@@ -50,10 +50,10 @@ export function buildSymbolName(dump: Pick<LemonDump, 'symbols'>): SymbolName {
 /**
  * Compute the stable key for a single rule.  Multi-terminals are joined
  * with `|`, positions within an RHS with spaces.  `symbolName` should
- * come from `buildSymbolName(dump)` and be reused across all rules for
- * one dump.
+ * come from `buildSymbolName(defs)` and be reused across all rules for
+ * one set of defs.
  */
-export function stableKeyForRule(rule: DumpRule, symbolName: SymbolName): StableKey {
+export function stableKeyForRule(rule: ParserRule, symbolName: SymbolName): StableKey {
   const rhsParts: string[] = [];
   for (const p of rule.rhs) {
     if (p.symbol !== undefined) {
@@ -92,16 +92,16 @@ export type Handler<T extends AstNode = AstNode> = (
 export type HandlerRegistry = Readonly<Record<StableKey, Handler>>;
 
 /**
- * The per-dump binding: a fast rule-id → handler lookup plus a
+ * The per-defs binding: a fast rule-id → handler lookup plus a
  * coverage summary.  Produced once by `bindRegistry`, reused for every
- * parse call against that dump.
+ * parse call against those defs.
  */
 export interface BoundDispatcher {
   /** Look up the handler for a rule id.  `undefined` if no handler registered. */
   readonly handlerFor: (ruleId: RuleId) => Handler | undefined;
   /** Stable keys of rules that have actions but no registered handler. */
   readonly missingKeys: readonly StableKey[];
-  /** Every stable key in the dump, in rule-id order.  Useful for coverage. */
+  /** Every stable key in the defs, in rule-id order.  Useful for coverage. */
   readonly allKeys: readonly StableKey[];
 }
 
@@ -112,7 +112,7 @@ export interface BoundDispatcher {
  * TODO — implement.  See AST_DESIGN_IDEAS.md for the algorithm.
  */
 export function bindRegistry(
-  _dump: LemonDump,
+  _defs: ParserDefs,
   _registry: HandlerRegistry,
 ): BoundDispatcher {
   throw new Error('bindRegistry: not yet implemented');
@@ -161,11 +161,11 @@ export function cstToAst(
  * TODO — implement (trivial once `bindRegistry` and `cstToAst` land).
  */
 export function createAstBuilder(
-  dump: LemonDump,
+  defs: ParserDefs,
   registry: HandlerRegistry,
   opts: ConvertOptions = {},
 ) {
-  const dispatcher = bindRegistry(dump, registry);
+  const dispatcher = bindRegistry(defs, registry);
   return {
     dispatcher,
     build(cst: CstNode, sql: string) {

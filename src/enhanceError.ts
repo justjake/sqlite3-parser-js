@@ -11,10 +11,10 @@
 // message when nothing pattern-matches.
 //
 // Adapted from the lemonjs port; the algorithms are unchanged, but the
-// data access has been rewritten against sqlite3-parser's LemonDump / CST
+// data access has been rewritten against sqlite3-parser's ParserDefs / CST
 // shapes (see src/lempar.ts, src/parser.ts).
 
-import type { LemonDump, SymbolId, TokenId } from './lempar.ts';
+import type { ParserDefs, SymbolId, TokenId } from './lempar.ts';
 import type { TokenNode } from './parser.ts';
 
 // ---------------------------------------------------------------------------
@@ -42,8 +42,8 @@ export interface EnhanceParseErrorOptions {
   readonly token: TokenNode;
   /** Parser state number at the time of failure. */
   readonly state: number;
-  /** Full grammar dump — symbol table + action tables. */
-  readonly dump: LemonDump;
+  /** Full grammar defs — symbol table + action tables. */
+  readonly defs: ParserDefs;
   /**
    * The full token stream we fed the engine, in chronological order,
    * including any synthetic SEMI/EOF at the tail.  Used for context
@@ -164,7 +164,7 @@ export function canonicalParseMessage(token: TokenNode): string {
 }
 
 export function enhanceParseError(opts: EnhanceParseErrorOptions): EnhancedParseDiagnostic {
-  const { sql, token, state, dump, tokens, tokenIndex } = opts;
+  const { sql, token, state, defs, tokens, tokenIndex } = opts;
   const canonical = canonicalParseMessage(token);
   const end = token.start + token.length;
   const range: [number, number] =
@@ -173,17 +173,17 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): EnhancedParse
       : [token.start, end];
   const { line, col } = lineColAt(sql, range[0]);
 
-  // Build a reusable symbol-id → DumpSymbol map once.  We hit it from
+  // Build a reusable symbol-id → ParserSymbol map once.  We hit it from
   // displayExpectedToken for every terminal we probe, so avoid the
   // O(N²) linear scan the lemonjs version does.
   const symbolById = new Map<number, { name: string; isTerminal: boolean }>();
-  for (let i = 0; i < dump.symbols.length; i++) {
-    const s = dump.symbols[i]!;
+  for (let i = 0; i < defs.symbols.length; i++) {
+    const s = defs.symbols[i]!;
     symbolById.set(i, { name: s.name, isTerminal: s.isTerminal });
   }
-  const idSymbolId = findIdSymbol(dump);
+  const idSymbolId = findIdSymbol(defs);
 
-  const expected = collectExpectedTerminals(dump, state, symbolById, idSymbolId);
+  const expected = collectExpectedTerminals(defs, state, symbolById, idSymbolId);
   const previousToken = previousConcreteToken(tokens, tokenIndex);
   const openGroups = scanOpenGroups(tokens, tokenIndex);
 
@@ -233,16 +233,16 @@ function lineColAt(sql: string, offset: number): { line: number; col: number } {
 // convert their symbol names into display forms.  Sorted so punctuation
 // sorts before keywords/identifiers.
 function collectExpectedTerminals(
-  dump: LemonDump,
+  defs: ParserDefs,
   state: number,
   symbolById: Map<number, { name: string; isTerminal: boolean }>,
   idSymbolId: SymbolId | null,
 ): string[] {
   const tokenIds = new Set<number>();
   tokenIds.add(0); // end-of-input marker
-  for (let i = 0; i < dump.symbols.length; i++) {
-    const s = dump.symbols[i]!;
-    if (s.isTerminal && i < dump.constants.YYNTOKEN) {
+  for (let i = 0; i < defs.symbols.length; i++) {
+    const s = defs.symbols[i]!;
+    if (s.isTerminal && i < defs.constants.YYNTOKEN) {
       tokenIds.add(i);
     }
   }
@@ -250,14 +250,14 @@ function collectExpectedTerminals(
   const seen = new Set<string>();
   const expected: string[] = [];
   for (const tokenId of tokenIds) {
-    const action = findShiftAction(dump, tokenId as TokenId, state);
+    const action = findShiftAction(defs, tokenId as TokenId, state);
     if (
-      action === dump.constants.YY_ERROR_ACTION ||
-      action === dump.constants.YY_NO_ACTION
+      action === defs.constants.YY_ERROR_ACTION ||
+      action === defs.constants.YY_NO_ACTION
     ) {
       continue;
     }
-    const display = displayExpectedToken(dump, tokenId, symbolById, idSymbolId);
+    const display = displayExpectedToken(defs, tokenId, symbolById, idSymbolId);
     if (display === null || seen.has(display)) continue;
     seen.add(display);
     expected.push(display);
@@ -269,7 +269,7 @@ function collectExpectedTerminals(
 // back to ID (i.e. it's a keyword that's accepted as an identifier),
 // collapse it to "identifier" so we don't emit dozens of keyword spellings.
 function displayExpectedToken(
-  dump: LemonDump,
+  defs: ParserDefs,
   tokenId: number,
   symbolById: Map<number, { name: string; isTerminal: boolean }>,
   idSymbolId: SymbolId | null,
@@ -281,7 +281,7 @@ function displayExpectedToken(
     return null;
   }
 
-  const fallbackTable = dump.tables.yyFallback ?? [];
+  const fallbackTable = defs.tables.yyFallback ?? [];
   const fallback = fallbackTable[tokenId] ?? 0;
   if (idSymbolId !== null && tokenId !== idSymbolId && fallback === idSymbolId) {
     return 'identifier';
@@ -296,20 +296,20 @@ function displayExpectedToken(
   return symbol.name;
 }
 
-function findIdSymbol(dump: LemonDump): SymbolId | null {
-  for (let i = 0; i < dump.symbols.length; i++) {
-    if (dump.symbols[i]!.name === 'ID') return i as SymbolId;
+function findIdSymbol(defs: ParserDefs): SymbolId | null {
+  for (let i = 0; i < defs.symbols.length; i++) {
+    if (defs.symbols[i]!.name === 'ID') return i as SymbolId;
   }
   return null;
 }
 
 // Local copy of the engine's findShiftAction — same algorithm, adapted
-// to take the dump directly.  Kept inline to avoid coupling the engine
+// to take the defs directly.  Kept inline to avoid coupling the engine
 // module to the diagnostic module.  See src/lempar.ts for the annotated
 // original.
-function findShiftAction(dump: LemonDump, lookahead: TokenId, state: number): number {
-  const K = dump.constants;
-  const T = dump.tables;
+function findShiftAction(defs: ParserDefs, lookahead: TokenId, state: number): number {
+  const K = defs.constants;
+  const T = defs.tables;
   if (state > K.YY_MAX_SHIFT) return state;
 
   let la: TokenId = lookahead;

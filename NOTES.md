@@ -11,8 +11,8 @@ yy_find_reduce_action, yy_reduce, the Parse() loop, SHIFTREDUCE state rewrite)
 - Zero mentions of tokens-as-source-text, CST, unit rules, multi-terminals, ILLEGAL, or anything
 SQL-specific. The only hit grep finds for CST/trivia/ILLEGAL/SEMI is a comment that says "if you want to
 inject a synthetic SEMI before EOF, do it in your caller."
-- Exports: createEngine(dump) → { run(tokens, onReduce) }, plus the dump types (LemonDump, LemonConstants,
-LemonTables, DumpRule, DumpRhsPos, DumpSymbol) and the small generic API (LalrInput<V>, LalrPopped<V>,
+- Exports: createEngine(dump) → { run(tokens, onReduce) }, plus the dump types (ParserDefs, ParserConstants,
+ParserTables, ParserRule, ParserRhsPos, ParserSymbol) and the small generic API (LalrInput<V>, LalrPopped<V>,
 LalrReduce<V>, LalrError<V>, LalrResult<V>)
 
 src/parser.ts (389 LOC) — CST emitter, every divergence from C lives here:

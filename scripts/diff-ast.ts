@@ -23,22 +23,22 @@
 
 import { readFileSync } from 'node:fs';
 import { buildSymbolName, stableKeyForRule } from '../src/ast/dispatch.ts';
-import type { DumpRule, LemonDump } from '../src/lempar.ts';
+import type { ParserRule, ParserDefs } from '../src/lempar.ts';
 
 // Narrow dev-dump shape.  We read `rules[]` (plus the dev-only fields
 // `actionC` / `noCode`) and the top-level `symbols[]` table used to
 // resolve stable keys.
-interface DevRule extends DumpRule {
+interface DevRule extends ParserRule {
   readonly actionC: string | null;
   readonly noCode: boolean;
 }
-interface DevDump {
+interface DevDefs {
   readonly rules: readonly DevRule[];
-  readonly symbols: LemonDump['symbols'];
+  readonly symbols: ParserDefs['symbols'];
 }
 
-function readDump(path: string): DevDump {
-  return JSON.parse(readFileSync(path, 'utf8')) as DevDump;
+function readDefs(path: string): DevDefs {
+  return JSON.parse(readFileSync(path, 'utf8')) as DevDefs;
 }
 
 function main(): void {
@@ -48,18 +48,18 @@ function main(): void {
     process.exit(2);
   }
 
-  const oldDump = readDump(oldPath);
-  const newDump = readDump(newPath);
+  const oldDefs = readDefs(oldPath);
+  const newDefs = readDefs(newPath);
 
-  const byKey = (d: DevDump) => {
+  const byKey = (d: DevDefs) => {
     const symbolName = buildSymbolName(d);
     return new Map(
       d.rules.map((r) => [stableKeyForRule(r, symbolName), r] as const),
     );
   };
 
-  const oldByKey = byKey(oldDump);
-  const newByKey = byKey(newDump);
+  const oldByKey = byKey(oldDefs);
+  const newByKey = byKey(newDefs);
 
   const added: string[] = [];
   const removed: string[] = [];

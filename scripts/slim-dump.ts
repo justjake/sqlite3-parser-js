@@ -1,5 +1,5 @@
 #!/usr/bin/env -S bun run
-// Slim a parser.json or keywords.json dump down to only the fields
+// Slim a parser.json or keywords.json defs down to only the fields
 // the JS runtime actually reads.  The Makefile wires this in as the
 // transformation `*.dev.json → *.prod.json`:
 //
@@ -27,7 +27,7 @@ function detectSchemaName(d: Record<string, unknown>): SchemaName {
   if ('rules' in d && 'tables' in d && 'symbols' in d) return 'parser.prod';
   if ('keywords' in d && 'meta' in d)                  return 'keywords.prod';
   throw new Error(
-    'Unrecognised dump shape: expected either a parser.json (with rules/tables/symbols) ' +
+    'Unrecognised defs shape: expected either a parser.json (with rules/tables/symbols) ' +
     'or a keywords.json (with keywords/meta).',
   );
 }
@@ -56,13 +56,13 @@ function main(): void {
   }
 
   const inBytes = readFileSync(inPath);
-  const dump = JSON.parse(inBytes.toString('utf8')) as Record<string, unknown>;
-  const schemaName = detectSchemaName(dump);
-  // `Clean` mutates, but we just parsed `dump` for our own use — no
+  const defs = JSON.parse(inBytes.toString('utf8')) as Record<string, unknown>;
+  const schemaName = detectSchemaName(defs);
+  // `Clean` mutates, but we just parsed `defs` for our own use — no
   // caller is relying on the parsed object.  Returns `unknown`; the
   // schema is what controls the shape so the `as` cast is safe.
-  const slim = Clean(SCHEMAS[schemaName], dump);
-  // Compact JSON — every saved byte counts when the dump dominates the bundle.
+  const slim = Clean(SCHEMAS[schemaName], defs);
+  // Compact JSON — every saved byte counts when the defs dominates the bundle.
   const outText = JSON.stringify(slim);
   writeFileSync(outPath, outText);
 

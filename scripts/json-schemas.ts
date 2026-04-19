@@ -6,21 +6,21 @@
 //   generated/json-schema/v<JSON_SCHEMA_VERSION>/<name>.schema.json
 //
 // Consumed by:
-//   * scripts/validate-json.ts — validates a dump against its schema.
+//   * scripts/validate-json.ts — validates a defs against its schema.
 //   * scripts/slim-dump.ts     — uses the .prod schemas to slim dev dumps.
 //   * scripts/vendor.ts        — reads JSON_SCHEMA_VERSION for manifest.
 //
 // There are four schemas:
 //
-//   * parser.dev    — full parser dump emitted by tool/lemon.c -J<file>.
-//   * parser.prod   — slim parser dump (what the JS runtime reads).
-//   * keywords.dev  — full keyword dump emitted by tool/mkkeywordhash.c -J<file>.
-//   * keywords.prod — slim keyword dump.
+//   * parser.dev    — full parser defs emitted by tool/lemon.c -J<file>.
+//   * parser.prod   — slim parser defs (what the JS runtime reads).
+//   * keywords.dev  — full keyword defs emitted by tool/mkkeywordhash.c -J<file>.
+//   * keywords.prod — slim keyword defs.
 //
 // DESIGN: both .dev schemas are intentionally EXACT and STRICT
 // (`additionalProperties: false` at every level).  They document the
 // complete shape emitted by our patched C tools.  Another project can
-// read these schemas to understand the dump format without reading the
+// read these schemas to understand the defs format without reading the
 // C source, and can use them to drive code generation in any language.
 //
 // The .prod schemas are strict subsets of .dev describing just what the
@@ -44,12 +44,12 @@ import { PACKAGE_NAME } from './package-info.ts';
 // added/removed, type widened/narrowed) becomes a TypeScript compile
 // error at the `matches<T>()(...)` call site.
 import type {
-  DumpRhsPos,
-  DumpRule,
-  DumpSymbol,
-  LemonConstants,
-  LemonDump,
-  LemonTables,
+  ParserRhsPos,
+  ParserRule,
+  ParserSymbol,
+  ParserConstants,
+  ParserDefs,
+  ParserTables,
   RuleId   as BrandedRuleId,
   SymbolId as BrandedSymbolId,
   TokenId  as BrandedTokenId,
@@ -57,7 +57,7 @@ import type {
 import type {
   KeywordEntry,
   KeywordMask as BrandedKeywordMask,
-  KeywordsDump,
+  KeywordDefs,
   MaskFlag,
 } from '../src/tokenize.ts';
 
@@ -166,7 +166,7 @@ const ParserAssoc = Type.Union([
 const ParserDevMeta = Strict({
   /** Hardcoded "1.0" in lemon.c; lockstep with JSON_SCHEMA_VERSION. */
   lemonVersion:  Type.Literal('1.0'),
-  /** Integer version of the dump shape.  Matches JSON_SCHEMA_VERSION. */
+  /** Integer version of the defs shape.  Matches JSON_SCHEMA_VERSION. */
   schemaVersion: Type.Literal(JSON_SCHEMA_VERSION),
   /** Input `.y` path (lemp->filename).  Nullable for robustness. */
   sourceFile:    NullableString,
@@ -316,7 +316,7 @@ const ParserDevSchema = Strict({
 // scripts/slim-dump.ts walks to produce *.prod.json from *.dev.json.
 // ===========================================================================
 
-const ParserProdConstants = matches<LemonConstants>()(Strict({
+const ParserProdConstants = matches<ParserConstants>()(Strict({
   YYNSTATE:           Type.Integer(),
   YYNRULE:            Type.Integer(),
   YYNTOKEN:           Type.Integer(),
@@ -336,7 +336,7 @@ const ParserProdConstants = matches<LemonConstants>()(Strict({
   YYFALLBACK:         Type.Union([Type.Literal(0), Type.Literal(1)]),
 }));
 
-const ParserProdTables = matches<LemonTables>()(Strict({
+const ParserProdTables = matches<ParserTables>()(Strict({
   yy_action:      Type.Array(Type.Integer()),
   yy_lookahead:   Type.Array(SymbolId),
   yy_shift_ofst:  Type.Array(Type.Integer()),
@@ -347,40 +347,40 @@ const ParserProdTables = matches<LemonTables>()(Strict({
 
 // `id` is redundant with the symbol's array index and is stripped from
 // prod dumps.  Callers that need a SymbolId use the array position.
-const ParserProdSymbol = matches<DumpSymbol>()(Strict({
+const ParserProdSymbol = matches<ParserSymbol>()(Strict({
   name:       Type.String(),
   isTerminal: Type.Boolean(),
 }));
 
-// The multi-entry element shape lives inline on `DumpRhsPos.multi` in
+// The multi-entry element shape lives inline on `ParserRhsPos.multi` in
 // src/lempar.ts; pull it out for the schema match.
-type DumpRhsPosMulti = NonNullable<DumpRhsPos['multi']>[number];
+type ParserRhsPosMulti = NonNullable<ParserRhsPos['multi']>[number];
 
 // The runtime resolves symbol names via the top-level `symbols[]` table
 // (see buildSymbolName in src/ast/dispatch.ts), so rhs positions carry
 // only the numeric ids.  Stripping the redundant names shaves ~18 KB raw
 // / ~1.7 KB gzipped per version from parser.prod.json.
-const ParserProdMultiEntry = matches<DumpRhsPosMulti>()(Strict({
+const ParserProdMultiEntry = matches<ParserRhsPosMulti>()(Strict({
   symbol: SymbolId,
 }));
 
 // `pos` is redundant with the RHS position's array index and is
 // stripped from prod dumps.
-const ParserProdRhsPos = matches<DumpRhsPos>()(Strict({
+const ParserProdRhsPos = matches<ParserRhsPos>()(Strict({
   symbol: Type.Optional(SymbolId),
   multi:  Type.Optional(Type.Array(ParserProdMultiEntry)),
 }));
 
 // `id` is redundant with the rule's array index; `nrhs` is redundant
 // with `rhs.length`.  Both stripped from prod dumps.
-const ParserProdRule = matches<DumpRule>()(Strict({
+const ParserProdRule = matches<ParserRule>()(Strict({
   lhs:        SymbolId,
   lhsName:    Type.String(),
   rhs:        Type.Array(ParserProdRhsPos),
   doesReduce: Type.Boolean(),
 }));
 
-const ParserProdSchema = matches<LemonDump>()(Strict({
+const ParserProdSchema = matches<ParserDefs>()(Strict({
   constants: ParserProdConstants,
   tables:    ParserProdTables,
   symbols:   Type.Array(ParserProdSymbol),
@@ -418,7 +418,7 @@ const KeywordsDevMaskFlags = Strict(
 const KeywordsDevMeta = Strict({
   /** Hardcoded "tool/mkkeywordhash.c" in the emitter. */
   sourceFile:    Type.String(),
-  /** Integer version of the dump shape.  Matches JSON_SCHEMA_VERSION. */
+  /** Integer version of the defs shape.  Matches JSON_SCHEMA_VERSION. */
   schemaVersion: Type.Literal(JSON_SCHEMA_VERSION),
   /** Number of keyword entries before main() filters out mask==0. */
   keywordCount:  Type.Integer(),
@@ -446,10 +446,10 @@ const KeywordsDevSchema = Strict({
 
 // ===========================================================================
 // KEYWORDS PROD SCHEMA — strict subset of .dev that the JS runtime reads.
-// Matches src/tokenize.ts::KeywordsDump minus the debug-only fields.
+// Matches src/tokenize.ts::KeywordDefs minus the debug-only fields.
 // ===========================================================================
 
-const KeywordsProdMeta = matches<KeywordsDump['meta']>()(Strict({
+const KeywordsProdMeta = matches<KeywordDefs['meta']>()(Strict({
   maskFlags: KeywordsDevMaskFlags,
 }));
 
@@ -458,14 +458,14 @@ const KeywordsProdMeta = matches<KeywordsDump['meta']>()(Strict({
 // the redundant `TK_` prefix from `tokenName` — renaming the field to
 // `token` to signal that the value is the parser symbol name directly.
 // See scripts/slim-dump.ts for the pre-Clean transform that builds
-// this shape out of the dev dump.
+// this shape out of the dev defs.
 const KeywordsProdEntry = matches<KeywordEntry>()(Strict({
   name:  Type.String(),
   token: Type.String(),
   mask:  KeywordMask,
 }));
 
-const KeywordsProdSchema = matches<KeywordsDump>()(Strict({
+const KeywordsProdSchema = matches<KeywordDefs>()(Strict({
   meta:     KeywordsProdMeta,
   keywords: Type.Array(KeywordsProdEntry),
 }));

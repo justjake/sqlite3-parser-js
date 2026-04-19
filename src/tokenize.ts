@@ -13,7 +13,7 @@
 // are treated as identifier characters (matching SQLite's rule that any
 // high byte is valid inside an identifier).
 
-import type { LemonDump, TokenId } from './lempar.ts';
+import type { ParserDefs, TokenId } from './lempar.ts';
 
 // ---------------------------------------------------------------------------
 // Public types — the shape of the keywords-dump, tokenizer options, and
@@ -38,7 +38,7 @@ export type MaskFlag =
 
 /**
  * A bitmask over `MaskFlag` values.  Bit positions are defined by
- * `KeywordsDump.meta.maskFlags` (source: mkkeywordhash.c's
+ * `KeywordDefs.meta.maskFlags` (source: mkkeywordhash.c's
  * `aMaskNames[]`).  A keyword is enabled iff
  * `(kw.mask & enabledMask) !== 0`.
  *
@@ -54,9 +54,9 @@ export type KeywordMask = number & { readonly [__keywordMaskBrand]: true };
 export const KeywordMask = (n: number): KeywordMask => n as KeywordMask;
 
 /**
- * One keyword entry in the runtime (prod) keyword dump.
+ * One keyword entry in the runtime (prod) keyword defs.
  *
- * The dev dump additionally carries `priority` (hash-chain ordering),
+ * The dev defs additionally carries `priority` (hash-chain ordering),
  * decoded `flags: string[]`, and the original `tokenName` with the
  * `TK_` prefix; all three are dropped/transformed by scripts/slim-dump.ts
  * for the runtime — see the pre-Clean transform there for details.
@@ -79,12 +79,12 @@ export interface KeywordEntry {
 /**
  * Shape of keywords.prod.json (what the JS runtime reads).
  *
- * Strict subset of the dev dump: `meta.sourceFile`,
+ * Strict subset of the dev defs: `meta.sourceFile`,
  * `meta.schemaVersion`, and `meta.keywordCount` are debug-only and
  * stripped by slim-dump.  Keep this type in lockstep with
  * scripts/json-schemas.ts's `KeywordsProdSchema`.
  */
-export interface KeywordsDump {
+export interface KeywordDefs {
   meta: {
     /** Bit-name → bit-value map; mirrors the maskFlags in the C patch. */
     maskFlags: Record<MaskFlag, KeywordMask>;
@@ -97,8 +97,8 @@ export interface CreateTokenizerOptions {
   /**
    * Which feature flags should be enabled at parse time.  Keywords whose
    * mask intersects this set are recognised; others fall back to TK_ID.
-   * Defaults to the full set of flags present in the dump (i.e. "every
-   * feature the dump was built with is on").  `ALWAYS` is always added
+   * Defaults to the full set of flags present in the defs (i.e. "every
+   * feature the defs were built with is on").  `ALWAYS` is always added
    * regardless of the caller's choice.
    */
   readonly flags?: readonly MaskFlag[];
@@ -125,7 +125,7 @@ export interface TokenSpan {
 /**
  * The 33 TK_* codes the lexer emits directly.  Every key is required
  * — their presence is verified at `createTokenizer` time by looking
- * them up in the parser dump's symbol table.
+ * them up in the parser defs' symbol table.
  *
  * Matches the `switch(aiClass[*z])` in src/tokenize.c:276.
  */
@@ -305,21 +305,21 @@ const DEFAULT_DIGIT_SEPARATOR = '';
 // keyword dumps.  See the `Tokenizer` interface for the returned shape.
 // ---------------------------------------------------------------------------
 export function createTokenizer(
-  parserDump: LemonDump,
-  keywordsDump: KeywordsDump,
+  parserDefs: ParserDefs,
+  keywordDefs: KeywordDefs,
   opts: CreateTokenizerOptions = {},
 ): Tokenizer {
   const digitSep = opts.digitSeparator ?? DEFAULT_DIGIT_SEPARATOR;
   const hasDigitSep = typeof digitSep === 'string' && digitSep.length === 1;
 
-  // Resolve TK_* names -> integer codes via the parser dump's symbol
-  // table.  The dump holds names without the TK_ prefix (e.g.
+  // Resolve TK_* names -> integer codes via the parser defs' symbol
+  // table.  The defs hold names without the TK_ prefix (e.g.
   // "SELECT", "ID").  isTerminal=true narrows SymbolId down to TokenId;
   // TS can't prove that, so we do the cast at the assignment boundary.
   const tokenCode = new Map<string, TokenId>();
   const tokenNameMap = new Map<TokenId, string>();
-  for (let i = 0; i < parserDump.symbols.length; i++) {
-    const sym = parserDump.symbols[i]!;
+  for (let i = 0; i < parserDefs.symbols.length; i++) {
+    const sym = parserDefs.symbols[i]!;
     if (!sym.isTerminal) continue;
     const id = i as TokenId;
     tokenCode.set(sym.name, id);
@@ -329,8 +329,8 @@ export function createTokenizer(
     const code = tokenCode.get(name);
     if (code === undefined) {
       throw new Error(
-        `tokenize.ts: parser dump is missing terminal token "${name}". ` +
-        `This usually means the parser dump and tokenizer are out of sync.`,
+        `tokenize.ts: parser defs are missing terminal token "${name}". ` +
+        `This usually means the parser defs and tokenizer are out of sync.`,
       );
     }
     return code;
@@ -382,8 +382,8 @@ export function createTokenizer(
   // Both the per-keyword `mask` and the bit assignments in
   // `meta.maskFlags` come from mkkeywordhash.c's `aMaskNames[]` — we
   // don't hardcode bit values on the JS side, so if SQLite ever
-  // reassigns a bit we pick up the change via the regenerated dump.
-  const maskFlags = keywordsDump.meta.maskFlags;
+  // reassigns a bit we pick up the change via the regenerated defs.
+  const maskFlags = keywordDefs.meta.maskFlags;
   const allFlags = Object.keys(maskFlags) as MaskFlag[];
   const enabledFlags: readonly MaskFlag[] = opts.flags ?? allFlags;
   // ALWAYS keywords are unconditional.  `|` drops the brand back to
@@ -394,7 +394,7 @@ export function createTokenizer(
   }
 
   const keywordCode = new Map<string, TokenId>();
-  for (const kw of keywordsDump.keywords) {
+  for (const kw of keywordDefs.keywords) {
     if ((kw.mask & enabledMask) === 0) continue;
     keywordCode.set(kw.name, requireToken(kw.token));
   }

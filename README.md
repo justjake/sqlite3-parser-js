@@ -38,7 +38,7 @@ Pin to a specific SQLite version by importing the subpath directly:
 import { parse } from 'sqlite3-parser/sqlite-3.54.0';
 ```
 
-Every version we track ships both `parse()` (convenience) and `createParser()` (advanced; use when you need non-default tokenizer options like a custom digit separator or a pared-down keyword-flag set).
+Every version we track ships both `parse()` (convenience) and `createParser()` (advanced; use when you need non-default tokenizer options like a custom digit separator or a pared-down keyword-flag set). A `parseToAst()` / `createAstBuilder()` pair is also exposed but currently experimental — see the Roadmap for status.
 
 ## Parse rules & porting
 
@@ -89,9 +89,12 @@ The JSON Schemas at `generated/json-schema/v1/` document every field the runtime
 │   ├── build.ts                bun build + tsc → dist/
 │   ├── vendor.ts               onboard a new SQLite version
 │   ├── slim-dump.ts            .dev.json → .prod.json
+│   ├── verify-slim.ts          smoke-test that slim and full dumps parse identically
 │   ├── json-schemas.ts         emit the JSON Schemas
 │   ├── validate-json.ts        validate a dump against its schema
-│   └── emit-version-modules.ts codegen the per-version TS wrappers
+│   ├── emit-version-modules.ts codegen the per-version TS wrappers
+│   ├── diff-ast.ts             grammar-shape diff across two parser.dev dumps
+│   └── ast-coverage.ts         unhit-rule report for the AST layer
 ├── test/                       test suites
 │   ├── *.test.ts               unit tests
 │   └── sqlite/*.test.ts        ports of SQLite tests
@@ -132,6 +135,6 @@ Flags: `--no-submodule --from <path>` bring your own SQLite source tree (useful 
 
 ### Roadmap
 
-- **AST layer**. `src/ast/` contains an experimental CST → AST converter that produces typed expression, statement, and DDL nodes. Not yet public API — the shape is still evolving. When it stabilises, `parse()` will grow an `ast?: StatementNode[]` field and consumers who want the richer tree can opt into it without changing how they construct the parser.
+- **AST layer**. `src/ast/` contains the scaffolding for a CST → AST converter: a stable-key dispatch table (handlers keyed on `${lhsName}::${rhs symbol names}` so they survive rule-id reshuffling across SQLite versions), per-category handler modules (`stmt`, `expr`, `select`, `ddl`, `trigger`), and `scripts/diff-ast.ts` / `scripts/ast-coverage.ts` for tracking grammar drift and handler coverage. The handlers themselves aren't implemented yet — `parseToAst()` currently throws `"bindRegistry: not yet implemented"`. Once handlers stabilise, `parse()` will grow an `ast?` field and consumers who want the richer tree can opt into it without changing how they construct the parser.
 - **More SQLite versions**. Currently pinned to 3.54.0. The `bun run vendor <ref>` workflow is designed to roll forward at minimum effort; expect periodic releases that track upstream.
 - **libsql / other Lemon-using dialects**. The vendor tooling is structured to accept other Lemon-based grammars (the `generated/sqlite-<ver>/` subpath convention leaves room for `generated/libsql-<ver>/` siblings), but no other dialect is wired up yet.

@@ -36,7 +36,7 @@
 // * TokenId is the subset where the symbol is a terminal; it's a
 //   subtype of SymbolId so a TokenId can flow anywhere a SymbolId is
 //   accepted, but not the other way around.
-// * RuleId indexes into `dump.rules[]`.
+// * RuleId indexes into `defs.rules[]`.
 //
 // State numbers and action codes are intentionally NOT branded: Lemon
 // packs shift state numbers, `YY_ACCEPT_ACTION`, and pending-reduce
@@ -61,7 +61,7 @@ export type SymbolId = number & { readonly [__symbolIdBrand]: true };
  */
 export type TokenId = SymbolId & { readonly [__tokenIdBrand]: true };
 
-/** Index into `dump.rules[]`.  0..YYNRULE. */
+/** Index into `defs.rules[]`.  0..YYNRULE. */
 export type RuleId = number & { readonly [__ruleIdBrand]: true };
 
 /** Coerce a plain number to `SymbolId` (unsafe — caller asserts range). */
@@ -75,7 +75,7 @@ export const RuleId   = (n: number): RuleId   => n as RuleId;
 // Dump shapes.  Only the fields the LALR engine actually reads.
 // ---------------------------------------------------------------------------
 
-export interface LemonConstants {
+export interface ParserConstants {
   /** Number of LALR states. */
   YYNSTATE: number;
   /** Number of grammar rules. */
@@ -107,7 +107,7 @@ export interface LemonConstants {
   YYFALLBACK: 0 | 1;
 }
 
-export interface LemonTables {
+export interface ParserTables {
   yy_action: number[];
   /** Indexed by base+lookahead; each entry is a terminal SymbolId. */
   yy_lookahead: SymbolId[];
@@ -122,22 +122,22 @@ export interface LemonTables {
 // fields that are recoverable from array position.  Callers that need
 // a SymbolId / RuleId use the element's index in the owning array.
 
-export interface DumpSymbol {
+export interface ParserSymbol {
   name: string;
   isTerminal: boolean;
 }
 
-export interface DumpRhsPos {
+export interface ParserRhsPos {
   /** Single terminal/nonterminal symbol id at this position. */
   symbol?: SymbolId;
   /** For `%token_class foo A|B|C` positions, the set of accepted symbols. */
   multi?: Array<{ symbol: SymbolId }>;
 }
 
-export interface DumpRule {
+export interface ParserRule {
   lhs: SymbolId;
   lhsName: string;
-  rhs: DumpRhsPos[];
+  rhs: ParserRhsPos[];
   /**
    * `false` when Lemon's unit-rule elimination proved this reduction
    * never fires.  The engine doesn't care — it follows the tables
@@ -147,11 +147,11 @@ export interface DumpRule {
   doesReduce: boolean;
 }
 
-export interface LemonDump {
-  constants: LemonConstants;
-  tables: LemonTables;
-  symbols: DumpSymbol[];
-  rules: DumpRule[];
+export interface ParserDefs {
+  constants: ParserConstants;
+  tables: ParserTables;
+  symbols: ParserSymbol[];
+  rules: ParserRule[];
 }
 
 // ---------------------------------------------------------------------------
@@ -225,16 +225,16 @@ export interface LalrEngine {
 // ---------------------------------------------------------------------------
 
 /**
- * Bind the engine to a specific Lemon grammar dump.  Returns a reusable
+ * Bind the engine to a specific Lemon grammar defs.  Returns a reusable
  * `run` function.  Constructing the engine is cheap — the tables are
  * referenced, not copied — so callers can create one per grammar and
  * parse arbitrarily many strings through it.
  */
-export function createEngine(dump: LemonDump): LalrEngine {
-  const K = dump.constants;
-  const T = dump.tables;
+export function createEngine(defs: ParserDefs): LalrEngine {
+  const K = defs.constants;
+  const T = defs.tables;
   const yyFallback = T.yyFallback ?? [];
-  const rules = dump.rules;
+  const rules = defs.rules;
 
   // -------------------------------------------------------------------------
   // Table lookups — faithful ports of lempar.c:549 and lempar.c:614.

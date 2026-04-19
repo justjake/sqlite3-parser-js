@@ -1,5 +1,5 @@
 #!/usr/bin/env -S bun run
-// scripts/validate-json.ts — check a generated dump against its schema.
+// scripts/validate-json.ts — check a generated defs against its schema.
 //
 //   bun scripts/validate-json.ts <schema-name> <path-to-file>
 //
@@ -9,7 +9,7 @@
 //
 // Exits 0 on success and 1 (with a list of validation errors) on
 // failure.  Used by the Makefile as a post-step on every target that
-// produces a .json dump so regressions surface at build time rather
+// produces a .json defs so regressions surface at build time rather
 // than at runtime in a bundle somewhere.
 //
 // The schema is loaded from
