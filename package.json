@@ -10,22 +10,24 @@
     "dist"
   ],
   "bin": {
-    "sqlite3-parser":    "./dist/bin/sqlite3-parser.js",
+    "sqlite3-parser": "./dist/bin/sqlite3-parser.js",
     "sqlite3-tokenizer": "./dist/bin/sqlite3-tokenizer.js"
   },
   "exports": {
     ".": {
-      "types":   "./dist/generated/current.d.ts",
+      "types": "./dist/generated/current.d.ts",
       "default": "./dist/generated/current.js"
     },
     "./sqlite-*": {
-      "types":   "./dist/generated/*/index.d.ts",
+      "types": "./dist/generated/*/index.d.ts",
       "default": "./dist/generated/*/index.js"
     }
   },
   "scripts": {
     "build": "bun scripts/build.ts",
     "test": "bun test",
+    "fmt": "oxfmt",
+    "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "vendor": "bun scripts/vendor.ts",
     "diff:ast": "bun scripts/diff-ast.ts",
@@ -33,6 +35,8 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
     "typebox": "1.1.28",
     "typescript": "^6.0.3"
   }
