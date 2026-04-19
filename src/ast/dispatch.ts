@@ -19,12 +19,12 @@
 // etc.) and are aggregated by ./registry.ts.  This file defines the
 // types and wiring only — no SQL semantics live here.
 
-import type { ParserRule, ParserDefs, RuleId, SymbolId } from '../lempar.ts';
-import type { CstNode, RuleNode } from '../parser.ts';
-import type { AstError, AstNode } from './types.ts';
+import type { ParserRule, ParserDefs, RuleId, SymbolId } from "../lempar.ts"
+import type { CstNode, RuleNode } from "../parser.ts"
+import type { AstError, AstNode } from "./types.ts"
 
 /** A grammar-shape key, stable across SQLite version bumps. */
-export type StableKey = string;
+export type StableKey = string
 
 /**
  * Resolves a symbol id to its display name.  The prod defs strips the
@@ -32,19 +32,19 @@ export type StableKey = string;
  * from the top-level `symbols[]` table), so stable-key construction
  * goes through this lookup rather than reading names inline.
  */
-export type SymbolName = (id: SymbolId) => string;
+export type SymbolName = (id: SymbolId) => string
 
 /**
  * Build a `SymbolName` lookup from the parser defs' `symbols[]` table.
  * The symbol id IS the array index — prod defs don't ship a redundant
  * `id` field.
  */
-export function buildSymbolName(defs: Pick<ParserDefs, 'symbols'>): SymbolName {
-  const byId: string[] = [];
+export function buildSymbolName(defs: Pick<ParserDefs, "symbols">): SymbolName {
+  const byId: string[] = []
   for (let i = 0; i < defs.symbols.length; i++) {
-    byId[i] = defs.symbols[i]!.name;
+    byId[i] = defs.symbols[i]!.name
   }
-  return (id) => byId[id] ?? `?${id}`;
+  return (id) => byId[id] ?? `?${id}`
 }
 
 /**
@@ -54,17 +54,17 @@ export function buildSymbolName(defs: Pick<ParserDefs, 'symbols'>): SymbolName {
  * one set of defs.
  */
 export function stableKeyForRule(rule: ParserRule, symbolName: SymbolName): StableKey {
-  const rhsParts: string[] = [];
+  const rhsParts: string[] = []
   for (const p of rule.rhs) {
     if (p.symbol !== undefined) {
-      rhsParts.push(symbolName(p.symbol));
+      rhsParts.push(symbolName(p.symbol))
     } else if (p.multi !== undefined) {
-      rhsParts.push(p.multi.map((m) => symbolName(m.symbol)).join('|'));
+      rhsParts.push(p.multi.map((m) => symbolName(m.symbol)).join("|"))
     } else {
-      rhsParts.push('?');
+      rhsParts.push("?")
     }
   }
-  return `${rule.lhsName}::${rhsParts.join(' ')}`;
+  return `${rule.lhsName}::${rhsParts.join(" ")}`
 }
 
 /**
@@ -72,10 +72,10 @@ export function stableKeyForRule(rule: ParserRule, symbolName: SymbolName): Stab
  * recursively convert child CST nodes should do so via `ctx.dispatch`.
  */
 export interface AstContext {
-  readonly sql: string;
-  readonly errors: AstError[];
+  readonly sql: string
+  readonly errors: AstError[]
   /** Recurse into a child CST node.  Returns `undefined` for terminals. */
-  readonly dispatch: (cst: CstNode) => AstNode | undefined;
+  readonly dispatch: (cst: CstNode) => AstNode | undefined
 }
 
 /**
@@ -83,13 +83,10 @@ export interface AstContext {
  * narrows the return type when the registry wants stronger guarantees
  * per rule (future work — today everything returns `AstNode`).
  */
-export type Handler<T extends AstNode = AstNode> = (
-  cst: RuleNode,
-  ctx: AstContext,
-) => T;
+export type Handler<T extends AstNode = AstNode> = (cst: RuleNode, ctx: AstContext) => T
 
 /** A table of handlers keyed by stable key. */
-export type HandlerRegistry = Readonly<Record<StableKey, Handler>>;
+export type HandlerRegistry = Readonly<Record<StableKey, Handler>>
 
 /**
  * The per-defs binding: a fast rule-id → handler lookup plus a
@@ -98,11 +95,11 @@ export type HandlerRegistry = Readonly<Record<StableKey, Handler>>;
  */
 export interface BoundDispatcher {
   /** Look up the handler for a rule id.  `undefined` if no handler registered. */
-  readonly handlerFor: (ruleId: RuleId) => Handler | undefined;
+  readonly handlerFor: (ruleId: RuleId) => Handler | undefined
   /** Stable keys of rules that have actions but no registered handler. */
-  readonly missingKeys: readonly StableKey[];
+  readonly missingKeys: readonly StableKey[]
   /** Every stable key in the defs, in rule-id order.  Useful for coverage. */
-  readonly allKeys: readonly StableKey[];
+  readonly allKeys: readonly StableKey[]
 }
 
 /**
@@ -111,11 +108,8 @@ export interface BoundDispatcher {
  *
  * TODO — implement.  See AST_DESIGN_IDEAS.md for the algorithm.
  */
-export function bindRegistry(
-  _defs: ParserDefs,
-  _registry: HandlerRegistry,
-): BoundDispatcher {
-  throw new Error('bindRegistry: not yet implemented');
+export function bindRegistry(_defs: ParserDefs, _registry: HandlerRegistry): BoundDispatcher {
+  throw new Error("bindRegistry: not yet implemented")
 }
 
 export interface ConvertOptions {
@@ -124,13 +118,13 @@ export interface ConvertOptions {
    * in the grammar.  Otherwise fall back to `UnknownAstNode`.  Default
    * false — tests should opt in.
    */
-  readonly strict?: boolean;
+  readonly strict?: boolean
   /**
    * If provided, called with each stable key that gets dispatched.
    * Used by `scripts/ast-coverage.ts` to build a hit set from the test
    * suite.
    */
-  readonly onHit?: (key: StableKey) => void;
+  readonly onHit?: (key: StableKey) => void
 }
 
 /**
@@ -150,7 +144,7 @@ export function cstToAst(
   _sql: string,
   _opts: ConvertOptions = {},
 ): { ast?: AstNode; errors: AstError[] } {
-  throw new Error('cstToAst: not yet implemented');
+  throw new Error("cstToAst: not yet implemented")
 }
 
 /**
@@ -165,11 +159,11 @@ export function createAstBuilder(
   registry: HandlerRegistry,
   opts: ConvertOptions = {},
 ) {
-  const dispatcher = bindRegistry(defs, registry);
+  const dispatcher = bindRegistry(defs, registry)
   return {
     dispatcher,
     build(cst: CstNode, sql: string) {
-      return cstToAst(cst, dispatcher, sql, opts);
+      return cstToAst(cst, dispatcher, sql, opts)
     },
-  };
+  }
 }

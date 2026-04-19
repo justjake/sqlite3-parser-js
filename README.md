@@ -9,9 +9,9 @@ Parse SQLite query syntax into a concrete syntax tree (CST).
 ## Usage
 
 ```ts
-import { parse } from 'sqlite3-parser';
+import { parse } from "sqlite3-parser"
 
-const { cst, errors } = parse('SELECT id, name FROM users WHERE active = 1');
+const { cst, errors } = parse("SELECT id, name FROM users WHERE active = 1")
 if (cst) {
   // cst.kind === 'rule', cst.name === 'input' — walk the tree from here.
 }
@@ -20,12 +20,12 @@ if (cst) {
 Errors come back as structured diagnostics:
 
 ```ts
-const { errors } = parse('SELECT FROM users');
+const { errors } = parse("SELECT FROM users")
 
 for (const err of errors) {
-  console.error(`${err.line}:${err.col}: ${err.canonical}`);
-  if (err.hint)     console.error(`  hint: ${err.hint}`);
-  if (err.expected) console.error(`  expected: ${err.expected.join(', ')}`);
+  console.error(`${err.line}:${err.col}: ${err.canonical}`)
+  if (err.hint) console.error(`  hint: ${err.hint}`)
+  if (err.expected) console.error(`  expected: ${err.expected.join(", ")}`)
 }
 // 1:8: near "FROM": syntax error
 //   hint: a SELECT list cannot start with the keyword "FROM"
@@ -35,7 +35,7 @@ for (const err of errors) {
 Pin to a specific SQLite version by importing the subpath directly:
 
 ```ts
-import { parse } from 'sqlite3-parser/sqlite-3.54.0';
+import { parse } from "sqlite3-parser/sqlite-3.54.0"
 ```
 
 Every version we track ships both `parse()` (convenience) and `createParser()` (advanced; use when you need non-default tokenizer options like a custom digit separator or a pared-down keyword-flag set). A `parseToAst()` / `createAstBuilder()` pair is also exposed but currently experimental — see the Roadmap for status.
@@ -44,10 +44,10 @@ Every version we track ships both `parse()` (convenience) and `createParser()` (
 
 At runtime, the parser is driven by two JSON files per SQLite version:
 
-| File | Contents |
-|---|---|
+| File                                     | Contents                                                                                                  |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `generated/<version>/parser.prod.json`   | LALR(1) action/goto tables, symbol list, rule list — everything the state machine needs to drive a parse. |
-| `generated/<version>/keywords.prod.json` | The SQL keyword table — maps keyword text to the terminal id the grammar expects. |
+| `generated/<version>/keywords.prod.json` | The SQL keyword table — maps keyword text to the terminal id the grammar expects.                         |
 
 Both are **generated** from the upstream `tool/lemon.c` and `tool/mkkeywordhash.c` (patched to emit a machine-readable JSON dump alongside their usual C output — see [`vendor/README.md`](./vendor/README.md)). A `.dev.json` companion sits next to each `.prod.json` with the full un-slimmed dump: rule action-C source, symbol metadata, precedence tables, destructors. The `.dev.json` files are for debugging and introspection; the runtime reads `.prod.json`.
 
@@ -104,14 +104,14 @@ The JSON Schemas at `generated/json-schema/v1/` document every field the runtime
 
 Development commands:
 
-| Command | Purpose |
-|---|---|
-| `bun run test`                  | Run the full test suite. |
-| `bun run build`                 | Produce `dist/` (bundled JS + colocated `.d.ts`). |
-| `bun run typecheck`             | `tsc --noEmit` over source + tests + scripts. |
-| `bun run vendor <ref>`          | Onboard a new SQLite version (see below). |
-| `make generated/<ver>/…`        | Regenerate a specific output without re-running the whole vendor flow. |
-| `make help`                     | List every pattern target Make knows about. |
+| Command                  | Purpose                                                                |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `bun run test`           | Run the full test suite.                                               |
+| `bun run build`          | Produce `dist/` (bundled JS + colocated `.d.ts`).                      |
+| `bun run typecheck`      | `tsc --noEmit` over source + tests + scripts.                          |
+| `bun run vendor <ref>`   | Onboard a new SQLite version (see below).                              |
+| `make generated/<ver>/…` | Regenerate a specific output without re-running the whole vendor flow. |
+| `make help`              | List every pattern target Make knows about.                            |
 
 Anything touching the vendored SQLite sources is explained in [`vendor/README.md`](./vendor/README.md).
 

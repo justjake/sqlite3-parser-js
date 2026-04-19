@@ -18,11 +18,7 @@ table. When we ship standalone we need to:
 The ideal API is roughly:
 
 ```ts
-updateSqliteSource(
-  ourProjectPatchesAndMetadata,
-  newSqliteSourceTree,
-  ourProjectOutputDir,
-)
+updateSqliteSource(ourProjectPatchesAndMetadata, newSqliteSourceTree, ourProjectOutputDir)
 ```
 
 ## Recommendation: git-native 3-way merge, with patches as derived artifacts
@@ -123,12 +119,12 @@ that case we can still generate the patch on demand with `diff -u`.
   lempar template changes upstream, the JSON shape from `lemon.c` may also
   change (new tables, new constants). We should vendor a copy of
   `lempar.c` under `vendor/upstream/<ver>/tool/` and teach the update flow to
-  diff it — not to merge, but to *alert* when it changes so someone audits
+  diff it — not to merge, but to _alert_ when it changes so someone audits
   `src/lempar.ts`.
 
 - **The JSON schema our patches emit is a contract with JS.** Bumping upstream
   SQLite can add grammar symbols / rules / constants. The JS side (`src/
-  parser.ts`, `src/enhanceError.ts`) reads fields by name, so new ones are
+parser.ts`, `src/enhanceError.ts`) reads fields by name, so new ones are
   additive; but if a bumped SQLite ever renames one, we break silently. The
   manifest should carry a `jsonSchemaVersion` that the JS loader asserts on
   load, and the update flow should verify the merged `lemon.c` / `mkkeywordhash.c`
@@ -151,68 +147,68 @@ that case we can still generate the patch on demand with `diff -u`.
 
 ```ts
 interface VendorManifest {
-  sqliteVersion: string;
-  upstreamCommit: string;
-  upstreamUrl: string;
-  fileHashes: Record<string, string>; // relative path → sha256
-  jsonSchemaVersion: number;
-  notes: string;
+  sqliteVersion: string
+  upstreamCommit: string
+  upstreamUrl: string
+  fileHashes: Record<string, string> // relative path → sha256
+  jsonSchemaVersion: number
+  notes: string
 }
 
 interface UpdateResult {
-  merged: string[];      // files with clean merges
-  conflicts: string[];   // files that need manual review
-  unchanged: string[];   // files where upstream didn't change
+  merged: string[] // files with clean merges
+  conflicts: string[] // files that need manual review
+  unchanged: string[] // files where upstream didn't change
 }
 
 async function updateSqliteSource(
-  vendorDir: string,      // our vendor/ tree
+  vendorDir: string, // our vendor/ tree
   newUpstreamDir: string, // a checked-out new sqlite
-  newVersion: string,     // e.g. "3.51.0"
+  newVersion: string, // e.g. "3.51.0"
 ): Promise<UpdateResult> {
-  const manifest = readManifest(vendorDir);
-  verifyHashes(vendorDir, manifest); // bail if vendor/patched/* drifted
+  const manifest = readManifest(vendorDir)
+  verifyHashes(vendorDir, manifest) // bail if vendor/patched/* drifted
 
-  const targets = ['tool/lemon.c', 'tool/mkkeywordhash.c'];
-  const result: UpdateResult = { merged: [], conflicts: [], unchanged: [] };
+  const targets = ["tool/lemon.c", "tool/mkkeywordhash.c"]
+  const result: UpdateResult = { merged: [], conflicts: [], unchanged: [] }
 
   for (const rel of targets) {
-    const oldUp  = path.join(vendorDir, 'upstream', manifest.sqliteVersion, rel);
-    const newUp  = path.join(newUpstreamDir, rel);
-    const mine   = path.join(vendorDir, 'patched', rel);
+    const oldUp = path.join(vendorDir, "upstream", manifest.sqliteVersion, rel)
+    const newUp = path.join(newUpstreamDir, rel)
+    const mine = path.join(vendorDir, "patched", rel)
 
     if (hashFile(oldUp) === hashFile(newUp)) {
-      result.unchanged.push(rel);
-      continue;
+      result.unchanged.push(rel)
+      continue
     }
 
-    const { exitCode, stdout } = await runGitMergeFile(mine, oldUp, newUp);
-    const mergedPath = path.join(vendorDir, 'patched', rel);
-    writeFile(mergedPath, stdout);
+    const { exitCode, stdout } = await runGitMergeFile(mine, oldUp, newUp)
+    const mergedPath = path.join(vendorDir, "patched", rel)
+    writeFile(mergedPath, stdout)
 
     if (exitCode === 0) {
-      result.merged.push(rel);
+      result.merged.push(rel)
     } else {
-      result.conflicts.push(rel); // conflict markers are in the file
+      result.conflicts.push(rel) // conflict markers are in the file
     }
   }
 
   // lempar.c — advisory diff, not a merge target
   if (lemparChangedUpstream(manifest, newUpstreamDir)) {
-    result.conflicts.push('tool/lempar.c (audit src/lempar.ts)');
+    result.conflicts.push("tool/lempar.c (audit src/lempar.ts)")
   }
 
   if (result.conflicts.length === 0) {
     // stage the new pristine, bump the manifest
-    moveDir(newUpstreamDir, path.join(vendorDir, 'upstream', newVersion));
+    moveDir(newUpstreamDir, path.join(vendorDir, "upstream", newVersion))
     writeManifest(vendorDir, {
       ...manifest,
       sqliteVersion: newVersion,
       fileHashes: rehashAll(vendorDir),
-    });
+    })
   }
 
-  return result;
+  return result
 }
 ```
 

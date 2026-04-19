@@ -14,7 +14,7 @@
 // parser.ts when the CST shape changes, or when you want to alter how
 // virtual tokens / error messages / trivia are represented.
 
-import { createTokenizer, type KeywordDefs } from './tokenize.ts';
+import { createTokenizer, type KeywordDefs } from "./tokenize.ts"
 import {
   createEngine,
   type ParserRhsPos,
@@ -24,8 +24,8 @@ import {
   type RuleId,
   type SymbolId,
   type TokenId,
-} from './lempar.ts';
-import { enhanceParseError } from './enhanceError.ts';
+} from "./lempar.ts"
+import { enhanceParseError } from "./enhanceError.ts"
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -34,17 +34,17 @@ import { enhanceParseError } from './enhanceError.ts';
 
 /** A leaf node — one token from the tokenizer. */
 export interface TokenNode {
-  readonly kind: 'token';
+  readonly kind: "token"
   /** Numeric TK_* code (matches lemon's terminal symbol id). */
-  readonly type: TokenId;
+  readonly type: TokenId
   /** Stringified TK_* name, e.g. `"SELECT"`, `"ID"`, `"INTEGER"`. */
-  readonly name: string;
+  readonly name: string
   /** Source text covered by the token.  Empty string for synthetic tokens. */
-  readonly text: string;
+  readonly text: string
   /** Byte offset of the token in the original source string. */
-  readonly start: number;
+  readonly start: number
   /** Length of the token in source characters.  Zero for synthetic tokens. */
-  readonly length: number;
+  readonly length: number
   /**
    * True iff this token was injected by the parser rather than read from
    * the source.  At end-of-input we inject a virtual SEMI (to close the
@@ -53,30 +53,30 @@ export interface TokenNode {
    * sql.length`.  `tokenLeaves()` filters these out by default so existing
    * callers see only source tokens.
    */
-  readonly synthetic: boolean;
+  readonly synthetic: boolean
 }
 
 /** An internal node — the result of a grammar reduction. */
 export interface RuleNode {
-  readonly kind: 'rule';
+  readonly kind: "rule"
   /** Lemon rule id (matches `rules[ruleId]` in the defs). */
-  readonly rule: RuleId;
+  readonly rule: RuleId
   /**
    * The nonterminal name on the left-hand side, e.g. `"select"`,
    * `"expr"`, `"cmdlist"`.  This is the natural CST label.
    */
-  readonly name: string;
+  readonly name: string
   /** Nonterminal symbol id (always a nonterminal, despite the union type). */
-  readonly lhs: SymbolId;
+  readonly lhs: SymbolId
   /** Direct children, in source order. */
-  readonly children: readonly CstNode[];
+  readonly children: readonly CstNode[]
   /** Source offset of the first child (or 0 for an empty reduction). */
-  readonly start: number;
+  readonly start: number
   /** Source length, from the first child's start to the last child's end. */
-  readonly length: number;
+  readonly length: number
 }
 
-export type CstNode = TokenNode | RuleNode;
+export type CstNode = TokenNode | RuleNode
 
 export interface ParseError {
   /**
@@ -84,33 +84,33 @@ export interface ParseError {
    * prefer `canonical` + `hint` for new code).  Kept in sync with
    * `canonical` for engine-level errors.
    */
-  readonly message: string;
+  readonly message: string
   /** The offending token, if we had one when the error was raised. */
-  readonly token?: TokenNode;
+  readonly token?: TokenNode
   /**
    * SQLite-style canonical summary, e.g. `near "FROM": syntax error`
    * or `incomplete input`.  Only set for errors that came from the
    * LALR engine; tokenizer errors (e.g. unrecognised token) only set
    * `message`.
    */
-  readonly canonical?: string;
+  readonly canonical?: string
   /** Grammar-aware hint.  See enhanceError.ts for the heuristics. */
-  readonly hint?: string;
+  readonly hint?: string
   /** 1-based line of the failing token, or end of input. */
-  readonly line?: number;
+  readonly line?: number
   /** 1-based column. */
-  readonly col?: number;
+  readonly col?: number
   /** Half-open source range `[start, end)`. */
-  readonly range?: readonly [number, number];
+  readonly range?: readonly [number, number]
   /** Display names of terminals that would have been accepted here. */
-  readonly expected?: readonly string[];
+  readonly expected?: readonly string[]
 }
 
 export interface ParseResult {
   /** The CST root, present iff the parser reached YY_ACCEPT_ACTION. */
-  readonly cst?: CstNode;
+  readonly cst?: CstNode
   /** Any errors encountered.  Non-empty implies either a partial or no CST. */
-  readonly errors: readonly ParseError[];
+  readonly errors: readonly ParseError[]
 }
 
 // Internal — the stack-value type we hand to the engine.  Virtual
@@ -118,25 +118,22 @@ export interface ParseResult {
 // `synthetic: true`; they appear as CST children like any other token
 // (filtered by `tokenLeaves` by default), and survive into the parse
 // result so diagnostics can see them.
-type EngineValue = CstNode;
+type EngineValue = CstNode
 
 // ---------------------------------------------------------------------------
 // createParser — bind the driver to a specific parser.json + keywords.json.
 // ---------------------------------------------------------------------------
 
-export function createParser(
-  parserDefs: ParserDefs,
-  keywordDefs: KeywordDefs,
-) {
-  const engine = createEngine(parserDefs);
-  const rules = parserDefs.rules;
+export function createParser(parserDefs: ParserDefs, keywordDefs: KeywordDefs) {
+  const engine = createEngine(parserDefs)
+  const rules = parserDefs.rules
 
   // Symbol-id → display name (used to build the CST token names).
   // Mirrors yyTokenName[] in the generated parse.c.  Symbols are
   // keyed on array index — the prod defs has no explicit `id` field.
-  const symbolName: string[] = [];
+  const symbolName: string[] = []
   for (let i = 0; i < parserDefs.symbols.length; i++) {
-    symbolName[i] = parserDefs.symbols[i]!.name;
+    symbolName[i] = parserDefs.symbols[i]!.name
   }
 
   // -------------------------------------------------------------------------
@@ -159,19 +156,16 @@ export function createParser(
   // Each entry carries the rule plus the rule id (its index in `rules`),
   // since we drop `rule.id` from the prod defs and still need to stamp
   // the wrapper's `RuleNode.rule` at synthesis time.
-  const unitWrapper = new Map<
-    SymbolId,
-    Map<SymbolId, { rule: ParserRule; ruleId: RuleId }>
-  >();
+  const unitWrapper = new Map<SymbolId, Map<SymbolId, { rule: ParserRule; ruleId: RuleId }>>()
   for (let i = 0; i < rules.length; i++) {
-    const r = rules[i]!;
-    if (r.doesReduce) continue;
-    if (r.rhs.length !== 1) continue;
-    const src = r.rhs[0]?.symbol;
-    if (src === undefined) continue;
-    let inner = unitWrapper.get(r.lhs);
-    if (!inner) unitWrapper.set(r.lhs, (inner = new Map()));
-    inner.set(src, { rule: r, ruleId: i as RuleId });
+    const r = rules[i]!
+    if (r.doesReduce) continue
+    if (r.rhs.length !== 1) continue
+    const src = r.rhs[0]?.symbol
+    if (src === undefined) continue
+    let inner = unitWrapper.get(r.lhs)
+    if (!inner) unitWrapper.set(r.lhs, (inner = new Map()))
+    inner.set(src, { rule: r, ruleId: i as RuleId })
   }
 
   // -------------------------------------------------------------------------
@@ -188,11 +182,11 @@ export function createParser(
 
   /** Does `actualMajor` satisfy the RHS-position `expected` constraint? */
   function rhsMatches(expected: ParserRhsPos, actualMajor: SymbolId): boolean {
-    if (expected.symbol !== undefined) return expected.symbol === actualMajor;
+    if (expected.symbol !== undefined) return expected.symbol === actualMajor
     if (expected.multi !== undefined) {
-      for (const s of expected.multi) if (s.symbol === actualMajor) return true;
+      for (const s of expected.multi) if (s.symbol === actualMajor) return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -206,41 +200,41 @@ export function createParser(
     actualMajor: SymbolId,
     node: CstNode,
   ): CstNode {
-    let cur = node;
-    let curMajor = actualMajor;
+    let cur = node
+    let curMajor = actualMajor
     for (let safety = 0; safety < 4; safety++) {
-      if (rhsMatches(expected, curMajor)) break;
+      if (rhsMatches(expected, curMajor)) break
       // `expected.symbol` is the only target we know how to reach via
       // unit rules — if the expected position is a MULTITERMINAL set
       // and nothing matched, we've found a grammar invariant violation
       // rather than an elision.
-      const target = expected.symbol;
-      if (target === undefined) break;
-      const wrapperEntry = unitWrapper.get(target)?.get(curMajor);
-      if (!wrapperEntry) break;
-      const { rule: wrapperRule, ruleId: wrapperId } = wrapperEntry;
+      const target = expected.symbol
+      if (target === undefined) break
+      const wrapperEntry = unitWrapper.get(target)?.get(curMajor)
+      if (!wrapperEntry) break
+      const { rule: wrapperRule, ruleId: wrapperId } = wrapperEntry
       cur = {
-        kind: 'rule',
+        kind: "rule",
         rule: wrapperId,
         name: wrapperRule.lhsName,
         lhs: wrapperRule.lhs,
         children: [cur],
         start: cur.start,
         length: cur.length,
-      };
-      curMajor = wrapperRule.lhs;
+      }
+      curMajor = wrapperRule.lhs
     }
-    return cur;
+    return cur
   }
 
   // Bind a tokenizer.  The parser uses the same TK_* ids the defs'
   // symbol table assigns, so everything stays in sync.
-  const tk = createTokenizer(parserDefs, keywordDefs);
+  const tk = createTokenizer(parserDefs, keywordDefs)
 
   /** Token id 0 is Lemon's end-of-input marker (`$`). */
-  const TK_EOF: TokenId = 0 as TokenId;
-  const TK_SEMI   = tk.tokens.SEMI;
-  const TK_ILLEGAL = tk.tokens.ILLEGAL;
+  const TK_EOF: TokenId = 0 as TokenId
+  const TK_SEMI = tk.tokens.SEMI
+  const TK_ILLEGAL = tk.tokens.ILLEGAL
 
   // -------------------------------------------------------------------------
   // Build the RuleNode for a given reduction.  This is the engine's
@@ -251,25 +245,18 @@ export function createParser(
   // should become children (virtual tokens drop out), running unit-rule
   // synthesis, and tightening the span around non-empty children.
   // -------------------------------------------------------------------------
-  function buildRuleNode(
-    ruleId: RuleId,
-    popped: LalrPopped<EngineValue>[],
-  ): EngineValue {
-    const rule = rules[ruleId];
+  function buildRuleNode(ruleId: RuleId, popped: LalrPopped<EngineValue>[]): EngineValue {
+    const rule = rules[ruleId]
 
     // Walk popped entries alongside the rule's declared RHS.  Each
     // entry becomes a child, possibly wrapped in synthetic unit-rule
     // nodes that Lemon elided.  Synthetic tokens (injected SEMI/EOF)
     // ride along with `synthetic: true` and zero-length spans.
-    const children: CstNode[] = [];
+    const children: CstNode[] = []
     for (let i = 0; i < popped.length; i++) {
-      const entry = popped[i];
-      const rhsPos = rule.rhs[i];
-      children.push(
-        rhsPos
-          ? synthesizeWrappers(rhsPos, entry.major, entry.value)
-          : entry.value,
-      );
+      const entry = popped[i]
+      const rhsPos = rule.rhs[i]
+      children.push(rhsPos ? synthesizeWrappers(rhsPos, entry.major, entry.value) : entry.value)
     }
 
     // Compute the rule's span from its children.  Children with
@@ -277,28 +264,28 @@ export function createParser(
     // source text to anchor to) or synthetic siblings.  Skipping them
     // keeps the span tight and prevents negative lengths when a
     // zero-length child appears at the end of the sequence.
-    let start = 0;
-    let length = 0;
-    let sawSpan = false;
+    let start = 0
+    let length = 0
+    let sawSpan = false
     for (const c of children) {
-      if (c.length === 0) continue;
+      if (c.length === 0) continue
       if (!sawSpan) {
-        start = c.start;
-        sawSpan = true;
+        start = c.start
+        sawSpan = true
       }
-      length = c.start + c.length - start;
+      length = c.start + c.length - start
     }
 
     const ruleNode: RuleNode = {
-      kind: 'rule',
+      kind: "rule",
       rule: ruleId,
       name: rule.lhsName,
       lhs: rule.lhs,
       children,
       start,
       length,
-    };
-    return ruleNode;
+    }
+    return ruleNode
   }
 
   // -------------------------------------------------------------------------
@@ -309,38 +296,38 @@ export function createParser(
   // ParseResult with CST and user-facing error messages.
   // -------------------------------------------------------------------------
   function parse(sql: string): ParseResult {
-    const errors: ParseError[] = [];
+    const errors: ParseError[] = []
 
     // Collect inputs into an array so we can pre-check for ILLEGAL
     // tokens and inject virtual SEMI/EOF tails before driving the
     // engine.  SQL strings are small; streaming isn't worth it here.
-    const inputs: Array<{ major: TokenId; value: EngineValue }> = [];
+    const inputs: Array<{ major: TokenId; value: EngineValue }> = []
     // Sentinel `undefined` means "no real token seen yet" — avoids
     // inventing a bogus -1 that would need a cast to TokenId.
-    let lastMajor: TokenId | undefined;
+    let lastMajor: TokenId | undefined
     for (const tok of tk.tokenize(sql)) {
       if (tok.type === TK_ILLEGAL) {
         // sqlite's tokenize.c:707 formats it as: unrecognized token.
         // We record it and bail — attempting to recover typically
         // cascades into noise.
-        const text = sql.slice(tok.start, tok.start + tok.length);
+        const text = sql.slice(tok.start, tok.start + tok.length)
         errors.push({
           message: `unrecognized token: ${JSON.stringify(text)}`,
-        });
-        return { errors };
+        })
+        return { errors }
       }
 
       const node: TokenNode = {
-        kind: 'token',
+        kind: "token",
         type: tok.type,
         name: symbolName[tok.type] ?? String(tok.type),
         text: sql.slice(tok.start, tok.start + tok.length),
         start: tok.start,
         length: tok.length,
         synthetic: false,
-      };
-      inputs.push({ major: tok.type, value: node });
-      lastMajor = tok.type;
+      }
+      inputs.push({ major: tok.type, value: node })
+      lastMajor = tok.type
     }
 
     // EOF tail — mirrors tokenize.c:674 sqlite3RunParser.  If the last
@@ -348,31 +335,31 @@ export function createParser(
     // current statement.  Then feed 0 (end-of-input marker) to trigger
     // the final reduce/accept.  Both are real TokenNodes with
     // `synthetic: true` and zero-length span at `sql.length`.
-    const endPos = sql.length;
+    const endPos = sql.length
     if (lastMajor !== TK_SEMI) {
       const semiNode: TokenNode = {
-        kind: 'token',
+        kind: "token",
         type: TK_SEMI,
-        name: symbolName[TK_SEMI] ?? 'SEMI',
-        text: '',
+        name: symbolName[TK_SEMI] ?? "SEMI",
+        text: "",
         start: endPos,
         length: 0,
         synthetic: true,
-      };
-      inputs.push({ major: TK_SEMI, value: semiNode });
+      }
+      inputs.push({ major: TK_SEMI, value: semiNode })
     }
     const eofNode: TokenNode = {
-      kind: 'token',
+      kind: "token",
       type: TK_EOF,
-      name: symbolName[TK_EOF] ?? '$',
-      text: '',
+      name: symbolName[TK_EOF] ?? "$",
+      text: "",
       start: endPos,
       length: 0,
       synthetic: true,
-    };
-    inputs.push({ major: TK_EOF, value: eofNode });
+    }
+    inputs.push({ major: TK_EOF, value: eofNode })
 
-    const result = engine.run<EngineValue>(inputs, buildRuleNode);
+    const result = engine.run<EngineValue>(inputs, buildRuleNode)
 
     // Translate engine errors into user-facing ParseErrors with
     // grammar-aware diagnostics.  The token list we feed enhanceError
@@ -380,14 +367,14 @@ export function createParser(
     // scan backward for open groups, trailing commas, FILTER-after-OVER,
     // etc.  `inputs[i].value` is always a TokenNode (real or synthetic).
     const tokenStream: TokenNode[] = inputs.map((input) => {
-      const v = input.value;
+      const v = input.value
       // Engine inputs are always terminals, so value is always a
       // TokenNode; the cast is just to satisfy TypeScript.
-      return v as TokenNode;
-    });
+      return v as TokenNode
+    })
     for (const e of result.errors) {
-      const v = e.value;
-      const tokForError = v.kind === 'token' ? v : undefined;
+      const v = e.value
+      const tokForError = v.kind === "token" ? v : undefined
       if (tokForError) {
         const diag = enhanceParseError({
           sql,
@@ -396,7 +383,7 @@ export function createParser(
           defs: parserDefs,
           tokens: tokenStream,
           tokenIndex: e.inputIndex,
-        });
+        })
         errors.push({
           message: diag.canonical,
           token: tokForError,
@@ -406,25 +393,25 @@ export function createParser(
           col: diag.col,
           range: diag.range,
           expected: diag.expected,
-        });
+        })
       } else {
         // Shouldn't happen — engine input values are always TokenNodes —
         // but fall back to a plain message so we don't swallow the error.
         errors.push({
           message: `syntax error near ${v.name}`,
-        });
+        })
       }
     }
 
     if (result.accepted && result.root) {
-      return { cst: result.root, errors };
+      return { cst: result.root, errors }
     }
     if (!result.accepted && errors.length === 0) {
       // Engine ran out of input without accepting — well-formed
       // grammars shouldn't allow this, but guard anyway.
-      errors.push({ message: 'parser did not accept at end of input' });
+      errors.push({ message: "parser did not accept at end of input" })
     }
-    return { errors };
+    return { errors }
   }
 
   // Expose the tokenizer too so callers can inspect raw tokens for
@@ -433,7 +420,7 @@ export function createParser(
     parse,
     tokenize: tk.tokenize,
     tokenName: tk.tokenName,
-  };
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -446,23 +433,23 @@ export function createParser(
  * (injected SEMI/EOF) are marked so they stand out from source tokens.
  */
 export function formatCst(node: CstNode, indent = 0): string {
-  const pad = '  '.repeat(indent);
-  if (node.kind === 'token') {
-    const marker = node.synthetic ? ' /*synthetic*/' : '';
-    return `${pad}${node.name} ${JSON.stringify(node.text)}${marker}`;
+  const pad = "  ".repeat(indent)
+  if (node.kind === "token") {
+    const marker = node.synthetic ? " /*synthetic*/" : ""
+    return `${pad}${node.name} ${JSON.stringify(node.text)}${marker}`
   }
   if (node.children.length === 0) {
-    return `${pad}(${node.name})`;
+    return `${pad}(${node.name})`
   }
-  const inner = node.children.map((c) => formatCst(c, indent + 1)).join('\n');
-  return `${pad}(${node.name}\n${inner})`;
+  const inner = node.children.map((c) => formatCst(c, indent + 1)).join("\n")
+  return `${pad}(${node.name}\n${inner})`
 }
 
 /** Yield every node in the tree, parents before children (pre-order). */
 export function* walkCst(node: CstNode): Generator<CstNode> {
-  yield node;
-  if (node.kind === 'rule') {
-    for (const c of node.children) yield* walkCst(c);
+  yield node
+  if (node.kind === "rule") {
+    for (const c of node.children) yield* walkCst(c)
   }
 }
 
@@ -474,15 +461,15 @@ export function* tokenLeaves(
   node: CstNode,
   opts: { includeSynthetic?: boolean } = {},
 ): Generator<TokenNode> {
-  const includeSynthetic = opts.includeSynthetic === true;
-  if (node.kind === 'token') {
-    if (includeSynthetic || !node.synthetic) yield node;
-    return;
+  const includeSynthetic = opts.includeSynthetic === true
+  if (node.kind === "token") {
+    if (includeSynthetic || !node.synthetic) yield node
+    return
   }
-  for (const c of node.children) yield* tokenLeaves(c, opts);
+  for (const c of node.children) yield* tokenLeaves(c, opts)
 }
 
 // Re-export the defs type so callers can import it without reaching
 // into the engine module.
-export type { ParserDefs } from './lempar.ts';
-export type { EnhancedParseDiagnostic } from './enhanceError.ts';
+export type { ParserDefs } from "./lempar.ts"
+export type { EnhancedParseDiagnostic } from "./enhanceError.ts"

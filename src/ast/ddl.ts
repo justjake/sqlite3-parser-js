@@ -15,6 +15,6 @@
 //
 // TODO — populate with real handlers.
 
-import type { HandlerRegistry } from './dispatch.ts';
+import type { HandlerRegistry } from "./dispatch.ts"
 
-export const ddlHandlers: HandlerRegistry = {};
+export const ddlHandlers: HandlerRegistry = {}

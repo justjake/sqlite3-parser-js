@@ -45,22 +45,22 @@
 // The Makefile invokes these per-version; scripts/vendor.ts invokes
 // `--current` after onboarding a new version.
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs"
+import { dirname, join, resolve } from "node:path"
 
-import { PACKAGE_NAME } from './package-info.ts';
+import { PACKAGE_NAME } from "./package-info.ts"
 
-const ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..');
-const MANIFEST = join(ROOT, 'vendor', 'manifest.json');
+const ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
+const MANIFEST = join(ROOT, "vendor", "manifest.json")
 
 interface Manifest {
-  manifestVersion: number;
-  current: string;
-  versions: Record<string, unknown>;
+  manifestVersion: number
+  current: string
+  versions: Record<string, unknown>
 }
 
 function readManifest(): Manifest {
-  return JSON.parse(readFileSync(MANIFEST, 'utf8'));
+  return JSON.parse(readFileSync(MANIFEST, "utf8"))
 }
 
 // ---------------------------------------------------------------------------
@@ -180,7 +180,7 @@ export type {
 export type {
   TokenId, SymbolId, RuleId, ParserDefs,
 } from '../../src/lempar.ts';
-`;
+`
 }
 
 /**
@@ -199,7 +199,7 @@ function currentModule(current: string): string {
 // instead: \`${PACKAGE_NAME}/sqlite-<version>\`.
 
 export * from './${current}/index.ts';
-`;
+`
 }
 
 // ---------------------------------------------------------------------------
@@ -207,17 +207,17 @@ export * from './${current}/index.ts';
 // ---------------------------------------------------------------------------
 
 function emitVersion(version: string): void {
-  const outDir = join(ROOT, 'generated', version);
-  mkdirSync(outDir, { recursive: true });
-  const outPath = join(outDir, 'index.ts');
-  writeFileSync(outPath, indexModule(version));
-  console.log(`wrote ${outPath}`);
+  const outDir = join(ROOT, "generated", version)
+  mkdirSync(outDir, { recursive: true })
+  const outPath = join(outDir, "index.ts")
+  writeFileSync(outPath, indexModule(version))
+  console.log(`wrote ${outPath}`)
 }
 
 function emitCurrent(current: string): void {
-  const outPath = join(ROOT, 'generated', 'current.ts');
-  writeFileSync(outPath, currentModule(current));
-  console.log(`wrote ${outPath} (→ ${current})`);
+  const outPath = join(ROOT, "generated", "current.ts")
+  writeFileSync(outPath, currentModule(current))
+  console.log(`wrote ${outPath} (→ ${current})`)
 }
 
 // ---------------------------------------------------------------------------
@@ -225,38 +225,36 @@ function emitCurrent(current: string): void {
 // ---------------------------------------------------------------------------
 
 function main(): void {
-  const [, , ...argv] = process.argv;
+  const [, , ...argv] = process.argv
 
-  if (argv.includes('--help') || argv.includes('-h')) {
+  if (argv.includes("--help") || argv.includes("-h")) {
     console.log(
-      'usage: bun scripts/emit-version-modules.ts <version>\n' +
-      '       bun scripts/emit-version-modules.ts --current\n' +
-      '       bun scripts/emit-version-modules.ts --all',
-    );
-    process.exit(0);
+      "usage: bun scripts/emit-version-modules.ts <version>\n" +
+        "       bun scripts/emit-version-modules.ts --current\n" +
+        "       bun scripts/emit-version-modules.ts --all",
+    )
+    process.exit(0)
   }
 
-  const manifest = readManifest();
+  const manifest = readManifest()
 
-  if (argv.includes('--all')) {
-    for (const v of Object.keys(manifest.versions)) emitVersion(v);
-    emitCurrent(manifest.current);
-    return;
+  if (argv.includes("--all")) {
+    for (const v of Object.keys(manifest.versions)) emitVersion(v)
+    emitCurrent(manifest.current)
+    return
   }
 
-  if (argv.includes('--current')) {
-    emitCurrent(manifest.current);
-    return;
+  if (argv.includes("--current")) {
+    emitCurrent(manifest.current)
+    return
   }
 
-  const positional = argv.filter((a) => !a.startsWith('--'));
+  const positional = argv.filter((a) => !a.startsWith("--"))
   if (positional.length !== 1) {
-    console.error(
-      'usage: bun scripts/emit-version-modules.ts {<version>|--current|--all}',
-    );
-    process.exit(2);
+    console.error("usage: bun scripts/emit-version-modules.ts {<version>|--current|--all}")
+    process.exit(2)
   }
-  emitVersion(positional[0]!);
+  emitVersion(positional[0]!)
 }
 
-main();
+main()

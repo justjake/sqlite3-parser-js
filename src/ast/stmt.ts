@@ -7,6 +7,6 @@
 // TODO — populate with real handlers.  Each entry's key is the stable
 // shape string from `stableKeyForRule(rule)` (see ./dispatch.ts).
 
-import type { HandlerRegistry } from './dispatch.ts';
+import type { HandlerRegistry } from "./dispatch.ts"
 
-export const stmtHandlers: HandlerRegistry = {};
+export const stmtHandlers: HandlerRegistry = {}

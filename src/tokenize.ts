@@ -13,7 +13,7 @@
 // are treated as identifier characters (matching SQLite's rule that any
 // high byte is valid inside an identifier).
 
-import type { ParserDefs, TokenId } from './lempar.ts';
+import type { ParserDefs, TokenId } from "./lempar.ts"
 
 // ---------------------------------------------------------------------------
 // Public types — the shape of the keywords-dump, tokenizer options, and
@@ -29,12 +29,30 @@ import type { ParserDefs, TokenId } from './lempar.ts';
  * can check flag names at call sites.
  */
 export type MaskFlag =
-  | 'ALTER' | 'ALWAYS' | 'ANALYZE' | 'ATTACH'
-  | 'AUTOINCR' | 'CAST' | 'COMPOUND' | 'CONFLICT'
-  | 'EXPLAIN' | 'FKEY' | 'PRAGMA' | 'REINDEX'
-  | 'SUBQUERY' | 'TRIGGER' | 'VACUUM' | 'VIEW'
-  | 'VTAB' | 'AUTOVACUUM' | 'CTE' | 'UPSERT'
-  | 'WINDOWFUNC' | 'GENCOL' | 'RETURNING' | 'ORDERSET';
+  | "ALTER"
+  | "ALWAYS"
+  | "ANALYZE"
+  | "ATTACH"
+  | "AUTOINCR"
+  | "CAST"
+  | "COMPOUND"
+  | "CONFLICT"
+  | "EXPLAIN"
+  | "FKEY"
+  | "PRAGMA"
+  | "REINDEX"
+  | "SUBQUERY"
+  | "TRIGGER"
+  | "VACUUM"
+  | "VIEW"
+  | "VTAB"
+  | "AUTOVACUUM"
+  | "CTE"
+  | "UPSERT"
+  | "WINDOWFUNC"
+  | "GENCOL"
+  | "RETURNING"
+  | "ORDERSET"
 
 /**
  * A bitmask over `MaskFlag` values.  Bit positions are defined by
@@ -47,11 +65,11 @@ export type MaskFlag =
  * The brand is compile-time only — `KeywordMask` is a plain `number`
  * at runtime.
  */
-declare const __keywordMaskBrand: unique symbol;
-export type KeywordMask = number & { readonly [__keywordMaskBrand]: true };
+declare const __keywordMaskBrand: unique symbol
+export type KeywordMask = number & { readonly [__keywordMaskBrand]: true }
 
 /** Coerce a raw number to `KeywordMask`.  Caller asserts it's a valid bitmask. */
-export const KeywordMask = (n: number): KeywordMask => n as KeywordMask;
+export const KeywordMask = (n: number): KeywordMask => n as KeywordMask
 
 /**
  * One keyword entry in the runtime (prod) keyword defs.
@@ -65,15 +83,15 @@ export const KeywordMask = (n: number): KeywordMask => n as KeywordMask;
  */
 export interface KeywordEntry {
   /** Uppercase ASCII keyword text, e.g. `"SELECT"`, `"BEGIN"`. */
-  name: string;
+  name: string
   /** Parser symbol name (no `TK_` prefix), e.g. `"SELECT"`, `"JOIN_KW"`. */
-  token: string;
+  token: string
   /**
    * Feature-flag bitmask.  Bits come from `meta.maskFlags`; a keyword
    * is enabled iff `(mask & enabledMask) !== 0` where `enabledMask` is
    * built from the caller-supplied flag set at createTokenizer time.
    */
-  mask: KeywordMask;
+  mask: KeywordMask
 }
 
 /**
@@ -87,9 +105,9 @@ export interface KeywordEntry {
 export interface KeywordDefs {
   meta: {
     /** Bit-name → bit-value map; mirrors the maskFlags in the C patch. */
-    maskFlags: Record<MaskFlag, KeywordMask>;
-  };
-  keywords: KeywordEntry[];
+    maskFlags: Record<MaskFlag, KeywordMask>
+  }
+  keywords: KeywordEntry[]
 }
 
 /** Options for `createTokenizer`. */
@@ -101,25 +119,25 @@ export interface CreateTokenizerOptions {
    * feature the defs were built with is on").  `ALWAYS` is always added
    * regardless of the caller's choice.
    */
-  readonly flags?: readonly MaskFlag[];
+  readonly flags?: readonly MaskFlag[]
   /**
    * Single-character digit separator (SQLite 3.45+ supports `'_'`).
    * Empty string disables the feature.
    */
-  readonly digitSeparator?: string;
+  readonly digitSeparator?: string
 }
 
 /** Options for one call to `tokenizer.tokenize(sql, opts?)`. */
 export interface TokenizeOpts {
   /** Drop SPACE and COMMENT tokens from the output stream.  Default: true. */
-  readonly skipTrivia?: boolean;
+  readonly skipTrivia?: boolean
 }
 
 /** One token as yielded by `tokenizer.tokenize()`. */
 export interface TokenSpan {
-  readonly type: TokenId;
-  readonly start: number;
-  readonly length: number;
+  readonly type: TokenId
+  readonly start: number
+  readonly length: number
 }
 
 /**
@@ -130,53 +148,53 @@ export interface TokenSpan {
  * Matches the `switch(aiClass[*z])` in src/tokenize.c:276.
  */
 export interface TokenizerTokens {
-  readonly SPACE:    TokenId;
-  readonly COMMENT:  TokenId;
-  readonly ILLEGAL:  TokenId;
-  readonly PTR:      TokenId;
-  readonly MINUS:    TokenId;
-  readonly LP:       TokenId;
-  readonly RP:       TokenId;
-  readonly SEMI:     TokenId;
-  readonly PLUS:     TokenId;
-  readonly STAR:     TokenId;
-  readonly SLASH:    TokenId;
-  readonly REM:      TokenId;
-  readonly EQ:       TokenId;
-  readonly LE:       TokenId;
-  readonly NE:       TokenId;
-  readonly LT:       TokenId;
-  readonly LSHIFT:   TokenId;
-  readonly GE:       TokenId;
-  readonly RSHIFT:   TokenId;
-  readonly GT:       TokenId;
-  readonly BITOR:    TokenId;
-  readonly CONCAT:   TokenId;
-  readonly COMMA:    TokenId;
-  readonly BITAND:   TokenId;
-  readonly BITNOT:   TokenId;
-  readonly DOT:      TokenId;
-  readonly STRING:   TokenId;
-  readonly ID:       TokenId;
-  readonly INTEGER:  TokenId;
-  readonly FLOAT:    TokenId;
-  readonly QNUMBER:  TokenId;
-  readonly VARIABLE: TokenId;
-  readonly BLOB:     TokenId;
+  readonly SPACE: TokenId
+  readonly COMMENT: TokenId
+  readonly ILLEGAL: TokenId
+  readonly PTR: TokenId
+  readonly MINUS: TokenId
+  readonly LP: TokenId
+  readonly RP: TokenId
+  readonly SEMI: TokenId
+  readonly PLUS: TokenId
+  readonly STAR: TokenId
+  readonly SLASH: TokenId
+  readonly REM: TokenId
+  readonly EQ: TokenId
+  readonly LE: TokenId
+  readonly NE: TokenId
+  readonly LT: TokenId
+  readonly LSHIFT: TokenId
+  readonly GE: TokenId
+  readonly RSHIFT: TokenId
+  readonly GT: TokenId
+  readonly BITOR: TokenId
+  readonly CONCAT: TokenId
+  readonly COMMA: TokenId
+  readonly BITAND: TokenId
+  readonly BITNOT: TokenId
+  readonly DOT: TokenId
+  readonly STRING: TokenId
+  readonly ID: TokenId
+  readonly INTEGER: TokenId
+  readonly FLOAT: TokenId
+  readonly QNUMBER: TokenId
+  readonly VARIABLE: TokenId
+  readonly BLOB: TokenId
 }
 
 /** Return type of `createTokenizer`. */
 export interface Tokenizer {
   /** TK_* codes the tokenizer emits directly. */
-  readonly tokens: TokenizerTokens;
+  readonly tokens: TokenizerTokens
   /** TokenId → display name (`"SELECT"`, `"ID"`, …) or undefined. */
-  tokenName(code: TokenId): string | undefined;
+  tokenName(code: TokenId): string | undefined
   /** Iterate tokens in `sql`.  Trivia is skipped by default. */
-  tokenize(sql: string, opts?: TokenizeOpts): IterableIterator<TokenSpan>;
+  tokenize(sql: string, opts?: TokenizeOpts): IterableIterator<TokenSpan>
   /** @internal — exposed for tests. */
-  _nextToken(z: string, p: number, outType: [TokenId]): number;
+  _nextToken(z: string, p: number, outType: [TokenId]): number
   /** @internal — exposed for tests. */
-  readonly _keywordCount: number;
+  readonly _keywordCount: number
 }
 
 // ---------------------------------------------------------------------------
@@ -184,66 +202,306 @@ export interface Tokenizer {
 // Indexing: aiClass[byte 0..0xFF] -> CC_*.
 // ---------------------------------------------------------------------------
 
-const CC_X        = 0;   // The letter 'x', start of BLOB literal
-const CC_KYWD0    = 1;   // First letter of a keyword
-const CC_KYWD     = 2;   // Alphabetic or '_'.  Usable in a keyword
-const CC_DIGIT    = 3;   // Digits
-const CC_DOLLAR   = 4;   // '$'
-const CC_VARALPHA = 5;   // '@', '#', ':'
-const CC_VARNUM   = 6;   // '?'
-const CC_SPACE    = 7;
-const CC_QUOTE    = 8;   // '"', '\'', '`'
-const CC_QUOTE2   = 9;   // '['
-const CC_PIPE     = 10;
-const CC_MINUS    = 11;
-const CC_LT       = 12;
-const CC_GT       = 13;
-const CC_EQ       = 14;
-const CC_BANG     = 15;
-const CC_SLASH    = 16;
-const CC_LP       = 17;
-const CC_RP       = 18;
-const CC_SEMI     = 19;
-const CC_PLUS     = 20;
-const CC_STAR     = 21;
-const CC_PERCENT  = 22;
-const CC_COMMA    = 23;
-const CC_AND      = 24;
-const CC_TILDA    = 25;
-const CC_DOT      = 26;
-const CC_ID       = 27;  // Unicode characters usable in IDs
-const CC_ILLEGAL  = 28;
-const CC_NUL      = 29;
-const CC_BOM      = 30;
+const CC_X = 0 // The letter 'x', start of BLOB literal
+const CC_KYWD0 = 1 // First letter of a keyword
+const CC_KYWD = 2 // Alphabetic or '_'.  Usable in a keyword
+const CC_DIGIT = 3 // Digits
+const CC_DOLLAR = 4 // '$'
+const CC_VARALPHA = 5 // '@', '#', ':'
+const CC_VARNUM = 6 // '?'
+const CC_SPACE = 7
+const CC_QUOTE = 8 // '"', '\'', '`'
+const CC_QUOTE2 = 9 // '['
+const CC_PIPE = 10
+const CC_MINUS = 11
+const CC_LT = 12
+const CC_GT = 13
+const CC_EQ = 14
+const CC_BANG = 15
+const CC_SLASH = 16
+const CC_LP = 17
+const CC_RP = 18
+const CC_SEMI = 19
+const CC_PLUS = 20
+const CC_STAR = 21
+const CC_PERCENT = 22
+const CC_COMMA = 23
+const CC_AND = 24
+const CC_TILDA = 25
+const CC_DOT = 26
+const CC_ID = 27 // Unicode characters usable in IDs
+const CC_ILLEGAL = 28
+const CC_NUL = 29
+const CC_BOM = 30
 
 const aiClass = new Uint8Array([
   // 0x
-  29, 28, 28, 28, 28, 28, 28, 28, 28,  7,  7, 28,  7,  7, 28, 28,
+  29,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  7,
+  7,
+  28,
+  7,
+  7,
+  28,
+  28,
   // 1x
-  28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
+  28,
   // 2x
-   7, 15,  8,  5,  4, 22, 24,  8, 17, 18, 21, 20, 23, 11, 26, 16,
+  7,
+  15,
+  8,
+  5,
+  4,
+  22,
+  24,
+  8,
+  17,
+  18,
+  21,
+  20,
+  23,
+  11,
+  26,
+  16,
   // 3x
-   3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  5, 19, 12, 14, 13,  6,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  5,
+  19,
+  12,
+  14,
+  13,
+  6,
   // 4x
-   5,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+  5,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
   // 5x
-   1,  1,  1,  1,  1,  1,  1,  1,  0,  2,  2,  9, 28, 28, 28,  2,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  2,
+  2,
+  9,
+  28,
+  28,
+  28,
+  2,
   // 6x
-   8,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+  8,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
   // 7x
-   1,  1,  1,  1,  1,  1,  1,  1,  0,  2,  2, 28, 10, 28, 25, 28,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  2,
+  2,
+  28,
+  10,
+  28,
+  25,
+  28,
   // 8x..ff: all CC_ID (high-byte; valid identifier chars), with one CC_BOM
   // for 0xEF (UTF-8 BOM start).
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,  // 8x
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,  // 9x
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,  // Ax
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,  // Bx
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,  // Cx
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,  // Dx
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 30,  // Ex
-  27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,  // Fx
-]);
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27, // 8x
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27, // 9x
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27, // Ax
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27, // Bx
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27, // Cx
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27, // Dx
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  30, // Ex
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27,
+  27, // Fx
+])
 
 // Look up the character class of the character at z[i].  Returns CC_NUL
 // at end-of-input (matching C's null-terminated string behaviour) and
@@ -251,10 +509,10 @@ const aiClass = new Uint8Array([
 // identifier" rule).  Used whenever the lex loop needs to dispatch on
 // class rather than compare to a specific character.
 function classAt(z: string, i: number): number {
-  const c = z.charCodeAt(i);
-  if (c !== c) return CC_NUL;        // NaN -> past end
-  if (c > 0xff) return CC_ID;
-  return aiClass[c];
+  const c = z.charCodeAt(i)
+  if (c !== c) return CC_NUL // NaN -> past end
+  if (c > 0xff) return CC_ID
+  return aiClass[c]
 }
 
 // ---------------------------------------------------------------------------
@@ -263,40 +521,37 @@ function classAt(z: string, i: number): number {
 // Works on a single character (length-1 string) or `undefined` at EOI.
 // ---------------------------------------------------------------------------
 function isIdChar(ch: string | undefined): boolean {
-  if (ch === undefined) return false;
-  if (ch.charCodeAt(0) >= 0x80) return true;
+  if (ch === undefined) return false
+  if (ch.charCodeAt(0) >= 0x80) return true
   return (
-    (ch >= '0' && ch <= '9') ||
-    (ch >= 'A' && ch <= 'Z') ||
-    (ch >= 'a' && ch <= 'z') ||
-    ch === '_' || ch === '$'
-  );
+    (ch >= "0" && ch <= "9") ||
+    (ch >= "A" && ch <= "Z") ||
+    (ch >= "a" && ch <= "z") ||
+    ch === "_" ||
+    ch === "$"
+  )
 }
 
 function isDigit(ch: string | undefined): boolean {
-  return ch !== undefined && ch >= '0' && ch <= '9';
+  return ch !== undefined && ch >= "0" && ch <= "9"
 }
 function isXDigit(ch: string | undefined): boolean {
-  if (ch === undefined) return false;
-  return (
-    (ch >= '0' && ch <= '9') ||
-    (ch >= 'A' && ch <= 'F') ||
-    (ch >= 'a' && ch <= 'f')
-  );
+  if (ch === undefined) return false
+  return (ch >= "0" && ch <= "9") || (ch >= "A" && ch <= "F") || (ch >= "a" && ch <= "f")
 }
 function isSpace(ch: string | undefined): boolean {
   // sqlite3Isspace: 0x09..0x0d and 0x20 (space, tab, LF, VT, FF, CR).
-  if (ch === ' ') return true;
-  if (ch === undefined) return false;
-  const c = ch.charCodeAt(0);
-  return c >= 0x09 && c <= 0x0d;
+  if (ch === " ") return true
+  if (ch === undefined) return false
+  const c = ch.charCodeAt(0)
+  return c >= 0x09 && c <= 0x0d
 }
 
 // SQLite supports `1_000_000` style digit separators when compiled with
 // SQLITE_DIGIT_SEPARATOR set to '_'.  Most builds disable it.  We
 // follow the reference build: separator off by default; settable as a
 // single character or the empty string to disable.
-const DEFAULT_DIGIT_SEPARATOR = '';
+const DEFAULT_DIGIT_SEPARATOR = ""
 
 // ---------------------------------------------------------------------------
 // createTokenizer
@@ -309,70 +564,70 @@ export function createTokenizer(
   keywordDefs: KeywordDefs,
   opts: CreateTokenizerOptions = {},
 ): Tokenizer {
-  const digitSep = opts.digitSeparator ?? DEFAULT_DIGIT_SEPARATOR;
-  const hasDigitSep = typeof digitSep === 'string' && digitSep.length === 1;
+  const digitSep = opts.digitSeparator ?? DEFAULT_DIGIT_SEPARATOR
+  const hasDigitSep = typeof digitSep === "string" && digitSep.length === 1
 
   // Resolve TK_* names -> integer codes via the parser defs' symbol
   // table.  The defs hold names without the TK_ prefix (e.g.
   // "SELECT", "ID").  isTerminal=true narrows SymbolId down to TokenId;
   // TS can't prove that, so we do the cast at the assignment boundary.
-  const tokenCode = new Map<string, TokenId>();
-  const tokenNameMap = new Map<TokenId, string>();
+  const tokenCode = new Map<string, TokenId>()
+  const tokenNameMap = new Map<TokenId, string>()
   for (let i = 0; i < parserDefs.symbols.length; i++) {
-    const sym = parserDefs.symbols[i]!;
-    if (!sym.isTerminal) continue;
-    const id = i as TokenId;
-    tokenCode.set(sym.name, id);
-    tokenNameMap.set(id, sym.name);
+    const sym = parserDefs.symbols[i]!
+    if (!sym.isTerminal) continue
+    const id = i as TokenId
+    tokenCode.set(sym.name, id)
+    tokenNameMap.set(id, sym.name)
   }
   function requireToken(name: string): TokenId {
-    const code = tokenCode.get(name);
+    const code = tokenCode.get(name)
     if (code === undefined) {
       throw new Error(
         `tokenize.ts: parser defs are missing terminal token "${name}". ` +
-        `This usually means the parser defs and tokenizer are out of sync.`,
-      );
+          `This usually means the parser defs and tokenizer are out of sync.`,
+      )
     }
-    return code;
+    return code
   }
 
   // Token codes the lex loop emits directly.  These names match the
   // TK_* constants the C tokenizer uses; lemon assigns the actual ints.
   const T: TokenizerTokens = {
-    SPACE:    requireToken('SPACE'),
-    COMMENT:  requireToken('COMMENT'),
-    ILLEGAL:  requireToken('ILLEGAL'),
-    PTR:      requireToken('PTR'),
-    MINUS:    requireToken('MINUS'),
-    LP:       requireToken('LP'),
-    RP:       requireToken('RP'),
-    SEMI:     requireToken('SEMI'),
-    PLUS:     requireToken('PLUS'),
-    STAR:     requireToken('STAR'),
-    SLASH:    requireToken('SLASH'),
-    REM:      requireToken('REM'),
-    EQ:       requireToken('EQ'),
-    LE:       requireToken('LE'),
-    NE:       requireToken('NE'),
-    LT:       requireToken('LT'),
-    LSHIFT:   requireToken('LSHIFT'),
-    GE:       requireToken('GE'),
-    RSHIFT:   requireToken('RSHIFT'),
-    GT:       requireToken('GT'),
-    BITOR:    requireToken('BITOR'),
-    CONCAT:   requireToken('CONCAT'),
-    COMMA:    requireToken('COMMA'),
-    BITAND:   requireToken('BITAND'),
-    BITNOT:   requireToken('BITNOT'),
-    DOT:      requireToken('DOT'),
-    STRING:   requireToken('STRING'),
-    ID:       requireToken('ID'),
-    INTEGER:  requireToken('INTEGER'),
-    FLOAT:    requireToken('FLOAT'),
-    QNUMBER:  requireToken('QNUMBER'),
-    VARIABLE: requireToken('VARIABLE'),
-    BLOB:     requireToken('BLOB'),
-  };
+    SPACE: requireToken("SPACE"),
+    COMMENT: requireToken("COMMENT"),
+    ILLEGAL: requireToken("ILLEGAL"),
+    PTR: requireToken("PTR"),
+    MINUS: requireToken("MINUS"),
+    LP: requireToken("LP"),
+    RP: requireToken("RP"),
+    SEMI: requireToken("SEMI"),
+    PLUS: requireToken("PLUS"),
+    STAR: requireToken("STAR"),
+    SLASH: requireToken("SLASH"),
+    REM: requireToken("REM"),
+    EQ: requireToken("EQ"),
+    LE: requireToken("LE"),
+    NE: requireToken("NE"),
+    LT: requireToken("LT"),
+    LSHIFT: requireToken("LSHIFT"),
+    GE: requireToken("GE"),
+    RSHIFT: requireToken("RSHIFT"),
+    GT: requireToken("GT"),
+    BITOR: requireToken("BITOR"),
+    CONCAT: requireToken("CONCAT"),
+    COMMA: requireToken("COMMA"),
+    BITAND: requireToken("BITAND"),
+    BITNOT: requireToken("BITNOT"),
+    DOT: requireToken("DOT"),
+    STRING: requireToken("STRING"),
+    ID: requireToken("ID"),
+    INTEGER: requireToken("INTEGER"),
+    FLOAT: requireToken("FLOAT"),
+    QNUMBER: requireToken("QNUMBER"),
+    VARIABLE: requireToken("VARIABLE"),
+    BLOB: requireToken("BLOB"),
+  }
 
   // Build the keyword lookup map.  Keys are uppercase ASCII keyword
   // strings; values are TK_* codes.  We filter by enabled flags so that
@@ -383,20 +638,20 @@ export function createTokenizer(
   // `meta.maskFlags` come from mkkeywordhash.c's `aMaskNames[]` — we
   // don't hardcode bit values on the JS side, so if SQLite ever
   // reassigns a bit we pick up the change via the regenerated defs.
-  const maskFlags = keywordDefs.meta.maskFlags;
-  const allFlags = Object.keys(maskFlags) as MaskFlag[];
-  const enabledFlags: readonly MaskFlag[] = opts.flags ?? allFlags;
+  const maskFlags = keywordDefs.meta.maskFlags
+  const allFlags = Object.keys(maskFlags) as MaskFlag[]
+  const enabledFlags: readonly MaskFlag[] = opts.flags ?? allFlags
   // ALWAYS keywords are unconditional.  `|` drops the brand back to
   // plain `number`, so we re-coerce on assignment.
-  let enabledMask: KeywordMask = maskFlags.ALWAYS ?? KeywordMask(0);
+  let enabledMask: KeywordMask = maskFlags.ALWAYS ?? KeywordMask(0)
   for (const f of enabledFlags) {
-    enabledMask = KeywordMask(enabledMask | (maskFlags[f] ?? 0));
+    enabledMask = KeywordMask(enabledMask | (maskFlags[f] ?? 0))
   }
 
-  const keywordCode = new Map<string, TokenId>();
+  const keywordCode = new Map<string, TokenId>()
   for (const kw of keywordDefs.keywords) {
-    if ((kw.mask & enabledMask) === 0) continue;
-    keywordCode.set(kw.name, requireToken(kw.token));
+    if ((kw.mask & enabledMask) === 0) continue
+    keywordCode.set(kw.name, requireToken(kw.token))
   }
 
   // -----------------------------------------------------------------------
@@ -408,174 +663,207 @@ export function createTokenizer(
   // mutable holder.
   // -----------------------------------------------------------------------
   function nextToken(z: string, p: number, outType: [TokenId]): number {
-    let i: number;
+    let i: number
     switch (classAt(z, p)) {
       case CC_SPACE: {
         for (i = p + 1; isSpace(z[i]); i++) {}
-        outType[0] = T.SPACE;
-        return i - p;
+        outType[0] = T.SPACE
+        return i - p
       }
       case CC_MINUS: {
-        if (z[p + 1] === '-') {
+        if (z[p + 1] === "-") {
           // -- line comment: consume to '\n' or EOI.
-          for (i = p + 2; z[i] !== undefined && z[i] !== '\n'; i++) {}
-          outType[0] = T.COMMENT;
-          return i - p;
+          for (i = p + 2; z[i] !== undefined && z[i] !== "\n"; i++) {}
+          outType[0] = T.COMMENT
+          return i - p
         }
-        if (z[p + 1] === '>') {
-          outType[0] = T.PTR;
-          return z[p + 2] === '>' ? 3 : 2;
+        if (z[p + 1] === ">") {
+          outType[0] = T.PTR
+          return z[p + 2] === ">" ? 3 : 2
         }
-        outType[0] = T.MINUS;
-        return 1;
+        outType[0] = T.MINUS
+        return 1
       }
-      case CC_LP:    outType[0] = T.LP;    return 1;
-      case CC_RP:    outType[0] = T.RP;    return 1;
-      case CC_SEMI:  outType[0] = T.SEMI;  return 1;
-      case CC_PLUS:  outType[0] = T.PLUS;  return 1;
-      case CC_STAR:  outType[0] = T.STAR;  return 1;
+      case CC_LP:
+        outType[0] = T.LP
+        return 1
+      case CC_RP:
+        outType[0] = T.RP
+        return 1
+      case CC_SEMI:
+        outType[0] = T.SEMI
+        return 1
+      case CC_PLUS:
+        outType[0] = T.PLUS
+        return 1
+      case CC_STAR:
+        outType[0] = T.STAR
+        return 1
       case CC_SLASH: {
-        if (z[p + 1] !== '*' || z[p + 2] === undefined) {
-          outType[0] = T.SLASH;
-          return 1;
+        if (z[p + 1] !== "*" || z[p + 2] === undefined) {
+          outType[0] = T.SLASH
+          return 1
         }
         // /* ... */ block comment.  Consume until "*/" or EOI.
-        i = p + 3;
-        let prev = z[p + 2];
-        while (z[i] !== undefined && !(prev === '*' && z[i] === '/')) {
-          prev = z[i];
-          i++;
+        i = p + 3
+        let prev = z[p + 2]
+        while (z[i] !== undefined && !(prev === "*" && z[i] === "/")) {
+          prev = z[i]
+          i++
         }
-        if (z[i] !== undefined) i++; // include the closing '/'
-        outType[0] = T.COMMENT;
-        return i - p;
+        if (z[i] !== undefined) i++ // include the closing '/'
+        outType[0] = T.COMMENT
+        return i - p
       }
-      case CC_PERCENT: outType[0] = T.REM; return 1;
+      case CC_PERCENT:
+        outType[0] = T.REM
+        return 1
       case CC_EQ: {
-        outType[0] = T.EQ;
-        return z[p + 1] === '=' ? 2 : 1;
+        outType[0] = T.EQ
+        return z[p + 1] === "=" ? 2 : 1
       }
       case CC_LT: {
-        const c = z[p + 1];
-        if (c === '=') { outType[0] = T.LE;     return 2; }
-        if (c === '>') { outType[0] = T.NE;     return 2; }
-        if (c === '<') { outType[0] = T.LSHIFT; return 2; }
-        outType[0] = T.LT;
-        return 1;
+        const c = z[p + 1]
+        if (c === "=") {
+          outType[0] = T.LE
+          return 2
+        }
+        if (c === ">") {
+          outType[0] = T.NE
+          return 2
+        }
+        if (c === "<") {
+          outType[0] = T.LSHIFT
+          return 2
+        }
+        outType[0] = T.LT
+        return 1
       }
       case CC_GT: {
-        const c = z[p + 1];
-        if (c === '=') { outType[0] = T.GE;     return 2; }
-        if (c === '>') { outType[0] = T.RSHIFT; return 2; }
-        outType[0] = T.GT;
-        return 1;
+        const c = z[p + 1]
+        if (c === "=") {
+          outType[0] = T.GE
+          return 2
+        }
+        if (c === ">") {
+          outType[0] = T.RSHIFT
+          return 2
+        }
+        outType[0] = T.GT
+        return 1
       }
       case CC_BANG: {
-        if (z[p + 1] === '=') {
-          outType[0] = T.NE;
-          return 2;
+        if (z[p + 1] === "=") {
+          outType[0] = T.NE
+          return 2
         }
-        outType[0] = T.ILLEGAL;
-        return 1;
+        outType[0] = T.ILLEGAL
+        return 1
       }
       case CC_PIPE: {
-        if (z[p + 1] === '|') {
-          outType[0] = T.CONCAT;
-          return 2;
+        if (z[p + 1] === "|") {
+          outType[0] = T.CONCAT
+          return 2
         }
-        outType[0] = T.BITOR;
-        return 1;
+        outType[0] = T.BITOR
+        return 1
       }
-      case CC_COMMA: outType[0] = T.COMMA;  return 1;
-      case CC_AND:   outType[0] = T.BITAND; return 1;
-      case CC_TILDA: outType[0] = T.BITNOT; return 1;
+      case CC_COMMA:
+        outType[0] = T.COMMA
+        return 1
+      case CC_AND:
+        outType[0] = T.BITAND
+        return 1
+      case CC_TILDA:
+        outType[0] = T.BITNOT
+        return 1
       case CC_QUOTE: {
         // '..', "..", `..`  with doubled-quote escape.
-        const delim = z[p];
-        let c: string | undefined;
+        const delim = z[p]
+        let c: string | undefined
         for (i = p + 1; (c = z[i]) !== undefined; i++) {
           if (c === delim) {
             if (z[i + 1] === delim) {
-              i++; // escaped — keep going
+              i++ // escaped — keep going
             } else {
-              break;
+              break
             }
           }
         }
         if (c === "'") {
-          outType[0] = T.STRING;
-          return i - p + 1;
+          outType[0] = T.STRING
+          return i - p + 1
         }
         if (c !== undefined) {
-          outType[0] = T.ID; // closed " or `
-          return i - p + 1;
+          outType[0] = T.ID // closed " or `
+          return i - p + 1
         }
-        outType[0] = T.ILLEGAL; // unterminated
-        return i - p;
+        outType[0] = T.ILLEGAL // unterminated
+        return i - p
       }
       case CC_DOT: {
         if (!isDigit(z[p + 1])) {
-          outType[0] = T.DOT;
-          return 1;
+          outType[0] = T.DOT
+          return 1
         }
         // Leading-dot float such as ".5" — delegate to the number scanner.
-        return scanNumber(z, p, outType, /*startsWithDot=*/true);
+        return scanNumber(z, p, outType, /*startsWithDot=*/ true)
       }
       case CC_DIGIT: {
-        return scanNumber(z, p, outType, /*startsWithDot=*/false);
+        return scanNumber(z, p, outType, /*startsWithDot=*/ false)
       }
       case CC_QUOTE2: {
         // [bracketed identifier]
         for (i = p + 1; z[i] !== undefined; i++) {
-          if (z[i] === ']') {
-            outType[0] = T.ID;
-            return i - p + 1;
+          if (z[i] === "]") {
+            outType[0] = T.ID
+            return i - p + 1
           }
         }
-        outType[0] = T.ILLEGAL;
-        return i - p;
+        outType[0] = T.ILLEGAL
+        return i - p
       }
       case CC_VARNUM: {
         // ? or ?123
-        outType[0] = T.VARIABLE;
+        outType[0] = T.VARIABLE
         for (i = p + 1; isDigit(z[i]); i++) {}
-        return i - p;
+        return i - p
       }
       case CC_DOLLAR:
       case CC_VARALPHA: {
-        let n = 0;
-        outType[0] = T.VARIABLE;
-        i = p + 1;
+        let n = 0
+        outType[0] = T.VARIABLE
+        i = p + 1
         while (z[i] !== undefined) {
-          const c = z[i];
+          const c = z[i]
           if (isIdChar(c)) {
-            n++;
-            i++;
-            continue;
+            n++
+            i++
+            continue
           }
           // TCL-style variable expansion:  $foo(...)
-          if (c === '(' && n > 0) {
-            let cc: string | undefined;
+          if (c === "(" && n > 0) {
+            let cc: string | undefined
             do {
-              i++;
-              cc = z[i];
-            } while (cc !== undefined && !isSpace(cc) && cc !== ')');
-            if (cc === ')') {
-              i++;
+              i++
+              cc = z[i]
+            } while (cc !== undefined && !isSpace(cc) && cc !== ")")
+            if (cc === ")") {
+              i++
             } else {
-              outType[0] = T.ILLEGAL;
+              outType[0] = T.ILLEGAL
             }
-            break;
+            break
           }
           // ::  scope operator:  $foo::bar
-          if (c === ':' && z[i + 1] === ':') {
-            i += 2;
-            continue;
+          if (c === ":" && z[i + 1] === ":") {
+            i += 2
+            continue
           }
-          break;
+          break
         }
-        if (n === 0) outType[0] = T.ILLEGAL;
-        return i - p;
+        if (n === 0) outType[0] = T.ILLEGAL
+        return i - p
       }
       case CC_KYWD0: {
         // Identifier or keyword.  KYWD0 starts; KYWD continues; if any
@@ -585,68 +873,68 @@ export function createTokenizer(
           // one-character ID (e.g. "a" in "a+b") or a longer
           // identifier that just happens to contain non-KYWD IdChars
           // (digits, non-ASCII, etc.).
-          i = p + 1;
+          i = p + 1
           if (isIdChar(z[i])) {
-            i++;
-            while (isIdChar(z[i])) i++;
-            outType[0] = T.ID;
-            return i - p;
+            i++
+            while (isIdChar(z[i])) i++
+            outType[0] = T.ID
+            return i - p
           }
-          return finishKeyword(z, p, i, outType);
+          return finishKeyword(z, p, i, outType)
         }
         for (i = p + 2; classAt(z, i) <= CC_KYWD; i++) {}
         if (isIdChar(z[i])) {
           // Continued past the keyword char-class — definitely an ID.
-          i++;
-          while (isIdChar(z[i])) i++;
-          outType[0] = T.ID;
-          return i - p;
+          i++
+          while (isIdChar(z[i])) i++
+          outType[0] = T.ID
+          return i - p
         }
-        return finishKeyword(z, p, i, outType);
+        return finishKeyword(z, p, i, outType)
       }
       case CC_X: {
         // x'...' BLOB literal, or fall through to identifier.
         if (z[p + 1] === "'") {
-          outType[0] = T.BLOB;
+          outType[0] = T.BLOB
           for (i = p + 2; isXDigit(z[i]); i++) {}
-          if (z[i] !== "'" || ((i - p - 2) % 2)) {
-            outType[0] = T.ILLEGAL;
-            while (z[i] !== undefined && z[i] !== "'") i++;
+          if (z[i] !== "'" || (i - p - 2) % 2) {
+            outType[0] = T.ILLEGAL
+            while (z[i] !== undefined && z[i] !== "'") i++
           }
-          if (z[i] !== undefined) i++; // consume closing quote
-          return i - p;
+          if (z[i] !== undefined) i++ // consume closing quote
+          return i - p
         }
         // Fall through: 'x' is a normal identifier start.
-        i = p + 1;
-        while (isIdChar(z[i])) i++;
-        outType[0] = T.ID;
-        return i - p;
+        i = p + 1
+        while (isIdChar(z[i])) i++
+        outType[0] = T.ID
+        return i - p
       }
       case CC_KYWD:
       case CC_ID: {
-        i = p + 1;
-        while (isIdChar(z[i])) i++;
-        outType[0] = T.ID;
-        return i - p;
+        i = p + 1
+        while (isIdChar(z[i])) i++
+        outType[0] = T.ID
+        return i - p
       }
       case CC_BOM: {
         // UTF-8 BOM is 0xef 0xbb 0xbf at the start of the input.
         if (z.charCodeAt(p + 1) === 0xbb && z.charCodeAt(p + 2) === 0xbf) {
-          outType[0] = T.SPACE;
-          return 3;
+          outType[0] = T.SPACE
+          return 3
         }
-        i = p + 1;
-        while (isIdChar(z[i])) i++;
-        outType[0] = T.ID;
-        return i - p;
+        i = p + 1
+        while (isIdChar(z[i])) i++
+        outType[0] = T.ID
+        return i - p
       }
       case CC_NUL: {
-        outType[0] = T.ILLEGAL;
-        return 0;
+        outType[0] = T.ILLEGAL
+        return 0
       }
       default: {
-        outType[0] = T.ILLEGAL;
-        return 1;
+        outType[0] = T.ILLEGAL
+        return 1
       }
     }
   }
@@ -654,69 +942,63 @@ export function createTokenizer(
   // Numeric literal (integer / float / hex / quoted-number with `_`
   // separator).  Mirrors the CC_DIGIT case in tokenize.c, plus the
   // CC_DOT fall-through for ".5" floats.
-  function scanNumber(
-    z: string,
-    p: number,
-    outType: [TokenId],
-    startsWithDot: boolean,
-  ): number {
-    let i = p;
-    outType[0] = T.INTEGER;
+  function scanNumber(z: string, p: number, outType: [TokenId], startsWithDot: boolean): number {
+    let i = p
+    outType[0] = T.INTEGER
 
     if (
       !startsWithDot &&
-      z[p] === '0' &&
-      (z[p + 1] === 'x' || z[p + 1] === 'X') &&
+      z[p] === "0" &&
+      (z[p + 1] === "x" || z[p + 1] === "X") &&
       isXDigit(z[p + 2])
     ) {
       // 0x... hex integer (with optional `_` separators if configured).
       for (i = p + 3; z[i] !== undefined; i++) {
-        if (isXDigit(z[i])) continue;
+        if (isXDigit(z[i])) continue
         if (hasDigitSep && z[i] === digitSep) {
-          outType[0] = T.QNUMBER;
-          continue;
+          outType[0] = T.QNUMBER
+          continue
         }
-        break;
+        break
       }
     } else {
       if (!startsWithDot) {
         for (i = p; z[i] !== undefined; i++) {
-          if (isDigit(z[i])) continue;
+          if (isDigit(z[i])) continue
           if (hasDigitSep && z[i] === digitSep) {
-            outType[0] = T.QNUMBER;
-            continue;
+            outType[0] = T.QNUMBER
+            continue
           }
-          break;
+          break
         }
       }
       // Fractional part.
-      if ((startsWithDot && i === p) || z[i] === '.') {
-        if (outType[0] === T.INTEGER) outType[0] = T.FLOAT;
-        i = startsWithDot ? p + 1 : i + 1;
+      if ((startsWithDot && i === p) || z[i] === ".") {
+        if (outType[0] === T.INTEGER) outType[0] = T.FLOAT
+        i = startsWithDot ? p + 1 : i + 1
         for (; z[i] !== undefined; i++) {
-          if (isDigit(z[i])) continue;
+          if (isDigit(z[i])) continue
           if (hasDigitSep && z[i] === digitSep) {
-            outType[0] = T.QNUMBER;
-            continue;
+            outType[0] = T.QNUMBER
+            continue
           }
-          break;
+          break
         }
       }
       // Exponent:  e[+-]?digits
       if (
-        (z[i] === 'e' || z[i] === 'E') &&
-        (isDigit(z[i + 1]) ||
-          ((z[i + 1] === '+' || z[i + 1] === '-') && isDigit(z[i + 2])))
+        (z[i] === "e" || z[i] === "E") &&
+        (isDigit(z[i + 1]) || ((z[i + 1] === "+" || z[i + 1] === "-") && isDigit(z[i + 2])))
       ) {
-        if (outType[0] === T.INTEGER) outType[0] = T.FLOAT;
-        i += 2;
+        if (outType[0] === T.INTEGER) outType[0] = T.FLOAT
+        i += 2
         for (; z[i] !== undefined; i++) {
-          if (isDigit(z[i])) continue;
+          if (isDigit(z[i])) continue
           if (hasDigitSep && z[i] === digitSep) {
-            outType[0] = T.QNUMBER;
-            continue;
+            outType[0] = T.QNUMBER
+            continue
           }
-          break;
+          break
         }
       }
     }
@@ -724,30 +1006,25 @@ export function createTokenizer(
     // (e.g. `123foo`).  Consume the rest of the run so error recovery
     // skips the whole thing.
     while (isIdChar(z[i])) {
-      outType[0] = T.ILLEGAL;
-      i++;
+      outType[0] = T.ILLEGAL
+      i++
     }
-    return i - p;
+    return i - p
   }
 
   // Resolve an identifier-shaped token to its keyword code, if any.
   // SQLite keyword matching is ASCII case-insensitive.
-  function finishKeyword(
-    z: string,
-    p: number,
-    i: number,
-    outType: [TokenId],
-  ): number {
-    const word = z.slice(p, i);
+  function finishKeyword(z: string, p: number, i: number, outType: [TokenId]): number {
+    const word = z.slice(p, i)
     if (word.length >= 2) {
-      const code = keywordCode.get(word.toUpperCase());
+      const code = keywordCode.get(word.toUpperCase())
       if (code !== undefined) {
-        outType[0] = code;
-        return i - p;
+        outType[0] = code
+        return i - p
       }
     }
-    outType[0] = T.ID;
-    return i - p;
+    outType[0] = T.ID
+    return i - p
   }
 
   // Public entry: yield successive tokens.
@@ -755,19 +1032,19 @@ export function createTokenizer(
     sql: string,
     { skipTrivia = true }: TokenizeOpts = {},
   ): IterableIterator<TokenSpan> {
-    const out: [TokenId] = [0 as TokenId];
-    let i = 0;
-    const len = sql.length;
+    const out: [TokenId] = [0 as TokenId]
+    let i = 0
+    const len = sql.length
     while (i < len) {
-      const n = nextToken(sql, i, out);
-      const type = out[0];
-      if (n === 0) break; // CC_NUL at offset i
+      const n = nextToken(sql, i, out)
+      const type = out[0]
+      if (n === 0) break // CC_NUL at offset i
       if (skipTrivia && (type === T.SPACE || type === T.COMMENT)) {
-        i += n;
-        continue;
+        i += n
+        continue
       }
-      yield { type, start: i, length: n };
-      i += n;
+      yield { type, start: i, length: n }
+      i += n
     }
   }
 
@@ -777,5 +1054,5 @@ export function createTokenizer(
     tokenize,
     _nextToken: nextToken,
     _keywordCount: keywordCode.size,
-  };
+  }
 }

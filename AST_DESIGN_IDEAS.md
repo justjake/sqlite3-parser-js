@@ -38,7 +38,7 @@ friends. That's ~50 kloc of SQLite frontend behind the ~2 kloc `parse.y`.
 
 Transpiling `actionC` without porting the callees yields calls into an empty
 shell. Porting the callees means reimplementing most of SQLite's frontend, and
-the output is still the wrong *shape* for a JS AST.
+the output is still the wrong _shape_ for a JS AST.
 
 ### Option rejected: stub out `sqlite3*` helpers as AST builders
 
@@ -148,7 +148,7 @@ export function aliasesOfRule13(r: RuleNode) {
     E: r.children[3] as RuleNode,
     Y: r.children[4] as RuleNode,
     Z: r.children[5] as RuleNode,
-  };
+  }
 }
 ```
 
@@ -159,9 +159,9 @@ need. Early on that's probably just:
 
 ```ts
 interface ReduceContext {
-  readonly sql: string;              // for extracting token text
-  readonly errors: AstError[];       // semantic issues found during reduction
-  readonly options: ReduceOptions;   // strict vs lenient, dialect, etc.
+  readonly sql: string // for extracting token text
+  readonly errors: AstError[] // semantic issues found during reduction
+  readonly options: ReduceOptions // strict vs lenient, dialect, etc.
 }
 ```
 
@@ -233,7 +233,7 @@ Work from statements outward:
 6. **Triggers, virtual tables, the long tail** (~as-needed)
 
 At each stage, the generated stubs for unhandled rules make the dispatcher
-total — `parse("some SQL")` always returns *some* AST, with well-labeled
+total — `parse("some SQL")` always returns _some_ AST, with well-labeled
 `UnknownStmt` placeholders where coverage is missing. This lets downstream
 consumers start integrating before we're "done."
 

@@ -7,12 +7,12 @@
 // Order matters only when two files define the same key; that's a bug
 // and should be caught by a startup uniqueness check once wired up.
 
-import type { HandlerRegistry } from './dispatch.ts';
-import { stmtHandlers } from './stmt.ts';
-import { exprHandlers } from './expr.ts';
-import { selectHandlers } from './select.ts';
-import { ddlHandlers } from './ddl.ts';
-import { triggerHandlers } from './trigger.ts';
+import type { HandlerRegistry } from "./dispatch.ts"
+import { stmtHandlers } from "./stmt.ts"
+import { exprHandlers } from "./expr.ts"
+import { selectHandlers } from "./select.ts"
+import { ddlHandlers } from "./ddl.ts"
+import { triggerHandlers } from "./trigger.ts"
 
 export const registry: HandlerRegistry = {
   ...stmtHandlers,
@@ -20,4 +20,4 @@ export const registry: HandlerRegistry = {
   ...selectHandlers,
   ...ddlHandlers,
   ...triggerHandlers,
-};
+}

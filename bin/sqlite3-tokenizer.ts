@@ -11,22 +11,22 @@
 // Pinned to the `current` SQLite version — see the library API
 // (`import { createTokenizer } from 'sqlite3-parser'`) for real use.
 
-import { createTokenizer } from '../generated/current.ts';
+import { createTokenizer } from "../generated/current.ts"
 
 interface CliOptions {
-  includeTrivia: boolean;
-  digitSeparator: string | undefined;
-  sqlParts: string[];
+  includeTrivia: boolean
+  digitSeparator: string | undefined
+  sqlParts: string[]
 }
 
 function usage(): string {
   return (
     'usage: sqlite3-tokenizer [--include-trivia] [--digit-separator <char>] ["<sql>"]\n' +
-    '  --include-trivia     Emit SPACE / COMMENT tokens (default: skip).\n' +
-    '  --digit-separator    Single-char separator for numeric literals\n' +
+    "  --include-trivia     Emit SPACE / COMMENT tokens (default: skip).\n" +
+    "  --digit-separator    Single-char separator for numeric literals\n" +
     '                       (default: disabled; pass "_" for sqlite 3.45+ behaviour).\n' +
-    '  <sql>                SQL to tokenise.  If omitted, read from stdin.'
-  );
+    "  <sql>                SQL to tokenise.  If omitted, read from stdin."
+  )
 }
 
 function parseCli(argv: string[]): CliOptions {
@@ -34,50 +34,58 @@ function parseCli(argv: string[]): CliOptions {
     includeTrivia: false,
     digitSeparator: undefined,
     sqlParts: [],
-  };
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]!;
-    if (a === '--include-trivia') { opts.includeTrivia = true; continue; }
-    if (a === '--digit-separator') {
-      if (i + 1 >= argv.length) throw new Error('missing value after --digit-separator');
-      opts.digitSeparator = argv[++i]!;
-      continue;
-    }
-    if (a === '-h' || a === '--help') { console.log(usage()); process.exit(0); }
-    opts.sqlParts.push(a);
   }
-  return opts;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i]!
+    if (a === "--include-trivia") {
+      opts.includeTrivia = true
+      continue
+    }
+    if (a === "--digit-separator") {
+      if (i + 1 >= argv.length) throw new Error("missing value after --digit-separator")
+      opts.digitSeparator = argv[++i]!
+      continue
+    }
+    if (a === "-h" || a === "--help") {
+      console.log(usage())
+      process.exit(0)
+    }
+    opts.sqlParts.push(a)
+  }
+  return opts
 }
 
 async function readStdin(): Promise<string> {
-  let data = '';
-  process.stdin.setEncoding('utf8');
-  for await (const chunk of process.stdin) data += chunk;
-  return data;
+  let data = ""
+  process.stdin.setEncoding("utf8")
+  for await (const chunk of process.stdin) data += chunk
+  return data
 }
 
 async function readSql(parts: string[]): Promise<string> {
-  if (parts.length > 0) return parts.join(' ');
+  if (parts.length > 0) return parts.join(" ")
   if (!process.stdin.isTTY) {
-    return (await readStdin()).trimEnd();
+    return (await readStdin()).trimEnd()
   }
-  console.error(usage());
-  process.exit(2);
+  console.error(usage())
+  process.exit(2)
 }
 
-const cli = parseCli(process.argv.slice(2));
-const sql = await readSql(cli.sqlParts);
+const cli = parseCli(process.argv.slice(2))
+const sql = await readSql(cli.sqlParts)
 
 const tk = createTokenizer(
   cli.digitSeparator !== undefined ? { digitSeparator: cli.digitSeparator } : {},
-);
+)
 
 for (const tok of tk.tokenize(sql, { skipTrivia: !cli.includeTrivia })) {
-  console.log(JSON.stringify({
-    type: tok.type,
-    name: tk.tokenName(tok.type) ?? null,
-    start: tok.start,
-    length: tok.length,
-    text: sql.slice(tok.start, tok.start + tok.length),
-  }));
+  console.log(
+    JSON.stringify({
+      type: tok.type,
+      name: tk.tokenName(tok.type) ?? null,
+      start: tok.start,
+      length: tok.length,
+      text: sql.slice(tok.start, tok.start + tok.length),
+    }),
+  )
 }

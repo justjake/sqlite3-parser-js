@@ -5,13 +5,7 @@
 // binds this API to a concrete defs and exposes a one-call
 // `parseToAst(sql)` on top.
 
-export type {
-  AstNode,
-  AstError,
-  AstResult,
-  BaseAstNode,
-  UnknownAstNode,
-} from './types.ts';
+export type { AstNode, AstError, AstResult, BaseAstNode, UnknownAstNode } from "./types.ts"
 
 export {
   stableKeyForRule,
@@ -19,7 +13,7 @@ export {
   bindRegistry,
   cstToAst,
   createAstBuilder,
-} from './dispatch.ts';
+} from "./dispatch.ts"
 
 export type {
   AstContext,
@@ -29,6 +23,6 @@ export type {
   HandlerRegistry,
   StableKey,
   SymbolName,
-} from './dispatch.ts';
+} from "./dispatch.ts"
 
-export { registry } from './registry.ts';
+export { registry } from "./registry.ts"

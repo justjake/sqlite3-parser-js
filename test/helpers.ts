@@ -15,28 +15,28 @@ import {
   type ParserDefs,
   type Tokenizer,
   type TokenizeOpts,
-} from '../generated/current.ts';
+} from "../generated/current.ts"
 
 /** The parser defs used by every helper in this file.  Tracks `current`. */
-export const parserDefs: ParserDefs = PARSER_DEFS;
+export const parserDefs: ParserDefs = PARSER_DEFS
 /** The keywords defs used by every helper.  Tracks `current`. */
-export const keywordDefs: KeywordDefs = KEYWORD_DEFS;
+export const keywordDefs: KeywordDefs = KEYWORD_DEFS
 
 /** Default tokenizer: every feature flag enabled, no digit separator. */
-export const tk: Tokenizer = createTokenizer();
+export const tk: Tokenizer = createTokenizer()
 
 /** Tokenizer with the `_` digit separator (SQLite 3.45+ default). */
-export const tkSep: Tokenizer = createTokenizer({ digitSeparator: '_' });
+export const tkSep: Tokenizer = createTokenizer({ digitSeparator: "_" })
 
 /** Build a tokenizer with custom options (flags, digit separator). */
 export function makeTokenizer(opts: CreateTokenizerOptions = {}): Tokenizer {
-  return createTokenizer(opts);
+  return createTokenizer(opts)
 }
 
 /** A `{name, text}` pair — the lex() return shape used throughout the suite. */
 export interface LexedToken {
-  name: string;
-  text: string;
+  name: string
+  text: string
 }
 
 /**
@@ -44,35 +44,27 @@ export interface LexedToken {
  * (SPACE + COMMENT) suppressed by default.  Pass `{skipTrivia: false}` to
  * include them.
  */
-export function lex(
-  sql: string,
-  opts?: TokenizeOpts,
-  t: Tokenizer = tk,
-): LexedToken[] {
-  const out: LexedToken[] = [];
+export function lex(sql: string, opts?: TokenizeOpts, t: Tokenizer = tk): LexedToken[] {
+  const out: LexedToken[] = []
   for (const tok of t.tokenize(sql, opts)) {
     out.push({
       name: t.tokenName(tok.type) ?? String(tok.type),
       text: sql.slice(tok.start, tok.start + tok.length),
-    });
+    })
   }
-  return out;
+  return out
 }
 
 /** Shortcut for tests that only care about token names, not their text. */
-export function lexNames(
-  sql: string,
-  opts?: TokenizeOpts,
-  t: Tokenizer = tk,
-): string[] {
-  return lex(sql, opts, t).map((x) => x.name);
+export function lexNames(sql: string, opts?: TokenizeOpts, t: Tokenizer = tk): string[] {
+  return lex(sql, opts, t).map((x) => x.name)
 }
 
 /** One triple yielded by tokenTriples — matches the lemonjs test shape. */
 export interface TokenTriple {
-  tokenName: string;
-  rawTokenName: string;
-  lexeme: string;
+  tokenName: string
+  rawTokenName: string
+  lexeme: string
 }
 
 /**
@@ -84,28 +76,25 @@ export interface TokenTriple {
  * but the field is kept so existing assertions transfer verbatim.
  */
 export function tokenTriples(sql: string, t: Tokenizer = tk): TokenTriple[] {
-  const out: TokenTriple[] = [];
+  const out: TokenTriple[] = []
   for (const tok of t.tokenize(sql)) {
-    const name = t.tokenName(tok.type) ?? String(tok.type);
+    const name = t.tokenName(tok.type) ?? String(tok.type)
     out.push({
       tokenName: name,
       rawTokenName: name,
       lexeme: sql.slice(tok.start, tok.start + tok.length),
-    });
+    })
   }
-  return out;
+  return out
 }
 
 /** Return the lexeme of the first ILLEGAL token in `sql`, or null. */
-export function firstIllegalLexeme(
-  sql: string,
-  t: Tokenizer = tk,
-): string | null {
+export function firstIllegalLexeme(sql: string, t: Tokenizer = tk): string | null {
   for (const tok of t.tokenize(sql)) {
-    const name = t.tokenName(tok.type);
-    if (name === 'ILLEGAL') return sql.slice(tok.start, tok.start + tok.length);
+    const name = t.tokenName(tok.type)
+    if (name === "ILLEGAL") return sql.slice(tok.start, tok.start + tok.length)
   }
-  return null;
+  return null
 }
 
 /**
@@ -113,11 +102,9 @@ export function firstIllegalLexeme(
  * exactly one token, return that token.  Trivia is skipped.
  */
 export function lexOne(sql: string, t: Tokenizer = tk): LexedToken {
-  const toks = lex(sql, undefined, t);
+  const toks = lex(sql, undefined, t)
   if (toks.length !== 1) {
-    throw new Error(
-      `expected exactly one token, got ${toks.length}: ${JSON.stringify(toks)}`,
-    );
+    throw new Error(`expected exactly one token, got ${toks.length}: ${JSON.stringify(toks)}`)
   }
-  return toks[0]!;
+  return toks[0]!
 }

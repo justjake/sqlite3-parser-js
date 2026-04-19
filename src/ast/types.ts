@@ -11,7 +11,7 @@
 //   source spans without a second parse.  Handlers attach this in their
 //   return values; the `BaseAstNode` interface below is the common shape.
 
-import type { CstNode, RuleNode } from '../parser.ts';
+import type { CstNode, RuleNode } from "../parser.ts"
 
 /**
  * Fields common to every AST node.  Handlers should spread this into
@@ -19,9 +19,9 @@ import type { CstNode, RuleNode } from '../parser.ts';
  */
 export interface BaseAstNode {
   /** Discriminant.  Extended by each concrete variant below. */
-  readonly kind: string;
+  readonly kind: string
   /** The CST node this was built from.  Source range is `cst.start`/`cst.length`. */
-  readonly cst: RuleNode;
+  readonly cst: RuleNode
 }
 
 /**
@@ -30,16 +30,16 @@ export interface BaseAstNode {
  * Downstream code can detect this and fall back to CST-based rendering.
  */
 export interface UnknownAstNode extends BaseAstNode {
-  readonly kind: 'Unknown';
+  readonly kind: "Unknown"
   /** The rule's stable key (for diagnostics / coverage). */
-  readonly stableKey: string;
+  readonly stableKey: string
 }
 
 /**
  * The discriminated union of all AST nodes.  Grows as handlers land;
  * for now it's just the fallback.
  */
-export type AstNode = UnknownAstNode;
+export type AstNode = UnknownAstNode
 
 /**
  * An error raised during CST→AST conversion.  Distinct from
@@ -48,13 +48,13 @@ export type AstNode = UnknownAstNode;
  * combination it expresses is semantically ill-formed").
  */
 export interface AstError {
-  readonly message: string;
+  readonly message: string
   /** The CST node that triggered the error, if applicable. */
-  readonly cst?: CstNode;
+  readonly cst?: CstNode
 }
 
 export interface AstResult {
   /** Present iff conversion produced a root node. */
-  readonly ast?: AstNode;
-  readonly errors: readonly AstError[];
+  readonly ast?: AstNode
+  readonly errors: readonly AstError[]
 }
