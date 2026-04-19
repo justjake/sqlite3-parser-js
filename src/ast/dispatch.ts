@@ -15,7 +15,7 @@
 //   * `build(cst, sql)` computes the current node's stable key and looks
 //     up the handler directly.
 //
-// Missing handlers fall back to `UnknownAstNode`, so the AST layer can be
+// Missing handlers fall back to {@link UnknownAstNode}, so the AST layer can be
 // built out incrementally without inventing a large registration framework
 // up front.
 
@@ -36,7 +36,7 @@ export type StableKey = string
 export type SymbolName = (id: SymbolId) => string
 
 /**
- * Build a `SymbolName` lookup from the parser defs' `symbols[]` table.
+ * Build a {@link SymbolName} lookup from the parser defs' `symbols[]` table.
  * The symbol id IS the array index — prod defs don't ship a redundant
  * `id` field.
  */
@@ -80,9 +80,9 @@ export interface AstContext {
 }
 
 /**
- * A handler turns one `RuleNode` into one AST node.  The type parameter
+ * A handler turns one {@link RuleNode} into one AST node.  The type parameter
  * narrows the return type when the registry wants stronger guarantees
- * per rule (future work — today everything returns `AstNode`).
+ * per rule (future work — today everything returns {@link AstNode}).
  */
 export type Handler<T extends AstNode = AstNode> = (cst: RuleNode, ctx: AstContext) => T
 
@@ -135,7 +135,7 @@ export function verifyHandlers(
 
 export interface ConvertOptions {
   /**
-   * If true, throw when a rule falls back to `UnknownAstNode` or when a
+   * If true, throw when a rule falls back to {@link UnknownAstNode} or when a
    * handler itself throws.  Default false — the AST layer is expected to
    * grow incrementally.
    */

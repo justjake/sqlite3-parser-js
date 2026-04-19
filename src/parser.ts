@@ -5,7 +5,7 @@
 // of the faithful-to-lempar.c work — shift/reduce dispatch, fallback
 // lookup, wildcard, etc.  Everything in *this* file is CST-emitter
 // divergence from the C codebase: we translate raw tokens into CST
-// `TokenNode`s, reduce callbacks into CST `RuleNode`s, and reconstruct
+// {@link TokenNode}s, reduce callbacks into CST {@link RuleNode}s, and reconstruct
 // the grammar structure that Lemon's table generator elided via
 // unit-rule elimination.
 //
@@ -97,7 +97,8 @@ export interface ParseResult {
 }
 
 // ---------------------------------------------------------------------------
-// createParser — bind the driver to a specific parser.json + keywords.json.
+// parserModuleForGrammar — bind the driver to a specific
+// parser.json + keywords.json.
 // ---------------------------------------------------------------------------
 
 /**

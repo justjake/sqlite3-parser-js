@@ -9,7 +9,7 @@
 // - AST nodes are our own shape, NOT a mirror of SQLite's internal IR.
 // - Every AST node preserves a `cst` back-pointer so callers can recover
 //   source spans without a second parse.  Handlers attach this in their
-//   return values; the `BaseAstNode` interface below is the common shape.
+//   return values; the {@link BaseAstNode} interface below is the common shape.
 
 import type { CstNode, RuleNode } from "../parser.ts"
 
@@ -43,7 +43,8 @@ export type AstNode = UnknownAstNode
 
 /**
  * An error raised during CST→AST conversion.  Distinct from
- * `ParseError`: parse errors come from the LALR engine; AST errors
+ * `ParseError` (in ../parser.ts): parse errors come from the LALR
+ * engine; AST errors
  * come from handlers (e.g. "this CST is syntactically valid but the
  * combination it expresses is semantically ill-formed").
  */

@@ -55,14 +55,14 @@ export type MaskFlag =
   | "ORDERSET"
 
 /**
- * A bitmask over `MaskFlag` values.  Bit positions are defined by
- * `KeywordDefs.meta.maskFlags` (source: mkkeywordhash.c's
+ * A bitmask over {@link MaskFlag} values.  Bit positions are defined by
+ * {@link KeywordDefs}.meta.maskFlags (source: mkkeywordhash.c's
  * `aMaskNames[]`).  A keyword is enabled iff
  * `(kw.mask & enabledMask) !== 0`.
  *
- * Branded so a `KeywordMask` can't silently mix with other integer
- * namespaces (`SymbolId`, `TokenId`, `RuleId`, plain counts, etc.).
- * The brand is compile-time only — `KeywordMask` is a plain `number`
+ * Branded so a {@link KeywordMask} can't silently mix with other integer
+ * namespaces ({@link SymbolId}, {@link TokenId}, {@link RuleId}, plain counts, etc.).
+ * The brand is compile-time only — {@link KeywordMask} is a plain `number`
  * at runtime.
  */
 declare const __keywordMaskBrand: unique symbol
@@ -89,7 +89,8 @@ export interface KeywordEntry {
   /**
    * Feature-flag bitmask.  Bits come from `meta.maskFlags`; a keyword
    * is enabled iff `(mask & enabledMask) !== 0` where `enabledMask` is
-   * built from the caller-supplied flag set at createTokenizer time.
+   * built from the caller-supplied flag set at
+   * {@link tokenizerModuleForGrammar} time.
    */
   mask: KeywordMask
 }
@@ -110,7 +111,7 @@ export interface KeywordDefs {
   keywords: KeywordEntry[]
 }
 
-/** Options for `createTokenizer`. */
+/** Options for {@link tokenizerModuleForGrammar}. */
 export interface CreateTokenizerOptions {
   /**
    * Which feature flags should be enabled at parse time.  Keywords whose
@@ -142,8 +143,8 @@ export interface TokenSpan {
 
 /**
  * The 33 TK_* codes the lexer emits directly.  Every key is required
- * — their presence is verified at `createTokenizer` time by looking
- * them up in the parser defs' symbol table.
+ * — their presence is verified at {@link tokenizerModuleForGrammar} time
+ * by looking them up in the parser defs' symbol table.
  *
  * Matches the `switch(aiClass[*z])` in src/tokenize.c:276.
  */
@@ -183,7 +184,7 @@ export interface TokenizerTokens {
   readonly BLOB: TokenId
 }
 
-/** Return type of `createTokenizer`. */
+/** Return type of {@link tokenizerModuleForGrammar}. */
 export interface Tokenizer {
   /** TK_* codes the tokenizer emits directly. */
   readonly tokens: TokenizerTokens

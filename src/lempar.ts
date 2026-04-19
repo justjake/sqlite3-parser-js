@@ -20,17 +20,18 @@
 //
 // Names mirror lempar.c where an equivalent exists:
 //
-//   Ours                       lempar.c / parse.c
-//   -------------------------  -------------------------------------
-//   yyParser<V>                struct yyParser
-//   yyStackEntry<V>            struct yyStackEntry { stateno, major, minor }
-//   ParseAlloc(onReduce)       ParseAlloc(mallocProc, pCtx)
-//   session.Parse(major, minor) void Parse(yyp, yymajor, yyminor, …)
-//   yy_find_shift_action       yy_find_shift_action
-//   yy_find_reduce_action      yy_find_reduce_action
-//   #yy_reduce                 yy_reduce
+//   Ours                              lempar.c / parse.c
+//   --------------------------------  -----------------------------------
+//   engineModuleForGrammar(defs)      — (C bakes tables in at codegen)
+//   CreateLalrEngine (the factory)    ParseAlloc(mallocProc, pCtx)
+//   LalrEngine<V> (the session)       struct yyParser (the handle)
+//   yyStackEntry<V>                   struct yyStackEntry { stateno, major, minor }
+//   session.next(major, minor)        void Parse(yyp, yymajor, yyminor, …)
+//   yy_find_shift_action              yy_find_shift_action
+//   yy_find_reduce_action             yy_find_reduce_action
+//   #yy_reduce                        yy_reduce
 //
-// `session.state`, `session.root`, and the collected `errors` have no
+// `session.state`, `session.root`, and `session.errors` have no
 // yyParser equivalent — C side-effects those onto the user's %extra
 // argument (`pParse`) via `sqlite3ErrorMsg`.  Our reducer is pure, so
 // the session has to hold the top-of-stack value to return as `root`.
@@ -38,7 +39,7 @@
 // Generic parameter `V` is the caller's stack-value type (the C side
 // calls this YYMINORTYPE — a union over all `%type` declarations).
 // The engine stores one `V` per stack entry alongside the state number
-// and the symbol's major id, passes popped entries to `onReduce`, and
+// and the symbol's major id, passes popped entries to `reducer`, and
 // returns the final top-of-stack value as the accepted root.  The
 // engine never looks inside `V` — the caller's reducer is the only
 // thing that does.
@@ -189,16 +190,11 @@ export interface yyStackEntry<V> {
   readonly minor: V
 }
 
-/** One input token fed to the engine.  Inputs are always terminals. */
-export interface LalrInput<V> {
-  readonly major: TokenId
-  readonly minor: V
-}
-
 /**
  * One popped stack entry handed to the reducer.  `major` is widened to
- * `SymbolId` because a popped entry may be either the token we shifted
- * (a TokenId) or a nonterminal we previously reduced (a SymbolId).
+ * {@link SymbolId} because a popped entry may be either the token we
+ * shifted (a {@link TokenId}) or a nonterminal we previously reduced
+ * (a {@link SymbolId}).
  */
 export interface LalrPopped<V> {
   readonly major: SymbolId
@@ -225,36 +221,28 @@ export interface LalrError<V> {
   readonly inputIndex: number
 }
 
-export interface LalrResult<V> {
-  /** Did the parser reach YY_ACCEPT_ACTION? */
-  readonly accepted: boolean
-  /** The final top-of-stack value when accepted. */
-  readonly root?: V
-  /** Any errors collected before stopping. */
-  readonly errors: readonly LalrError<V>[]
-}
-
 /**
- * Lifecycle state of a `yyParser` session.
+ * Lifecycle state of a {@link LalrEngine} session.
  *
  *   running   — accepting further tokens
  *   accepted  — saw YY_ACCEPT_ACTION; `root` is set
- *   errored   — saw YY_ERROR_ACTION / YY_NO_ACTION; further `Parse()`
- *               calls are no-ops (state does not change)
+ *   errored   — saw YY_ERROR_ACTION / YY_NO_ACTION; further
+ *               {@link LalrEngine.next} calls are no-ops (state does
+ *               not change)
  *
- * `state` is the primary signal callers check after each `Parse()`
- * call to know whether to keep feeding tokens.  C callers look at
- * `pParse->nErr` for the same purpose.
+ * `state` is the primary signal callers check after each
+ * {@link LalrEngine.next} call to know whether to keep feeding tokens.
+ * C callers look at `pParse->nErr` for the same purpose.
  */
 export type LalrSessionState = "running" | "accepted" | "errored"
 
 /**
  * Incremental LALR parser session.  One per parse; feed tokens one at
- * a time via `Parse(major, minor)`.  Analogous to the `struct yyParser`
+ * a time via `next(major, minor)`.  Analogous to the `struct yyParser`
  * handle passed around by lempar.c's `Parse()` function — except our
- * `state` / `root` / `snapshotErrors()` are session fields because our
- * reducer is a pure callback, whereas C's reducer side-effects into
- * the user's %extra argument (`pParse`).
+ * `state` / `root` / `errors` are session fields because our reducer
+ * is a pure callback, whereas C's reducer side-effects into the user's
+ * %extra argument (`pParse`).
  */
 export interface LalrEngine<V> {
   /**
@@ -265,7 +253,7 @@ export interface LalrEngine<V> {
    * on the stack — nothing the caller needs *per call*.  After each
    * call, check `session.state` to know whether the parse is still
    * running; on `accepted` read `session.root`, on `errored` read
-   * `session.snapshotErrors()`.
+   * `session.errors`.
    *
    * When all real tokens have been fed, feed `major === 0` (Lemon's
    * end-of-input `$`) to trigger the final reduce/accept sequence.
@@ -278,9 +266,9 @@ export interface LalrEngine<V> {
   readonly state: LalrSessionState
   /** The final top-of-stack value when accepted. */
   readonly root: V | undefined
-  /** Get stack for diagnostics / IDE hooks. BORROWED, do not mutate. */
+  /** Live stack reference for diagnostics / IDE hooks — do not mutate. */
   readonly stack: readonly yyStackEntry<V>[]
-  /** Errors accumulated so far.  Today always ≤1. BORROWED, do not mutate. */
+  /** Errors accumulated so far.  Today always ≤1.  Live reference — do not mutate. */
   readonly errors: readonly LalrError<V>[]
 }
 
@@ -293,20 +281,22 @@ export interface CreateLalrEngine {
 // ---------------------------------------------------------------------------
 
 /**
- * Bind the engine to a specific Lemon grammar defs.  Returns a factory
- * that allocates `yyParser` sessions, plus a `run` convenience for
- * non-incremental callers.  Constructing the engine is cheap — the
- * tables are referenced, not copied — so callers can create one per
- * grammar and parse arbitrarily many strings through it.
+ * Bind the engine to a specific Lemon grammar defs.  Returns a
+ * {@link CreateLalrEngine} factory that allocates fresh
+ * {@link LalrEngine} sessions — one per parse.  Constructing the
+ * module is cheap (tables are referenced, not copied) so callers can
+ * create one per grammar at module load time and feed arbitrarily many
+ * strings through it.
  *
  * Implementation note: the session class is defined *inside* this
- * factory so that `Parse()` and `#yy_reduce()` read `K` / `T` / `rules`
- * as lexically-bound locals rather than property chains off `this`.
+ * factory so that {@link LalrEngine.next} and `#yy_reduce()` read
+ * `K` / `T` / `rules` as lexically-bound locals rather than property
+ * chains off `this`.
  * On hot dispatch paths that's measurably faster (the JIT hoists a
  * bound local out of the loop; it won't always hoist
  * `this.defs.constants.YY_MIN_REDUCE`).  We pay for it with one class
- * object per `createEngine()` call, which is fine because
- * `createEngine()` runs once per grammar at module load.
+ * object per `engineModuleForGrammar()` call, which is fine because it
+ * runs once per grammar at module load.
  */
 export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
   const K = defs.constants
@@ -317,13 +307,13 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
   // -------------------------------------------------------------------------
   // Table lookups — faithful ports of lempar.c:549 and lempar.c:614.
   // Kept as plain functions (not class methods) so the JIT can inline
-  // them into `Parse()`'s hot loop without a `this`-load indirection.
+  // them into {@link LalrEngine.next}'s hot loop without a `this`-load indirection.
   // -------------------------------------------------------------------------
 
   /**
    * Given the current state and next terminal token, return the parser
    * action to take.  The action's encoding (shift / shift-reduce /
-   * reduce / accept / error) is decoded by `Parse()`'s dispatch loop.
+   * reduce / accept / error) is decoded by {@link LalrEngine.next}'s dispatch loop.
    *
    * lempar.c:549 yy_find_shift_action.
    */
@@ -368,8 +358,8 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
    * state (as an action code — see encoding).
    *
    * lempar.c:614 yy_find_reduce_action.  Note: `lookahead` here is the
-   * LHS of the just-reduced rule, so it's a `SymbolId` (nonterminal),
-   * not a `TokenId` like in yy_find_shift_action.
+   * LHS of the just-reduced rule, so it's a {@link SymbolId} (nonterminal),
+   * not a {@link TokenId} like in yy_find_shift_action.
    */
   function yy_find_reduce_action(stateno: number, lookahead: SymbolId): number {
     // With no error symbol, lempar.c asserts stateno <= YY_REDUCE_COUNT
@@ -385,12 +375,12 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
   }
 
   // -------------------------------------------------------------------------
-  // ParserImpl — the `yyParser` handle.  One per parse.
+  // YYParser — the session class.  One per parse.
   //
-  // Scoped inside createEngine() so methods read K/T/rules/yyFallback
-  // and the yy_find_* helpers from lexical scope.  The external name
-  // callers use is the `yyParser<V>` interface above; the class itself
-  // is not exported.
+  // Scoped inside engineModuleForGrammar() so methods read
+  // K / T / rules / yyFallback and the yy_find_* helpers from lexical
+  // scope.  Callers see this through the exported `LalrEngine<V>`
+  // interface above; the class itself is not exported.
   // -------------------------------------------------------------------------
   class YYParser<V> implements LalrEngine<V> {
     // The LR stack (lempar.c's `yystack` / `yystk0`).  The bottom
