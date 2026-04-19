@@ -1,0 +1,3 @@
+[submodule "vendor/lemon-rs"]
+	path = vendor/lemon-rs
+	url = https://github.com/gwenn/lemon-rs
