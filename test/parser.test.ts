@@ -13,6 +13,7 @@ import { describe, test, expect } from "bun:test"
 import {
   createParser,
   formatCst,
+  parse as parseSql,
   walkCst,
   tokenLeaves,
   type CstNode,
@@ -78,6 +79,25 @@ describe("smallest possible inputs", () => {
     // token leaf but missing from the second.
     expect(tokenText(withSemi).includes(";")).toBe(true)
     expect(tokenText(withoutSemi).includes(";")).toBe(false)
+  })
+})
+
+describe("parser options", () => {
+  test("createParser accepts tokenizer options", () => {
+    const parserWithSep = createParser({ digitSeparator: "_" })
+    const r = parserWithSep.parse("SELECT 1_000")
+
+    expect(r.errors).toEqual([])
+    expect(r.cst).toBeDefined()
+    expect(tokenText(r.cst!)).toEqual(["SELECT", "1_000"])
+  })
+
+  test("parse convenience accepts tokenizer options", () => {
+    const r = parseSql("SELECT 1_000", { digitSeparator: "_" })
+
+    expect(r.errors).toEqual([])
+    expect(r.cst).toBeDefined()
+    expect(tokenText(r.cst!)).toEqual(["SELECT", "1_000"])
   })
 })
 
@@ -325,6 +345,22 @@ describe("error reporting", () => {
     const r = parser.parse("SELECT 1.0e+")
     expect(r.errors.length).toBeGreaterThan(0)
     expect(r.errors[0].message).toContain("unrecognized token")
+  })
+
+  test("unrecognised token includes location metadata", () => {
+    const sql = "SELECT 1;\nSELECT 'oops"
+    const r = parser.parse(sql)
+    const err = r.errors[0]!
+
+    expect(r.errors.length).toBeGreaterThan(0)
+    expect(err.message).toContain("unrecognized token")
+    expect(err.token?.text).toBe("'oops")
+    expect(err.hint).toBe("unterminated string literal")
+    expect(err.line).toBe(2)
+    expect(err.col).toBe(8)
+    expect(err.expected).toBeUndefined()
+    expect(err.range).toBeDefined()
+    expect(sql.slice(err.range![0], err.range![1])).toBe("'oops")
   })
 })
 

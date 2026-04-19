@@ -38,7 +38,7 @@ Pin to a specific SQLite version by importing the subpath directly:
 import { parse } from "sqlite3-parser/sqlite-3.54.0"
 ```
 
-Every version we track ships both `parse()` (convenience) and `createParser()` (advanced; use when you need non-default tokenizer options like a custom digit separator or a pared-down keyword-flag set). Internal AST scaffolding exists in `src/ast/`, but it is not yet part of the published API.
+Every version we track ships both `parse(sql, opts?)` (convenience) and `createParser(opts?)` (advanced). Both accept the same tokenizer options, so you can enable non-default behavior like a custom digit separator or a pared-down keyword-flag set without reaching into internal modules. Internal AST scaffolding exists in `src/ast/`, but it is not yet part of the published API.
 
 ## Parse rules & porting
 

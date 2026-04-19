@@ -14,7 +14,11 @@
 // parser.ts when the CST shape changes, or when you want to alter how
 // virtual tokens / error messages / trivia are represented.
 
-import { createTokenizer, type KeywordDefs } from "./tokenize.ts"
+import {
+  createTokenizer,
+  type CreateTokenizerOptions,
+  type KeywordDefs,
+} from "./tokenize.ts"
 import {
   createEngine,
   type ParserRhsPos,
@@ -78,6 +82,9 @@ export interface RuleNode {
 
 export type CstNode = TokenNode | RuleNode
 
+/** Parser options are forwarded to the tokenizer bound inside the parser. */
+export type CreateParserOptions = CreateTokenizerOptions
+
 export interface ParseError {
   /**
    * Short human-readable summary (`message` is used for back-compat;
@@ -94,7 +101,7 @@ export interface ParseError {
    * `message`.
    */
   readonly canonical?: string
-  /** Grammar-aware hint.  See enhanceError.ts for the heuristics. */
+  /** Grammar-aware or tokenizer-specific hint. */
   readonly hint?: string
   /** 1-based line of the failing token, or end of input. */
   readonly line?: number
@@ -120,11 +127,38 @@ export interface ParseResult {
 // result so diagnostics can see them.
 type EngineValue = CstNode
 
+function lineColAt(sql: string, offset: number): { line: number; col: number } {
+  let line = 1
+  let col = 1
+  for (let i = 0; i < offset; i++) {
+    if (sql.charCodeAt(i) === 10) {
+      line++
+      col = 1
+    } else {
+      col++
+    }
+  }
+  return { line, col }
+}
+
+function illegalTokenHint(text: string): string | undefined {
+  if (text.startsWith("'")) return "unterminated string literal"
+  if (text.startsWith('"') || text.startsWith("`") || text.startsWith("[")) {
+    return "unterminated quoted identifier"
+  }
+  if (/^[0-9.]/.test(text)) return "malformed numeric literal"
+  return "the tokenizer could not classify this input"
+}
+
 // ---------------------------------------------------------------------------
 // createParser — bind the driver to a specific parser.json + keywords.json.
 // ---------------------------------------------------------------------------
 
-export function createParser(parserDefs: ParserDefs, keywordDefs: KeywordDefs) {
+export function createParser(
+  parserDefs: ParserDefs,
+  keywordDefs: KeywordDefs,
+  opts: CreateParserOptions = {},
+) {
   const engine = createEngine(parserDefs)
   const rules = parserDefs.rules
 
@@ -229,7 +263,7 @@ export function createParser(parserDefs: ParserDefs, keywordDefs: KeywordDefs) {
 
   // Bind a tokenizer.  The parser uses the same TK_* ids the defs'
   // symbol table assigns, so everything stays in sync.
-  const tk = createTokenizer(parserDefs, keywordDefs)
+  const tk = createTokenizer(parserDefs, keywordDefs, opts)
 
   /** Token id 0 is Lemon's end-of-input marker (`$`). */
   const TK_EOF: TokenId = 0 as TokenId

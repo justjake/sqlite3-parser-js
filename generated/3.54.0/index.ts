@@ -6,15 +6,17 @@
 //   import { parse } from 'sqlite3-parser/sqlite-3.54.0';
 //   parse('SELECT 1');
 //
-// Advanced consumers can reach for createParser() / createTokenizer()
-// to build an instance with non-default options (flag set, digit
-// separator, …).  The raw prod dumps are also re-exported for
-// consumers that want to plug them into their own tooling.
+// Advanced consumers can reach for createParser(opts) /
+// createTokenizer(opts) to build an instance with non-default
+// options (flag set, digit separator, …).  The raw prod dumps are
+// also re-exported for consumers that want to plug them into their
+// own tooling.
 
 import parserDefs   from './parser.prod.json'   with { type: 'json' };
 import keywordDefs from './keywords.prod.json' with { type: 'json' };
 import {
   createParser as _createParser,
+  type CreateParserOptions,
 } from '../../src/parser.ts';
 import {
   createTokenizer as _createTokenizer,
@@ -42,14 +44,13 @@ export const KEYWORD_DEFS = keywordDefs as unknown as KeywordDefs;
 // --- Bound factories ---------------------------------------------------
 
 /**
- * Create a parser bound to SQLite 3.54.0.  Options like the digit
- * separator or enabled-flag set live on the tokenizer side; the parser
- * creates one internally using the tokenizer defaults.  If you need to
- * customise the tokenizer, use `createTokenizer(opts)` directly and
- * feed its output to the lower-level API in `sqlite3-parser/parser`.
+ * Create a parser bound to SQLite 3.54.0.  Parser options are the
+ * same tokenizer options exposed by `createTokenizer(opts)`: digit
+ * separator, enabled keyword flags, and any future tokenizer-bound
+ * parser options.
  */
-export function createParser() {
-  return _createParser(PARSER_DEFS, KEYWORD_DEFS);
+export function createParser(opts: CreateParserOptions = {}) {
+  return _createParser(PARSER_DEFS, KEYWORD_DEFS, opts);
 }
 
 /** Create a tokenizer bound to SQLite 3.54.0. */
@@ -69,8 +70,11 @@ function defaultTokenizer() {
   return _defaultTokenizer ?? (_defaultTokenizer = createTokenizer());
 }
 
-/** Parse a SQL string using the default (lazy) parser instance. */
-export function parse(sql: string) {
+/** Parse a SQL string using the default parser or a throwaway configured parser. */
+export function parse(sql: string, opts?: CreateParserOptions) {
+  if (opts?.flags !== undefined || opts?.digitSeparator !== undefined) {
+    return createParser(opts).parse(sql);
+  }
   return defaultParser().parse(sql);
 }
 
@@ -87,7 +91,7 @@ export function tokenName(code: import('../../src/lempar.ts').TokenId) {
 // --- Re-exported types + utilities (so consumers don't reach into src/) --
 
 export type {
-  ParseResult, ParseError, CstNode, TokenNode, RuleNode,
+  ParseResult, ParseError, CstNode, TokenNode, RuleNode, CreateParserOptions,
 } from '../../src/parser.ts';
 export { formatCst, walkCst, tokenLeaves } from '../../src/parser.ts';
 
