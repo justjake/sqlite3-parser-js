@@ -1,6 +1,6 @@
 {
   "name": "sqlite3-parser",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
   "bin": {
     "sqlite3-parser": "dist/bin/sqlite3-parser.js",
