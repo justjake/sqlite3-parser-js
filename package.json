@@ -2,6 +2,11 @@
   "name": "sqlite3-parser",
   "version": "0.1.0",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
+  "license": "MIT",
+  "author": {
+    "name": "Jake Teton-Landis",
+    "url": "https://jake.tl"
+  },
   "bin": {
     "sqlite3-parser": "dist/bin/sqlite3-parser.js",
     "sqlite3-tokenizer": "dist/bin/sqlite3-tokenizer.js"
@@ -13,6 +18,14 @@
   "sideEffects": false,
   "main": "./dist/generated/current.js",
   "types": "./dist/generated/current.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justjake/sqlite3-parser-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/justjake/sqlite3-parser-js/issues"
+  },
+  "homepage": "https://github.com/justjake/sqlite3-parser-js#readme",
   "exports": {
     ".": {
       "types": "./dist/generated/current.d.ts",
