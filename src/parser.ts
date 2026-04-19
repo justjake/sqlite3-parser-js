@@ -14,11 +14,7 @@
 // parser.ts when the CST shape changes, or when you want to alter how
 // virtual tokens / error messages / trivia are represented.
 
-import {
-  createTokenizer,
-  type CreateTokenizerOptions,
-  type KeywordDefs,
-} from "./tokenize.ts"
+import { createTokenizer, type CreateTokenizerOptions, type KeywordDefs } from "./tokenize.ts"
 import {
   createEngine,
   type ParserRhsPos,
@@ -120,13 +116,6 @@ export interface ParseResult {
   readonly errors: readonly ParseError[]
 }
 
-// Internal — the stack-value type we hand to the engine.  Virtual
-// SEMI/EOF markers ride the stack as real TokenNodes with
-// `synthetic: true`; they appear as CST children like any other token
-// (filtered by `tokenLeaves` by default), and survive into the parse
-// result so diagnostics can see them.
-type EngineValue = CstNode
-
 function lineColAt(sql: string, offset: number): { line: number; col: number } {
   let line = 1
   let col = 1
@@ -154,6 +143,9 @@ function illegalTokenHint(text: string): string | undefined {
 // createParser — bind the driver to a specific parser.json + keywords.json.
 // ---------------------------------------------------------------------------
 
+/**
+ * Create a Parser for the grammar specified by `parserDefs` and `keywordDefs`.
+ */
 export function createParser(
   parserDefs: ParserDefs,
   keywordDefs: KeywordDefs,
@@ -279,7 +271,7 @@ export function createParser(
   // should become children (virtual tokens drop out), running unit-rule
   // synthesis, and tightening the span around non-empty children.
   // -------------------------------------------------------------------------
-  function buildRuleNode(ruleId: RuleId, popped: LalrPopped<EngineValue>[]): EngineValue {
+  function buildRuleNode(ruleId: RuleId, popped: LalrPopped<CstNode>[]): CstNode {
     const rule = rules[ruleId]
 
     // Walk popped entries alongside the rule's declared RHS.  Each
@@ -290,7 +282,7 @@ export function createParser(
     for (let i = 0; i < popped.length; i++) {
       const entry = popped[i]
       const rhsPos = rule.rhs[i]
-      children.push(rhsPos ? synthesizeWrappers(rhsPos, entry.major, entry.value) : entry.value)
+      children.push(rhsPos ? synthesizeWrappers(rhsPos, entry.major, entry.minor) : entry.minor)
     }
 
     // Compute the rule's span from its children.  Children with
@@ -332,12 +324,18 @@ export function createParser(
   function parse(sql: string): ParseResult {
     const errors: ParseError[] = []
 
-    // Collect inputs into an array so we can pre-check for ILLEGAL
-    // tokens and inject virtual SEMI/EOF tails before driving the
-    // engine.  SQL strings are small; streaming isn't worth it here.
-    const inputs: Array<{ major: TokenId; value: EngineValue }> = []
-    // Sentinel `undefined` means "no real token seen yet" — avoids
-    // inventing a bogus -1 that would need a cast to TokenId.
+    // Structurally the same shape as sqlite's tokenize.c:674
+    // sqlite3RunParser: get a token, feed it to the parser, repeat
+    // until end-of-input or error; then inject a virtual SEMI (if the
+    // last real token wasn't one) and the `$` end marker.
+    const session = engine.ParseAlloc<CstNode>(buildRuleNode)
+
+    // Chronological token stream we actually fed the session.
+    // enhanceParseError scans this backward from the failing token to
+    // find unclosed groups, trailing commas, FILTER-before-OVER, etc.,
+    // so it needs to include synthetic SEMI/EOF markers too.
+    const tokenStream: TokenNode[] = []
+
     let lastMajor: TokenId | undefined
     for (const tok of tk.tokenize(sql)) {
       const node: TokenNode = {
@@ -366,7 +364,10 @@ export function createParser(
         })
         return { errors }
       }
-      inputs.push({ major: tok.type, value: node })
+
+      tokenStream.push(node)
+      session.next(tok.type, node)
+      if (session.state !== "running") break
       lastMajor = tok.type
     }
 
@@ -374,46 +375,44 @@ export function createParser(
     // real token wasn't a SEMI, feed a virtual one to close the
     // current statement.  Then feed 0 (end-of-input marker) to trigger
     // the final reduce/accept.  Both are real TokenNodes with
-    // `synthetic: true` and zero-length span at `sql.length`.
-    const endPos = sql.length
-    if (lastMajor !== TK_SEMI) {
-      const semiNode: TokenNode = {
-        kind: "token",
-        type: TK_SEMI,
-        name: symbolName[TK_SEMI] ?? "SEMI",
-        text: "",
-        start: endPos,
-        length: 0,
-        synthetic: true,
+    // `synthetic: true` and zero-length span at `sql.length`.  Skip
+    // both if the session already terminated during the token loop.
+    if (session.state === "running") {
+      const endPos = sql.length
+      if (lastMajor !== TK_SEMI) {
+        const semiNode: TokenNode = {
+          kind: "token",
+          type: TK_SEMI,
+          name: symbolName[TK_SEMI] ?? "SEMI",
+          text: "",
+          start: endPos,
+          length: 0,
+          synthetic: true,
+        }
+        tokenStream.push(semiNode)
+        session.next(TK_SEMI, semiNode)
       }
-      inputs.push({ major: TK_SEMI, value: semiNode })
+      if (session.state === "running") {
+        const eofNode: TokenNode = {
+          kind: "token",
+          type: TK_EOF,
+          name: symbolName[TK_EOF] ?? "$",
+          text: "",
+          start: endPos,
+          length: 0,
+          synthetic: true,
+        }
+        tokenStream.push(eofNode)
+        session.next(TK_EOF, eofNode)
+      }
     }
-    const eofNode: TokenNode = {
-      kind: "token",
-      type: TK_EOF,
-      name: symbolName[TK_EOF] ?? "$",
-      text: "",
-      start: endPos,
-      length: 0,
-      synthetic: true,
-    }
-    inputs.push({ major: TK_EOF, value: eofNode })
 
-    const result = engine.run<EngineValue>(inputs, buildRuleNode)
-
-    // Translate engine errors into user-facing ParseErrors with
-    // grammar-aware diagnostics.  The token list we feed enhanceError
-    // is the same chronological stream we fed the engine, so it can
-    // scan backward for open groups, trailing commas, FILTER-after-OVER,
-    // etc.  `inputs[i].value` is always a TokenNode (real or synthetic).
-    const tokenStream: TokenNode[] = inputs.map((input) => {
-      const v = input.value
-      // Engine inputs are always terminals, so value is always a
-      // TokenNode; the cast is just to satisfy TypeScript.
-      return v as TokenNode
-    })
-    for (const e of result.errors) {
-      const v = e.value
+    // Translate any engine error into a user-facing ParseError with
+    // grammar-aware diagnostics.  YYNOERRORRECOVERY means the engine
+    // records at most one error, but we loop anyway to stay robust if
+    // that ever changes.
+    for (const e of session.errors) {
+      const v = e.minor
       const tokForError = v.kind === "token" ? v : undefined
       if (tokForError) {
         const diag = enhanceParseError({
@@ -443,12 +442,13 @@ export function createParser(
       }
     }
 
-    if (result.accepted && result.root) {
-      return { cst: result.root, errors }
+    if (session.state === "accepted" && session.root) {
+      return { cst: session.root, errors }
     }
-    if (!result.accepted && errors.length === 0) {
-      // Engine ran out of input without accepting — well-formed
-      // grammars shouldn't allow this, but guard anyway.
+    if (session.state !== "accepted" && errors.length === 0) {
+      // Well-formed grammars + YYNOERRORRECOVERY should always land on
+      // accept or error by the time we've fed `$`.  Guard anyway so we
+      // never return silently empty.
       errors.push({ message: "parser did not accept at end of input" })
     }
     return { errors }

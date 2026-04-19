@@ -18,11 +18,30 @@
 // against the updated C, checking that each `lempar.c:NNN` citation
 // still points at the right code.
 //
-// Generic parameter `V` is the caller's stack-value type.  The engine
-// stores one `V` per stack entry (alongside the state number and the
-// symbol's major id), passes popped entries to `onReduce`, and returns
-// the final top-of-stack value as the accepted root.  The engine never
-// looks inside `V` — the caller's reducer is the only thing that does.
+// Names mirror lempar.c where an equivalent exists:
+//
+//   Ours                       lempar.c / parse.c
+//   -------------------------  -------------------------------------
+//   yyParser<V>                struct yyParser
+//   yyStackEntry<V>            struct yyStackEntry { stateno, major, minor }
+//   ParseAlloc(onReduce)       ParseAlloc(mallocProc, pCtx)
+//   session.Parse(major, minor) void Parse(yyp, yymajor, yyminor, …)
+//   yy_find_shift_action       yy_find_shift_action
+//   yy_find_reduce_action      yy_find_reduce_action
+//   #yy_reduce                 yy_reduce
+//
+// `session.state`, `session.root`, and the collected `errors` have no
+// yyParser equivalent — C side-effects those onto the user's %extra
+// argument (`pParse`) via `sqlite3ErrorMsg`.  Our reducer is pure, so
+// the session has to hold the top-of-stack value to return as `root`.
+//
+// Generic parameter `V` is the caller's stack-value type (the C side
+// calls this YYMINORTYPE — a union over all `%type` declarations).
+// The engine stores one `V` per stack entry alongside the state number
+// and the symbol's major id, passes popped entries to `onReduce`, and
+// returns the final top-of-stack value as the accepted root.  The
+// engine never looks inside `V` — the caller's reducer is the only
+// thing that does.
 
 // ---------------------------------------------------------------------------
 // Branded number types.
@@ -158,10 +177,22 @@ export interface ParserDefs {
 // Engine API.
 // ---------------------------------------------------------------------------
 
-/** One input token to the engine.  Inputs are always terminals. */
+/**
+ * One LR-stack entry.  Mirrors lempar.c's `struct yyStackEntry`:
+ * `{ stateno, major, minor }`.  The sentinel at index 0 has
+ * `stateno: 0` and an undefined `minor`; the engine never pops it, so
+ * the caller's reducer never observes the cast.
+ */
+export interface yyStackEntry<V> {
+  readonly stateno: number
+  readonly major: SymbolId
+  readonly minor: V
+}
+
+/** One input token fed to the engine.  Inputs are always terminals. */
 export interface LalrInput<V> {
   readonly major: TokenId
-  readonly value: V
+  readonly minor: V
 }
 
 /**
@@ -171,14 +202,14 @@ export interface LalrInput<V> {
  */
 export interface LalrPopped<V> {
   readonly major: SymbolId
-  readonly value: V
+  readonly minor: V
 }
 
 /**
  * Called once per reduction.  The engine has already popped the RHS
  * entries off the stack and reversed them into source order before
  * calling you.  Your return value is pushed back as the LHS entry's
- * `value`.
+ * `minor`.
  */
 export type LalrReduce<V> = (ruleId: RuleId, popped: LalrPopped<V>[]) => V
 
@@ -189,7 +220,7 @@ export interface LalrError<V> {
   /** Terminal that couldn't be parsed in the current state. */
   readonly major: TokenId
   /** Value of that token, as supplied by the caller. */
-  readonly value: V
+  readonly minor: V
   /** 0-based index of the failing token within the input iterable. */
   readonly inputIndex: number
 }
@@ -203,15 +234,74 @@ export interface LalrResult<V> {
   readonly errors: readonly LalrError<V>[]
 }
 
+/**
+ * Lifecycle state of a `yyParser` session.
+ *
+ *   running   — accepting further tokens
+ *   accepted  — saw YY_ACCEPT_ACTION; `root` is set
+ *   errored   — saw YY_ERROR_ACTION / YY_NO_ACTION; further `Parse()`
+ *               calls are no-ops (state does not change)
+ *
+ * `state` is the primary signal callers check after each `Parse()`
+ * call to know whether to keep feeding tokens.  C callers look at
+ * `pParse->nErr` for the same purpose.
+ */
+export type LalrSessionState = "running" | "accepted" | "errored"
+
+/**
+ * Incremental LALR parser session.  One per parse; feed tokens one at
+ * a time via `Parse(major, minor)`.  Analogous to the `struct yyParser`
+ * handle passed around by lempar.c's `Parse()` function — except our
+ * `state` / `root` / `snapshotErrors()` are session fields because our
+ * reducer is a pure callback, whereas C's reducer side-effects into
+ * the user's %extra argument (`pParse`).
+ */
+export interface Parser<V> {
+  /**
+   * Feed one token.  Matches lempar.c's
+   * `void Parse(void *yyp, int yymajor, YYMINORTYPE yyminor, ...)`.
+   * Returns `void` for the same reason C does: the outcome of one
+   * token (shift vs. reduce vs. accept vs. error) is a side-effect
+   * on the stack — nothing the caller needs *per call*.  After each
+   * call, check `session.state` to know whether the parse is still
+   * running; on `accepted` read `session.root`, on `errored` read
+   * `session.snapshotErrors()`.
+   *
+   * When all real tokens have been fed, feed `major === 0` (Lemon's
+   * end-of-input `$`) to trigger the final reduce/accept sequence.
+   *
+   * After a terminal outcome (`accepted` or `error`), further calls
+   * are no-ops — stack is not mutated, state does not change.
+   */
+  next(yymajor: TokenId, yyminor: V): void
+  /** The current state of the parser. */
+  readonly state: LalrSessionState
+  /** The final top-of-stack value when accepted. */
+  readonly root: V | undefined
+  /** Get stack for diagnostics / IDE hooks. BORROWED, do not mutate. */
+  readonly stack: readonly yyStackEntry<V>[]
+  /** Errors accumulated so far.  Today always ≤1. BORROWED, do not mutate. */
+  readonly errors: readonly LalrError<V>[]
+}
+
 export interface LalrEngine {
   /**
-   * Drive the state machine over `tokens`.
+   * Allocate a fresh incremental parse session.  Matches lempar.c's
+   * `void *ParseAlloc(void *(*mallocProc)(size_t), void *pCtx)`
+   * (minus the allocator callback — JS GC handles that).
+   */
+  ParseAlloc<V>(onReduce: LalrReduce<V>): Parser<V>
+
+  /**
+   * Convenience: drive `ParseAlloc()` with an iterable and return the
+   * final result.  No direct C analogue — lempar.c's public surface is
+   * token-at-a-time; this wrapper matches what the old closure-style
+   * `engine.run()` did.
    *
    * The last input MUST have `major === 0` (Lemon's end-of-input
-   * marker, `$`) to trigger the final reduce/accept sequence.  Callers
-   * that want a pre-EOF virtual token (e.g. a synthetic SEMI to
-   * terminate SQL statements) should inject it into the iterable
-   * themselves before the end marker.
+   * marker) to trigger the final reduce/accept sequence.  Callers that
+   * want a pre-EOF virtual token (e.g. a synthetic SEMI) should inject
+   * it into the iterable themselves before the end marker.
    *
    * On the first YY_ERROR_ACTION encountered the engine records an
    * error and stops — there is no error recovery (mirrors sqlite's
@@ -225,10 +315,20 @@ export interface LalrEngine {
 // ---------------------------------------------------------------------------
 
 /**
- * Bind the engine to a specific Lemon grammar defs.  Returns a reusable
- * `run` function.  Constructing the engine is cheap — the tables are
- * referenced, not copied — so callers can create one per grammar and
- * parse arbitrarily many strings through it.
+ * Bind the engine to a specific Lemon grammar defs.  Returns a factory
+ * that allocates `yyParser` sessions, plus a `run` convenience for
+ * non-incremental callers.  Constructing the engine is cheap — the
+ * tables are referenced, not copied — so callers can create one per
+ * grammar and parse arbitrarily many strings through it.
+ *
+ * Implementation note: the session class is defined *inside* this
+ * factory so that `Parse()` and `#yy_reduce()` read `K` / `T` / `rules`
+ * as lexically-bound locals rather than property chains off `this`.
+ * On hot dispatch paths that's measurably faster (the JIT hoists a
+ * bound local out of the loop; it won't always hoist
+ * `this.defs.constants.YY_MIN_REDUCE`).  We pay for it with one class
+ * object per `createEngine()` call, which is fine because
+ * `createEngine()` runs once per grammar at module load.
  */
 export function createEngine(defs: ParserDefs): LalrEngine {
   const K = defs.constants
@@ -238,16 +338,18 @@ export function createEngine(defs: ParserDefs): LalrEngine {
 
   // -------------------------------------------------------------------------
   // Table lookups — faithful ports of lempar.c:549 and lempar.c:614.
+  // Kept as plain functions (not class methods) so the JIT can inline
+  // them into `Parse()`'s hot loop without a `this`-load indirection.
   // -------------------------------------------------------------------------
 
   /**
    * Given the current state and next terminal token, return the parser
    * action to take.  The action's encoding (shift / shift-reduce /
-   * reduce / accept / error) is decoded by `run`'s dispatch loop below.
+   * reduce / accept / error) is decoded by `Parse()`'s dispatch loop.
    *
    * lempar.c:549 yy_find_shift_action.
    */
-  function findShiftAction(lookahead: TokenId, stateno: number): number {
+  function yy_find_shift_action(lookahead: TokenId, stateno: number): number {
     // When `stateno` already encodes a pending reduce (> YY_MAX_SHIFT),
     // yy_find_shift_action in C returns it verbatim so the caller can
     // dispatch straight to the reduce branch.
@@ -289,9 +391,9 @@ export function createEngine(defs: ParserDefs): LalrEngine {
    *
    * lempar.c:614 yy_find_reduce_action.  Note: `lookahead` here is the
    * LHS of the just-reduced rule, so it's a `SymbolId` (nonterminal),
-   * not a `TokenId` like in findShiftAction.
+   * not a `TokenId` like in yy_find_shift_action.
    */
-  function findReduceAction(stateno: number, lookahead: SymbolId): number {
+  function yy_find_reduce_action(stateno: number, lookahead: SymbolId): number {
     // With no error symbol, lempar.c asserts stateno <= YY_REDUCE_COUNT
     // and the table lookup always succeeds.  We defensively fall back
     // to yy_default on out-of-range input.
@@ -305,78 +407,76 @@ export function createEngine(defs: ParserDefs): LalrEngine {
   }
 
   // -------------------------------------------------------------------------
-  // Stack entry.  Mirrors lempar.c's struct yyStackEntry: {stateno,
-  // major, minor}.  The sentinel at index 0 has stateno=0 and an
-  // undefined value — we never pop it, so the value is never handed to
-  // the reducer.
+  // ParserImpl — the `yyParser` handle.  One per parse.
+  //
+  // Scoped inside createEngine() so methods read K/T/rules/yyFallback
+  // and the yy_find_* helpers from lexical scope.  The external name
+  // callers use is the `yyParser<V>` interface above; the class itself
+  // is not exported.
   // -------------------------------------------------------------------------
-  interface StackEntry<V> {
-    stateno: number
-    major: SymbolId
-    value: V
-  }
+  class YYParser<V> implements Parser<V> {
+    // The LR stack (lempar.c's `yystack` / `yystk0`).  The bottom
+    // sentinel's `minor` is synthesised as `undefined as V`; because we
+    // never pop it, the caller's reducer never observes the cast.
+    readonly #yystack: yyStackEntry<V>[] = [
+      { stateno: 0, major: 0 as SymbolId, minor: undefined as V },
+    ]
+    readonly #errors: LalrError<V>[] = []
+    #state: LalrSessionState = "running"
+    #root: V | undefined
+    #inputIndex = 0
+    readonly #reducer: LalrReduce<V>
 
-  function run<V>(tokens: Iterable<LalrInput<V>>, onReduce: LalrReduce<V>): LalrResult<V> {
-    // The bottom sentinel's value is synthesised as `undefined as V`;
-    // because we never pop it, the caller's reducer never observes the
-    // cast.  Using an explicit sentinel matches lempar.c's yystack[0].
-    const stack: StackEntry<V>[] = [{ stateno: 0, major: 0 as SymbolId, value: undefined as V }]
-    const errors: LalrError<V>[] = []
-    let accepted = false
-    let root: V | undefined
-
-    // ---- Reduce: pop nrhs entries, call onReduce, run GOTO, push ----
-    // The non-action-switch half of lempar.c:742 yy_reduce.
-    function doReduce(ruleId: RuleId): void {
-      const rule = rules[ruleId]
-      const lhs = rule.lhs
-      const nrhs = rule.rhs.length
-
-      // Pop nrhs entries into `popped`, in source order.  We pop
-      // last-first and reverse so that popped[i] corresponds to the
-      // rule's i-th RHS position.
-      const popped: LalrPopped<V>[] = []
-      for (let i = 0; i < nrhs; i++) {
-        const e = stack.pop()!
-        popped.push({ major: e.major, value: e.value })
-      }
-      popped.reverse()
-
-      // Hand them to the caller's reducer; the returned value becomes
-      // the new stack entry's value.
-      const value = onReduce(ruleId, popped)
-
-      // GOTO — see lempar.c:772 yyact = yy_find_reduce_action(...).
-      const baseState = stack[stack.length - 1].stateno
-      const act = findReduceAction(baseState, lhs)
-      stack.push({ stateno: act, major: lhs, value })
+    constructor(onReduce: LalrReduce<V>) {
+      this.#reducer = onReduce
     }
 
-    // ---- Main dispatch loop (lempar.c:915) --------------------------
-    let inputIndex = 0
-    for (const tok of tokens) {
-      const major: TokenId = tok.major
-      const value = tok.value
+    get state(): LalrSessionState {
+      return this.#state
+    }
 
-      // Equivalent to Parse()'s while(1) loop: keep reducing until the
-      // state can accept this token (or decide it's an error).
-      let act = stack[stack.length - 1].stateno
-      let settled = false
-      while (!settled) {
-        // Capture the state we're about to query *before* findShiftAction
+    get root(): V | undefined {
+      return this.#root
+    }
+
+    get stack(): readonly yyStackEntry<V>[] {
+      return this.#yystack
+    }
+
+    get errors(): readonly LalrError<V>[] {
+      return this.#errors
+    }
+
+    /**
+     * Main dispatch.  lempar.c:915 `Parse()` — the C function's outer
+     * while(1) loop has been unrolled: each call to this method
+     * consumes exactly one input token, chaining reduces as needed
+     * before settling on a shift / accept / error outcome.
+     * 
+     * The caller should check `this.state` after each call.
+     */
+    next(yymajor: TokenId, yyminor: V): void {
+      if (this.#state !== "running") return
+
+      // Hoist the stack field into a local so the hot loop reads a
+      // closure slot instead of a hidden-class property on `this`.
+      const yystack = this.#yystack
+
+      let act = yystack[yystack.length - 1]!.stateno
+      while (true) {
+        // Capture the state we're about to query *before* yy_find_shift_action
         // rewrites `act` into an action code.  Needed for error reporting
         // (diagnostics want the state at the point of failure, not the
-        // YY_ERROR_ACTION sentinel).  Inside this loop, at this point,
-        // `act` is always a state number: either the initial
-        // stack[top].stateno, or the post-reduce state we fetched below.
+        // YY_ERROR_ACTION sentinel).  At this point, `act` is always a
+        // state number: either the initial yystack[top].stateno, or the
+        // post-reduce state we fetched below.
         const stateBeforeLookup = act
-        act = findShiftAction(major, act)
+        act = yy_find_shift_action(yymajor, act)
 
         if (act >= K.YY_MIN_REDUCE) {
           // (1) Pure reduce, possibly chained.  Rule = act - YY_MIN_REDUCE.
-          const ruleId = (act - K.YY_MIN_REDUCE) as RuleId
-          doReduce(ruleId)
-          act = stack[stack.length - 1].stateno
+          this.#yy_reduce((act - K.YY_MIN_REDUCE) as RuleId)
+          act = yystack[yystack.length - 1]!.stateno
           continue // retry with the same token against the new state
         }
 
@@ -385,37 +485,97 @@ export function createEngine(defs: ParserDefs): LalrEngine {
           //
           // For SHIFTREDUCE actions (YY_MIN_SHIFTREDUCE..YY_MAX_SHIFTREDUCE),
           // lempar.c:709 rewrites the stored state so that the next
-          // findShiftAction dispatches straight into the pending reduce.
+          // yy_find_shift_action dispatches straight into the pending reduce.
           let newState = act
           if (newState > K.YY_MAX_SHIFT) {
             newState += K.YY_MIN_REDUCE - K.YY_MIN_SHIFTREDUCE
           }
-          stack.push({ stateno: newState, major, value })
-          settled = true
-          break
+          yystack.push({ stateno: newState, major: yymajor, minor: yyminor })
+          this.#inputIndex++
+          return
         }
 
         if (act === K.YY_ACCEPT_ACTION) {
           // (3) Accept.  Per lempar.c:965, yytos-- then yy_accept.  We
           // capture the top value first (that's the CST root or
           // semantic value the reducer built).
-          root = stack[stack.length - 1].value
-          accepted = true
-          return { accepted, root, errors }
+          this.#root = yystack[yystack.length - 1]!.minor
+          this.#state = "accepted"
+          return
         }
 
-        // (4) Anything else is YY_ERROR_ACTION or YY_NO_ACTION.
-        errors.push({ stateno: stateBeforeLookup, major, value, inputIndex })
-        return { accepted: false, errors }
+        // (4) Anything else is YY_ERROR_ACTION or YY_NO_ACTION.  We
+        // allocate one LalrError per terminal-error transition — this
+        // only happens once per parse in the current no-recovery model,
+        // so the allocation isn't on a hot path.
+        this.#errors.push({
+          stateno: stateBeforeLookup,
+          major: yymajor,
+          minor: yyminor,
+          inputIndex: this.#inputIndex,
+        })
+        this.#state = "errored"
+        return
       }
-
-      inputIndex++
     }
 
-    // The caller should have terminated the stream with major=0.  If
-    // they didn't, we've exhausted the input without accepting.
-    return { accepted, root, errors }
+    /**
+     * Reduce: pop `nrhs` entries, call `onReduce`, run GOTO, push the
+     * result.  Mirrors the non-action-switch half of lempar.c:742
+     * `yy_reduce`.  In C the action switch is inlined here from the
+     * generated rule bodies in parse.y; our reducer is the caller's
+     * pure `onReduce` callback, which returns the new stack value.
+     */
+    #yy_reduce(yyruleno: RuleId): void {
+      const rule = rules[yyruleno]!
+      const nrhs = rule.rhs.length
+      const yystack = this.#yystack
+
+      // Pop nrhs entries into `popped`, in source order.  We pop
+      // last-first and reverse so that popped[i] corresponds to the
+      // rule's i-th RHS position.
+      const popped: LalrPopped<V>[] = []
+      for (let i = 0; i < nrhs; i++) {
+        const e = yystack.pop()!
+        popped.push({ major: e.major, minor: e.minor })
+      }
+      popped.reverse()
+
+      const minor = this.#reducer(yyruleno, popped)
+
+      // GOTO — see lempar.c:772 yyact = yy_find_reduce_action(...).
+      const baseState = yystack[yystack.length - 1]!.stateno
+      const act = yy_find_reduce_action(baseState, rule.lhs)
+      yystack.push({ stateno: act, major: rule.lhs, minor })
+    }
+
   }
 
-  return { run }
+  /**
+   * In the C parser, each reduce step may perform side-effects.
+   * SQLite's parser doesn't build an AST, instead its parser directly updates
+   * various state in the system.
+   * 
+   * Since we are just a parser and not an interpreter, it doesn't make sense to
+   * port the side-effect actions.
+   * 
+   * Instead, the caller provides a `reducer` function that can be used to build
+   * a tree, do side effects, whatever.
+   */
+  function ParseAlloc<V>(reducer: LalrReduce<V>): Parser<V> {
+    return new YYParser<V>(reducer)
+  }
+
+  function run<V>(tokens: Iterable<LalrInput<V>>, onReduce: LalrReduce<V>): LalrResult<V> {
+    const session = new YYParser<V>(onReduce)
+    for (const tok of tokens) {
+      session.next(tok.major, tok.minor)
+      if (session.state !== "running") break
+    }
+    return session.state === "accepted"
+      ? { accepted: true, root: session.root, errors: session.errors }
+      : { accepted: false, errors: session.errors }
+  }
+
+  return { ParseAlloc, run }
 }
