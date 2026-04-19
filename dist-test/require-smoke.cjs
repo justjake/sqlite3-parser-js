@@ -1,6 +1,6 @@
 "use strict"
 
-const pkg = require("../dist/generated/current.js")
+const pkg = require("sqlite3-parser")
 const { cst, errors } = pkg.parse("SELECT 1")
 const mod = pkg.withOptions({ digitSeparator: "_" })
 const tokenNames = Array.from(mod.tokenize("SELECT 1_000"), (token) => mod.tokenName(token.type))

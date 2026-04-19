@@ -12,6 +12,7 @@ import { describe, test, expect } from "bun:test"
 
 import {
   parse,
+  SQLITE_VERSION,
   withOptions,
   formatCst,
   walkCst,
@@ -81,6 +82,10 @@ describe("smallest possible inputs", () => {
 })
 
 describe("parser options", () => {
+  test("generated current wrapper exposes a concrete SQLITE_VERSION", () => {
+    expect(SQLITE_VERSION).toMatch(/^\d+\.\d+\.\d+$/)
+  })
+
   test("withOptions returns a parser with tokenizer options applied", () => {
     const parserWithSep = withOptions({ digitSeparator: "_" })
     const r = parserWithSep.parse("SELECT 1_000")

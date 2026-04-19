@@ -1,15 +1,10 @@
 import assert from "node:assert/strict"
 import { execFileSync } from "node:child_process"
 import { join } from "node:path"
-import { fileURLToPath } from "node:url"
 import test from "node:test"
 
-const DIST_TEST_DIR = fileURLToPath(new URL(".", import.meta.url))
-const ROOT = join(DIST_TEST_DIR, "..")
-const DIST = join(ROOT, "dist")
-
 test("main entrypoint parses SQL", async () => {
-  const pkg = await import("../dist/generated/current.js")
+  const pkg = await import("sqlite3-parser")
   const { cst, errors } = pkg.parse("SELECT 1")
 
   assert.equal(errors.length, 0)
@@ -23,8 +18,8 @@ test("main entrypoint parses SQL", async () => {
 })
 
 test("versioned subpath import works", async () => {
-  const main = await import("../dist/generated/current.js")
-  const pinned = await import(`../dist/generated/${main.SQLITE_VERSION}/index.js`)
+  const main = await import("sqlite3-parser")
+  const pinned = await import(`sqlite3-parser/sqlite-${main.SQLITE_VERSION}`)
   const { cst, errors } = pinned.parse("SELECT 1")
 
   assert.equal(errors.length, 0)
@@ -33,7 +28,7 @@ test("versioned subpath import works", async () => {
 })
 
 test("main entrypoint can be required from commonjs", () => {
-  const output = execFileSync(process.execPath, [join(DIST_TEST_DIR, "require-smoke.cjs")], {
+  const output = execFileSync(process.execPath, [join(process.cwd(), "require-smoke.cjs")], {
     encoding: "utf8",
   })
   const result = JSON.parse(output)
@@ -52,7 +47,7 @@ test("main entrypoint can be required from commonjs", () => {
 })
 
 test("withOptions exposes a specialized parser module", async () => {
-  const pkg = await import("../dist/generated/current.js")
+  const pkg = await import("sqlite3-parser")
   const mod = pkg.withOptions({ digitSeparator: "_" })
   const tokens = Array.from(mod.tokenize("SELECT 1_000"))
 
@@ -63,7 +58,14 @@ test("withOptions exposes a specialized parser module", async () => {
 })
 
 test("parser CLI runs under node", () => {
-  const cli = join(DIST, "bin", "sqlite3-parser.js")
+  const cli = join(
+    process.cwd(),
+    "node_modules",
+    "sqlite3-parser",
+    "dist",
+    "bin",
+    "sqlite3-parser.js",
+  )
   const output = execFileSync(process.execPath, [cli, "SELECT 1"], {
     encoding: "utf8",
   })
@@ -72,7 +74,14 @@ test("parser CLI runs under node", () => {
 })
 
 test("tokenizer CLI runs under node", () => {
-  const cli = join(DIST, "bin", "sqlite3-tokenizer.js")
+  const cli = join(
+    process.cwd(),
+    "node_modules",
+    "sqlite3-parser",
+    "dist",
+    "bin",
+    "sqlite3-tokenizer.js",
+  )
   const output = execFileSync(process.execPath, [cli, "SELECT 1"], {
     encoding: "utf8",
   })
