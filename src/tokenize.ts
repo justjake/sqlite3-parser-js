@@ -37,6 +37,23 @@ export type MaskFlag =
   | 'WINDOWFUNC' | 'GENCOL' | 'RETURNING' | 'ORDERSET';
 
 /**
+ * A bitmask over `MaskFlag` values.  Bit positions are defined by
+ * `KeywordsDump.meta.maskFlags` (source: mkkeywordhash.c's
+ * `aMaskNames[]`).  A keyword is enabled iff
+ * `(kw.mask & enabledMask) !== 0`.
+ *
+ * Branded so a `KeywordMask` can't silently mix with other integer
+ * namespaces (`SymbolId`, `TokenId`, `RuleId`, plain counts, etc.).
+ * The brand is compile-time only — `KeywordMask` is a plain `number`
+ * at runtime.
+ */
+declare const __keywordMaskBrand: unique symbol;
+export type KeywordMask = number & { readonly [__keywordMaskBrand]: true };
+
+/** Coerce a raw number to `KeywordMask`.  Caller asserts it's a valid bitmask. */
+export const KeywordMask = (n: number): KeywordMask => n as KeywordMask;
+
+/**
  * One keyword entry in the runtime (prod) keyword dump.
  *
  * The dev dump additionally carries `priority` (hash-chain ordering),
@@ -56,7 +73,7 @@ export interface KeywordEntry {
    * is enabled iff `(mask & enabledMask) !== 0` where `enabledMask` is
    * built from the caller-supplied flag set at createTokenizer time.
    */
-  mask: number;
+  mask: KeywordMask;
 }
 
 /**
@@ -70,7 +87,7 @@ export interface KeywordEntry {
 export interface KeywordsDump {
   meta: {
     /** Bit-name → bit-value map; mirrors the maskFlags in the C patch. */
-    maskFlags: Record<MaskFlag, number>;
+    maskFlags: Record<MaskFlag, KeywordMask>;
   };
   keywords: KeywordEntry[];
 }
@@ -369,8 +386,12 @@ export function createTokenizer(
   const maskFlags = keywordsDump.meta.maskFlags;
   const allFlags = Object.keys(maskFlags) as MaskFlag[];
   const enabledFlags: readonly MaskFlag[] = opts.flags ?? allFlags;
-  let enabledMask = maskFlags.ALWAYS ?? 0; // ALWAYS keywords are unconditional.
-  for (const f of enabledFlags) enabledMask |= maskFlags[f] ?? 0;
+  // ALWAYS keywords are unconditional.  `|` drops the brand back to
+  // plain `number`, so we re-coerce on assignment.
+  let enabledMask: KeywordMask = maskFlags.ALWAYS ?? KeywordMask(0);
+  for (const f of enabledFlags) {
+    enabledMask = KeywordMask(enabledMask | (maskFlags[f] ?? 0));
+  }
 
   const keywordCode = new Map<string, TokenId>();
   for (const kw of keywordsDump.keywords) {

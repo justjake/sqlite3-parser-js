@@ -143,7 +143,8 @@ export { stableKeyForRule, buildSymbolName } from '../../src/ast/index.ts';
 
 export type {
   Tokenizer, TokenSpan, TokenizeOpts, TokenizerTokens,
-  CreateTokenizerOptions, KeywordsDump, MaskFlag,
+  CreateTokenizerOptions, KeywordsDump, MaskFlag, KeywordMask,
+  KeywordEntry,
 } from '../../src/tokenize.ts';
 
 export type {

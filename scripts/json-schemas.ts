@@ -56,6 +56,7 @@ import type {
 } from '../src/lempar.ts';
 import type {
   KeywordEntry,
+  KeywordMask as BrandedKeywordMask,
   KeywordsDump,
   MaskFlag,
 } from '../src/tokenize.ts';
@@ -136,6 +137,9 @@ const TokenId = Type.Unsafe<BrandedTokenId>(
 );
 const RuleId = Type.Unsafe<BrandedRuleId>(
   Type.Integer({ minimum: 0, title: 'RuleId' }),
+);
+const KeywordMask = Type.Unsafe<BrandedKeywordMask>(
+  Type.Integer({ minimum: 0, title: 'KeywordMask' }),
 );
 
 // ===========================================================================
@@ -399,14 +403,15 @@ const KW_MASK_FLAG_NAMES = [
 ] as const;
 
 // The cast preserves the literal-keyed shape so `Static<>` produces
-// `{ ALTER: number; ALWAYS: number; … }` — structurally equal to
-// `Record<MaskFlag, number>` — instead of a loose `Record<string, number>`.
-// Runtime behaviour is unchanged (`Object.fromEntries` returns an object
-// keyed by the 24 flag names regardless of the TS cast).
-type MaskFlagsProps = { [K in MaskFlag]: ReturnType<typeof Type.Integer> };
+// `{ ALTER: KeywordMask; ALWAYS: KeywordMask; … }` — structurally
+// equal to `Record<MaskFlag, KeywordMask>` — instead of a loose
+// `Record<string, KeywordMask>`.  Runtime behaviour is unchanged
+// (`Object.fromEntries` returns an object keyed by the 24 flag names
+// regardless of the TS cast).
+type MaskFlagsProps = { [K in MaskFlag]: typeof KeywordMask };
 const KeywordsDevMaskFlags = Strict(
   Object.fromEntries(
-    KW_MASK_FLAG_NAMES.map((n) => [n, Type.Integer()]),
+    KW_MASK_FLAG_NAMES.map((n) => [n, KeywordMask]),
   ) as MaskFlagsProps,
 );
 
@@ -430,7 +435,7 @@ const KeywordsDevEntry = Strict({
   name:     Type.String(),
   token:    Type.String(),
   priority: Type.Integer(),
-  mask:     Type.Integer(),
+  mask:     KeywordMask,
   flags:    Type.Array(Type.String()),
 });
 
@@ -457,7 +462,7 @@ const KeywordsProdMeta = matches<KeywordsDump['meta']>()(Strict({
 const KeywordsProdEntry = matches<KeywordEntry>()(Strict({
   name:  Type.String(),
   token: Type.String(),
-  mask:  Type.Integer(),
+  mask:  KeywordMask,
 }));
 
 const KeywordsProdSchema = matches<KeywordsDump>()(Strict({

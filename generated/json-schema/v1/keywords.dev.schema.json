@@ -57,76 +57,124 @@
           ],
           "properties": {
             "ALTER": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "ALWAYS": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "ANALYZE": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "ATTACH": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "AUTOINCR": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "CAST": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "COMPOUND": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "CONFLICT": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "EXPLAIN": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "FKEY": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "PRAGMA": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "REINDEX": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "SUBQUERY": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "TRIGGER": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "VACUUM": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "VIEW": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "VTAB": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "AUTOVACUUM": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "CTE": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "UPSERT": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "WINDOWFUNC": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "GENCOL": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "RETURNING": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             },
             "ORDERSET": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "title": "KeywordMask"
             }
           },
           "additionalProperties": false
@@ -156,7 +204,9 @@
             "type": "integer"
           },
           "mask": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0,
+            "title": "KeywordMask"
           },
           "flags": {
             "type": "array",
