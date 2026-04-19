@@ -322,6 +322,12 @@ describe("multiple statements", () => {
 })
 
 describe("error reporting", () => {
+  function firstError(sql: string) {
+    const r = parse(sql)
+    expect(r.errors.length).toBeGreaterThan(0)
+    return r.errors[0]!
+  }
+
   test("empty input produces a minimal parse (bare SEMI injected)", () => {
     const r = parse("")
     // The grammar requires at least one ecmd, which can be an empty
@@ -355,6 +361,55 @@ describe("error reporting", () => {
     expect(err.col).toBe(8)
     expect(err.expected).toEqual([])
     expect(sql.slice(err.range[0], err.range[1])).toBe("'oops")
+  })
+
+  test("missing table name after FROM gets a targeted hint", () => {
+    const err = firstError("SELECT * FROM FROM")
+
+    expect(err.canonical).toBe('near "FROM": syntax error')
+    expect(err.hint).toBe("expected a table name after FROM")
+  })
+
+  test("unclosed parenthesized expression at EOF gets a missing ) hint", () => {
+    const err = firstError("SELECT (1 + 2")
+
+    expect(err.canonical).toBe("incomplete input")
+    expect(err.hint).toBe('missing ")" before end of input')
+  })
+
+  test("unclosed CASE interrupted by a clause boundary gets a missing END hint", () => {
+    const err = firstError("SELECT CASE WHEN x > 0 THEN 1 FROM t")
+
+    expect(err.canonical).toBe('near "FROM": syntax error')
+    expect(err.hint).toBe('missing END before "FROM"')
+  })
+
+  test("unmatched closing parenthesis gets a dedicated hint", () => {
+    const err = firstError("SELECT )")
+
+    expect(err.canonical).toBe('near ")": syntax error')
+    expect(err.hint).toBe('unexpected ")" with no matching "("')
+  })
+
+  test("FILTER after OVER gets the ordering hint", () => {
+    const err = firstError("SELECT sum(x) OVER (ORDER BY y) FILTER (WHERE x > 0) FROM t")
+
+    expect(err.canonical).toBe('near "FILTER": syntax error')
+    expect(err.hint).toBe("FILTER clauses must appear before OVER clauses")
+  })
+
+  test("trailing comma before a clause boundary gets a comma hint", () => {
+    const err = firstError("SELECT a, FROM t")
+
+    expect(err.canonical).toBe('near "FROM": syntax error')
+    expect(err.hint).toBe('remove the trailing comma or add another list item before "FROM"')
+  })
+
+  test("keyword-used-as-identifier gets a quoting hint", () => {
+    const err = firstError("CREATE TABLE select (x)")
+
+    expect(err.canonical).toBe('near "select": syntax error')
+    expect(err.hint).toBe('if you intended "select" as an identifier here, quote it')
   })
 })
 

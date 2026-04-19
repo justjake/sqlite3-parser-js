@@ -21,6 +21,7 @@ export type * from "../../src/parser"
 export type * from "../../src/tokenize"
 export type * from "../../src/lempar"
 export type * from "../../src/enhanceError"
+export type * from "./stable-keys.ts"
 
 export * from "../../src/extras"
 

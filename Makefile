@@ -66,12 +66,13 @@ help:
 	  'AST layer:' \
 	  '  make diff-ast OLD=<ver> NEW=<ver>       # grammar-shape diff' \
 	  '  make ast-coverage VER=<ver>             # unhit-rule report' \
+	  '  make check-semantic-actions             # drift-check parse.y validations' \
 	  '' \
 	  'For onboarding a new sqlite release, use:' \
 	  '  bun run vendor <ref>                    # full workflow' \
 	  ''
 
-gen: $(GEN_TARGETS)
+gen: $(GEN_TARGETS) check-semantic-actions
 
 versions:
 	@echo "Versions with vendored patches:"
@@ -179,13 +180,22 @@ generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.
 # ---------------------------------------------------------------------------
 # Per-version TS wrapper.  Codegened from scripts/emit-version-modules.ts.
 # Depends on the prod dumps so the wrapper's JSON imports resolve.
+# One invocation of the script emits both index.ts and stable-keys.ts, but
+# keep the targets split so GNU Make 3.81 can still parse this file.
 # ---------------------------------------------------------------------------
 generated/%/index.ts: \
     scripts/emit-version-modules.ts \
     generated/%/parser.prod.json \
     generated/%/keywords.prod.json
 	bun scripts/emit-version-modules.ts $*
-	bun run fmt $@
+	bun run fmt generated/$*/index.ts generated/$*/stable-keys.ts
+
+generated/%/stable-keys.ts: \
+    scripts/emit-version-modules.ts \
+    generated/%/parser.prod.json \
+    generated/%/keywords.prod.json
+	bun scripts/emit-version-modules.ts $*
+	bun run fmt generated/$*/index.ts generated/$*/stable-keys.ts
 
 # ---------------------------------------------------------------------------
 # The cross-version `current` re-export.  Sourced from
@@ -227,3 +237,19 @@ ast-coverage:
 	bun scripts/ast-coverage.ts \
 	  generated/$(VER)/parser.dev.json \
 	  build/test/ast-coverage.json
+
+# ---------------------------------------------------------------------------
+# Semantic-action drift check.  The committed snapshot at
+# generated/<ver>/semantic-actions.snapshot.json hashes every parse.y
+# action that carries a parse-time validation call.  `make gen` runs
+# this check for every version with vendored patches; any drift fails
+# the build and forces a human to review src/semantic.ts.
+#
+# To adopt drift after updating src/semantic.ts:
+#   bun scripts/semantic-snapshot.ts --write <ver>
+# ---------------------------------------------------------------------------
+.PHONY: check-semantic-actions
+check-semantic-actions:
+	@for v in $(GEN_VERSIONS); do \
+	  bun scripts/semantic-snapshot.ts --check $$v || exit $$?; \
+	done

@@ -23,9 +23,14 @@ import type { ParserRule, ParserDefs, RuleId, SymbolId } from "../lempar.ts"
 import type { CstNode, RuleNode } from "../parser.ts"
 import { handlers as defaultHandlers } from "./handlers.ts"
 import type { AstError, AstNode, UnknownAstNode } from "./types.ts"
+import type { ActionStableKey } from "../../generated/current.ts"
 
-/** A grammar-shape key, stable across SQLite version bumps. */
-export type StableKey = string
+/**
+ * A grammar-shape key, stable across SQLite version bumps.  Constrained
+ * to keys that actually exist in the current version's grammar — see
+ * the generated `ActionStableKey` union.
+ */
+export type StableKey = ActionStableKey
 
 /**
  * Resolves a symbol id to its display name.  The prod defs strips the
@@ -65,7 +70,12 @@ export function stableKeyForRule(rule: ParserRule, symbolName: SymbolName): Stab
       rhsParts.push("?")
     }
   }
-  return `${rule.lhsName}::${rhsParts.join(" ")}`
+  // Construction is dynamic so TS can't prove the result is a member of
+  // the generated union.  For defs matching the current version every
+  // key is; for other-version defs (scripts/diff-ast, ast-coverage) the
+  // key is technically off-union, but consumers only compare it as a
+  // string and don't do union-constrained lookups.
+  return `${rule.lhsName}::${rhsParts.join(" ")}` as StableKey
 }
 
 /**
@@ -86,16 +96,24 @@ export interface AstContext {
  */
 export type Handler<T extends AstNode = AstNode> = (cst: RuleNode, ctx: AstContext) => T
 
-/** A table of handlers keyed by stable key. */
-export type HandlerMap = Readonly<Record<StableKey, Handler>>
+/**
+ * A table of handlers keyed by {@link StableKey}.  Missing keys dispatch
+ * to `UnknownAstNode`.  Keys are constrained to shapes that exist in
+ * the current version's grammar — typos and stale keys fail to compile.
+ */
+export type HandlerMap = Readonly<Partial<Record<StableKey, Handler>>>
 
 export interface VerifyHandlersResult {
   /** Every stable key in the defs, in rule-id order. */
   readonly allRuleKeys: readonly StableKey[]
   /** Stable keys that collide across multiple rules.  Should stay empty. */
   readonly duplicateRuleKeys: readonly StableKey[]
-  /** Handler keys that don't exist in the current defs. */
-  readonly unknownHandlerKeys: readonly StableKey[]
+  /**
+   * Handler keys that don't exist in the current defs.  Typed as plain
+   * strings rather than `StableKey` — by definition these are keys the
+   * grammar doesn't have, so they aren't members of the generated union.
+   */
+  readonly unknownHandlerKeys: readonly string[]
 }
 
 /**
@@ -123,7 +141,7 @@ export function verifyHandlers(
     seen.set(key, count + 1)
   }
 
-  const knownKeys = new Set(allRuleKeys)
+  const knownKeys: ReadonlySet<string> = new Set(allRuleKeys)
   const unknownHandlerKeys = Object.keys(handlers).filter((key) => !knownKeys.has(key))
 
   return {
@@ -148,7 +166,7 @@ export interface ConvertOptions {
   readonly onHit?: (key: StableKey) => void
 }
 
-function unknownAst(cst: RuleNode, stableKey: StableKey): UnknownAstNode {
+function unknownAst(cst: RuleNode, stableKey: string): UnknownAstNode {
   return {
     kind: "Unknown",
     cst,

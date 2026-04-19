@@ -1,0 +1,70 @@
+{
+  "sqliteVersion": "3.54.0",
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "stableKey": "ccons::CONSTRAINT nm",
+      "ruleId": 32,
+      "patterns": [
+        "ASSERT_IS_CREATE"
+      ],
+      "hash": "1e66109fd1d1e214270067973be25446dea3a701947c6de45f8b9c613c8a65cb"
+    },
+    {
+      "stableKey": "table_option::nm",
+      "ruleId": 24,
+      "patterns": [
+        "sqlite3ErrorMsg"
+      ],
+      "hash": "636819d52de93ad40aff2c0cb907a6f0b7af985d2a75503761a2146affaa47d1"
+    },
+    {
+      "stableKey": "table_option::WITHOUT nm",
+      "ruleId": 23,
+      "patterns": [
+        "sqlite3ErrorMsg"
+      ],
+      "hash": "42f881d89ee8f9cf3c90b28ba72acb8827f933f78c52c8a70a5f4fb9c67952cf"
+    },
+    {
+      "stableKey": "tcons::CONSTRAINT nm",
+      "ruleId": 67,
+      "patterns": [
+        "ASSERT_IS_CREATE"
+      ],
+      "hash": "1e66109fd1d1e214270067973be25446dea3a701947c6de45f8b9c613c8a65cb"
+    },
+    {
+      "stableKey": "tconscomma::COMMA",
+      "ruleId": 66,
+      "patterns": [
+        "ASSERT_IS_CREATE"
+      ],
+      "hash": "affacd1cfa10b8ec5435a4ce458272114fc060058f9c1e62699ad7bec9be36bc"
+    },
+    {
+      "stableKey": "term::QNUMBER",
+      "ruleId": 349,
+      "patterns": [
+        "sqlite3DequoteNumber"
+      ],
+      "hash": "78a114b5a42982f6f7fbcc22ab40de02539effe5c486344b4d728ef8b59a41b6"
+    },
+    {
+      "stableKey": "tridxby::INDEXED BY nm",
+      "ruleId": 274,
+      "patterns": [
+        "sqlite3ErrorMsg"
+      ],
+      "hash": "742d11a218ecd7ef15f5ba99c6a5066314cbd5a1b3f55d7f2ec4180d8dc47574"
+    },
+    {
+      "stableKey": "tridxby::NOT INDEXED",
+      "ruleId": 275,
+      "patterns": [
+        "sqlite3ErrorMsg"
+      ],
+      "hash": "515e51cafa93d9b2f9accee1c957978c583bb9b08b0aa128e13978a8d1ba1212"
+    }
+  ]
+}
