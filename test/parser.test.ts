@@ -11,21 +11,19 @@
 import { describe, test, expect } from "bun:test"
 
 import {
-  createParser,
+  parse,
+  withOptions,
   formatCst,
-  parse as parseSql,
   walkCst,
   tokenLeaves,
   type CstNode,
   type RuleNode,
 } from "../generated/current.ts"
 
-const parser = createParser()
-
 // --- helpers ---------------------------------------------------------------
 
 function parseOk(sql: string): CstNode {
-  const r = parser.parse(sql)
+  const r = parse(sql)
   if (r.errors.length || !r.cst) {
     throw new Error(
       `expected clean parse of ${JSON.stringify(sql)} but got: ` +
@@ -83,17 +81,9 @@ describe("smallest possible inputs", () => {
 })
 
 describe("parser options", () => {
-  test("createParser accepts tokenizer options", () => {
-    const parserWithSep = createParser({ digitSeparator: "_" })
+  test("withOptions returns a parser with tokenizer options applied", () => {
+    const parserWithSep = withOptions({ digitSeparator: "_" })
     const r = parserWithSep.parse("SELECT 1_000")
-
-    expect(r.errors).toEqual([])
-    expect(r.cst).toBeDefined()
-    expect(tokenText(r.cst!)).toEqual(["SELECT", "1_000"])
-  })
-
-  test("parse convenience accepts tokenizer options", () => {
-    const r = parseSql("SELECT 1_000", { digitSeparator: "_" })
 
     expect(r.errors).toEqual([])
     expect(r.cst).toBeDefined()
@@ -163,7 +153,7 @@ describe("CREATE TABLE", () => {
   `
 
   test("parses without errors", () => {
-    const r = parser.parse(sql)
+    const r = parse(sql)
     expect(r.errors).toEqual([])
     expect(r.cst).toBeDefined()
   })
@@ -226,7 +216,7 @@ describe("expressions and operator precedence", () => {
       "SELECT * FROM t WHERE x IS NULL",
       "SELECT * FROM t WHERE x IS NOT NULL",
     ]) {
-      const r = parser.parse(sql)
+      const r = parse(sql)
       expect(r.errors).toEqual([])
       expect(r.cst).toBeDefined()
     }
@@ -234,7 +224,7 @@ describe("expressions and operator precedence", () => {
 
   test("LIKE / GLOB / REGEXP all fold to LIKE_KW", () => {
     for (const op of ["LIKE", "GLOB", "REGEXP"]) {
-      const r = parser.parse(`SELECT 1 WHERE x ${op} 'y'`)
+      const r = parse(`SELECT 1 WHERE x ${op} 'y'`)
       expect(r.errors).toEqual([])
     }
   })
@@ -242,13 +232,13 @@ describe("expressions and operator precedence", () => {
 
 describe("JOIN forms", () => {
   test("explicit INNER JOIN with ON", () => {
-    const r = parser.parse("SELECT a.id, b.name FROM a INNER JOIN b ON a.id = b.aid")
+    const r = parse("SELECT a.id, b.name FROM a INNER JOIN b ON a.id = b.aid")
     expect(r.errors).toEqual([])
     expect(ruleNames(r.cst!).has("seltablist")).toBe(true)
   })
 
   test("LEFT OUTER JOIN with USING", () => {
-    const r = parser.parse("SELECT * FROM a LEFT OUTER JOIN b USING (id)")
+    const r = parse("SELECT * FROM a LEFT OUTER JOIN b USING (id)")
     expect(r.errors).toEqual([])
   })
 })
@@ -263,7 +253,7 @@ describe("WITH (common table expressions)", () => {
       )
       SELECT * FROM counter;
     `
-    const r = parser.parse(sql)
+    const r = parse(sql)
     expect(r.errors).toEqual([])
     const names = ruleNames(r.cst!)
     // SQLite's grammar uses wqlist/wqitem for the CTE list itself;
@@ -276,7 +266,7 @@ describe("WITH (common table expressions)", () => {
 describe("window functions", () => {
   test("COUNT(*) OVER (PARTITION BY x ORDER BY y)", () => {
     const sql = "SELECT count(*) OVER (PARTITION BY x ORDER BY y) FROM t"
-    const r = parser.parse(sql)
+    const r = parse(sql)
     expect(r.errors).toEqual([])
     expect(ruleNames(r.cst!).has("over_clause")).toBe(true)
   })
@@ -284,12 +274,12 @@ describe("window functions", () => {
 
 describe("subqueries", () => {
   test("scalar subquery in WHERE", () => {
-    const r = parser.parse("SELECT * FROM t WHERE id = (SELECT MAX(id) FROM u)")
+    const r = parse("SELECT * FROM t WHERE id = (SELECT MAX(id) FROM u)")
     expect(r.errors).toEqual([])
   })
 
   test("EXISTS subquery", () => {
-    const r = parser.parse("SELECT 1 WHERE EXISTS (SELECT 1 FROM t WHERE x = 1)")
+    const r = parse("SELECT 1 WHERE EXISTS (SELECT 1 FROM t WHERE x = 1)")
     expect(r.errors).toEqual([])
   })
 })
@@ -303,7 +293,7 @@ describe("triggers", () => {
         INSERT INTO log VALUES (NEW.id);
       END;
     `
-    const r = parser.parse(sql)
+    const r = parse(sql)
     expect(r.errors).toEqual([])
     const names = ruleNames(r.cst!)
     expect(names.has("trigger_event")).toBe(true)
@@ -313,14 +303,14 @@ describe("triggers", () => {
 
 describe("multiple statements", () => {
   test("two SELECTs separated by SEMI", () => {
-    const r = parser.parse("SELECT 1; SELECT 2;")
+    const r = parse("SELECT 1; SELECT 2;")
     expect(r.errors).toEqual([])
     const selects = findRules(r.cst!, "select")
     expect(selects.length).toBe(2)
   })
 
   test("cmdlist nests correctly for three statements", () => {
-    const r = parser.parse("SELECT 1; SELECT 2; SELECT 3;")
+    const r = parse("SELECT 1; SELECT 2; SELECT 3;")
     expect(r.errors).toEqual([])
     expect(findRules(r.cst!, "select").length).toBe(3)
   })
@@ -328,7 +318,7 @@ describe("multiple statements", () => {
 
 describe("error reporting", () => {
   test("empty input produces a minimal parse (bare SEMI injected)", () => {
-    const r = parser.parse("")
+    const r = parse("")
     // The grammar requires at least one ecmd, which can be an empty
     // statement.  Whether that's accepted or flagged is a grammar call —
     // we just assert we don't crash and give back a reasonable shape.
@@ -336,31 +326,30 @@ describe("error reporting", () => {
   })
 
   test("clearly malformed input surfaces a syntax error", () => {
-    const r = parser.parse("SELECT FROM FROM;")
+    const r = parse("SELECT FROM FROM;")
     expect(r.errors.length).toBeGreaterThan(0)
-    expect(r.errors[0].message).toContain("syntax error")
+    expect(r.errors[0]!.canonical).toContain("syntax error")
   })
 
   test("unrecognised token short-circuits before any reductions", () => {
-    const r = parser.parse("SELECT 1.0e+")
+    const r = parse("SELECT 1.0e+")
     expect(r.errors.length).toBeGreaterThan(0)
-    expect(r.errors[0].message).toContain("unrecognized token")
+    expect(r.errors[0]!.canonical).toContain("unrecognized token")
   })
 
   test("unrecognised token includes location metadata", () => {
     const sql = "SELECT 1;\nSELECT 'oops"
-    const r = parser.parse(sql)
+    const r = parse(sql)
     const err = r.errors[0]!
 
     expect(r.errors.length).toBeGreaterThan(0)
-    expect(err.message).toContain("unrecognized token")
-    expect(err.token?.text).toBe("'oops")
+    expect(err.canonical).toContain("unrecognized token")
+    expect(err.token.text).toBe("'oops")
     expect(err.hint).toBe("unterminated string literal")
     expect(err.line).toBe(2)
     expect(err.col).toBe(8)
-    expect(err.expected).toBeUndefined()
-    expect(err.range).toBeDefined()
-    expect(sql.slice(err.range![0], err.range![1])).toBe("'oops")
+    expect(err.expected).toEqual([])
+    expect(sql.slice(err.range[0], err.range[1])).toBe("'oops")
   })
 })
 

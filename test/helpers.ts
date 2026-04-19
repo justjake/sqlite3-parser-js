@@ -1,21 +1,21 @@
 // Shared helpers for the tokenizer/parser test suites.
 //
-// Imports are deliberately routed through `generated/current.ts` so the
-// test suite tracks whatever version `vendor/manifest.json` calls
-// `current`.  To pin tests against a specific older version, import
-// from `../generated/<version>/index.ts` directly — the same surface
-// is available there.
+// Parser defs are routed through `generated/current.ts` so the test
+// suite tracks whatever version `vendor/manifest.json` calls `current`.
+// The raw tokenizer factory comes straight from `src/tokenize.ts` —
+// the public `ParserModule` only surfaces `tokenize()`/`tokenName()`,
+// but tests need `Tokenizer.tokens` and `Tokenizer._keywordCount` for
+// introspection.
 
+import { PARSER_DEFS, KEYWORD_DEFS } from "../generated/current.ts"
 import {
-  createTokenizer,
-  PARSER_DEFS,
-  KEYWORD_DEFS,
+  tokenizerModuleForGrammar,
   type CreateTokenizerOptions,
   type KeywordDefs,
-  type ParserDefs,
   type Tokenizer,
   type TokenizeOpts,
-} from "../generated/current.ts"
+} from "../src/tokenize.ts"
+import type { ParserDefs } from "../src/lempar.ts"
 
 /** The parser defs used by every helper in this file.  Tracks `current`. */
 export const parserDefs: ParserDefs = PARSER_DEFS
@@ -23,14 +23,16 @@ export const parserDefs: ParserDefs = PARSER_DEFS
 export const keywordDefs: KeywordDefs = KEYWORD_DEFS
 
 /** Default tokenizer: every feature flag enabled, no digit separator. */
-export const tk: Tokenizer = createTokenizer()
+export const tk: Tokenizer = tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS)
 
 /** Tokenizer with the `_` digit separator (SQLite 3.45+ default). */
-export const tkSep: Tokenizer = createTokenizer({ digitSeparator: "_" })
+export const tkSep: Tokenizer = tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, {
+  digitSeparator: "_",
+})
 
 /** Build a tokenizer with custom options (flags, digit separator). */
 export function makeTokenizer(opts: CreateTokenizerOptions = {}): Tokenizer {
-  return createTokenizer(opts)
+  return tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, opts)
 }
 
 /** A `{name, text}` pair — the lex() return shape used throughout the suite. */

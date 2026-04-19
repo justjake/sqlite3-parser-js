@@ -9,9 +9,9 @@
 //   echo "SELECT 1" | sqlite3-tokenizer
 //
 // Pinned to the `current` SQLite version — see the library API
-// (`import { createTokenizer } from 'sqlite3-parser'`) for real use.
+// (`import { withOptions } from 'sqlite3-parser'`) for real use.
 
-import { createTokenizer } from "../generated/current.ts"
+import { withOptions } from "../generated/current.ts"
 
 interface CliOptions {
   includeTrivia: boolean
@@ -74,15 +74,15 @@ async function readSql(parts: string[]): Promise<string> {
 const cli = parseCli(process.argv.slice(2))
 const sql = await readSql(cli.sqlParts)
 
-const tk = createTokenizer(
+const mod = withOptions(
   cli.digitSeparator !== undefined ? { digitSeparator: cli.digitSeparator } : {},
 )
 
-for (const tok of tk.tokenize(sql, { skipTrivia: !cli.includeTrivia })) {
+for (const tok of mod.tokenize(sql, { skipTrivia: !cli.includeTrivia })) {
   console.log(
     JSON.stringify({
       type: tok.type,
-      name: tk.tokenName(tok.type) ?? null,
+      name: mod.tokenName(tok.type) ?? null,
       start: tok.start,
       length: tok.length,
       text: sql.slice(tok.start, tok.start + tok.length),

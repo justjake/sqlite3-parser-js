@@ -21,18 +21,28 @@ import type { TokenNode } from "./parser.ts"
 // Public types.
 // ---------------------------------------------------------------------------
 
-export interface EnhancedParseDiagnostic {
-  /** Short canonical SQLite-style message, e.g. `near "FROM": syntax error`. */
+/** A single parse error. */
+export interface ParseError {
+  /** The offending token. */
+  readonly token: TokenNode
+  /**
+   * SQLite-style canonical summary, e.g. `near "FROM": syntax error`,
+   * `incomplete input`, or `unrecognized token: "'oops"`.
+   */
   readonly canonical: string
-  /** Grammar-aware hint.  Always populated; falls back to a generic form. */
+  /** Short human-readable hint for the likely cause. */
   readonly hint: string
-  /** 1-based line number of the failing token (or end of input). */
+  /** 1-based line of the failing token (or end of input). */
   readonly line: number
-  /** 1-based column number. */
+  /** 1-based column. */
   readonly col: number
   /** Half-open source range `[start, end)` of the failing token. */
   readonly range: readonly [number, number]
-  /** Display names of terminals that would have been accepted at `state`. */
+  /**
+   * Display names of terminals that would have been accepted at the
+   * failure point.  Empty when the grammar state is not available
+   * (e.g. tokenizer-level failures).
+   */
   readonly expected: readonly string[]
 }
 
@@ -205,12 +215,10 @@ export function canonicalParseMessage(token: TokenNode): string {
   return token.text.length > 0 ? `near "${token.text}": syntax error` : "incomplete input"
 }
 
-export function enhanceParseError(opts: EnhanceParseErrorOptions): EnhancedParseDiagnostic {
+export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
   const { sql, token, state, defs, tokens, tokenIndex } = opts
   const canonical = canonicalParseMessage(token)
-  const end = token.start + token.length
-  const range: [number, number] =
-    token.synthetic && token.text.length === 0 ? [sql.length, sql.length] : [token.start, end]
+  const range = tokenRange(sql, token)
   const { line, col } = lineColAt(sql, range[0])
 
   // Build a reusable symbol-id → ParserSymbol map once.  We hit it from
@@ -228,6 +236,7 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): EnhancedParse
   const openGroups = scanOpenGroups(tokens, tokenIndex)
 
   return {
+    token,
     canonical,
     hint: buildHint({
       token,
@@ -243,6 +252,38 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): EnhancedParse
     range,
     expected,
   }
+}
+
+/**
+ * Build a ParseError for an ILLEGAL token that the tokenizer could not
+ * classify.  No grammar state is consulted, so `expected` is empty.
+ */
+export function buildIllegalTokenError(sql: string, token: TokenNode): ParseError {
+  const range = tokenRange(sql, token)
+  const { line, col } = lineColAt(sql, range[0])
+  return {
+    token,
+    canonical: `unrecognized token: ${JSON.stringify(token.text)}`,
+    hint: illegalTokenHint(token.text),
+    line,
+    col,
+    range,
+    expected: [],
+  }
+}
+
+function illegalTokenHint(text: string): string {
+  if (text.startsWith("'")) return "unterminated string literal"
+  if (text.startsWith('"') || text.startsWith("`") || text.startsWith("[")) {
+    return "unterminated quoted identifier"
+  }
+  if (/^[0-9.]/.test(text)) return "malformed numeric literal"
+  return "the tokenizer could not classify this input"
+}
+
+function tokenRange(sql: string, token: TokenNode): [number, number] {
+  if (token.synthetic && token.text.length === 0) return [sql.length, sql.length]
+  return [token.start, token.start + token.length]
 }
 
 // ---------------------------------------------------------------------------

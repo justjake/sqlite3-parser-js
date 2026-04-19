@@ -114,6 +114,7 @@ JSON_SCHEMAS := \
 
 $(JSON_SCHEMAS): $(JSON_SCHEMA_SOURCES)
 	bun scripts/json-schemas.ts
+	bun run fmt $(JSON_SCHEMAS)
 
 .PHONY: json-schemas
 json-schemas: $(JSON_SCHEMAS)
@@ -144,6 +145,7 @@ generated/%/parser.dev.json: \
 	    -J$(ROOT)/$@ \
 	    parse.y
 	bun scripts/validate-json.ts parser.dev $@
+	bun run fmt $@
 
 # mkkeywordhash has no input files — its keyword table is compiled in.
 # Drop the C output; we only want the JSON.
@@ -153,6 +155,7 @@ generated/%/keywords.dev.json: build/mkkeywordhash-% \
 	@mkdir -p $(dir $@)
 	./$< -J$@ > /dev/null
 	bun scripts/validate-json.ts keywords.dev $@
+	bun run fmt $@
 
 # ---------------------------------------------------------------------------
 # Slim the dev dumps down to production variants.  Consumers that
@@ -164,12 +167,14 @@ generated/%/parser.prod.json: generated/%/parser.dev.json scripts/slim-dump.ts \
     generated/json-schema/v1/parser.prod.schema.json
 	bun scripts/slim-dump.ts $< $@
 	bun scripts/validate-json.ts parser.prod $@
+	bun run fmt $@
 
 generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.ts \
     scripts/validate-json.ts \
     generated/json-schema/v1/keywords.prod.schema.json
 	bun scripts/slim-dump.ts $< $@
 	bun scripts/validate-json.ts keywords.prod $@
+	bun run fmt $@
 
 # ---------------------------------------------------------------------------
 # Per-version TS wrapper.  Codegened from scripts/emit-version-modules.ts.
@@ -180,6 +185,7 @@ generated/%/index.ts: \
     generated/%/parser.prod.json \
     generated/%/keywords.prod.json
 	bun scripts/emit-version-modules.ts $*
+	bun run fmt $@
 
 # ---------------------------------------------------------------------------
 # The cross-version `current` re-export.  Sourced from
@@ -190,6 +196,7 @@ generated/current.ts: \
     scripts/emit-version-modules.ts \
     vendor/manifest.json
 	bun scripts/emit-version-modules.ts --current
+	bun run fmt $@
 
 .PHONY: current
 current: generated/current.ts

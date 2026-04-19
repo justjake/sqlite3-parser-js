@@ -17,6 +17,13 @@ import type { KeywordDefs } from "../src/tokenize.ts"
 const PARSER_DEFS = parserDefs as unknown as ParserDefs
 const KEYWORD_DEFS = keywordDefs as unknown as KeywordDefs
 
+const GRAMMAR_ARGS = {
+  SQLITE_VERSION: "3.54.0",
+  PARSER_DEFS,
+  KEYWORD_DEFS,
+  options: {},
+}
+
 describe("AST scaffolding", () => {
   test("handler table matches the current grammar", () => {
     const verification = verifyHandlers(PARSER_DEFS, handlers)
@@ -27,7 +34,7 @@ describe("AST scaffolding", () => {
   })
 
   test("default builder falls back to Unknown for unhandled rules", () => {
-    const parser = parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS)
+    const parser = parserModuleForGrammar(GRAMMAR_ARGS)
     const { cst, errors } = parser.parse("SELECT 1")
     expect(errors).toEqual([])
     expect(cst).toBeDefined()
@@ -45,7 +52,7 @@ describe("AST scaffolding", () => {
   })
 
   test("strict mode throws on an unhandled rule", () => {
-    const parser = parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS)
+    const parser = parserModuleForGrammar(GRAMMAR_ARGS)
     const { cst, errors } = parser.parse("SELECT 1")
     expect(errors).toEqual([])
     expect(cst).toBeDefined()

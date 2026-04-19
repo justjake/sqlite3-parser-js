@@ -33,7 +33,7 @@ import {
   LalrReduce,
   LalrEngine,
 } from "./lempar.ts"
-import { enhanceParseError } from "./enhanceError.ts"
+import { buildIllegalTokenError, enhanceParseError, type ParseError } from "./enhanceError.ts"
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -89,62 +89,11 @@ export type CstNode = TokenNode | RuleNode
 /** Parser options are forwarded to the tokenizer bound inside the parser. */
 export type CreateParserOptions = CreateTokenizerOptions
 
-export interface ParseError {
-  /**
-   * Short human-readable summary (`message` is used for back-compat;
-   * prefer `canonical` + `hint` for new code).  Kept in sync with
-   * `canonical` for engine-level errors.
-   */
-  readonly message: string
-  /** The offending token, if we had one when the error was raised. */
-  readonly token?: TokenNode
-  /**
-   * SQLite-style canonical summary, e.g. `near "FROM": syntax error`
-   * or `incomplete input`.  Only set for errors that came from the
-   * LALR engine; tokenizer errors (e.g. unrecognised token) only set
-   * `message`.
-   */
-  readonly canonical?: string
-  /** Grammar-aware or tokenizer-specific hint. */
-  readonly hint?: string
-  /** 1-based line of the failing token, or end of input. */
-  readonly line?: number
-  /** 1-based column. */
-  readonly col?: number
-  /** Half-open source range `[start, end)`. */
-  readonly range?: readonly [number, number]
-  /** Display names of terminals that would have been accepted here. */
-  readonly expected?: readonly string[]
-}
-
 export interface ParseResult {
   /** The CST root, present iff the parser reached YY_ACCEPT_ACTION. */
   readonly cst?: CstNode
   /** Any errors encountered.  Non-empty implies either a partial or no CST. */
   readonly errors: readonly ParseError[]
-}
-
-function lineColAt(sql: string, offset: number): { line: number; col: number } {
-  let line = 1
-  let col = 1
-  for (let i = 0; i < offset; i++) {
-    if (sql.charCodeAt(i) === 10) {
-      line++
-      col = 1
-    } else {
-      col++
-    }
-  }
-  return { line, col }
-}
-
-function illegalTokenHint(text: string): string | undefined {
-  if (text.startsWith("'")) return "unterminated string literal"
-  if (text.startsWith('"') || text.startsWith("`") || text.startsWith("[")) {
-    return "unterminated quoted identifier"
-  }
-  if (/^[0-9.]/.test(text)) return "malformed numeric literal"
-  return "the tokenizer could not classify this input"
 }
 
 // ---------------------------------------------------------------------------
@@ -387,16 +336,7 @@ export function parserModuleForGrammar(args: {
         // sqlite's tokenize.c:707 formats it as: unrecognized token.
         // We record it and bail — attempting to recover typically
         // cascades into noise.
-        const range: [number, number] = [node.start, node.start + node.length]
-        const { line, col } = lineColAt(sql, range[0])
-        errors.push({
-          message: `unrecognized token: ${JSON.stringify(node.text)}`,
-          token: node,
-          hint: illegalTokenHint(node.text),
-          line,
-          col,
-          range,
-        })
+        errors.push(buildIllegalTokenError(sql, node))
         return { errors }
       }
 
@@ -442,49 +382,25 @@ export function parserModuleForGrammar(args: {
       }
     }
 
-    // Translate any engine error into a user-facing ParseError with
-    // grammar-aware diagnostics.  YYNOERRORRECOVERY means the engine
-    // records at most one error, but we loop anyway to stay robust if
-    // that ever changes.
+    // Translate each engine error into a grammar-aware ParseError.
+    // YYNOERRORRECOVERY means the engine records at most one, but loop
+    // in case that ever changes.  Engine input values are always
+    // TokenNodes (we only feed terminals), so the cast is safe.
     for (const e of session.errors) {
-      const v = e.minor
-      const tokForError = v.kind === "token" ? v : undefined
-      if (tokForError) {
-        const diag = enhanceParseError({
+      errors.push(
+        enhanceParseError({
           sql,
-          token: tokForError,
+          token: e.minor as TokenNode,
           state: e.stateno,
           defs: PARSER_DEFS,
           tokens: tokenStream,
           tokenIndex: e.inputIndex,
-        })
-        errors.push({
-          message: diag.canonical,
-          token: tokForError,
-          canonical: diag.canonical,
-          hint: diag.hint,
-          line: diag.line,
-          col: diag.col,
-          range: diag.range,
-          expected: diag.expected,
-        })
-      } else {
-        // Shouldn't happen — engine input values are always TokenNodes —
-        // but fall back to a plain message so we don't swallow the error.
-        errors.push({
-          message: `syntax error near ${v.name}`,
-        })
-      }
+        }),
+      )
     }
 
     if (session.state === "accepted" && session.root) {
       return { cst: session.root, errors }
-    }
-    if (session.state !== "accepted" && errors.length === 0) {
-      // Well-formed grammars + YYNOERRORRECOVERY should always land on
-      // accept or error by the time we've fed `$`.  Guard anyway so we
-      // never return silently empty.
-      errors.push({ message: "parser did not accept at end of input" })
     }
     return { errors }
   }
@@ -498,7 +414,7 @@ export function parserModuleForGrammar(args: {
     tokenName: tk.tokenName,
     createEngine,
     withOptions: (newOpts: CreateParserOptions) =>
-      parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, { ...opts, ...newOpts }),
+      parserModuleForGrammar({ ...args, options: { ...options, ...newOpts } }),
     PARSER_DEFS: PARSER_DEFS,
     KEYWORD_DEFS: KEYWORD_DEFS,
   }
@@ -511,4 +427,4 @@ export function parserModuleForGrammar(args: {
 // Re-export the defs type so callers can import it without reaching
 // into the engine module.
 export type { ParserDefs } from "./lempar.ts"
-export type { EnhancedParseDiagnostic } from "./enhanceError.ts"
+export type { ParseError } from "./enhanceError.ts"

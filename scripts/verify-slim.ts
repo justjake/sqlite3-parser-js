@@ -11,7 +11,8 @@ import full from "../generated/3.54.0/parser.dev.json" with { type: "json" }
 import fullKw from "../generated/3.54.0/keywords.dev.json" with { type: "json" }
 import slim from "../generated/3.54.0/parser.prod.json" with { type: "json" }
 import slimKw from "../generated/3.54.0/keywords.prod.json" with { type: "json" }
-import { parserModuleForGrammar, formatCst } from "../src/parser.ts"
+import { parserModuleForGrammar } from "../src/parser.ts"
+import { formatCst } from "../src/extras.ts"
 
 const SAMPLES = [
   "SELECT 1",
@@ -27,8 +28,18 @@ const SAMPLES = [
    );`,
 ]
 
-const fullParser = parserModuleForGrammar(full as any, fullKw as any)
-const slimParser = parserModuleForGrammar(slim as any, slimKw as any)
+const fullParser = parserModuleForGrammar({
+  SQLITE_VERSION: "3.54.0",
+  PARSER_DEFS: full as any,
+  KEYWORD_DEFS: fullKw as any,
+  options: {},
+})
+const slimParser = parserModuleForGrammar({
+  SQLITE_VERSION: "3.54.0",
+  PARSER_DEFS: slim as any,
+  KEYWORD_DEFS: slimKw as any,
+  options: {},
+})
 
 let pass = 0,
   fail = 0
