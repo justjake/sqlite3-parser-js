@@ -47,3 +47,51 @@ url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.11/bun-windows-
 [tools.bun."platforms.windows-x64-baseline"]
 checksum = "sha256:9d0e0f923e9626f3bc6044fc32e0d3ab29039aea753f5678ef8801cf26f75288"
 url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.11/bun-windows-x64-baseline.zip"
+
+[[tools.node]]
+version = "24.8.0"
+backend = "core:node"
+
+[tools.node."platforms.linux-arm64"]
+checksum = "sha256:5eb16b14af5a5f494ed54770822144e847c744fe590f8df093ad4927cf3dd7fd"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-linux-arm64.tar.gz"
+
+[tools.node."platforms.linux-arm64-musl"]
+checksum = "sha256:5eb16b14af5a5f494ed54770822144e847c744fe590f8df093ad4927cf3dd7fd"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-linux-arm64.tar.gz"
+
+[tools.node."platforms.linux-x64"]
+checksum = "sha256:daf68404b478b4c3616666580d02500a24148c0f439e4d0134d65ce70e90e655"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-linux-x64.tar.gz"
+
+[tools.node."platforms.linux-x64-baseline"]
+checksum = "sha256:daf68404b478b4c3616666580d02500a24148c0f439e4d0134d65ce70e90e655"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-linux-x64.tar.gz"
+
+[tools.node."platforms.linux-x64-musl"]
+checksum = "sha256:daf68404b478b4c3616666580d02500a24148c0f439e4d0134d65ce70e90e655"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-linux-x64.tar.gz"
+
+[tools.node."platforms.linux-x64-musl-baseline"]
+checksum = "sha256:daf68404b478b4c3616666580d02500a24148c0f439e4d0134d65ce70e90e655"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-linux-x64.tar.gz"
+
+[tools.node."platforms.macos-arm64"]
+checksum = "sha256:d81191a1866760eb918caa976c023036bc1fc7405ea31b148905211522045767"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-darwin-arm64.tar.gz"
+
+[tools.node."platforms.macos-x64"]
+checksum = "sha256:6fd8496b59baa8f86a24e3eb03308b763091716ffc6b6e1094d1a5e5696dd6dd"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-darwin-x64.tar.gz"
+
+[tools.node."platforms.macos-x64-baseline"]
+checksum = "sha256:6fd8496b59baa8f86a24e3eb03308b763091716ffc6b6e1094d1a5e5696dd6dd"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-darwin-x64.tar.gz"
+
+[tools.node."platforms.windows-x64"]
+checksum = "sha256:970ecc121a16f546174b6a870215ca4cc0de33f8a616b42c16c8c02e66b07d05"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-win-x64.zip"
+
+[tools.node."platforms.windows-x64-baseline"]
+checksum = "sha256:970ecc121a16f546174b6a870215ca4cc0de33f8a616b42c16c8c02e66b07d05"
+url = "https://nodejs.org/dist/v24.8.0/node-v24.8.0-win-x64.zip"
