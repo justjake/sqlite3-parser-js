@@ -30,8 +30,19 @@ SHELL := /bin/bash
 # into workdirs still locate the repo root correctly.
 ROOT := $(CURDIR)
 
-.PHONY: help versions clean
+.PHONY: help versions clean gen
 .DEFAULT_GOAL := help
+
+# Every version with patched sources ready to build.  The per-version
+# pattern rules below turn each of these into a JSON dump + TS wrapper.
+GEN_VERSIONS := $(notdir $(patsubst %/,%,$(wildcard vendor/patched/*/)))
+
+# The umbrella `gen` target only names the per-version `index.ts`
+# outputs + `current.ts`.  Make walks the dependency chain from there
+# (index.ts → parser.prod.json → parser.dev.json → build/lemon-<ver>).
+GEN_TARGETS := \
+  $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts) \
+  generated/current.ts
 
 help:
 	@printf '%s\n' \
@@ -46,6 +57,7 @@ help:
 	  '  make build/mkkeywordhash-<ver>          # patched mkkeywordhash' \
 	  '' \
 	  'Convenience targets:' \
+	  '  make gen                                # build every generated/<ver>/* + current.ts' \
 	  '  make current                            # regenerate generated/current.ts' \
 	  '  make versions                           # list all versions we have' \
 	  '  make json-schemas                       # (re)generate JSON Schemas' \
@@ -58,6 +70,8 @@ help:
 	  'For onboarding a new sqlite release, use:' \
 	  '  bun run vendor <ref>                    # full workflow' \
 	  ''
+
+gen: $(GEN_TARGETS)
 
 versions:
 	@echo "Versions with vendored patches:"
