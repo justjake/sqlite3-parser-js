@@ -32,12 +32,7 @@
   "properties": {
     "meta": {
       "type": "object",
-      "required": [
-        "lemonVersion",
-        "schemaVersion",
-        "sourceFile",
-        "defines"
-      ],
+      "required": ["lemonVersion", "schemaVersion", "sourceFile", "defines"],
       "properties": {
         "lemonVersion": {
           "type": "string",
@@ -377,15 +372,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "type",
-          "isTerminal",
-          "dtnum",
-          "useCnt",
-          "lambda"
-        ],
+        "required": ["id", "name", "type", "isTerminal", "dtnum", "useCnt", "lambda"],
         "properties": {
           "id": {
             "type": "integer",
@@ -523,12 +510,7 @@
               "anyOf": [
                 {
                   "type": "object",
-                  "required": [
-                    "pos",
-                    "alias",
-                    "symbol",
-                    "name"
-                  ],
+                  "required": ["pos", "alias", "symbol", "name"],
                   "properties": {
                     "pos": {
                       "type": "integer"
@@ -556,11 +538,7 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "pos",
-                    "alias",
-                    "multi"
-                  ],
+                  "required": ["pos", "alias", "multi"],
                   "properties": {
                     "pos": {
                       "type": "integer"
@@ -579,10 +557,7 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": [
-                          "symbol",
-                          "name"
-                        ],
+                        "required": ["symbol", "name"],
                         "properties": {
                           "symbol": {
                             "type": "integer",
@@ -664,13 +639,7 @@
     },
     "tables": {
       "type": "object",
-      "required": [
-        "yy_action",
-        "yy_lookahead",
-        "yy_shift_ofst",
-        "yy_reduce_ofst",
-        "yy_default"
-      ],
+      "required": ["yy_action", "yy_lookahead", "yy_shift_ofst", "yy_reduce_ofst", "yy_default"],
       "properties": {
         "yy_action": {
           "type": "array",

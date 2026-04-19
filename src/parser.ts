@@ -14,7 +14,13 @@
 // parser.ts when the CST shape changes, or when you want to alter how
 // virtual tokens / error messages / trivia are represented.
 
-import { TokenizeOpts, tokenizerModuleForGrammar, TokenSpan, type CreateTokenizerOptions, type KeywordDefs } from "./tokenize.ts"
+import {
+  TokenizeOpts,
+  tokenizerModuleForGrammar,
+  TokenSpan,
+  type CreateTokenizerOptions,
+  type KeywordDefs,
+} from "./tokenize.ts"
 import {
   engineModuleForGrammar,
   type ParserRhsPos,
@@ -491,7 +497,8 @@ export function parserModuleForGrammar(args: {
     tokenize: tk.tokenize,
     tokenName: tk.tokenName,
     createEngine,
-    withOptions: (newOpts: CreateParserOptions) => parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, { ...opts, ...newOpts }),
+    withOptions: (newOpts: CreateParserOptions) =>
+      parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, { ...opts, ...newOpts }),
     PARSER_DEFS: PARSER_DEFS,
     KEYWORD_DEFS: KEYWORD_DEFS,
   }

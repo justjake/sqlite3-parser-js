@@ -398,12 +398,12 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
     // never pop it, the caller's reducer never observes the cast.
     readonly #yystack: yyStackEntry<V>[] = [
       { stateno: 0, major: 0 as SymbolId, minor: undefined as V },
-    ];
-    readonly #errors: LalrError<V>[] = [];
-    #state: LalrSessionState = "running";
-    #root: V | undefined;
-    #inputIndex = 0;
-    readonly #reducer: LalrReduce<V>;
+    ]
+    readonly #errors: LalrError<V>[] = []
+    #state: LalrSessionState = "running"
+    #root: V | undefined
+    #inputIndex = 0
+    readonly #reducer: LalrReduce<V>
 
     /**
      * Allocate a fresh incremental parse session.  Matches lempar.c's
@@ -411,23 +411,23 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
      * (minus the allocator callback — JS GC handles that).
      */
     constructor(onReduce: LalrReduce<V>) {
-      this.#reducer = onReduce;
+      this.#reducer = onReduce
     }
 
     get state(): LalrSessionState {
-      return this.#state;
+      return this.#state
     }
 
     get root(): V | undefined {
-      return this.#root;
+      return this.#root
     }
 
     get stack(): readonly yyStackEntry<V>[] {
-      return this.#yystack;
+      return this.#yystack
     }
 
     get errors(): readonly LalrError<V>[] {
-      return this.#errors;
+      return this.#errors
     }
 
     /**
@@ -439,13 +439,13 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
      * The caller should check `this.state` after each call.
      */
     next(yymajor: TokenId, yyminor: V): void {
-      if (this.#state !== "running") return;
+      if (this.#state !== "running") return
 
       // Hoist the stack field into a local so the hot loop reads a
       // closure slot instead of a hidden-class property on `this`.
-      const yystack = this.#yystack;
+      const yystack = this.#yystack
 
-      let act = yystack[yystack.length - 1]!.stateno;
+      let act = yystack[yystack.length - 1]!.stateno
       while (true) {
         // Capture the state we're about to query *before* yy_find_shift_action
         // rewrites `act` into an action code.  Needed for error reporting
@@ -453,14 +453,14 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
         // YY_ERROR_ACTION sentinel).  At this point, `act` is always a
         // state number: either the initial yystack[top].stateno, or the
         // post-reduce state we fetched below.
-        const stateBeforeLookup = act;
-        act = yy_find_shift_action(yymajor, act);
+        const stateBeforeLookup = act
+        act = yy_find_shift_action(yymajor, act)
 
         if (act >= K.YY_MIN_REDUCE) {
           // (1) Pure reduce, possibly chained.  Rule = act - YY_MIN_REDUCE.
-          this.#yy_reduce((act - K.YY_MIN_REDUCE) as RuleId);
-          act = yystack[yystack.length - 1]!.stateno;
-          continue; // retry with the same token against the new state
+          this.#yy_reduce((act - K.YY_MIN_REDUCE) as RuleId)
+          act = yystack[yystack.length - 1]!.stateno
+          continue // retry with the same token against the new state
         }
 
         if (act <= K.YY_MAX_SHIFTREDUCE) {
@@ -469,22 +469,22 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
           // For SHIFTREDUCE actions (YY_MIN_SHIFTREDUCE..YY_MAX_SHIFTREDUCE),
           // lempar.c:709 rewrites the stored state so that the next
           // yy_find_shift_action dispatches straight into the pending reduce.
-          let newState = act;
+          let newState = act
           if (newState > K.YY_MAX_SHIFT) {
-            newState += K.YY_MIN_REDUCE - K.YY_MIN_SHIFTREDUCE;
+            newState += K.YY_MIN_REDUCE - K.YY_MIN_SHIFTREDUCE
           }
-          yystack.push({ stateno: newState, major: yymajor, minor: yyminor });
-          this.#inputIndex++;
-          return;
+          yystack.push({ stateno: newState, major: yymajor, minor: yyminor })
+          this.#inputIndex++
+          return
         }
 
         if (act === K.YY_ACCEPT_ACTION) {
           // (3) Accept.  Per lempar.c:965, yytos-- then yy_accept.  We
           // capture the top value first (that's the CST root or
           // semantic value the reducer built).
-          this.#root = yystack[yystack.length - 1]!.minor;
-          this.#state = "accepted";
-          return;
+          this.#root = yystack[yystack.length - 1]!.minor
+          this.#state = "accepted"
+          return
         }
 
         // (4) Anything else is YY_ERROR_ACTION or YY_NO_ACTION.  We
@@ -496,9 +496,9 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
           major: yymajor,
           minor: yyminor,
           inputIndex: this.#inputIndex,
-        });
-        this.#state = "errored";
-        return;
+        })
+        this.#state = "errored"
+        return
       }
     }
 
@@ -510,26 +510,26 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
      * pure `onReduce` callback, which returns the new stack value.
      */
     #yy_reduce(yyruleno: RuleId): void {
-      const rule = rules[yyruleno]!;
-      const nrhs = rule.rhs.length;
-      const yystack = this.#yystack;
+      const rule = rules[yyruleno]!
+      const nrhs = rule.rhs.length
+      const yystack = this.#yystack
 
       // Pop nrhs entries into `popped`, in source order.  We pop
       // last-first and reverse so that popped[i] corresponds to the
       // rule's i-th RHS position.
-      const popped: LalrPopped<V>[] = [];
+      const popped: LalrPopped<V>[] = []
       for (let i = 0; i < nrhs; i++) {
-        const e = yystack.pop()!;
-        popped.push({ major: e.major, minor: e.minor });
+        const e = yystack.pop()!
+        popped.push({ major: e.major, minor: e.minor })
       }
-      popped.reverse();
+      popped.reverse()
 
-      const minor = this.#reducer(yyruleno, popped);
+      const minor = this.#reducer(yyruleno, popped)
 
       // GOTO — see lempar.c:772 yyact = yy_find_reduce_action(...).
-      const baseState = yystack[yystack.length - 1]!.stateno;
-      const act = yy_find_reduce_action(baseState, rule.lhs);
-      yystack.push({ stateno: act, major: rule.lhs, minor });
+      const baseState = yystack[yystack.length - 1]!.stateno
+      const act = yy_find_reduce_action(baseState, rule.lhs)
+      yystack.push({ stateno: act, major: rule.lhs, minor })
     }
   }
 
@@ -537,10 +537,10 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
    * In the C parser, each reduce step may perform side-effects.
    * SQLite's parser doesn't build an AST, instead its parser directly updates
    * various state in the system.
-   * 
+   *
    * Since we are just a parser and not an interpreter, it doesn't make sense to
    * port the side-effect actions.
-   * 
+   *
    * Instead, the caller provides a `reducer` function that can be used to build
    * a tree, do side effects, whatever.
    */

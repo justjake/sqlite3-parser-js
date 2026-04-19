@@ -30,7 +30,6 @@ export const PACKAGE_NAME: string = pkg.name
  *  for future "stamp the build with metadata" needs. */
 export const PACKAGE_VERSION: string = pkg.version
 
-
 export function rootPath(...subpaths: string[]): string {
   return resolve(REPO_ROOT, ...subpaths)
 }

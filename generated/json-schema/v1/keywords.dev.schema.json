@@ -3,19 +3,11 @@
   "$id": "sqlite3-parser/v1/keywords.dev",
   "title": "keywords.dev",
   "type": "object",
-  "required": [
-    "meta",
-    "keywords"
-  ],
+  "required": ["meta", "keywords"],
   "properties": {
     "meta": {
       "type": "object",
-      "required": [
-        "sourceFile",
-        "schemaVersion",
-        "keywordCount",
-        "maskFlags"
-      ],
+      "required": ["sourceFile", "schemaVersion", "keywordCount", "maskFlags"],
       "properties": {
         "sourceFile": {
           "type": "string"
@@ -186,13 +178,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "name",
-          "token",
-          "priority",
-          "mask",
-          "flags"
-        ],
+        "required": ["name", "token", "priority", "mask", "flags"],
         "properties": {
           "name": {
             "type": "string"

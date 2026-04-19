@@ -3,12 +3,7 @@
   "$id": "sqlite3-parser/v1/parser.prod",
   "title": "parser.prod",
   "type": "object",
-  "required": [
-    "constants",
-    "tables",
-    "symbols",
-    "rules"
-  ],
+  "required": ["constants", "tables", "symbols", "rules"],
   "properties": {
     "constants": {
       "type": "object",
@@ -97,13 +92,7 @@
     },
     "tables": {
       "type": "object",
-      "required": [
-        "yy_action",
-        "yy_lookahead",
-        "yy_shift_ofst",
-        "yy_reduce_ofst",
-        "yy_default"
-      ],
+      "required": ["yy_action", "yy_lookahead", "yy_shift_ofst", "yy_reduce_ofst", "yy_default"],
       "properties": {
         "yy_action": {
           "type": "array",
@@ -152,10 +141,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "name",
-          "isTerminal"
-        ],
+        "required": ["name", "isTerminal"],
         "properties": {
           "name": {
             "type": "string"
@@ -171,12 +157,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "lhs",
-          "lhsName",
-          "rhs",
-          "doesReduce"
-        ],
+        "required": ["lhs", "lhsName", "rhs", "doesReduce"],
         "properties": {
           "lhs": {
             "type": "integer",
@@ -200,9 +181,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "symbol"
-                    ],
+                    "required": ["symbol"],
                     "properties": {
                       "symbol": {
                         "type": "integer",

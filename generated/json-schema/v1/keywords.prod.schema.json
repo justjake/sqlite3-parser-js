@@ -3,16 +3,11 @@
   "$id": "sqlite3-parser/v1/keywords.prod",
   "title": "keywords.prod",
   "type": "object",
-  "required": [
-    "meta",
-    "keywords"
-  ],
+  "required": ["meta", "keywords"],
   "properties": {
     "meta": {
       "type": "object",
-      "required": [
-        "maskFlags"
-      ],
+      "required": ["maskFlags"],
       "properties": {
         "maskFlags": {
           "type": "object",
@@ -173,11 +168,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "name",
-          "token",
-          "mask"
-        ],
+        "required": ["name", "token", "mask"],
         "properties": {
           "name": {
             "type": "string"

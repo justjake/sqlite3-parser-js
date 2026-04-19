@@ -6,4 +6,4 @@
 // version explicitly should import from the versioned subpath
 // instead: `sqlite3-parser/sqlite-<version>`.
 
-export * from './3.54.0/index.ts';
+export * from "./3.54.0/index.ts"

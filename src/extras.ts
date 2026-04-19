@@ -1,4 +1,4 @@
-import { CstNode, TokenNode } from "./parser";
+import { CstNode, TokenNode } from "./parser"
 
 /**
  * Pretty-print a CST as indented S-expression-ish text.  Useful for
