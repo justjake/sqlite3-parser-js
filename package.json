@@ -1,9 +1,9 @@
 {
   "name": "sqlite3-parser",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.1",
   "type": "module",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
+  "sideEffects": false,
   "main": "./dist/generated/current.js",
   "types": "./dist/generated/current.d.ts",
   "files": [

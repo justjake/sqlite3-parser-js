@@ -100,12 +100,6 @@ import {
   createTokenizer as _createTokenizer,
   type CreateTokenizerOptions,
 } from '../../src/tokenize.ts';
-import {
-  createAstBuilder as _createAstBuilder,
-  registry as _astRegistry,
-  type AstResult,
-  type ConvertOptions as _AstConvertOptions,
-} from '../../src/ast/index.ts';
 import type { ParserDefs } from '../../src/lempar.ts';
 import type { KeywordDefs } from '../../src/tokenize.ts';
 
@@ -160,43 +154,6 @@ export function parse(sql: string) {
   return defaultParser().parse(sql);
 }
 
-// --- AST layer (CST → AST) --------------------------------------------
-
-let _defaultAstBuilder: ReturnType<typeof _createAstBuilder> | null = null;
-function defaultAstBuilder() {
-  return _defaultAstBuilder ?? (
-    _defaultAstBuilder = _createAstBuilder(PARSER_DEFS, _astRegistry)
-  );
-}
-
-/**
- * Parse a SQL string and convert the CST into our AST shape, bound to
- * SQLite ${version}.  Returns parse errors AND any AST-conversion
- * errors, plus the AST root if conversion produced one.
- *
- * Advanced callers who need custom \`ConvertOptions\` (coverage hooks,
- * strict mode) can call \`createAstBuilder(opts).build(cst, sql)\`
- * directly.
- */
-export function parseToAst(sql: string): {
-  parseErrors: import('../../src/parser.ts').ParseResult['errors'];
-  astErrors: AstResult['errors'];
-  ast?: AstResult['ast'];
-} {
-  const { cst, errors: parseErrors } = parse(sql);
-  if (!cst) return { parseErrors, astErrors: [] };
-  const { ast, errors: astErrors } = defaultAstBuilder().build(cst, sql);
-  return { parseErrors, astErrors, ast };
-}
-
-/**
- * Low-level AST builder factory, bound to this version's defs.  Use
- * when you want to pass \`ConvertOptions\` (onHit, strict, …).
- */
-export function createAstBuilder(opts?: _AstConvertOptions) {
-  return _createAstBuilder(PARSER_DEFS, _astRegistry, opts);
-}
-
 /** Iterate tokens in a SQL string using the default tokenizer. */
 export function tokenize(sql: string) {
   return defaultTokenizer().tokenize(sql);
@@ -213,13 +170,6 @@ export type {
   ParseResult, ParseError, CstNode, TokenNode, RuleNode,
 } from '../../src/parser.ts';
 export { formatCst, walkCst, tokenLeaves } from '../../src/parser.ts';
-
-export type {
-  AstNode, AstError, AstResult, BaseAstNode, UnknownAstNode,
-  AstContext, BoundDispatcher, ConvertOptions, Handler, HandlerRegistry,
-  StableKey, SymbolName,
-} from '../../src/ast/index.ts';
-export { stableKeyForRule, buildSymbolName } from '../../src/ast/index.ts';
 
 export type {
   Tokenizer, TokenSpan, TokenizeOpts, TokenizerTokens,
