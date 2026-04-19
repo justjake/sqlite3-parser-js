@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
   "bin": {
-    "sqlite3-parser": "./dist/bin/sqlite3-parser.js",
-    "sqlite3-tokenizer": "./dist/bin/sqlite3-tokenizer.js"
+    "sqlite3-parser": "dist/bin/sqlite3-parser.js",
+    "sqlite3-tokenizer": "dist/bin/sqlite3-tokenizer.js"
   },
   "files": [
     "dist"
