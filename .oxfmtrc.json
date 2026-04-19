@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": ["vendor", "node_modules", "generated"],
+  "ignorePatterns": [
+    "vendor",
+    "node_modules"
+  ],
   "semi": false
 }
