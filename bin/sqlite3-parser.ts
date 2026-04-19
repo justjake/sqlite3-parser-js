@@ -69,16 +69,7 @@ async function readSql(parts: string[]): Promise<string> {
 }
 
 function formatError(e: ParseError): string {
-  const lines: string[] = []
-  lines.push(e.canonical)
-  lines.push(`  at line ${e.line}, col ${e.col} range [${e.range[0]}, ${e.range[1]}]`)
-  if (e.hint) lines.push(`  hint: ${e.hint}`)
-  if (e.expected.length > 0) {
-    const list = e.expected.slice(0, 8).join(", ")
-    const more = e.expected.length > 8 ? ", ..." : ""
-    lines.push(`  expected: ${list}${more}`)
-  }
-  return lines.join("\n")
+  return e.getMessage()
 }
 
 const cli = parseCli(process.argv.slice(2))

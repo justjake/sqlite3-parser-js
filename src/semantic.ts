@@ -26,7 +26,7 @@
 // replaces the assert with a real error, the drift check fires and
 // forces a re-audit.
 
-import { lineColAt, type ParseError } from "./enhanceError.ts"
+import { ParseErrorImpl, type ParseError } from "./enhanceError.ts"
 import type { ParserDefs, RuleId } from "./lempar.ts"
 import type { CstNode, RuleNode, TokenNode } from "./parser.ts"
 import { sqlite3DequoteNumber } from "./util.ts"
@@ -93,8 +93,14 @@ function makeError(
   hint: string,
   range: readonly [number, number] = [token.start, token.start + token.length],
 ): ParseError {
-  const { line, col } = lineColAt(ctx.sql, range[0])
-  return { token, canonical, hint, line, col, range, expected: [] }
+  return new ParseErrorImpl({
+    token,
+    canonical,
+    hint,
+    expected: [],
+    sql: ctx.sql,
+    range,
+  })
 }
 
 // ---------------------------------------------------------------------------

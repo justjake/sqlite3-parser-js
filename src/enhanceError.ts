@@ -38,12 +38,87 @@ export interface ParseError {
   readonly col: number
   /** Half-open source range `[start, end)` of the failing token. */
   readonly range: readonly [number, number]
+  /** A visual representation of the code block containing the error. */
+  readonly codeBlock: string
   /**
    * Display names of terminals that would have been accepted at the
    * failure point.  Empty when the grammar state is not available
    * (e.g. tokenizer-level failures).
    */
   readonly expected: readonly string[]
+  /**
+   * Get a fully formatted error message combining all the error details with a
+   * rendered code block.
+   */
+  getMessage(): string
+}
+
+export class ParseErrorImpl implements ParseError {
+  readonly token: TokenNode
+  readonly canonical: string
+  readonly hint: string
+  readonly expected: readonly string[]
+
+  #line: number | undefined
+  #col: number | undefined
+  #range: readonly [number, number] | undefined
+  #codeBlock: string | undefined
+  #sql: string
+
+  constructor(
+    args: Pick<ParseError, "token" | "canonical" | "hint" | "expected"> & {
+      sql: string
+      range?: readonly [number, number]
+    },
+  ) {
+    this.token = args.token
+    this.canonical = args.canonical
+    this.hint = args.hint
+    this.expected = args.expected
+    this.#sql = args.sql
+    if (args.range) this.#range = args.range
+  }
+
+  get line(): number {
+    return this.#line ?? this.#refreshLineCol().line
+  }
+
+  get col(): number {
+    return this.#col ?? this.#refreshLineCol().col
+  }
+
+  get range(): readonly [number, number] {
+    return this.#range ??= tokenRange(this.#sql, this.token)
+  }
+
+  get codeBlock(): string {
+    return this.#codeBlock ??= renderCodeBlock(this.#sql, this.range)
+  }
+
+  getMessage(): string {
+    const indentedCodeBlock = this.codeBlock.replace(/^/gm, "  ")
+    const parts: string[] = [
+      `${this.canonical} at line ${this.line}, col ${this.col}`,
+      "",
+      indentedCodeBlock,
+    ]
+    if (this.hint) parts.push("", this.hint)
+    if (this.expected.length > 0) {
+      parts.push(`expected: ${formatExpectedList(this.expected)}`)
+    }
+    return parts.join("\n")
+  }
+
+  toString(): string {
+    return this.getMessage()
+  }
+
+  #refreshLineCol(): { line: number; col: number } {
+    const loc = lineColAt(this.#sql, this.token.start)
+    this.#line = loc.line
+    this.#col = loc.col
+    return loc
+  }
 }
 
 export interface EnhanceParseErrorOptions {
@@ -225,24 +300,22 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
   const expected = collectExpectedTerminals(defs, state, idSymbolId)
   const previousToken = previousConcreteToken(tokens, tokenIndex)
   const openGroups = scanOpenGroups(tokens, tokenIndex)
-
-  return {
+  const hint = buildHint({
     token,
     canonical,
-    hint: buildHint({
-      token,
-      canonical,
-      expected,
-      previousToken,
-      openGroups,
-      tokens,
-      tokenIndex,
-    }),
-    line,
-    col,
-    range,
     expected,
-  }
+    previousToken,
+    openGroups,
+    tokens,
+    tokenIndex,
+  })
+  return new ParseErrorImpl({
+    token,
+    canonical,
+    hint,
+    expected,
+    sql,
+  })
 }
 
 /**
@@ -250,17 +323,13 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
  * classify.  No grammar state is consulted, so `expected` is empty.
  */
 export function buildIllegalTokenError(sql: string, token: TokenNode): ParseError {
-  const range = tokenRange(sql, token)
-  const { line, col } = lineColAt(sql, range[0])
-  return {
+  return new ParseErrorImpl({
     token,
     canonical: `unrecognized token: ${JSON.stringify(token.text)}`,
     hint: illegalTokenHint(token.text),
-    line,
-    col,
-    range,
     expected: [],
-  }
+    sql,
+  })
 }
 
 function illegalTokenHint(text: string): string {
@@ -293,6 +362,54 @@ export function lineColAt(sql: string, offset: number): { line: number; col: num
     }
   }
   return { line, col }
+}
+
+export interface RenderCodeBlockOptions {
+  /** Number of source lines to show before the error line. Default 1. */
+  readonly contextBefore?: number
+}
+
+/**
+ * Render a Roc-style source snippet for a half-open range `[start, end)`:
+ *
+ *     5│ greet : Str -> Str
+ *     6│ greet = \name -> name + "!"
+ *                              ^^^^^
+ *
+ * Line numbers right-align in a gutter separated by `│`.  The underline
+ * sits on the first line of the range; multi-line spans are clipped to
+ * end-of-line.  An empty range (`start === end`) renders as a single `^`.
+ */
+export function renderCodeBlock(
+  sql: string,
+  range: readonly [number, number],
+  opts: RenderCodeBlockOptions = {},
+): string {
+  const contextBefore = Math.max(0, opts.contextBefore ?? 1)
+  const start = Math.max(0, Math.min(range[0], sql.length))
+  const end = Math.max(start, Math.min(range[1], sql.length))
+
+  const startLoc = lineColAt(sql, start)
+  const endLoc = lineColAt(sql, end)
+  const firstLine = Math.max(1, startLoc.line - contextBefore)
+  const lastLine = startLoc.line
+  const gutterWidth = String(lastLine).length
+
+  const lines = sql.split("\n")
+  const out: string[] = []
+  for (let ln = firstLine; ln <= lastLine; ln++) {
+    const text = lines[ln - 1] ?? ""
+    out.push(`${String(ln).padStart(gutterWidth, " ")}│ ${text}`)
+  }
+
+  const firstLineText = lines[startLoc.line - 1] ?? ""
+  const underlineEndCol =
+    endLoc.line === startLoc.line ? endLoc.col : firstLineText.length + 1
+  const caretCount = Math.max(1, underlineEndCol - startLoc.col)
+  const pad = " ".repeat(gutterWidth) + "│ " + " ".repeat(startLoc.col - 1)
+  out.push(pad + "^".repeat(caretCount))
+
+  return out.join("\n")
 }
 
 // ---------------------------------------------------------------------------
@@ -452,10 +569,7 @@ function buildHint(ctx: {
   if (canonical === "incomplete input") {
     const unclosedGroupHint = buildUnclosedGroupHint(token, topOpenGroup)
     if (unclosedGroupHint) return unclosedGroupHint
-    if (expected.length === 0) {
-      return "query ended before a complete statement was formed"
-    }
-    return `query ended before a complete statement was formed; expected ${formatExpectedList(expected)}`
+    return "query ended before a complete statement was formed"
   }
 
   const unmatchedClosingHint = buildUnmatchedClosingHint(token, openGroups)
@@ -477,10 +591,7 @@ function buildHint(ctx: {
   const quotedIdentifierHint = buildQuotedIdentifierHint(token, expected)
   if (quotedIdentifierHint) return quotedIdentifierHint
 
-  if (expected.length === 0) {
-    return `unexpected ${describeToken(token)}`
-  }
-  return `unexpected ${describeToken(token)}; expected ${formatExpectedList(expected)}`
+  return `unexpected ${describeToken(token)}`
 }
 
 function describeToken(token: TokenNode): string {
