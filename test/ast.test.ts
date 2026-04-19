@@ -11,7 +11,7 @@ import {
 } from "../src/ast/index.ts"
 import type { ParserDefs } from "../src/lempar.ts"
 import type { RuleNode } from "../src/parser.ts"
-import { createParser } from "../src/parser.ts"
+import { parserModuleForGrammar } from "../src/parser.ts"
 import type { KeywordDefs } from "../src/tokenize.ts"
 
 const PARSER_DEFS = parserDefs as unknown as ParserDefs
@@ -27,7 +27,7 @@ describe("AST scaffolding", () => {
   })
 
   test("default builder falls back to Unknown for unhandled rules", () => {
-    const parser = createParser(PARSER_DEFS, KEYWORD_DEFS)
+    const parser = parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS)
     const { cst, errors } = parser.parse("SELECT 1")
     expect(errors).toEqual([])
     expect(cst).toBeDefined()
@@ -45,7 +45,7 @@ describe("AST scaffolding", () => {
   })
 
   test("strict mode throws on an unhandled rule", () => {
-    const parser = createParser(PARSER_DEFS, KEYWORD_DEFS)
+    const parser = parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS)
     const { cst, errors } = parser.parse("SELECT 1")
     expect(errors).toEqual([])
     expect(cst).toBeDefined()

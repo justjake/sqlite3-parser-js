@@ -553,13 +553,11 @@ function isSpace(ch: string | undefined): boolean {
 // single character or the empty string to disable.
 const DEFAULT_DIGIT_SEPARATOR = ""
 
-// ---------------------------------------------------------------------------
-// createTokenizer
-//
-// Build a tokenizer bound to a particular sqlite checkout's parser+
-// keyword dumps.  See the `Tokenizer` interface for the returned shape.
-// ---------------------------------------------------------------------------
-export function createTokenizer(
+/**
+ * Build a tokenizer bound to a particular sqlite checkout's parser+
+ * keyword dumps.  See the `Tokenizer` interface for the returned shape.
+ */
+export function tokenizerModuleForGrammar(
   parserDefs: ParserDefs,
   keywordDefs: KeywordDefs,
   opts: CreateTokenizerOptions = {},

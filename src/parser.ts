@@ -14,9 +14,9 @@
 // parser.ts when the CST shape changes, or when you want to alter how
 // virtual tokens / error messages / trivia are represented.
 
-import { createTokenizer, type CreateTokenizerOptions, type KeywordDefs } from "./tokenize.ts"
+import { TokenizeOpts, tokenizerModuleForGrammar, TokenSpan, type CreateTokenizerOptions, type KeywordDefs } from "./tokenize.ts"
 import {
-  createEngine,
+  engineModuleForGrammar,
   type ParserRhsPos,
   type ParserRule,
   type LalrPopped,
@@ -24,6 +24,8 @@ import {
   type RuleId,
   type SymbolId,
   type TokenId,
+  LalrReduce,
+  LalrEngine,
 } from "./lempar.ts"
 import { enhanceParseError } from "./enhanceError.ts"
 
@@ -144,22 +146,49 @@ function illegalTokenHint(text: string): string | undefined {
 // ---------------------------------------------------------------------------
 
 /**
+ * SQlite3 Parser library.
+ */
+export interface ParserModule {
+  /** The specific SQLite version this bundle was generated from. */
+  readonly SQLITE_VERSION: string
+  /** Parse a SQL string into a CST. */
+  parse(source: string): ParseResult
+  /** Tokenize a SQL string into a stream of tokens. */
+  tokenize(source: string, opts?: TokenizeOpts): IterableIterator<TokenSpan>
+  /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
+  tokenName(code: TokenId): string | undefined
+  /** Create the underlying LALR state machine engine, used by {@link parse}. */
+  createEngine<T>(reducer: LalrReduce<T>): LalrEngine<T>
+  /**
+   * Create a new parser module with the given options.
+   * Parser modules are stateless, you should create one at module scope and reuse it.
+   */
+  withOptions(opts: CreateParserOptions): ParserModule
+  /** LALR parser definition. */
+  readonly PARSER_DEFS: ParserDefs
+  /** SQLite keywords recognized by the tokenizer. */
+  readonly KEYWORD_DEFS: KeywordDefs
+}
+
+/**
  * Create a Parser for the grammar specified by `parserDefs` and `keywordDefs`.
  */
-export function createParser(
-  parserDefs: ParserDefs,
-  keywordDefs: KeywordDefs,
-  opts: CreateParserOptions = {},
-) {
-  const engine = createEngine(parserDefs)
-  const rules = parserDefs.rules
+export function parserModuleForGrammar(args: {
+  SQLITE_VERSION: string
+  PARSER_DEFS: ParserDefs
+  KEYWORD_DEFS: KeywordDefs
+  options: CreateParserOptions
+}): ParserModule {
+  const { SQLITE_VERSION, PARSER_DEFS, KEYWORD_DEFS, options } = args
+  const createEngine = engineModuleForGrammar(PARSER_DEFS)
+  const rules = PARSER_DEFS.rules
 
   // Symbol-id → display name (used to build the CST token names).
   // Mirrors yyTokenName[] in the generated parse.c.  Symbols are
   // keyed on array index — the prod defs has no explicit `id` field.
   const symbolName: string[] = []
-  for (let i = 0; i < parserDefs.symbols.length; i++) {
-    symbolName[i] = parserDefs.symbols[i]!.name
+  for (let i = 0; i < PARSER_DEFS.symbols.length; i++) {
+    symbolName[i] = PARSER_DEFS.symbols[i]!.name
   }
 
   // -------------------------------------------------------------------------
@@ -255,7 +284,7 @@ export function createParser(
 
   // Bind a tokenizer.  The parser uses the same TK_* ids the defs'
   // symbol table assigns, so everything stays in sync.
-  const tk = createTokenizer(parserDefs, keywordDefs, opts)
+  const tk = tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, options)
 
   /** Token id 0 is Lemon's end-of-input marker (`$`). */
   const TK_EOF: TokenId = 0 as TokenId
@@ -328,7 +357,7 @@ export function createParser(
     // sqlite3RunParser: get a token, feed it to the parser, repeat
     // until end-of-input or error; then inject a virtual SEMI (if the
     // last real token wasn't one) and the `$` end marker.
-    const session = engine.ParseAlloc<CstNode>(buildRuleNode)
+    const session = createEngine(buildRuleNode)
 
     // Chronological token stream we actually fed the session.
     // enhanceParseError scans this backward from the failing token to
@@ -419,7 +448,7 @@ export function createParser(
           sql,
           token: tokForError,
           state: e.stateno,
-          defs: parserDefs,
+          defs: PARSER_DEFS,
           tokens: tokenStream,
           tokenIndex: e.inputIndex,
         })
@@ -457,57 +486,20 @@ export function createParser(
   // Expose the tokenizer too so callers can inspect raw tokens for
   // syntax highlighting / diagnostics without running a full parse.
   return {
+    SQLITE_VERSION,
     parse,
     tokenize: tk.tokenize,
     tokenName: tk.tokenName,
+    createEngine,
+    withOptions: (newOpts: CreateParserOptions) => parserModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, { ...opts, ...newOpts }),
+    PARSER_DEFS: PARSER_DEFS,
+    KEYWORD_DEFS: KEYWORD_DEFS,
   }
 }
 
 // ---------------------------------------------------------------------------
 // Helpers — tree walking and pretty-printing.
 // ---------------------------------------------------------------------------
-
-/**
- * Pretty-print a CST as indented S-expression-ish text.  Useful for
- * snapshot-style tests and quick inspection in a REPL.  Synthetic tokens
- * (injected SEMI/EOF) are marked so they stand out from source tokens.
- */
-export function formatCst(node: CstNode, indent = 0): string {
-  const pad = "  ".repeat(indent)
-  if (node.kind === "token") {
-    const marker = node.synthetic ? " /*synthetic*/" : ""
-    return `${pad}${node.name} ${JSON.stringify(node.text)}${marker}`
-  }
-  if (node.children.length === 0) {
-    return `${pad}(${node.name})`
-  }
-  const inner = node.children.map((c) => formatCst(c, indent + 1)).join("\n")
-  return `${pad}(${node.name}\n${inner})`
-}
-
-/** Yield every node in the tree, parents before children (pre-order). */
-export function* walkCst(node: CstNode): Generator<CstNode> {
-  yield node
-  if (node.kind === "rule") {
-    for (const c of node.children) yield* walkCst(c)
-  }
-}
-
-/**
- * Yield leaf tokens in source order.  Synthetic tokens (injected SEMI/EOF)
- * are skipped by default; pass `{ includeSynthetic: true }` to see them.
- */
-export function* tokenLeaves(
-  node: CstNode,
-  opts: { includeSynthetic?: boolean } = {},
-): Generator<TokenNode> {
-  const includeSynthetic = opts.includeSynthetic === true
-  if (node.kind === "token") {
-    if (includeSynthetic || !node.synthetic) yield node
-    return
-  }
-  for (const c of node.children) yield* tokenLeaves(c, opts)
-}
 
 // Re-export the defs type so callers can import it without reaching
 // into the engine module.

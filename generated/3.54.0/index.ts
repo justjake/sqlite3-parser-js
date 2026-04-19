@@ -15,11 +15,11 @@
 import parserDefs   from './parser.prod.json'   with { type: 'json' };
 import keywordDefs from './keywords.prod.json' with { type: 'json' };
 import {
-  createParser as _createParser,
+  parserModuleForGrammar as _createParser,
   type CreateParserOptions,
 } from '../../src/parser.ts';
 import {
-  createTokenizer as _createTokenizer,
+  tokenizerModuleForGrammar as _createTokenizer,
   type CreateTokenizerOptions,
 } from '../../src/tokenize.ts';
 import type { ParserDefs } from '../../src/lempar.ts';

@@ -10,11 +10,12 @@
 // dispatch, so noisy output here would leak into vendor flow.
 
 import { readFileSync } from "node:fs"
-import { dirname, resolve } from "node:path"
+import { dirname, relative, resolve } from "node:path"
 
-const PACKAGE_JSON = resolve(dirname(new URL(import.meta.url).pathname), "..", "package.json")
+export const REPO_ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
+export const PACKAGE_JSON_PATH = resolve(REPO_ROOT, "package.json")
 
-const pkg = JSON.parse(readFileSync(PACKAGE_JSON, "utf8")) as {
+const pkg = JSON.parse(readFileSync(PACKAGE_JSON_PATH, "utf8")) as {
   name: string
   version: string
 }
@@ -28,3 +29,13 @@ export const PACKAGE_NAME: string = pkg.name
 /** The package's declared version.  Not widely used today, but handy
  *  for future "stamp the build with metadata" needs. */
 export const PACKAGE_VERSION: string = pkg.version
+
+
+export function rootPath(...subpaths: string[]): string {
+  return resolve(REPO_ROOT, ...subpaths)
+}
+
+export function rootRelativePath(...subpaths: string[]): string {
+  const path = rootPath(...subpaths)
+  return relative(REPO_ROOT, path)
+}

@@ -11,7 +11,7 @@ import full from "../generated/3.54.0/parser.dev.json" with { type: "json" }
 import fullKw from "../generated/3.54.0/keywords.dev.json" with { type: "json" }
 import slim from "../generated/3.54.0/parser.prod.json" with { type: "json" }
 import slimKw from "../generated/3.54.0/keywords.prod.json" with { type: "json" }
-import { createParser, formatCst } from "../src/parser.ts"
+import { parserModuleForGrammar, formatCst } from "../src/parser.ts"
 
 const SAMPLES = [
   "SELECT 1",
@@ -27,8 +27,8 @@ const SAMPLES = [
    );`,
 ]
 
-const fullParser = createParser(full as any, fullKw as any)
-const slimParser = createParser(slim as any, slimKw as any)
+const fullParser = parserModuleForGrammar(full as any, fullKw as any)
+const slimParser = parserModuleForGrammar(slim as any, slimKw as any)
 
 let pass = 0,
   fail = 0
