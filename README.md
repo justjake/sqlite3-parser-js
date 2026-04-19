@@ -38,7 +38,7 @@ Pin to a specific SQLite version by importing the subpath directly:
 import { parse } from "sqlite3-parser/sqlite-3.54.0"
 ```
 
-Every version we track ships both `parse()` (convenience) and `createParser()` (advanced; use when you need non-default tokenizer options like a custom digit separator or a pared-down keyword-flag set). A `parseToAst()` / `createAstBuilder()` pair is also exposed but currently experimental — see the Roadmap for status.
+Every version we track ships both `parse()` (convenience) and `createParser()` (advanced; use when you need non-default tokenizer options like a custom digit separator or a pared-down keyword-flag set). Internal AST scaffolding exists in `src/ast/`, but it is not yet part of the published API.
 
 ## Parse rules & porting
 
@@ -135,6 +135,6 @@ Flags: `--no-submodule --from <path>` bring your own SQLite source tree (useful 
 
 ### Roadmap
 
-- **AST layer**. `src/ast/` contains the scaffolding for a CST → AST converter: a stable-key dispatch table (handlers keyed on `${lhsName}::${rhs symbol names}` so they survive rule-id reshuffling across SQLite versions), per-category handler modules (`stmt`, `expr`, `select`, `ddl`, `trigger`), and `scripts/diff-ast.ts` / `scripts/ast-coverage.ts` for tracking grammar drift and handler coverage. The handlers themselves aren't implemented yet — `parseToAst()` currently throws `"bindRegistry: not yet implemented"`. Once handlers stabilise, `parse()` will grow an `ast?` field and consumers who want the richer tree can opt into it without changing how they construct the parser.
+- **AST layer**. `src/ast/` contains internal scaffolding for CST → AST conversion: stable-key dispatch, a flat handler table in `src/ast/handlers.ts`, and `scripts/diff-ast.ts` / `scripts/ast-coverage.ts` for tracking grammar drift and coverage. The current fallback path returns `UnknownAstNode` for unhandled rules, and `test/ast.test.ts` verifies that the handler table still lines up with the current grammar.
 - **More SQLite versions**. Currently pinned to 3.54.0. The `bun run vendor <ref>` workflow is designed to roll forward at minimum effort; expect periodic releases that track upstream.
 - **libsql / other Lemon-using dialects**. The vendor tooling is structured to accept other Lemon-based grammars (the `generated/sqlite-<ver>/` subpath convention leaves room for `generated/libsql-<ver>/` siblings), but no other dialect is wired up yet.

@@ -1,9 +1,9 @@
 // AST node types.
 //
 // Scaffolding only.  Nothing here is final — the concrete variant set
-// will grow as handlers in ./stmt.ts / ./expr.ts / ./select.ts / ./ddl.ts /
-// ./trigger.ts get implemented.  For now we ship a single fallback variant
-// so the dispatcher type-checks end-to-end.
+// will grow as handlers in ./handlers.ts get implemented.  For now we
+// ship a single fallback variant so the dispatcher type-checks
+// end-to-end.
 //
 // Design intent (see AST_DESIGN_IDEAS.md):
 // - AST nodes are our own shape, NOT a mirror of SQLite's internal IR.

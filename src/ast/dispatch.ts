@@ -9,19 +9,20 @@
 //
 // e.g. `"expr::LP expr RP"`, `"cmd::BEGIN transtype trans_opt"`.
 //
-// At parser-creation time, `bindRegistry` walks `defs.rules` once,
-// resolves each rule's stable key against the handler registry, and
-// builds a rule-id indexed array for O(1) dispatch.  Rules that have no
-// registered handler are surfaced as `missingKeys` so tests / boot-time
-// checks can fail loudly.
+// The dispatch path is intentionally simple:
+//   * `handlers.ts` exports one flat `Record<StableKey, Handler>`.
+//   * `createAstBuilder(defs)` closes over the parser defs.
+//   * `build(cst, sql)` computes the current node's stable key and looks
+//     up the handler directly.
 //
-// Handler bodies live in the per-category files (./stmt.ts, ./expr.ts,
-// etc.) and are aggregated by ./registry.ts.  This file defines the
-// types and wiring only — no SQL semantics live here.
+// Missing handlers fall back to `UnknownAstNode`, so the AST layer can be
+// built out incrementally without inventing a large registration framework
+// up front.
 
 import type { ParserRule, ParserDefs, RuleId, SymbolId } from "../lempar.ts"
 import type { CstNode, RuleNode } from "../parser.ts"
-import type { AstError, AstNode } from "./types.ts"
+import { handlers as defaultHandlers } from "./handlers.ts"
+import type { AstError, AstNode, UnknownAstNode } from "./types.ts"
 
 /** A grammar-shape key, stable across SQLite version bumps. */
 export type StableKey = string
@@ -86,37 +87,57 @@ export interface AstContext {
 export type Handler<T extends AstNode = AstNode> = (cst: RuleNode, ctx: AstContext) => T
 
 /** A table of handlers keyed by stable key. */
-export type HandlerRegistry = Readonly<Record<StableKey, Handler>>
+export type HandlerMap = Readonly<Record<StableKey, Handler>>
 
-/**
- * The per-defs binding: a fast rule-id → handler lookup plus a
- * coverage summary.  Produced once by `bindRegistry`, reused for every
- * parse call against those defs.
- */
-export interface BoundDispatcher {
-  /** Look up the handler for a rule id.  `undefined` if no handler registered. */
-  readonly handlerFor: (ruleId: RuleId) => Handler | undefined
-  /** Stable keys of rules that have actions but no registered handler. */
-  readonly missingKeys: readonly StableKey[]
-  /** Every stable key in the defs, in rule-id order.  Useful for coverage. */
-  readonly allKeys: readonly StableKey[]
+export interface VerifyHandlersResult {
+  /** Every stable key in the defs, in rule-id order. */
+  readonly allRuleKeys: readonly StableKey[]
+  /** Stable keys that collide across multiple rules.  Should stay empty. */
+  readonly duplicateRuleKeys: readonly StableKey[]
+  /** Handler keys that don't exist in the current defs. */
+  readonly unknownHandlerKeys: readonly StableKey[]
 }
 
 /**
- * Resolve each rule's stable key against the registry and build a
- * rule-id-indexed handler array.  Called once per parser instance.
+ * Verify that a handler table lines up with a concrete grammar:
+ *   * every stable key in the defs is unique
+ *   * every handler key points at a real rule in the defs
  *
- * TODO — implement.  See AST_DESIGN_IDEAS.md for the algorithm.
+ * We do this in tests rather than by generating TypeScript exhaustiveness
+ * machinery for every rule.
  */
-export function bindRegistry(_defs: ParserDefs, _registry: HandlerRegistry): BoundDispatcher {
-  throw new Error("bindRegistry: not yet implemented")
+export function verifyHandlers(
+  defs: Pick<ParserDefs, "rules" | "symbols">,
+  handlers: HandlerMap,
+): VerifyHandlersResult {
+  const symbolName = buildSymbolName(defs)
+  const seen = new Map<StableKey, number>()
+  const allRuleKeys: StableKey[] = []
+  const duplicateRuleKeys: StableKey[] = []
+
+  for (const rule of defs.rules) {
+    const key = stableKeyForRule(rule, symbolName)
+    allRuleKeys.push(key)
+    const count = seen.get(key) ?? 0
+    if (count === 1) duplicateRuleKeys.push(key)
+    seen.set(key, count + 1)
+  }
+
+  const knownKeys = new Set(allRuleKeys)
+  const unknownHandlerKeys = Object.keys(handlers).filter((key) => !knownKeys.has(key))
+
+  return {
+    allRuleKeys,
+    duplicateRuleKeys: duplicateRuleKeys.sort(),
+    unknownHandlerKeys: unknownHandlerKeys.sort(),
+  }
 }
 
 export interface ConvertOptions {
   /**
-   * If true, throw when a handler is missing for a rule that has actions
-   * in the grammar.  Otherwise fall back to `UnknownAstNode`.  Default
-   * false — tests should opt in.
+   * If true, throw when a rule falls back to `UnknownAstNode` or when a
+   * handler itself throws.  Default false — the AST layer is expected to
+   * grow incrementally.
    */
   readonly strict?: boolean
   /**
@@ -127,43 +148,82 @@ export interface ConvertOptions {
   readonly onHit?: (key: StableKey) => void
 }
 
-/**
- * Convert a CST into an AST using the given bound dispatcher.
- *
- * TODO — implement.  Expected shape:
- *   - Walk `cst`.  For rule nodes, look up the handler and invoke it
- *     with an `AstContext` whose `dispatch` recurses back into this
- *     function.
- *   - For token nodes, return `undefined` (terminals aren't AST nodes
- *     in their own right; handlers read them directly off the CST).
- *   - Accumulate handler-raised errors in the returned `errors` array.
- */
-export function cstToAst(
-  _cst: CstNode,
-  _dispatcher: BoundDispatcher,
-  _sql: string,
-  _opts: ConvertOptions = {},
-): { ast?: AstNode; errors: AstError[] } {
-  throw new Error("cstToAst: not yet implemented")
+function unknownAst(cst: RuleNode, stableKey: StableKey): UnknownAstNode {
+  return {
+    kind: "Unknown",
+    cst,
+    stableKey,
+  }
 }
 
 /**
- * Convenience factory that packages a `bindRegistry` call with a
- * `cstToAst`-using `build(cst, sql)` method.  Per-version modules call
- * this once to produce the user-facing `parseToAst`.
- *
- * TODO — implement (trivial once `bindRegistry` and `cstToAst` land).
+ * Convert a CST into an AST using a stable-key handler table.
+ */
+export function cstToAst(
+  cst: CstNode,
+  defs: Pick<ParserDefs, "rules" | "symbols">,
+  handlers: HandlerMap,
+  sql: string,
+  opts: ConvertOptions = {},
+): { ast?: AstNode; errors: AstError[] } {
+  const rules = defs.rules
+  const symbolName = buildSymbolName(defs)
+  const errors: AstError[] = []
+
+  const dispatch = (node: CstNode): AstNode | undefined => {
+    if (node.kind === "token") return undefined
+
+    const rule = rules[node.rule as RuleId]
+    if (!rule) {
+      const message = `Unknown rule id ${node.rule}`
+      if (opts.strict) throw new Error(message)
+      errors.push({ message, cst: node })
+      return unknownAst(node, `?${node.rule}`)
+    }
+
+    const stableKey = stableKeyForRule(rule, symbolName)
+    opts.onHit?.(stableKey)
+
+    const handler = handlers[stableKey]
+    if (!handler) {
+      if (opts.strict) throw new Error(`No AST handler for ${stableKey}`)
+      return unknownAst(node, stableKey)
+    }
+
+    try {
+      return handler(node, { sql, errors, dispatch })
+    } catch (cause) {
+      if (opts.strict) throw cause
+      errors.push({
+        message: cause instanceof Error ? cause.message : String(cause),
+        cst: node,
+      })
+      return unknownAst(node, stableKey)
+    }
+  }
+
+  return {
+    ast: dispatch(cst),
+    errors,
+  }
+}
+
+/**
+ * Convenience factory that closes over one set of parser defs and a
+ * stable-key handler table.
  */
 export function createAstBuilder(
   defs: ParserDefs,
-  registry: HandlerRegistry,
+  handlers: HandlerMap = defaultHandlers,
   opts: ConvertOptions = {},
 ) {
-  const dispatcher = bindRegistry(defs, registry)
+  const verification = verifyHandlers(defs, handlers)
   return {
-    dispatcher,
+    verify() {
+      return verification
+    },
     build(cst: CstNode, sql: string) {
-      return cstToAst(cst, dispatcher, sql, opts)
+      return cstToAst(cst, defs, handlers, sql, opts)
     },
   }
 }

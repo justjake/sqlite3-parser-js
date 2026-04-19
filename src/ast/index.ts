@@ -1,28 +1,27 @@
 // Public API for the AST layer.
 //
 // This module is version-agnostic — it deals in shapes, not a specific
-// SQLite defs.  The per-version module (`generated/<ver>/index.ts`)
-// binds this API to a concrete defs and exposes a one-call
-// `parseToAst(sql)` on top.
+// SQLite defs.  Today it is internal scaffolding; the published version
+// wrappers do not expose AST conversion yet.
 
 export type { AstNode, AstError, AstResult, BaseAstNode, UnknownAstNode } from "./types.ts"
 
 export {
   stableKeyForRule,
   buildSymbolName,
-  bindRegistry,
+  verifyHandlers,
   cstToAst,
   createAstBuilder,
 } from "./dispatch.ts"
 
 export type {
   AstContext,
-  BoundDispatcher,
   ConvertOptions,
   Handler,
-  HandlerRegistry,
+  HandlerMap,
   StableKey,
   SymbolName,
+  VerifyHandlersResult,
 } from "./dispatch.ts"
 
-export { registry } from "./registry.ts"
+export { handlers } from "./handlers.ts"

@@ -2,271 +2,231 @@
 
 ## Status
 
-`src/parser.ts` currently produces a **CST** — a faithful tree of grammar
-reductions. Every rule in `fixtures/parser.json` becomes a `RuleNode`; every
-terminal becomes a `TokenNode`; the unit-rule-elimination and multi-terminal
-divergences are documented inline (`CST DIVERGENCE #1` / `#2`).
+`src/parser.ts` produces a **CST**: one `RuleNode` per grammar reduction,
+one `TokenNode` per terminal, plus the parser-specific wrapper recovery
+documented inline in that file.
 
-This document is about the next layer: turning that CST into an **AST** that
-downstream tooling (formatters, linters, analyzers, rewriters) can consume.
+The AST layer is intentionally smaller than the original design sketch:
 
-## What we are NOT going to do (and why)
+- `src/ast/types.ts` defines the AST node shapes.
+- `src/ast/handlers.ts` is one flat stable-key → handler map.
+- `src/ast/dispatch.ts` computes stable keys, verifies the handler map
+  against a grammar defs object, and runs CST → AST conversion.
+- `test/ast.test.ts` verifies the handler table against the current
+  grammar. This replaces the older idea of generating TypeScript
+  exhaustiveness machinery for every rule.
 
-### Option rejected: mechanically transpile `actionC` → TypeScript
+The AST layer is still scaffolding. With no real handlers registered yet,
+conversion falls back to `UnknownAstNode`.
 
-`fixtures/parser.json` already contains every rule's C action body on the
-`actionC` field, plus `codePrefix` / `codeSuffix`, `preamble`, `syntaxError`,
-and `stackOverflow`. A builder of the form
-`createParser(parser.json, out.ts)` that emits a reducer per rule is
-mechanically possible.
+## What we are NOT going to do
 
-It is semantically a dead end. Representative actions:
+### We are not going to transpile `actionC` to TypeScript
 
-- rule 3 (`cmd ::= BEGIN transtype trans_opt`):
-  `sqlite3BeginTransaction(pParse, yymsp[-1].minor.yy502);`
-- rule 13 (`create_table ::= createkw temp TABLE ifnotexists nm dbnm`):
-  `sqlite3StartTable(pParse, &yymsp[-1].minor.yy0, &yymsp[0].minor.yy0, yymsp[-4].minor.yy502, 0, 0, yymsp[-2].minor.yy502);`
-- rule 20 (`create_table_args ::= AS select`):
-  `sqlite3EndTable(pParse, 0, 0, 0, yymsp[0].minor.yy637); sqlite3SelectDelete(pParse->db, yymsp[0].minor.yy637);`
+SQLite's `parse.y` actions do not define a user-facing AST. They mutate
+`Parse *pParse`, construct SQLite's internal IR, emit codegen state, and
+free intermediate objects. Porting those actions mechanically would either:
 
-Those calls aren't "build an AST node". They mutate `pParse`, emit VDBE
-opcodes, free memory, and construct SQLite's internal IR (`Expr*`, `Select*`,
-`Table*`, `ExprList*`) — structures tuned for the code generator, not for
-external tools. SQLite has **no AST stage**; the parser actions directly drive
-codegen across `src/build.c`, `expr.c`, `select.c`, `insert.c`, `where.c`, and
-friends. That's ~50 kloc of SQLite frontend behind the ~2 kloc `parse.y`.
+1. emit calls into missing SQLite helper functions, or
+2. force us to reimplement a large slice of SQLite's frontend in order to
+   preserve semantics we do not actually want.
 
-Transpiling `actionC` without porting the callees yields calls into an empty
-shell. Porting the callees means reimplementing most of SQLite's frontend, and
-the output is still the wrong _shape_ for a JS AST.
+The AST we want is our own shape for tools like formatters, analyzers, and
+rewriters. It should not be a transliteration of SQLite internals.
 
-### Option rejected: stub out `sqlite3*` helpers as AST builders
+### We are not going to build a registration framework before we have handlers
 
-"Just make `sqlite3ExprFunction` return an AST node." This shifts the problem:
-we now define dozens of C-style helpers with the exact arity and side-effect
-contract of their SQLite originals, and every helper's correctness is pinned
-to whatever SQLite's `build.c` / `expr.c` expected at that moment. Version
-upgrades become archaeology.
+The first draft of this design leaned toward:
 
-The AST we want isn't lurking inside `parse.y` waiting to be extracted. It's
-ours to define.
+- per-category handler modules
+- a merged registry object
+- a binding phase that converted stable keys into a rule-id dispatch table
+- generated TypeScript unions / exhaustiveness checks over all rules
 
-## What we WILL do
+That is too much framework for the current stage of the codebase.
 
-Write a dedicated CST → AST reducer in TypeScript, keyed on rule id. Own the
-AST shape. Use `parser.json` as the source of truth for grammar shape, and as
-a diff surface for SQLite version upgrades.
+The simplified rule is:
 
-### Why this is tractable
+- keep stable keys
+- keep one flat handler map
+- do direct lookup at conversion time
+- verify the handler map in a `.test.ts` file
 
-- Only **350 of 414 rules have actions** (`YYNRULE_WITH_ACTION: 350` —
-  `fixtures/parser.json:31`). The others are pass-throughs; we can
-  auto-generate identity reducers for them.
-- The interesting rules cluster around `expr`, `select`, DDL. A handwritten
-  reducer set covering ~50-100 rule groups carries most of the weight.
-- Every rule's RHS in `parser.json` already carries an `alias` per position —
-  the same `Y`/`X`/`E` capture names `parse.y` uses. Our reducers can read
-  children by alias, not position, mirroring the grammar authors' mental
-  model.
-- The CST we already emit has the exact structure Lemon generated — unit
-  rules re-expanded (divergence #1), multi-terminals preserved (divergence
-  #2) — so reducers see a predictable shape per rule id.
+If the handler file grows large enough later, we can split it. We do not
+need to pre-pay that complexity now.
 
-## Architecture
+## Current architecture
 
 ```
-┌──────────┐   tokenize    ┌──────────┐  engine.run   ┌────────────┐
-│  source  │ ───────────▶  │  tokens  │ ─────────────▶│    CST     │
-│   SQL    │               │ (TK_*)   │               │ RuleNode/  │
-└──────────┘               └──────────┘               │ TokenNode  │
-                                                      └─────┬──────┘
-                                                            │ rule-keyed
-                                                            │ dispatch
-                                                            ▼
-                                                      ┌────────────┐
-                                                      │    AST     │
-                                                      │ (our own   │
-                                                      │  shape)    │
-                                                      └────────────┘
+SQL source
+  -> tokenizer
+  -> LALR driver
+  -> CST (`RuleNode` / `TokenNode`)
+  -> stable-key dispatch
+  -> AST (`AstNode`)
 ```
 
-Two new modules:
+### `src/ast/types.ts`
 
-- `src/ast.ts` — AST node types. Hand-written, designed for downstream use
-  (name-resolution, formatting, rewriting). Not a 1:1 image of anything in
-  SQLite.
-- `src/reduce.ts` — CST → AST reducers. Auto-generated dispatch skeleton
-  keyed by rule id; hand-written bodies for the rules that do real work.
+Owns the AST shape.
 
-Plus one build-time tool:
+Key rules:
 
-- `bin/gen-reducers.ts` — reads `fixtures/parser.json`, emits
-  `src/reduce.generated.ts`:
-  - A union type `RuleKey = "explain:0" | "cmd:3" | ...` or similar
-    signature-based keying.
-  - An identity reducer for every `doesReduce=true` rule that is a pure
-    1:N pass-through of its children.
-  - A stub `assertUnhandled(rule, cst)` for every rule with non-trivial
-    action semantics, so missing reducers fail loudly rather than silently
-    producing an incomplete AST.
-  - A manifest `ruleFingerprints` mapping each rule id to a hash of
-    `(lhsName, rhs symbol names, actionC)` — used by the version-diff
-    tool (see below).
+- AST nodes are our own model, not SQLite's internal IR.
+- Every AST node keeps a `cst` back-pointer so downstream code can recover
+  source spans and original syntax without reparsing.
+- `UnknownAstNode` is the fallback when no concrete handler exists yet.
 
-### Rule-keyed dispatch shape
+### `src/ast/handlers.ts`
+
+Exports one flat object:
 
 ```ts
-// src/reduce.ts
-import type { CstNode, RuleNode, TokenNode } from './parser.ts';
-import type { SqlAst, Expr, Select, Stmt, ... } from './ast.ts';
-
-type Reducer<T> = (cst: RuleNode, ctx: ReduceContext) => T;
-
-// Keyed by rule id (numeric) for O(1) dispatch; the generator also
-// emits a named-alias helper per rule so bodies stay readable.
-const reducers: Record<RuleId, Reducer<unknown>> = {
-  [RULE_EXPLAIN_0]: (r) => ({ kind: 'Explain', mode: 'basic' }),
-  [RULE_EXPLAIN_1]: (r) => ({ kind: 'Explain', mode: 'queryPlan' }),
-  [RULE_CMD_BEGIN]: (r, ctx) => {
-    const { Y: transtype } = aliasesOf(r);
-    return { kind: 'Begin', mode: reduce<TransType>(transtype, ctx) };
-  },
-  // ... ~350 entries, most auto-generated identity-or-stub
-};
-```
-
-`aliasesOf(cst)` exploits the fact that `parser.json` gives us both the rule's
-RHS shape and the source alias per position. The generator emits a typed
-alias accessor per rule so the reducer body reads like the grammar:
-
-```ts
-// generated — one per rule that has aliases
-export function aliasesOfRule13(r: RuleNode) {
-  // create_table ::= createkw temp(T) TABLE ifnotexists(E) nm(Y) dbnm(Z)
-  return {
-    T: r.children[1] as RuleNode,
-    E: r.children[3] as RuleNode,
-    Y: r.children[4] as RuleNode,
-    Z: r.children[5] as RuleNode,
-  }
+export const handlers: HandlerMap = {
+  "cmd::BEGIN transtype trans_opt": handleBegin,
+  "select::WITH selectnowith": handleSelectWith,
 }
 ```
 
-### Reducer context
+Keep it flat until there is enough real implementation pressure to justify
+splitting it.
 
-A small `ReduceContext` carries whatever cross-cutting state the reducers
-need. Early on that's probably just:
+### `src/ast/dispatch.ts`
+
+This file does three things:
+
+1. builds stable keys from grammar rules
+2. verifies that a handler map lines up with a concrete defs object
+3. converts CST nodes to AST nodes
+
+`createAstBuilder(defs, handlers, opts)` closes over one grammar defs object
+and returns:
+
+- `verify()` — test-oriented verification data
+- `build(cst, sql)` — CST → AST conversion
+
+There is no separate registry binding phase.
+
+### Missing handlers
+
+If a rule has no registered handler:
+
+- normal mode returns `UnknownAstNode`
+- `strict: true` throws
+
+This keeps the AST layer usable while coverage is incomplete.
+
+## Why stable keys still matter
+
+SQLite rule ids are not stable across versions. Stable keys are.
+
+Today the key is:
 
 ```ts
-interface ReduceContext {
-  readonly sql: string // for extracting token text
-  readonly errors: AstError[] // semantic issues found during reduction
-  readonly options: ReduceOptions // strict vs lenient, dialect, etc.
-}
+`${lhsName}::${rhs symbol names joined by spaces}`
 ```
 
-Do **not** mirror `Parse *pParse`. Most of what SQLite puts there is codegen
-state. We don't generate code.
+Examples:
+
+- `cmd::BEGIN transtype trans_opt`
+- `expr::LP expr RP`
+- `oneselect::SELECT distinct selcollist from where_opt groupby_opt having_opt orderby_opt limit_opt`
+
+Stable keys let us:
+
+- author handlers against grammar shape instead of rule number
+- diff grammar changes across SQLite upgrades with `scripts/diff-ast.ts`
+- keep the handler table readable
+
+## Verification strategy
+
+We explicitly moved away from "generate TypeScript types for every rule and
+let the compiler enforce exhaustiveness."
+
+Instead, `test/ast.test.ts` verifies the simpler invariants that actually
+matter to the current scaffolding:
+
+- every stable key in the current grammar is unique
+- every registered handler key exists in the current grammar
+- the default builder falls back to `UnknownAstNode`
+- `strict: true` fails loudly on unhandled rules
+
+This is easier to understand, cheaper to maintain, and closer to the real
+runtime behavior than a generated compile-time layer.
 
 ## Version upgrade workflow
 
-This is the key reason the rule-keyed design is worth the effort.
+1. Regenerate `generated/<ver>/parser.dev.json` and `parser.prod.json`.
+2. Run:
 
-1. Regenerate `fixtures/parser.json` from an upgraded SQLite.
-2. Run `bin/diff-grammar.ts old.json new.json`. It emits:
-   - **Added rules** — need new reducer entries. The tool inserts stubs into
-     `src/reduce.generated.ts` with a TODO marker.
-   - **Removed rules** — dead reducer entries; the tool removes them.
-   - **Changed RHS shape** — same rule id (or same lhs/alias but different
-     children). The tool flags these; the existing reducer body probably
-     needs edits.
-   - **Changed `actionC` only** — shape unchanged. These are candidates to
-     ignore (we don't transpile actions), but the tool prints them so a human
-     can sanity-check whether the semantic change matters to our AST shape.
+   ```sh
+   bun scripts/diff-ast.ts OLD.json NEW.json
+   ```
 
-3. TypeScript's exhaustiveness checking on `RuleKey` forces every rule to
-   have a reducer entry, so a forgotten rule is a compile error.
+   This reports:
+   - added stable keys
+   - removed stable keys
+   - rules whose `actionC` changed while the grammar shape stayed the same
 
-This replaces "chase C diffs across 50 kloc" with "read a ~20-50 line report
-and update a handful of reducers."
+3. Update `src/ast/handlers.ts` if any stable keys we care about changed.
+4. Run `bun test test/ast.test.ts`.
 
-## Incremental build-out plan
+The important part is that stable-key changes are reviewed explicitly, not
+hidden behind generated boilerplate.
 
-Work from statements outward:
+## Build-out plan
 
-1. **Scaffolding** (~1 day)
-   - `bin/gen-reducers.ts` — emit `RuleKey` union, identity reducers, stubs,
-     alias accessors, fingerprints.
-   - `src/ast.ts` — stub types for top-level: `Stmt`, `SqlFile`,
-     `UnknownStmt`.
-   - `src/reduce.ts` — dispatcher + `ReduceContext` + fallback that wraps
-     unhandled rules as `UnknownStmt { cst }` so downstream code keeps
-     working.
+Start from the outside in:
 
-2. **Statements: trivial DDL/DML** (~1-2 days each)
-   - `BEGIN` / `COMMIT` / `ROLLBACK` / `SAVEPOINT` / `RELEASE`.
-   - `EXPLAIN` wrappers.
-   - `ATTACH` / `DETACH`.
-   - These map directly from 1-3 rules each; good warm-up for the
-     alias-based reducer style.
+1. Statement wrappers
+   - `BEGIN`, `COMMIT`, `ROLLBACK`, `SAVEPOINT`, `RELEASE`
+   - `EXPLAIN`
+   - `ATTACH`, `DETACH`
 
-3. **Expressions** (~1 week)
-   - The `expr` nonterminal is the heaviest. Do it as one cohesive PR:
-     unary/binary ops, literals, column refs, function calls, CAST,
-     CASE/WHEN, subqueries, `IN`/`BETWEEN`/`LIKE`, window functions,
-     `COLLATE`, `RAISE`.
-   - Most grammar shapes map to a small set of AST variants; a few (e.g.
-     function call with `FILTER (WHERE ...)` / `OVER`) need careful
-     structural choices.
+2. Expressions
+   - literals
+   - identifiers / qualified names
+   - unary / binary ops
+   - function calls
+   - `CASE`, `IN`, `BETWEEN`, `LIKE`, subqueries, window attachments
 
-4. **SELECT** (~3-5 days)
-   - `select_no_cte` + `cte_selectlist` + `compound_op` compose the SELECT
-     pipeline. Design the AST's `Select` shape to separate set-operations
-     from per-query clauses cleanly — do not mirror SQLite's `Select` linked
-     list (`pPrior` / `pNext`), which exists for codegen reasons.
+3. SELECT pipeline
+   - single SELECT core
+   - FROM/JOIN structure
+   - ORDER/GROUP/HAVING/LIMIT
+   - compound SELECT
+   - CTEs
 
-5. **INSERT / UPDATE / DELETE / CREATE TABLE** (~1 week total)
-   - `create_table` is deceptively big — column defs, constraints
-     (`ccons` / `tcons`), foreign-key actions, generated columns. The CST
-     groups these cleanly; the AST should too.
+4. DML / DDL
+   - `INSERT`, `UPDATE`, `DELETE`
+   - `CREATE TABLE`
+   - constraints and column definitions
 
-6. **Triggers, virtual tables, the long tail** (~as-needed)
+5. Long tail
+   - triggers
+   - virtual tables
+   - pragma / vacuum / analyze / reindex
 
-At each stage, the generated stubs for unhandled rules make the dispatcher
-total — `parse("some SQL")` always returns _some_ AST, with well-labeled
-`UnknownStmt` placeholders where coverage is missing. This lets downstream
-consumers start integrating before we're "done."
+At each step, unimplemented rules still convert to `UnknownAstNode`.
 
-## Testing
+## Notes for future ergonomics
 
-- **Snapshot tests** on representative SQL from `test/` (currently has
-  syntax-level fixtures; add semantic ones for AST). One snapshot per
-  statement category; expect a golden file.
-- **Grammar coverage report**: at the end of the test run, print which rule
-  ids were touched. Any rule id with an action that was never exercised is a
-  coverage gap, not necessarily a bug — but worth surfacing.
-- **Round-trip check** where it makes sense: for a subset of statements we
-  claim to fully understand, `print(parse(sql)) === canonicalize(sql)`. This
-  catches reducer bugs that pass schema validation.
+### Aliases
 
-## Open questions
+The runtime defs (`parser.prod.json`) intentionally strip a lot of data,
+including RHS aliases. If alias-based reducer ergonomics become important,
+derive helper accessors from `parser.dev.json` at build time.
 
-- **Errors during reduction.** Some CSTs are syntactically valid but
-  semantically nonsense (e.g. `CREATE TEMP TEMP TABLE`). SQLite's
-  `actionC` raises these via `sqlite3ErrorMsg`. We can either (a) mirror
-  that — collect errors in `ReduceContext.errors` and still produce a
-  best-effort AST; or (b) leave semantic checks to a later pass over the
-  AST. Recommend (b): keeps reducers simple, makes the semantic layer
-  independently testable.
+Do not bloat the runtime defs just to make handler authoring nicer.
 
-- **Trivia / comments.** The CST currently drops comments (tokenizer skips
-  them). If formatters need them, that's a tokenizer change, not an AST
-  change — plumb trivia into `TokenNode` first, then decide how the AST
-  represents it (usually: as attached prefix/suffix trivia on the nearest
-  token-bearing node, never as first-class AST nodes).
+### Trivia / comments
 
-- **Rename support.** SQLite has `IN_RENAME_OBJECT` paths in actions that
-  attach source ranges for editors. We already have `start` / `length` on
-  every CST node — AST nodes should preserve a reference back to the CST
-  node they came from, so rename / hover features can always recover source
-  spans without a second parse.
+The tokenizer currently drops trivia by default. If formatters need comment
+preservation, that starts in the tokenizer / CST layer first. AST nodes
+should reference the CST rather than inventing comment nodes prematurely.
+
+### Source locations
+
+The `cst` back-pointer on every AST node is the source-of-truth for spans.
+Keep that invariant. It is cheaper and more reliable than recreating source
+ranges during later semantic passes.
