@@ -216,7 +216,7 @@ export interface LalrPopped<V> {
  * calling you.  Your return value is pushed back as the LHS entry's
  * `minor`.
  */
-export type LalrReduce<V> = (ruleId: RuleId, popped: LalrPopped<V>[]) => V
+export type LalrReduce<Ctx, V> = (ctx: Ctx, ruleId: RuleId, popped: LalrPopped<V>[]) => V
 
 /** A single parse error reported by the engine. */
 export interface LalrError<V> {

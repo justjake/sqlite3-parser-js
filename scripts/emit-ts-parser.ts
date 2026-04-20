@@ -19,70 +19,73 @@
 // rule's `lhsAlias`, `rhs[i].alias`, and `nrhs` data so the generated
 // reducer reads like the original parse-ts.y action bodies.
 
-import { promises as fs } from "node:fs"
-import path from "node:path"
+import { promises as fs } from "node:fs";
+import path from "node:path";
 
 // ---------------------------------------------------------------------------
 // Shape of parser.dev.json (only the fields we consume).
 // ---------------------------------------------------------------------------
 
 interface RawRhsPos {
-  readonly pos: number
-  readonly alias: string | null
-  readonly symbol?: number
-  readonly name?: string
-  readonly multi?: ReadonlyArray<{ readonly symbol: number; readonly name: string }>
+  readonly pos: number;
+  readonly alias: string | null;
+  readonly symbol?: number;
+  readonly name?: string;
+  readonly multi?: ReadonlyArray<{
+    readonly symbol: number;
+    readonly name: string;
+  }>;
 }
 
 interface RawRule {
-  readonly id: number
-  readonly lhs: number
-  readonly lhsName: string
-  readonly lhsAlias?: string | null
-  readonly nrhs: number
-  readonly rhs: readonly RawRhsPos[]
-  readonly doesReduce: boolean
-  readonly canReduce: boolean
-  readonly neverReduce: boolean
-  readonly noCode: boolean
-  readonly actionC?: string
-  readonly codePrefix?: string | null
-  readonly codeSuffix?: string | null
+  readonly id: number;
+  readonly lhs: number;
+  readonly lhsName: string;
+  readonly lhsAlias?: string | null;
+  readonly nrhs: number;
+  readonly rhs: readonly RawRhsPos[];
+  readonly doesReduce: boolean;
+  readonly canReduce: boolean;
+  readonly neverReduce: boolean;
+  readonly noCode: boolean;
+  readonly actionC?: string;
+  readonly codePrefix?: string | null;
+  readonly codeSuffix?: string | null;
 }
 
 interface RawSymbol {
-  readonly id: number
-  readonly name: string
-  readonly type: "TERMINAL" | "NONTERMINAL" | "MULTITERMINAL"
-  readonly isTerminal: boolean
-  readonly datatype?: string
-  readonly dtnum?: number
-  readonly lambda?: boolean
-  readonly useCnt?: number
+  readonly id: number;
+  readonly name: string;
+  readonly type: "TERMINAL" | "NONTERMINAL" | "MULTITERMINAL";
+  readonly isTerminal: boolean;
+  readonly datatype?: string;
+  readonly dtnum?: number;
+  readonly lambda?: boolean;
+  readonly useCnt?: number;
 }
 
 interface RawTables {
-  readonly yy_action: readonly number[]
-  readonly yy_lookahead: readonly number[]
-  readonly yy_shift_ofst: readonly number[]
-  readonly yy_reduce_ofst: readonly number[]
-  readonly yy_default: readonly number[]
-  readonly yyFallback?: readonly number[]
+  readonly yy_action: readonly number[];
+  readonly yy_lookahead: readonly number[];
+  readonly yy_shift_ofst: readonly number[];
+  readonly yy_reduce_ofst: readonly number[];
+  readonly yy_default: readonly number[];
+  readonly yyFallback?: readonly number[];
 }
 
 interface RawDump {
-  readonly meta: { readonly sourceFile: string }
-  readonly name: string
-  readonly tokenPrefix: string
-  readonly tokenType: string
-  readonly preamble: string
-  readonly syntaxError: string
-  readonly stackOverflow: string
-  readonly extraContext: string
-  readonly constants: Record<string, number>
-  readonly symbols: readonly RawSymbol[]
-  readonly rules: readonly RawRule[]
-  readonly tables: RawTables
+  readonly meta: { readonly sourceFile: string };
+  readonly name: string;
+  readonly tokenPrefix: string;
+  readonly tokenType: string;
+  readonly preamble: string;
+  readonly syntaxError: string;
+  readonly stackOverflow: string;
+  readonly extraContext: string;
+  readonly constants: Record<string, number>;
+  readonly symbols: readonly RawSymbol[];
+  readonly rules: readonly RawRule[];
+  readonly tables: RawTables;
 }
 
 // ---------------------------------------------------------------------------
@@ -97,7 +100,7 @@ interface RawDump {
  * `yymsp[0]` and earlier entries sit at negative offsets.
  */
 function rhsOffset(i: number, nrhs: number): number {
-  return i - (nrhs - 1)
+  return i - (nrhs - 1);
 }
 
 /**
@@ -106,7 +109,7 @@ function rhsOffset(i: number, nrhs: number): number {
  * `nrhs >= 1` the LHS reuses the slot of RHS[0] at `yymsp[-(nrhs - 1)]`.
  */
 function lhsOffset(nrhs: number): number {
-  return nrhs === 0 ? 1 : -(nrhs - 1)
+  return nrhs === 0 ? 1 : -(nrhs - 1);
 }
 
 /**
@@ -116,22 +119,25 @@ function lhsOffset(nrhs: number): number {
  * collision forces Lemon to write to `yylhsminor` instead, which we
  * handle separately).
  */
-function slotMapFor(rule: RawRule): { slot: Map<number, string>; lhsUsesLhsminor: boolean } {
-  const slot = new Map<number, string>()
+function slotMapFor(rule: RawRule): {
+  slot: Map<number, string>;
+  lhsUsesLhsminor: boolean;
+} {
+  const slot = new Map<number, string>();
   for (let i = 0; i < rule.nrhs; i++) {
-    const a = rule.rhs[i]?.alias
-    if (a) slot.set(rhsOffset(i, rule.nrhs), a)
+    const a = rule.rhs[i]?.alias;
+    if (a) slot.set(rhsOffset(i, rule.nrhs), a);
   }
-  let lhsUsesLhsminor = false
+  let lhsUsesLhsminor = false;
   if (rule.lhsAlias) {
-    const lhsSlot = lhsOffset(rule.nrhs)
+    const lhsSlot = lhsOffset(rule.nrhs);
     if (slot.has(lhsSlot)) {
-      lhsUsesLhsminor = true
+      lhsUsesLhsminor = true;
     } else {
-      slot.set(lhsSlot, rule.lhsAlias)
+      slot.set(lhsSlot, rule.lhsAlias);
     }
   }
-  return { slot, lhsUsesLhsminor }
+  return { slot, lhsUsesLhsminor };
 }
 
 /**
@@ -141,29 +147,29 @@ function slotMapFor(rule: RawRule): { slot: Map<number, string>; lhsUsesLhsminor
  * verbatim.
  */
 function rewriteAction(rule: RawRule, actionC: string): string {
-  const { slot, lhsUsesLhsminor } = slotMapFor(rule)
+  const { slot, lhsUsesLhsminor } = slotMapFor(rule);
 
-  let out = actionC
+  let out = actionC;
   // yylhsminor.yyN → LHS alias.
   if (rule.lhsAlias && lhsUsesLhsminor) {
-    out = out.replace(/yylhsminor\.yy\d+/g, rule.lhsAlias)
+    out = out.replace(/yylhsminor\.yy\d+/g, rule.lhsAlias);
   }
   // yymsp[N].minor.yyN → the alias at offset N (if any).
   out = out.replace(/yymsp\[(-?\d+)\]\.minor\.yy\d+/g, (m, offStr) => {
-    const off = Number(offStr)
-    const alias = slot.get(off)
-    return alias ?? m
-  })
+    const off = Number(offStr);
+    const alias = slot.get(off);
+    return alias ?? m;
+  });
   // yymsp[N].major → @alias (we don't use @-token-type in parse-ts.y,
   // but handle it so a future use doesn't silently leak the raw token).
   out = out.replace(/yymsp\[(-?\d+)\]\.major/g, (m, offStr) => {
-    const off = Number(offStr)
-    const alias = slot.get(off)
-    return alias ? `${alias}.type` : m
-  })
+    const off = Number(offStr);
+    const alias = slot.get(off);
+    return alias ? `${alias}.type` : m;
+  });
   // Strip any `#line N "file"` directives lemon injected.
-  out = out.replace(/^#line \d+ "[^"]+"\n?/gm, "")
-  return out
+  out = out.replace(/^#line \d+ "[^"]+"\n?/gm, "");
+  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -192,7 +198,7 @@ function preparePreamble(preamble: string): string {
       // any "../../../src/..." paths to "../../src/...".
       .replace(/"\.\.\/\.\.\/\.\.\/src\//g, '"../../src/')
       .trimEnd()
-  )
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -200,153 +206,125 @@ function preparePreamble(preamble: string): string {
 // ---------------------------------------------------------------------------
 
 function emitHeader(version: string): string {
-  return [
-    "// GENERATED by scripts/emit-ts-parser.ts — DO NOT EDIT.",
-    `// Source: generated/${version}/parser.dev.json`,
-    "// Regenerate with: make generated/" + version + "/lemonpar2.ts",
-    "",
-    "/* eslint-disable */",
-    "/* prettier-ignore */",
-  ].join("\n")
+  return `// GENERATED by scripts/emit-ts-parser.ts — DO NOT EDIT.
+// Source: generated/${version}/parser.dev.json
+// Regenerate with: make generated/${version}/lemonpar2.ts
+
+/* eslint-disable */
+/* prettier-ignore */`;
 }
 
 function emitImports(): string {
-  return [
-    'import {',
-    "  engineModuleForGrammar,",
-    "  type LalrPopped,",
-    "  type LalrReduce,",
-    "  type ParserDefs,",
-    "  type RuleId,",
-    "  type SymbolId,",
-    "  type TokenId,",
-    '} from "../../src/lempar.ts"',
-  ].join("\n")
+  return `import {
+  engineModuleForGrammar,
+  type LalrPopped,
+  type LalrReduce,
+  type ParserDefs,
+  type RuleId,
+  type SymbolId,
+  type TokenId,
+} from "../../src/lempar.ts"`;
 }
 
 /** Emit a `const tokens = { … } as const` holding every terminal's TK_* code. */
 function emitTokenCodes(dump: RawDump): string {
-  const lines: string[] = []
-  lines.push("/** TK_* → numeric token code, populated from the generated grammar. */")
-  lines.push("export const tokens = {")
+  const lines: string[] = [];
+  lines.push(
+    "/** TK_* → numeric token code, populated from the generated grammar. */",
+  );
+  lines.push("export const tokens = {");
   for (const sym of dump.symbols) {
-    if (!sym.isTerminal) continue
-    if (sym.type === "MULTITERMINAL") continue
-    if (sym.name === "$") continue // end-of-input sentinel
+    if (!sym.isTerminal) continue;
+    if (sym.type === "MULTITERMINAL") continue;
+    if (sym.name === "$") continue; // end-of-input sentinel
     // Some internal tokens contain characters not valid in TS identifiers
     // (the empty name from Lemon's synthesised entries); skip them.
-    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(sym.name)) continue
-    lines.push(`  ${sym.name}: ${sym.id},`)
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(sym.name)) continue;
+    lines.push(`  ${sym.name}: ${sym.id},`);
   }
-  lines.push("} as const")
-  return lines.join("\n")
+  lines.push("} as const");
+  return lines.join("\n");
+}
+
+const CONSTANTS = [
+  "YYNSTATE",
+  "YYNRULE",
+  "YYNTOKEN",
+  "YYNSYMBOL",
+  "YY_MAX_SHIFT",
+  "YY_MIN_SHIFTREDUCE",
+  "YY_MAX_SHIFTREDUCE",
+  "YY_ERROR_ACTION",
+  "YY_ACCEPT_ACTION",
+  "YY_NO_ACTION",
+  "YY_MIN_REDUCE",
+  "YY_MAX_REDUCE",
+  "YY_ACTTAB_COUNT",
+  "YY_SHIFT_COUNT",
+  "YY_REDUCE_COUNT",
+  "YYWILDCARD",
+  "YYFALLBACK",
+] as const;
+
+const TABLE_TYPES = {
+  yy_action: "number[]",
+  yy_lookahead: "SymbolId[]",
+  yy_shift_ofst: "number[]",
+  yy_reduce_ofst: "number[]",
+  yy_default: "number[]",
+  yyFallback: "TokenId[]",
+  yy_expected: "TokenId[][]",
 }
 
 /** Emit the PARSER_DEFS constant consumed by engineModuleForGrammar. */
 function emitParserDefs(dump: RawDump): string {
-  const lines: string[] = []
-  lines.push("// ---- LALR parser tables ----")
-  lines.push("")
-  lines.push("const CONSTANTS = {")
-  for (const k of [
-    "YYNSTATE",
-    "YYNRULE",
-    "YYNTOKEN",
-    "YYNSYMBOL",
-    "YY_MAX_SHIFT",
-    "YY_MIN_SHIFTREDUCE",
-    "YY_MAX_SHIFTREDUCE",
-    "YY_ERROR_ACTION",
-    "YY_ACCEPT_ACTION",
-    "YY_NO_ACTION",
-    "YY_MIN_REDUCE",
-    "YY_MAX_REDUCE",
-    "YY_ACTTAB_COUNT",
-    "YY_SHIFT_COUNT",
-    "YY_REDUCE_COUNT",
-    "YYWILDCARD",
-    "YYFALLBACK",
-  ]) {
-    const v = dump.constants[k]
-    if (v === undefined) throw new Error(`missing constant ${k}`)
-    lines.push(`  ${k}: ${v},`)
+  const lines: string[] = [];
+  lines.push("// ---- LALR parser tables ----");
+  lines.push("");
+  lines.push("const CONSTANTS = {");
+  for (const k of []) {
+    const v = dump.constants[k];
+    if (v === undefined) throw new Error(`missing constant ${k}`);
+    lines.push(`  ${k}: ${v},`);
   }
-  lines.push("} as const")
-  lines.push("")
+  lines.push("} as const");
+  lines.push("");
 
   // Emit each large table as a compact comma-separated array.  Readability
   // over size here — the file is roughly 50-60KB for 3.54.0, which is
   // fine since it's a build output.
   const packArr = (name: string, ty: string, xs: readonly number[]): string => {
-    const chunks: string[] = []
+    const chunks: string[] = [];
     for (let i = 0; i < xs.length; i += 16) {
-      chunks.push("  " + xs.slice(i, i + 16).join(", "))
+      chunks.push("  " + xs.slice(i, i + 16).join(", "));
     }
-    return `const ${name} = [\n${chunks.join(",\n")},\n] as unknown as ${ty}`
-  }
-  lines.push(packArr("yy_action", "number[]", dump.tables.yy_action))
-  lines.push("")
-  lines.push(packArr("yy_lookahead", "SymbolId[]", dump.tables.yy_lookahead))
-  lines.push("")
-  lines.push(packArr("yy_shift_ofst", "number[]", dump.tables.yy_shift_ofst))
-  lines.push("")
-  lines.push(packArr("yy_reduce_ofst", "number[]", dump.tables.yy_reduce_ofst))
-  lines.push("")
-  lines.push(packArr("yy_default", "number[]", dump.tables.yy_default))
-  lines.push("")
-  if (dump.tables.yyFallback && dump.tables.yyFallback.length > 0) {
-    lines.push(packArr("yyFallback", "TokenId[]", dump.tables.yyFallback))
-  } else {
-    lines.push("const yyFallback: TokenId[] = []")
-  }
-  lines.push("")
+    return `const ${name} = [\n${chunks.join(",\n")},\n] as unknown as ${ty}`;
+  };
 
-  // Symbols — keep only the fields the engine reads (name + isTerminal).
-  lines.push("const SYMBOLS: ParserDefs[\"symbols\"] = [")
+  for (const [name, ty] of Object.entries(TABLE_TYPES)) {
+    const xs = dump.tables[name as keyof RawTables];
+    if (xs === undefined) throw new Error(`missing table ${name}`);
+    lines.push(packArr(name, ty, xs as readonly number[]));
+    lines.push("");
+  }
+
+  lines.push("");
+
+  lines.push('const SYMBOLS: ParserDefs["symbols"] = [');
   for (const s of dump.symbols) {
-    lines.push(`  { name: ${JSON.stringify(s.name)}, isTerminal: ${s.isTerminal} },`)
+    lines.push(`  ${JSON.stringify(s.name)},`);
   }
-  lines.push("]")
-  lines.push("")
+  lines.push("]");
+  lines.push("");
 
-  // Rules — again only the engine-visible fields.  The reducer-side
-  // metadata (aliases, datatypes) lives alongside the reducer switch
-  // rather than in ParserDefs.
-  lines.push("const RULES: ParserDefs[\"rules\"] = [")
-  for (const r of dump.rules) {
-    const rhs = r.rhs
-      .map((p) => {
-        if (p.multi && p.multi.length > 0) {
-          const set = p.multi.map((m) => `{ symbol: ${m.symbol} as SymbolId }`).join(", ")
-          return `{ multi: [${set}] }`
-        }
-        if (typeof p.symbol === "number") {
-          return `{ symbol: ${p.symbol} as SymbolId }`
-        }
-        return "{}"
-      })
-      .join(", ")
-    lines.push(
-      `  { lhs: ${r.lhs} as SymbolId, lhsName: ${JSON.stringify(r.lhsName)}, rhs: [${rhs}], doesReduce: ${r.doesReduce} },`,
-    )
-  }
-  lines.push("]")
-  lines.push("")
-
-  lines.push("export const PARSER_DEFS: ParserDefs = {")
-  lines.push("  constants: CONSTANTS,")
-  lines.push("  tables: {")
-  lines.push("    yy_action,")
-  lines.push("    yy_lookahead,")
-  lines.push("    yy_shift_ofst,")
-  lines.push("    yy_reduce_ofst,")
-  lines.push("    yy_default,")
-  lines.push("    yyFallback,")
-  lines.push("  },")
-  lines.push("  symbols: SYMBOLS,")
-  lines.push("  rules: RULES,")
-  lines.push("}")
-  return lines.join("\n")
+  lines.push(`export const PARSER_DEFS: ParserDefs = {
+    constants: CONSTANTS,
+    tables: {
+      ${Object.keys(TABLE_TYPES).join(",\n")}
+    },
+    symbols: SYMBOLS,
+  }`);
+  return lines.join("\n");
 }
 
 /**
@@ -355,60 +333,64 @@ function emitParserDefs(dump: RawDump): string {
  * `%token_type`.  Fall back to `unknown` if neither resolves.
  */
 function typeForSymbol(dump: RawDump, sym: RawSymbol): string {
-  if (sym.datatype && sym.datatype.trim().length > 0) return sym.datatype
-  if (sym.isTerminal) return dump.tokenType
-  return "unknown"
+  if (sym.datatype && sym.datatype.trim().length > 0) return sym.datatype;
+  if (sym.isTerminal) return dump.tokenType;
+  return "unknown";
 }
 
 /** Emit the reducer's switch-case for one rule. */
 function emitReducerCase(dump: RawDump, rule: RawRule): string {
-  const lines: string[] = []
+  const lines: string[] = [];
   const rhsSig = rule.rhs
     .map((p) => {
-      const nm = p.name ?? "?"
-      return p.alias ? `${nm}(${p.alias})` : nm
+      const nm = p.name ?? "?";
+      return p.alias ? `${nm}(${p.alias})` : nm;
     })
-    .join(" ")
-  const header = `${rule.lhsName}${rule.lhsAlias ? `(${rule.lhsAlias})` : ""} ::= ${rhsSig}`
-  lines.push(`    case ${rule.id}: { // ${header}`)
+    .join(" ");
+  const header = `${rule.lhsName}${rule.lhsAlias ? `(${rule.lhsAlias})` : ""} ::= ${rhsSig}`;
+  lines.push(`    case ${rule.id}: { // ${header}`);
 
   // Bind each aliased RHS position to a local variable (skip LHS-alias
   // RHS collisions — they get their own `let` below).
-  const { lhsUsesLhsminor } = slotMapFor(rule)
+  const { lhsUsesLhsminor } = slotMapFor(rule);
   const lhsSharesRhs0 =
-    rule.lhsAlias && rule.nrhs > 0 && rule.rhs[0]?.alias === rule.lhsAlias
+    rule.lhsAlias && rule.nrhs > 0 && rule.rhs[0]?.alias === rule.lhsAlias;
   for (let i = 0; i < rule.nrhs; i++) {
-    const p = rule.rhs[i]!
-    if (!p.alias) continue
-    if (lhsSharesRhs0 && i === 0) continue // the `let A` below covers this slot
+    const p = rule.rhs[i]!;
+    if (!p.alias) continue;
+    if (lhsSharesRhs0 && i === 0) continue; // the `let A` below covers this slot
     const sym =
-      p.symbol !== undefined ? dump.symbols[p.symbol] :
-      p.multi && p.multi[0] ? dump.symbols[p.multi[0].symbol] :
-      undefined
-    const ty = sym ? typeForSymbol(dump, sym) : "unknown"
-    lines.push(`      const ${p.alias} = popped[${i}].minor as ${ty}`)
+      p.symbol !== undefined
+        ? dump.symbols[p.symbol]
+        : p.multi && p.multi[0]
+          ? dump.symbols[p.multi[0].symbol]
+          : undefined;
+    const ty = sym ? typeForSymbol(dump, sym) : "unknown";
+    lines.push(`      const ${p.alias} = popped[${i}].minor as ${ty}`);
   }
 
   // If there's an LHS alias, declare it as a mutable local so the
   // action body can assign to it.  Its type comes from the LHS symbol's
   // %type declaration.
-  let retExpr: string | null = null
+  let retExpr: string | null = null;
   if (rule.lhsAlias) {
-    const lhsSym = dump.symbols[rule.lhs]
-    const ty = lhsSym ? typeForSymbol(dump, lhsSym) : "unknown"
+    const lhsSym = dump.symbols[rule.lhs];
+    const ty = lhsSym ? typeForSymbol(dump, lhsSym) : "unknown";
     if (lhsSharesRhs0) {
       // Initialise from popped[0] so rules like `signed(A) ::= plus_num(A).`
       // with empty actions still work.
-      lines.push(`      let ${rule.lhsAlias}: ${ty} = popped[0].minor as ${ty}`)
+      lines.push(
+        `      let ${rule.lhsAlias}: ${ty} = popped[0].minor as ${ty}`,
+      );
     } else {
       // Fall back to a type that admits `undefined` so the action body
       // can assign into the local before the implicit return.  If the
       // declared datatype already includes `undefined` we'd emit a
       // `T | undefined | undefined`; TS tolerates that but it's noise.
-      const widened = /\bundefined\b/.test(ty) ? ty : `${ty} | undefined`
-      lines.push(`      let ${rule.lhsAlias}: ${widened}`)
+      const widened = /\bundefined\b/.test(ty) ? ty : `${ty} | undefined`;
+      lines.push(`      let ${rule.lhsAlias}: ${widened}`);
     }
-    retExpr = rule.lhsAlias
+    retExpr = rule.lhsAlias;
   }
 
   // Paste the rewritten action body (if any).  noCode rules have no
@@ -418,85 +400,42 @@ function emitReducerCase(dump: RawDump, rule: RawRule): string {
     const body = rewriteAction(rule, rule.actionC)
       .split("\n")
       .map((l) => (l.length > 0 ? "      " + l : l))
-      .join("\n")
-    lines.push(body.trimEnd())
+      .join("\n");
+    lines.push(body.trimEnd());
   }
 
   // Return value.  For noCode pass-through rules without an lhsAlias,
   // forward popped[0] if there is one; otherwise return undefined.
   if (retExpr) {
-    lines.push(`      return ${retExpr}`)
+    lines.push(`      return ${retExpr}`);
   } else if (rule.nrhs > 0 && rule.noCode) {
-    lines.push(`      return popped[0].minor`)
+    lines.push(`      return popped[0].minor`);
   } else {
-    lines.push(`      return undefined`)
+    lines.push(`      return undefined`);
   }
-  lines.push(`    }`)
-  return lines.join("\n")
+  lines.push(`    }`);
+  return lines.join("\n");
 }
 
 function emitReducer(dump: RawDump): string {
-  const out: string[] = []
-  out.push("// ---- Reducer ----")
-  out.push("")
-  out.push(
-    `/** Factory that closes over a ParseState and returns a reducer compatible with {@link engineModuleForGrammar}. */`,
-  )
-  out.push(`export function createReducer(state: ParseState): LalrReduce<unknown> {`)
-  out.push(`  return (ruleId: RuleId, popped: LalrPopped<unknown>[]): unknown => {`)
-  out.push(`    const nodeSpan = (): Span => spanFromPopped(popped)`)
-  out.push(`    switch (ruleId as number) {`)
-  for (const rule of dump.rules) {
-    out.push(emitReducerCase(dump, rule))
+  const cases = dump.rules.map(rule => emitReducerCase(dump, rule)).join("\n");
+  return `
+/**
+ * Reducer function that dispatches the actions defined for each rule in the grammar to build the AST.
+ */
+export const reduce: LalrReduce<ParseState, unknown> = (ctx, ruleId, popped) => {
+  const err = (message: string, span: Span, ...hints: { message: string, span?: Span }[]) => {
+    ctx.errors.push({ message, span, hints });
   }
-  out.push(`      default:`)
-  out.push(`        return undefined`)
-  out.push(`    }`)
-  out.push(`  }`)
-  out.push(`}`)
-  return out.join("\n")
-}
+  const nodeSpan = (): Span => spanFromPopped(popped)
 
-/** Emit a high-level driver: token iterable → finalized Cmd + errors. */
-function emitDriver(): string {
-  return [
-    "// ---- High-level driver ----",
-    "",
-    "const engineFactory = engineModuleForGrammar(PARSER_DEFS)",
-    "",
-    "import { makeParseState } from \"../../src/ast/parseState.ts\"",
-    "import type { ParseResult } from \"../../src/ast/parseState.ts\"",
-    "",
-    "/**",
-    " * Parse a pre-tokenized stream.  Callers must end the stream by",
-    " * feeding a token with `type === 0` (Lemon's end-of-input `$`).",
-    " */",
-    "export function parseTokens(tokenStream: Iterable<Token>): ParseResult {",
-    "  const state = makeParseState()",
-    "  const engine = engineFactory<unknown>(createReducer(state))",
-    "  for (const tok of tokenStream) {",
-    "    engine.next(tok.type as unknown as TokenId, tok)",
-    "    if (engine.state !== \"running\") break",
-    "  }",
-    "  if (engine.state === \"running\") {",
-    "    // Callers that forgot to feed EOF can still recover.",
-    "    const eof: Token = {",
-    "      type: 0 as unknown as TokenId,",
-    "      text: \"\",",
-    "      span: { offset: 0, length: 0, line: 1, col: 1 },",
-    "    }",
-    "    engine.next(0 as unknown as TokenId, eof)",
-    "  }",
-    "  for (const e of engine.errors) {",
-    "    const tok = e.minor as Token",
-    "    state.errors.push({",
-    "      message: `near \"${tok.text}\": syntax error`,",
-    "      span: tok.span,",
-    "    })",
-    "  }",
-    "  return { cmd: finalizeCmd(state), errors: state.errors }",
-    "}",
-  ].join("\n")
+  switch (ruleId as number) {
+    ${cases}
+    default:
+      return undefined
+  }
+}
+`
 }
 
 // ---------------------------------------------------------------------------
@@ -504,40 +443,38 @@ function emitDriver(): string {
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
-  const version = process.argv[2]
+  const version = process.argv[2];
   if (!version) {
-    console.error("Usage: bun scripts/emit-ts-parser.ts <version>")
-    process.exit(2)
+    console.error("Usage: bun scripts/emit-ts-parser.ts <version>");
+    process.exit(2);
   }
-  const inputPath = path.join("generated", version, "parser.dev.json")
-  const outputPath = path.join("generated", version, "lemonpar2.ts")
+  const inputPath = path.join("generated", version, "parser.dev.json");
+  const outputPath = path.join("generated", version, "lemonpar2.ts");
 
-  const raw = await fs.readFile(inputPath, "utf-8")
-  const dump = JSON.parse(raw) as RawDump
+  const raw = await fs.readFile(inputPath, "utf-8");
+  const dump = JSON.parse(raw) as RawDump;
 
-  const parts: string[] = []
-  parts.push(emitHeader(version))
-  parts.push("")
-  parts.push(emitImports())
-  parts.push("")
-  parts.push("// ---- Preamble (inlined from the .y %include) ----")
-  parts.push("")
-  parts.push(preparePreamble(dump.preamble))
-  parts.push("")
-  parts.push(emitTokenCodes(dump))
-  parts.push("")
-  parts.push(emitParserDefs(dump))
-  parts.push("")
-  parts.push(emitReducer(dump))
-  parts.push("")
-  parts.push(emitDriver())
-  parts.push("")
+  const parts: string[] = [];
+  parts.push(emitHeader(version));
+  parts.push("");
+  parts.push(emitImports());
+  parts.push("");
+  parts.push("// ---- Preamble (inlined from the .y %include) ----");
+  parts.push("");
+  parts.push(preparePreamble(dump.preamble));
+  parts.push("");
+  parts.push(emitTokenCodes(dump));
+  parts.push("");
+  parts.push(emitParserDefs(dump));
+  parts.push("");
+  parts.push(emitReducer(dump));
+  parts.push("");
 
-  await fs.writeFile(outputPath, parts.join("\n"))
-  console.log(`wrote ${outputPath}`)
+  await fs.writeFile(outputPath, parts.join("\n"));
+  console.log(`wrote ${outputPath}`);
 }
 
 main().catch((e) => {
-  console.error(e)
-  process.exit(1)
-})
+  console.error(e);
+  process.exit(1);
+});

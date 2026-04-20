@@ -298,17 +298,15 @@ function parseCli(argv: string[]): CliOptions {
     else if (a === "--commit") opts.upstreamCommit = argv[++i]
     else if (a === "--help" || a === "-h") {
       console.log(
-        [
-          "usage: bun run vendor <ref> [--no-submodule] [--from <dir>] [--commit <sha>]",
-          "",
-          "  <ref>              SQLite version tag, e.g. 3.55.0",
-          "  --no-submodule     Do not add a git submodule; --from is required.",
-          "  --from <dir>       Copy pristine files from an existing local checkout",
-          "                     instead of the submodule.  Useful for testing and for",
-          "                     building against an unreleased sqlite development tree.",
-          "  --commit <sha>     Record this commit hash in the manifest.  Defaults to",
-          "                     the HEAD of the submodule (or `unknown` with --from).",
-        ].join("\n"),
+        `usage: bun run vendor <ref> [--no-submodule] [--from <dir>] [--commit <sha>]
+
+  <ref>              SQLite version tag, e.g. 3.55.0
+  --no-submodule     Do not add a git submodule; --from is required.
+  --from <dir>       Copy pristine files from an existing local checkout
+                     instead of the submodule.  Useful for testing and for
+                     building against an unreleased sqlite development tree.
+  --commit <sha>     Record this commit hash in the manifest.  Defaults to
+                     the HEAD of the submodule (or \`unknown\` with --from).`,
       )
       process.exit(0)
     } else positional.push(a)
