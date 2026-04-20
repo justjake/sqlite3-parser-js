@@ -162,6 +162,8 @@ import {
   mkUpsertIndex,
   finalizeCmd,
   spanFromPopped,
+  mkAstParseError,
+  mkDuplicateError,
 } from "../../src/ast/parseActions.ts"
 import { sqlite3Dequote, sqlite3DequoteNumber } from "../../src/util.ts"
 
@@ -5866,11 +5868,15 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[2].minor as Name
         let A: Name[] = popped[0].minor as Name[]
 
-        if (A.some((n) => n.name === Y.name)) {
-          state.errors.push({
-            message: `column "${Y.name}" specified more than once`,
-            span: Y.span,
-          })
+        const duplicateOf = A.find((n) => n.name === Y.name)
+        if (duplicateOf) {
+          state.errors.push(
+            mkDuplicateError(
+              `column "${Y.name}" specified more than once`,
+              Y.span,
+              duplicateOf.span,
+            ),
+          )
         } else {
           A.push(Y)
         }

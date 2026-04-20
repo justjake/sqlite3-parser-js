@@ -95,6 +95,7 @@ import {
   mkColumnDefinition, addColumn, mkColumnsAndConstraints,
   addCte, mkUpsertIndex, finalizeCmd,
   spanFromPopped,
+  mkAstParseError, mkDuplicateError,
 } from "../../../src/ast/parseActions.ts";
 import { sqlite3Dequote, sqlite3DequoteNumber } from "../../../src/util.ts";
 
@@ -795,8 +796,13 @@ insert_cmd(A) ::= REPLACE.            { A = "Replace"; }
 idlist_opt(A) ::= .                   { A = undefined; }
 idlist_opt(A) ::= LP idlist(X) RP.    { A = X;    }
 idlist(A) ::= idlist(A) COMMA nm(Y).  {
-  if( A.some(n => n.name===Y.name) ){
-    state.errors.push({ message: `column "${Y.name}" specified more than once`, span: Y.span });
+  const duplicateOf = A.find(n => n.name===Y.name);
+  if( duplicateOf ){
+    state.errors.push(mkDuplicateError(
+      `column "${Y.name}" specified more than once`,
+      Y.span,
+      duplicateOf.span,
+    ));
   }else{
     A.push(Y);
   }

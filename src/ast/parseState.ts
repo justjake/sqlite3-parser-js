@@ -25,6 +25,16 @@ export type { Span, Token }
 export interface AstParseError {
   readonly message: string
   readonly span: Span
+  /**
+   * Secondary diagnostic pointers.  Useful for "duplicate name"-style
+   * errors where we want to call out where the first declaration lives
+   * in addition to the conflicting one, or for "unclosed LP" where we
+   * want to highlight the opener alongside the missing closer.
+   */
+  readonly hints?: ReadonlyArray<{
+    readonly message: string
+    readonly span: Span
+  }>
 }
 
 /**

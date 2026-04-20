@@ -48,7 +48,34 @@ import type {
   With,
   Cmd,
 } from "./nodes.ts"
-import type { ParseState, Span, Token } from "./parseState.ts"
+import type { AstParseError, ParseState, Span, Token } from "./parseState.ts"
+
+// ---- Error constructors ----------------------------------------------
+
+/** Build an {@link AstParseError} with zero or more secondary hints. */
+export function mkAstParseError(
+  message: string,
+  span: Span,
+  ...hints: ReadonlyArray<{ readonly message: string; readonly span: Span }>
+): AstParseError {
+  return hints.length > 0 ? { message, span, hints } : { message, span }
+}
+
+/**
+ * Common "duplicate X, first declared here" diagnostic.  Points the
+ * primary span at the conflicting occurrence and attaches a single
+ * `first specified here` hint at the original's span.
+ */
+export function mkDuplicateError(
+  message: string,
+  span: Span,
+  firstSpecifiedHereSpan: Span,
+): AstParseError {
+  return mkAstParseError(message, span, {
+    message: "first specified here",
+    span: firstSpecifiedHereSpan,
+  })
+}
 
 // ---- Span helpers -----------------------------------------------------
 
@@ -69,6 +96,11 @@ export function spanFromPopped(popped: readonly { readonly minor: unknown }[]): 
   const first = extractSpan(popped[0]!.minor)
   const last = popped.length === 1 ? first : extractSpan(popped[popped.length - 1]!.minor)
   if (!first || !last) return first ?? last ?? ZERO_SPAN
+  return spanOver(first, last)
+}
+
+/** Span covering `[first.offset, last.offset + last.length)`. */
+export function spanOver(first: Span, last: Span): Span {
   return {
     offset: first.offset,
     length: last.offset + last.length - first.offset,
@@ -534,11 +566,20 @@ export function valuesPush(
   row: readonly Expr[],
   span: Span,
 ): void {
-  if (values.length > 0 && values[0]!.length !== row.length) {
-    state.errors.push({
-      message: "all VALUES must have the same number of terms",
-      span,
-    })
+  const firstRow = values[0]
+  if (firstRow && firstRow.length !== row.length) {
+    const firstRowSpan = firstRow.length > 0
+      ? spanOver(firstRow[0]!.span, firstRow[firstRow.length - 1]!.span)
+      : undefined
+    state.errors.push(
+      firstRowSpan
+        ? mkAstParseError(
+            "all VALUES must have the same number of terms",
+            span,
+            { message: `first row has ${firstRow.length} terms`, span: firstRowSpan },
+          )
+        : mkAstParseError("all VALUES must have the same number of terms", span),
+    )
   }
   values.push(row as Expr[])
 }
@@ -584,11 +625,13 @@ export function addColumn(
   columns: ColumnDefinition[],
   cd: ColumnDefinition,
 ): void {
-  if (columns.some((c) => c.colName.name === cd.colName.name)) {
-    state.errors.push({
-      message: `duplicate column name: ${cd.colName.name}`,
-      span: cd.colName.span,
-    })
+  const duplicateOf = columns.find((c) => c.colName.name === cd.colName.name)
+  if (duplicateOf) {
+    state.errors.push(mkDuplicateError(
+      `duplicate column name: ${cd.colName.name}`,
+      cd.colName.span,
+      duplicateOf.colName.span,
+    ))
     return
   }
   columns.push(cd)
@@ -616,11 +659,13 @@ export function addCte(
   ctes: CommonTableExpr[],
   cte: CommonTableExpr,
 ): void {
-  if (ctes.some((c) => c.tblName.name === cte.tblName.name)) {
-    state.errors.push({
-      message: `duplicate WITH table name: ${cte.tblName.name}`,
-      span: cte.tblName.span,
-    })
+  const duplicateOf = ctes.find((c) => c.tblName.name === cte.tblName.name)
+  if (duplicateOf) {
+    state.errors.push(mkDuplicateError(
+      `duplicate WITH table name: ${cte.tblName.name}`,
+      cte.tblName.span,
+      duplicateOf.tblName.span,
+    ))
     return
   }
   ctes.push(cte)
