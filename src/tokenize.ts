@@ -162,6 +162,7 @@ export interface Token {
   readonly type: TokenId
   readonly text: string
   readonly span: Span
+  synthetic?: boolean
 }
 
 /**
@@ -595,13 +596,13 @@ export function tokenizerModuleForGrammar(
   // TS can't prove that, so we do the cast at the assignment boundary.
   const tokenCode = new Map<string, TokenId>()
   const tokenNameMap = new Map<TokenId, string>()
-  for (let i = 0; i < parserDefs.symbols.length; i++) {
+  for (let i = 0; i < parserDefs.constants.YYNTOKEN; i++) {
     const sym = parserDefs.symbols[i]!
     const id = i as TokenId
     tokenCode.set(sym, id)
     tokenNameMap.set(id, sym)
   }
-  function requireToken(name: string): TokenId {
+  function TokenId(name: string): TokenId {
     const code = tokenCode.get(name)
     if (code === undefined) {
       throw new Error(
@@ -615,39 +616,39 @@ export function tokenizerModuleForGrammar(
   // Token codes the lex loop emits directly.  These names match the
   // TK_* constants the C tokenizer uses; lemon assigns the actual ints.
   const T: TokenizerTokens = {
-    SPACE: requireToken("SPACE"),
-    COMMENT: requireToken("COMMENT"),
-    ILLEGAL: requireToken("ILLEGAL"),
-    PTR: requireToken("PTR"),
-    MINUS: requireToken("MINUS"),
-    LP: requireToken("LP"),
-    RP: requireToken("RP"),
-    SEMI: requireToken("SEMI"),
-    PLUS: requireToken("PLUS"),
-    STAR: requireToken("STAR"),
-    SLASH: requireToken("SLASH"),
-    REM: requireToken("REM"),
-    EQ: requireToken("EQ"),
-    LE: requireToken("LE"),
-    NE: requireToken("NE"),
-    LT: requireToken("LT"),
-    LSHIFT: requireToken("LSHIFT"),
-    GE: requireToken("GE"),
-    RSHIFT: requireToken("RSHIFT"),
-    GT: requireToken("GT"),
-    BITOR: requireToken("BITOR"),
-    CONCAT: requireToken("CONCAT"),
-    COMMA: requireToken("COMMA"),
-    BITAND: requireToken("BITAND"),
-    BITNOT: requireToken("BITNOT"),
-    DOT: requireToken("DOT"),
-    STRING: requireToken("STRING"),
-    ID: requireToken("ID"),
-    INTEGER: requireToken("INTEGER"),
-    FLOAT: requireToken("FLOAT"),
-    QNUMBER: requireToken("QNUMBER"),
-    VARIABLE: requireToken("VARIABLE"),
-    BLOB: requireToken("BLOB"),
+    SPACE: TokenId("SPACE"),
+    COMMENT: TokenId("COMMENT"),
+    ILLEGAL: TokenId("ILLEGAL"),
+    PTR: TokenId("PTR"),
+    MINUS: TokenId("MINUS"),
+    LP: TokenId("LP"),
+    RP: TokenId("RP"),
+    SEMI: TokenId("SEMI"),
+    PLUS: TokenId("PLUS"),
+    STAR: TokenId("STAR"),
+    SLASH: TokenId("SLASH"),
+    REM: TokenId("REM"),
+    EQ: TokenId("EQ"),
+    LE: TokenId("LE"),
+    NE: TokenId("NE"),
+    LT: TokenId("LT"),
+    LSHIFT: TokenId("LSHIFT"),
+    GE: TokenId("GE"),
+    RSHIFT: TokenId("RSHIFT"),
+    GT: TokenId("GT"),
+    BITOR: TokenId("BITOR"),
+    CONCAT: TokenId("CONCAT"),
+    COMMA: TokenId("COMMA"),
+    BITAND: TokenId("BITAND"),
+    BITNOT: TokenId("BITNOT"),
+    DOT: TokenId("DOT"),
+    STRING: TokenId("STRING"),
+    ID: TokenId("ID"),
+    INTEGER: TokenId("INTEGER"),
+    FLOAT: TokenId("FLOAT"),
+    QNUMBER: TokenId("QNUMBER"),
+    VARIABLE: TokenId("VARIABLE"),
+    BLOB: TokenId("BLOB"),
   }
 
   // Build the keyword lookup map.  Keys are uppercase ASCII keyword
@@ -672,7 +673,7 @@ export function tokenizerModuleForGrammar(
   const keywordCode = new Map<string, TokenId>()
   for (const kw of keywordDefs.keywords) {
     if ((kw.mask & enabledMask) === 0) continue
-    keywordCode.set(kw.name, requireToken(kw.token))
+    keywordCode.set(kw.name, TokenId(kw.token))
   }
 
   // -----------------------------------------------------------------------
