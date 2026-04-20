@@ -14,7 +14,7 @@
 // data access has been rewritten against sqlite3-parser's ParserDefs / CST
 // shapes (see src/lempar.ts, src/parser.ts).
 
-import type { ParserDefs, SymbolId, TokenId } from "./lempar.ts"
+import type { ParserDefs, SymbolId } from "./lempar.ts"
 import type { TokenNode } from "./parser.ts"
 
 // ---------------------------------------------------------------------------
@@ -404,32 +404,18 @@ export function renderCodeBlock(
 // Expected-terminal derivation.
 // ---------------------------------------------------------------------------
 
-// For each terminal in the grammar, ask the action tables what would
-// happen if it appeared next in `state`.  Keep those that produce a
-// shift or reduce (i.e. are not the error/no-action sentinel), and
-// convert their symbol names into display forms.  Sorted so punctuation
-// sorts before keywords/identifiers.
+// Render the display form of every terminal in `yy_expected[state]` —
+// the precomputed set of explicitly-shiftable terminals for this state
+// emitted by `scripts/slim-dump.ts`.
 function collectExpectedTerminals(
   defs: ParserDefs,
   state: number,
   idSymbolId: SymbolId | null,
 ): string[] {
-  const tokenIds = new Set<number>()
-  tokenIds.add(0) // end-of-input marker
-  for (let i = 0; i < defs.symbols.length; i++) {
-    const s = defs.symbols[i]!
-    if (s.isTerminal && i < defs.constants.YYNTOKEN) {
-      tokenIds.add(i)
-    }
-  }
-
+  const tokenIds = defs.tables.yy_expected?.[state] ?? []
   const seen = new Set<string>()
   const expected: string[] = []
   for (const tokenId of tokenIds) {
-    const action = findShiftAction(defs, tokenId as TokenId, state)
-    if (action === defs.constants.YY_ERROR_ACTION || action === defs.constants.YY_NO_ACTION) {
-      continue
-    }
     const display = displayExpectedToken(defs, tokenId, idSymbolId)
     if (display === null || seen.has(display)) continue
     seen.add(display)
@@ -475,46 +461,6 @@ function findIdSymbol(defs: ParserDefs): SymbolId | null {
   return null
 }
 
-// Local copy of the engine's findShiftAction — same algorithm, adapted
-// to take the defs directly.  Kept inline to avoid coupling the engine
-// module to the diagnostic module.  See src/lempar.ts for the annotated
-// original.
-function findShiftAction(defs: ParserDefs, lookahead: TokenId, state: number): number {
-  const K = defs.constants
-  const T = defs.tables
-  if (state > K.YY_MAX_SHIFT) return state
-
-  let la: TokenId = lookahead
-  while (true) {
-    const base = T.yy_shift_ofst[state]
-    if (base == null) return T.yy_default[state]
-    const i = base + la
-
-    if (i < 0 || i >= K.YY_ACTTAB_COUNT || i >= T.yy_action.length || T.yy_lookahead[i] !== la) {
-      const fallbackTable = T.yyFallback ?? []
-      if (K.YYFALLBACK && la < fallbackTable.length) {
-        const iFallback = fallbackTable[la]
-        if (iFallback !== 0) {
-          la = iFallback
-          continue
-        }
-      }
-      if (K.YYWILDCARD > 0 && la > 0) {
-        const j = base + K.YYWILDCARD
-        if (
-          j >= 0 &&
-          j < K.YY_ACTTAB_COUNT &&
-          j < T.yy_action.length &&
-          T.yy_lookahead[j] === K.YYWILDCARD
-        ) {
-          return T.yy_action[j]
-        }
-      }
-      return T.yy_default[state]
-    }
-    return T.yy_action[i]
-  }
-}
 
 // Punctuation sorts before words; within a class, alphabetic.  Keeps
 // "(", ")", "," ahead of "identifier" / "select" in the rendered list.

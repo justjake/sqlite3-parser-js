@@ -19,6 +19,45 @@ import { gzipSync } from "node:zlib"
 import { Clean } from "typebox/value"
 
 import { SCHEMAS, type SchemaName } from "./json-schemas.ts"
+import type { ParserConstants, ParserDefs, ParserTables } from "../src/lempar.ts"
+
+// ---------------------------------------------------------------------------
+// Expected-terminal table.
+//
+// For each parser state N in [0, YYNSTATE), list the terminal ids that
+// have an EXPLICIT shift/shift-reduce entry in the action table for
+// this state.  We deliberately skip terminals that only "accept" via
+// `yy_default[state]` (often a default reduce, which makes every
+// lookahead technically valid but tells an error reporter nothing) or
+// via fallback/wildcard redirection — those indirections are reported
+// at the display layer by mapping fallbacks to "identifier".
+//
+// Algorithm matches `ParseCoverage` in tool/lempar.c (lines 529-541):
+// walk `yy_lookahead[base..base+YYNTOKEN]` and keep slots where the
+// stored lookahead equals the offset.  Linear in YYNTOKEN per state.
+// ---------------------------------------------------------------------------
+
+function computeYyExpected(
+  tables: Pick<ParserTables, "yy_lookahead" | "yy_shift_ofst">,
+  constants: Pick<ParserConstants, "YYNSTATE" | "YYNTOKEN" | "YY_ACTTAB_COUNT">,
+): number[][] {
+  const { YYNSTATE, YYNTOKEN, YY_ACTTAB_COUNT } = constants
+  const { yy_lookahead, yy_shift_ofst } = tables
+  const out: number[][] = []
+  for (let state = 0; state < YYNSTATE; state++) {
+    const accepted: number[] = []
+    const base = yy_shift_ofst[state]
+    if (base != null) {
+      for (let la = 0; la < YYNTOKEN; la++) {
+        const i = base + la
+        if (i < 0 || i >= YY_ACTTAB_COUNT) continue
+        if (yy_lookahead[i] === la) accepted.push(la)
+      }
+    }
+    out.push(accepted)
+  }
+  return out
+}
 
 // ---------------------------------------------------------------------------
 // Detect kind by content shape so callers don't have to pass a flag.
@@ -58,12 +97,23 @@ function main(): void {
   const inBytes = readFileSync(inPath)
   const defs = JSON.parse(inBytes.toString("utf8")) as Record<string, unknown>
   const schemaName = detectSchemaName(defs)
-  // `Clean` mutates, but we just parsed `defs` for our own use — no
-  // caller is relying on the parsed object.  Returns `unknown`; the
-  // schema is what controls the shape so the `as` cast is safe.
-  const slim = Clean(SCHEMAS[schemaName], defs)
+  // `Clean` returns `unknown`; the schema controls the resulting shape.
+  // For parser.prod dumps, splice in the computed `yy_expected` table
+  // so runtime diagnostics can render "expected: …" lists in O(|accepted|).
+  let finalized: unknown = Clean(SCHEMAS[schemaName], defs)
+  if (schemaName === "parser.prod") {
+    const parserDefs = finalized as ParserDefs
+    finalized = {
+      ...parserDefs,
+      tables: {
+        ...parserDefs.tables,
+        yy_expected: computeYyExpected(parserDefs.tables, parserDefs.constants),
+      },
+    }
+  }
+
   // Compact JSON — every saved byte counts when the defs dominates the bundle.
-  const outText = JSON.stringify(slim)
+  const outText = JSON.stringify(finalized)
   writeFileSync(outPath, outText)
 
   const before = sizes(inBytes)

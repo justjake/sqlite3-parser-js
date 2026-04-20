@@ -133,6 +133,17 @@
             "minimum": 0,
             "title": "TokenId"
           }
+        },
+        "yy_expected": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "TokenId"
+            }
+          }
         }
       },
       "additionalProperties": false

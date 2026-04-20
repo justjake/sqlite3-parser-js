@@ -136,6 +136,15 @@ export interface ParserTables {
   yy_default: number[]
   /** Terminal-id → fallback-terminal-id.  Present iff YYFALLBACK=1. */
   yyFallback?: TokenId[]
+  /**
+   * Per-state sorted list of terminal ids the grammar would shift (or
+   * shift-reduce, or accept) from this state.  Precomputed at
+   * slim-dump time so error diagnostics can read the "expected" set in
+   * O(|accepted|) instead of iterating every terminal.  Optional —
+   * older prod dumps generated before this field was added still load,
+   * and {@link enhanceError} falls back to the per-terminal scan.
+   */
+  yy_expected?: TokenId[][]
 }
 
 // Symbol / rule / rhs-position shapes after slim-dump strips the

@@ -338,6 +338,11 @@ const ParserProdTables = matches<ParserTables>()(
     yy_reduce_ofst: Type.Array(Type.Integer()),
     yy_default: Type.Array(Type.Integer()),
     yyFallback: Type.Optional(Type.Array(TokenId)),
+    // Per-state sorted array of terminal ids the grammar will shift
+    // from that state.  Precomputed by slim-dump.ts; consumed by
+    // src/enhanceError.ts to render "expected: …" lists without
+    // scanning every terminal per error.
+    yy_expected: Type.Optional(Type.Array(Type.Array(TokenId))),
   }),
 )
 
