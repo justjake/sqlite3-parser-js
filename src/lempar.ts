@@ -245,7 +245,7 @@ export interface LalrError<V> {
   /** Value of that token, as supplied by the caller. */
   readonly minor: V
   /** 0-based index of the failing token within the input iterable. */
-  readonly inputIndex: number
+  readonly tokenIndex: number
 }
 
 /**
@@ -519,7 +519,7 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
           stateno: stateBeforeLookup,
           major: yymajor,
           minor: yyminor,
-          inputIndex: this.#inputIndex,
+          tokenIndex: this.#inputIndex,
         })
         this.#phase = "errored"
         return
@@ -572,8 +572,8 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
    * Instead, the caller provides a `reducer` function that can be used to build
    * a tree, do side effects, whatever.
    */
-  function ParseAlloc<V>(reducer: LalrReduce<V>): LalrEngine<V> {
-    return new YYParser(reducer)
+  function ParseAlloc<Ctx, V>(reducer: LalrReduce<Ctx, V>, state: Ctx): LalrEngine<Ctx, V> {
+    return new YYParser(reducer, state)
   }
 
   return ParseAlloc

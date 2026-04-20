@@ -31,6 +31,7 @@ import {
   type TokenId,
   LalrReduce,
   LalrEngine,
+  CreateLalrEngine,
 } from "./lempar.ts"
 import {
   buildIllegalTokenError,
@@ -38,6 +39,9 @@ import {
   lineColAt,
   type ParseError,
 } from "./enhanceError.ts"
+import { Cmd } from "./ast/nodes.ts";
+import { AstNode } from "../vendor/liteparser/wasm/src/index.ts";
+import { ParseState } from "./ast/parseState.ts";
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -99,9 +103,9 @@ export type CstNode = TokenNode | RuleNode
 export type CreateParserOptions = CreateTokenizerOptions
 
 export interface ParseResult {
-  /** The CST root, present iff the parser reached YY_ACCEPT_ACTION. */
-  readonly cst?: CstNode
-  /** Any errors encountered.  Non-empty implies either a partial or no CST. */
+  /** The AST root, present iff the parser reached YY_ACCEPT_ACTION. */
+  readonly ast?: Cmd
+  /** Any errors encountered.  Non-empty implies either a partial or no AST. */
   readonly errors: readonly ParseError[]
 }
 
@@ -114,8 +118,6 @@ export interface ParseResult {
  * SQlite3 Parser library.
  */
 export interface ParserModule {
-  /** The specific SQLite version this bundle was generated from. */
-  readonly SQLITE_VERSION: string
   /** Parse a SQL string into a CST. */
   parse(source: string): ParseResult
   /** Tokenize a SQL string into a stream of tokens. */
@@ -123,181 +125,32 @@ export interface ParserModule {
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
   tokenName(code: TokenId): string | undefined
   /** Create the underlying LALR state machine engine, used by {@link parse}. */
-  createEngine<Ctx, T>(reducer: LalrReduce<Ctx, T>): LalrEngine<Ctx, T>
+  createEngine: CreateLalrEngine
+  /** Reducer function that evaluates parse rules to build the AST. */
+  reduce: LalrReduce<ParseState, unknown>
+  /** Create a new parse state for use with {@link createEngine}.. */
+  createState: () => ParseState
   /**
    * Create a new parser module with the given options.
    * Parser modules are stateless, you should create one at module scope and reuse it.
    */
   withOptions(opts: CreateParserOptions): ParserModule
   /** LALR parser definition. */
-  readonly PARSER_DEFS: ParserDefs
+  parserDefs: ParserDefs
   /** SQLite keywords recognized by the tokenizer. */
-  readonly KEYWORD_DEFS: KeywordDefs
+  keywordDefs: KeywordDefs
 }
 
 /**
  * Create a Parser for the grammar specified by `parserDefs` and `keywordDefs`.
  */
-export function parserModuleForGrammar(args: {
-  SQLITE_VERSION: string
-  PARSER_DEFS: ParserDefs
-  KEYWORD_DEFS: KeywordDefs
-  options: CreateParserOptions
-}): ParserModule {
-  const { SQLITE_VERSION, PARSER_DEFS, KEYWORD_DEFS, options } = args
-  const createEngine = engineModuleForGrammar(PARSER_DEFS)
-  const rules = PARSER_DEFS.rules
+export function parserModuleForGrammar(parserDefs: ParserDefs, keywordDefs: KeywordDefs, options: CreateParserOptions): ParserModule {
+  const { symbols, reduce, createState } = parserDefs
+  const tk = tokenizerModuleForGrammar(parserDefs, keywordDefs, options)
+  const createEngine = engineModuleForGrammar(parserDefs)
 
-  const symbols = PARSER_DEFS.symbols
-
-  // -------------------------------------------------------------------------
-  // CST DIVERGENCE #1 — Unit-rule-elimination recovery.
-  //
-  // Lemon's table generator marks unit rules like `cmdlist ::= ecmd` as
-  // `doesReduce=false` and folds them into surrounding reductions (e.g.
-  // `input ::= cmdlist` pops what LOOKS like an ecmd off the stack and
-  // treats it as a cmdlist).  The LALR *engine* happily follows those
-  // tables — nothing in the C code needs to know those rules were
-  // elided, because the rule's C action was empty to begin with.
-  //
-  // For a CST that reflects the authored grammar, we need to put the
-  // invisible wrapper nodes back.  `unitWrapper[target][source]` is
-  // the id of the rule to apply when we pop a symbol of type `source`
-  // where a symbol of type `target` was expected.  In SQLite's current
-  // grammar all 14 collapsed rules are 1:1 unit rules; a single lookup
-  // suffices.
-  // -------------------------------------------------------------------------
-  const unitWrapper = new Map<SymbolId, Map<SymbolId, RuleId>>()
-  for (let i = 0; i < rules.length; i++) {
-    const r = rules[i]!
-    if (r.doesReduce) continue
-    if (r.rhs.length !== 1) continue
-    const src = r.rhs[0]?.symbol
-    if (src === undefined) continue
-    let inner = unitWrapper.get(r.lhs)
-    if (!inner) unitWrapper.set(r.lhs, (inner = new Map()))
-    inner.set(src, i as RuleId)
-  }
-
-  // -------------------------------------------------------------------------
-  // CST DIVERGENCE #2 — Multi-terminal RHS matching.
-  //
-  // Positions declared with `%token_class foo A|B|C` accept any of
-  // {A,B,C}.  Lemon handles this transparently at table-generation
-  // time, so the engine never needs to consult the multi set at
-  // runtime.  *We* do, but only as a pre-check: "was the popped entry
-  // one of the allowed terminals? if so, don't fire unit-rule
-  // synthesis."  If we skipped this check we'd spuriously wrap e.g. an
-  // INDEXED token when the rule's RHS is `id = ID|INDEXED|JOIN_KW`.
-  // -------------------------------------------------------------------------
-
-  /** Does `actualMajor` satisfy the RHS-position `expected` constraint? */
-  function rhsMatches(expected: ParserRhsPos, actualMajor: SymbolId): boolean {
-    if (expected.symbol !== undefined) return expected.symbol === actualMajor
-    if (expected.multi !== undefined) {
-      for (const s of expected.multi) if (s.symbol === actualMajor) return true
-    }
-    return false
-  }
-
-  /**
-   * If the node's symbol type is `actualMajor` but position `expected`
-   * wants something else, wrap it in the invisible unit-rule node(s)
-   * that Lemon elided.  Iterates in case a future version introduces
-   * multi-step unit chains.
-   */
-  function synthesizeWrappers(
-    expected: ParserRhsPos,
-    actualMajor: SymbolId,
-    node: CstNode,
-  ): CstNode {
-    let cur = node
-    let curMajor = actualMajor
-    for (let safety = 0; safety < 4; safety++) {
-      if (rhsMatches(expected, curMajor)) break
-      // `expected.symbol` is the only target we know how to reach via
-      // unit rules — if the expected position is a MULTITERMINAL set
-      // and nothing matched, we've found a grammar invariant violation
-      // rather than an elision.
-      const target = expected.symbol
-      if (target === undefined) break
-      const wrapperId = unitWrapper.get(target)?.get(curMajor)
-      if (wrapperId === undefined) break
-      const wrapperRule = rules[wrapperId]!
-      cur = {
-        kind: "rule",
-        rule: wrapperId,
-        name: wrapperRule.lhsName,
-        lhs: wrapperRule.lhs,
-        children: [cur],
-        start: cur.start,
-        length: cur.length,
-      }
-      curMajor = wrapperRule.lhs
-    }
-    return cur
-  }
-
-  // Bind a tokenizer.  The parser uses the same TK_* ids the defs'
-  // symbol table assigns, so everything stays in sync.
-  const tk = tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, options)
-
-  /** Token id 0 is Lemon's end-of-input marker (`$`). */
-  const TK_EOF: TokenId = 0 as TokenId
-  const TK_SEMI = tk.tokens.SEMI
-  const TK_ILLEGAL = tk.tokens.ILLEGAL
-
-  // -------------------------------------------------------------------------
-  // Build the RuleNode for a given reduction.  This is the engine's
-  // `onReduce` callback — it runs once per reduction and returns the
-  // new stack value.
-  //
-  // The work here is all CST-emitter: figuring out which popped entries
-  // should become children (virtual tokens drop out), running unit-rule
-  // synthesis, and tightening the span around non-empty children.
-  // -------------------------------------------------------------------------
-  function buildRuleNode(ruleId: RuleId, popped: LalrPopped<CstNode>[]): CstNode {
-    const rule = rules[ruleId]
-
-    // Walk popped entries alongside the rule's declared RHS.  Each
-    // entry becomes a child, possibly wrapped in synthetic unit-rule
-    // nodes that Lemon elided.  Synthetic tokens (injected SEMI/EOF)
-    // ride along with `synthetic: true` and zero-length spans.
-    const children: CstNode[] = []
-    for (let i = 0; i < popped.length; i++) {
-      const entry = popped[i]
-      const rhsPos = rule.rhs[i]
-      children.push(rhsPos ? synthesizeWrappers(rhsPos, entry.major, entry.minor) : entry.minor)
-    }
-
-    // Compute the rule's span from its children.  Children with
-    // length=0 don't contribute — they're either empty-RHS rules (no
-    // source text to anchor to) or synthetic siblings.  Skipping them
-    // keeps the span tight and prevents negative lengths when a
-    // zero-length child appears at the end of the sequence.
-    let start = 0
-    let length = 0
-    let sawSpan = false
-    for (const c of children) {
-      if (c.length === 0) continue
-      if (!sawSpan) {
-        start = c.start
-        sawSpan = true
-      }
-      length = c.start + c.length - start
-    }
-
-    const ruleNode: RuleNode = {
-      kind: "rule",
-      rule: ruleId,
-      name: rule.lhsName,
-      lhs: rule.lhs,
-      children,
-      start,
-      length,
-    }
-    return ruleNode
-  }
+  const { ILLEGAL, SEMI } = tk.tokens
+  const EOF = 0 as TokenId
 
   // -------------------------------------------------------------------------
   // parse — public entry point.
@@ -313,7 +166,7 @@ export function parserModuleForGrammar(args: {
     // sqlite3RunParser: get a token, feed it to the parser, repeat
     // until end-of-input or error; then inject a virtual SEMI (if the
     // last real token wasn't one) and the `$` end marker.
-    const session = createEngine(buildRuleNode)
+    const session = createEngine(reduce, createState())
 
     // Chronological token stream we actually fed the session.
     // enhanceParseError scans this backward from the failing token to
@@ -326,7 +179,7 @@ export function parserModuleForGrammar(args: {
       const node: TokenNode = {
         kind: "token",
         type: tok.type,
-        name: symbols[tok.type]?.name ?? String(tok.type),
+        name: symbols[tok.type] ?? String(tok.type),
         text: tok.text,
         start: tok.span.offset,
         length: tok.span.length,
@@ -335,7 +188,7 @@ export function parserModuleForGrammar(args: {
         synthetic: false,
       }
 
-      if (tok.type === TK_ILLEGAL) {
+      if (tok.type === ILLEGAL) {
         // sqlite's tokenize.c:707 formats it as: unrecognized token.
         // We record it and bail — attempting to recover typically
         // cascades into noise.
@@ -347,7 +200,7 @@ export function parserModuleForGrammar(args: {
       session.next(tok.type, node)
       if (session.phase !== "running") break
       lastMajor = tok.type
-    }
+    } // end parse loop
 
     // EOF tail — mirrors tokenize.c:674 sqlite3RunParser.  If the last
     // real token wasn't a SEMI, feed a virtual one to close the
@@ -358,11 +211,12 @@ export function parserModuleForGrammar(args: {
     if (session.phase === "running") {
       const endPos = sql.length
       const { line: endLine, col: endCol } = lineColAt(sql, endPos)
-      if (lastMajor !== TK_SEMI) {
+
+      if (lastMajor !== SEMI) {
         const semiNode: TokenNode = {
           kind: "token",
-          type: TK_SEMI,
-          name: symbols[TK_SEMI]?.name ?? "SEMI",
+          type: SEMI,
+          name: symbols[SEMI] ?? "SEMI",
           text: "",
           start: endPos,
           length: 0,
@@ -371,13 +225,14 @@ export function parserModuleForGrammar(args: {
           synthetic: true,
         }
         tokenStream.push(semiNode)
-        session.next(TK_SEMI, semiNode)
+        session.next(SEMI, semiNode)
       }
+
       if (session.phase === "running") {
         const eofNode: TokenNode = {
           kind: "token",
-          type: TK_EOF,
-          name: symbols[TK_EOF]?.name ?? "$",
+          type: EOF,
+          name: symbols[EOF] ?? "$",
           text: "",
           start: endPos,
           length: 0,
@@ -386,7 +241,7 @@ export function parserModuleForGrammar(args: {
           synthetic: true,
         }
         tokenStream.push(eofNode)
-        session.next(TK_EOF, eofNode)
+        session.next(EOF, eofNode)
       }
     }
 
@@ -400,38 +255,29 @@ export function parserModuleForGrammar(args: {
           sql,
           token: e.minor as TokenNode,
           state: e.stateno,
-          defs: PARSER_DEFS,
+          defs: parserDefs,
           tokens: tokenStream,
-          tokenIndex: e.inputIndex,
+          tokenIndex: e.tokenIndex,
         }),
       )
     }
 
-    if (session.phase === "accepted" && session.root) {
-      // Run the parse.y semantic-action port against the CST.  See
-      // src/semantic.ts and generated/<ver>/semantic-actions.snapshot.json.
-      for (const e of validate(session.root, PARSER_DEFS, sql, {
-        digitSeparator: options.digitSeparator,
-      })) {
-        errors.push(e)
-      }
-      return { cst: session.root, errors }
-    }
-    return { errors }
+    return { ast: session.state === "accepted" ? session.root as Cmd : undefined, errors }
   }
 
   // Expose the tokenizer too so callers can inspect raw tokens for
   // syntax highlighting / diagnostics without running a full parse.
   return {
-    SQLITE_VERSION,
     parse,
     tokenize: tk.tokenize,
     tokenName: tk.tokenName,
     createEngine,
+    reduce,
+    createState,
     withOptions: (newOpts: CreateParserOptions) =>
-      parserModuleForGrammar({ ...args, options: { ...options, ...newOpts } }),
-    PARSER_DEFS: PARSER_DEFS,
-    KEYWORD_DEFS: KEYWORD_DEFS,
+      parserModuleForGrammar(parserDefs, keywordDefs, { ...options, ...newOpts }),
+    parserDefs,
+    keywordDefs,
   }
 }
 
