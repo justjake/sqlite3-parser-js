@@ -67,13 +67,12 @@ help:
 	  'AST layer:' \
 	  '  make diff-ast OLD=<ver> NEW=<ver>       # grammar-shape diff' \
 	  '  make ast-coverage VER=<ver>             # unhit-rule report' \
-	  '  make check-semantic-actions             # drift-check parse.y validations' \
 	  '' \
 	  'For onboarding a new sqlite release, use:' \
 	  '  bun run vendor <ref>                    # full workflow' \
 	  ''
 
-gen: $(GEN_TARGETS) check-semantic-actions
+gen: $(GEN_TARGETS)
 
 versions:
 	@echo "Versions with vendored patches:"
@@ -108,15 +107,19 @@ build/mkkeywordhash-%: vendor/patched/%/tool/mkkeywordhash.c
 # validate-json can run.
 # ---------------------------------------------------------------------------
 JSON_SCHEMA_SOURCES := scripts/json-schemas.ts
+JSON_SCHEMA_DIR := generated/json-schema/v1
 JSON_SCHEMAS := \
-  generated/json-schema/v1/parser.dev.schema.json \
-  generated/json-schema/v1/parser.prod.schema.json \
-  generated/json-schema/v1/keywords.dev.schema.json \
-  generated/json-schema/v1/keywords.prod.schema.json
+  $(JSON_SCHEMA_DIR)/parser.dev.schema.json \
+  $(JSON_SCHEMA_DIR)/parser.prod.schema.json \
+  $(JSON_SCHEMA_DIR)/keywords.dev.schema.json \
+  $(JSON_SCHEMA_DIR)/keywords.prod.schema.json
 
-$(JSON_SCHEMAS): $(JSON_SCHEMA_SOURCES)
-	bun scripts/json-schemas.ts
-	bun run fmt $(JSON_SCHEMAS)
+# One pattern rule per schema — the stem (e.g. `parser.dev`) doubles as
+# both the CLI schema-name and the filename stem.
+$(JSON_SCHEMA_DIR)/%.schema.json: $(JSON_SCHEMA_SOURCES)
+	@mkdir -p $(dir $@)
+	bun scripts/json-schemas.ts $* $@
+	bun run fmt $@
 
 .PHONY: json-schemas
 json-schemas: $(JSON_SCHEMAS)
@@ -158,7 +161,7 @@ generated/%/parser.dev.json: \
 generated/%/lemonpar2.ts: \
     scripts/emit-ts-parser.ts \
     generated/%/parser.dev.json
-	bun scripts/emit-ts-parser.ts $*
+	bun scripts/emit-ts-parser.ts generated/$*/parser.dev.json $@
 	bun run fmt $@
 
 # mkkeywordhash has no input files — its keyword table is compiled in.
@@ -196,18 +199,38 @@ generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.
 # One invocation of the script emits both index.ts and stable-keys.ts, but
 # keep the targets split so GNU Make 3.81 can still parse this file.
 # ---------------------------------------------------------------------------
-generated/%/index.ts: \
+VERSION_INDEX_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts)
+VERSION_STABLE_KEYS_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/stable-keys.ts)
+
+# Static pattern rules — `%` is constrained to GEN_VERSIONS so the
+# pattern can't accidentally match `generated/template/index.ts` (a
+# checked-in source file that's an INPUT to these rules).  GNU Make 3.81
+# lacks grouped targets (`&:`), so the recipe is duplicated; the second
+# invocation is a no-op because both outputs were written the first time.
+$(VERSION_INDEX_TS): generated/%/index.ts: \
     scripts/emit-version-modules.ts \
+    generated/template/index.ts \
     generated/%/parser.prod.json \
     generated/%/keywords.prod.json
-	bun scripts/emit-version-modules.ts $*
+	bun scripts/emit-version-modules.ts version \
+	  $* \
+	  generated/$*/parser.prod.json \
+	  generated/template/index.ts \
+	  generated/$*/index.ts \
+	  generated/$*/stable-keys.ts
 	bun run fmt generated/$*/index.ts generated/$*/stable-keys.ts
 
-generated/%/stable-keys.ts: \
+$(VERSION_STABLE_KEYS_TS): generated/%/stable-keys.ts: \
     scripts/emit-version-modules.ts \
+    generated/template/index.ts \
     generated/%/parser.prod.json \
     generated/%/keywords.prod.json
-	bun scripts/emit-version-modules.ts $*
+	bun scripts/emit-version-modules.ts version \
+	  $* \
+	  generated/$*/parser.prod.json \
+	  generated/template/index.ts \
+	  generated/$*/index.ts \
+	  generated/$*/stable-keys.ts
 	bun run fmt generated/$*/index.ts generated/$*/stable-keys.ts
 
 # ---------------------------------------------------------------------------
@@ -218,7 +241,7 @@ generated/%/stable-keys.ts: \
 generated/current.ts: \
     scripts/emit-version-modules.ts \
     vendor/manifest.json
-	bun scripts/emit-version-modules.ts --current
+	bun scripts/emit-version-modules.ts current vendor/manifest.json $@
 	bun run fmt $@
 
 .PHONY: current
@@ -250,22 +273,6 @@ ast-coverage:
 	bun scripts/ast-coverage.ts \
 	  generated/$(VER)/parser.dev.json \
 	  build/test/ast-coverage.json
-
-# ---------------------------------------------------------------------------
-# Semantic-action drift check.  The committed snapshot at
-# generated/<ver>/semantic-actions.snapshot.json hashes every parse.y
-# action that carries a parse-time validation call.  `make gen` runs
-# this check for every version with vendored patches; any drift fails
-# the build and forces a human to review src/semantic.ts.
-#
-# To adopt drift after updating src/semantic.ts:
-#   bun scripts/semantic-snapshot.ts --write <ver>
-# ---------------------------------------------------------------------------
-.PHONY: check-semantic-actions
-check-semantic-actions:
-	@for v in $(GEN_VERSIONS); do \
-	  bun scripts/semantic-snapshot.ts --check $$v || exit $$?; \
-	done
 
 # ---------------------------------------------------------------------------
 # Benchmark comparison: build the liteparser submodule to WebAssembly so

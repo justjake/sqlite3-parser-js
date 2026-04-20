@@ -1,9 +1,11 @@
 #!/usr/bin/env -S bun run
 // scripts/json-schemas.ts — JSON Schemas for the generated dumps.
 //
-// Writes one file per schema into:
+// Usage:
+//   bun scripts/json-schemas.ts <schema-name> <output-path>
 //
-//   generated/json-schema/v<JSON_SCHEMA_VERSION>/<name>.schema.json
+// <schema-name> is one of SCHEMA_NAMES (parser.dev / parser.prod /
+// keywords.dev / keywords.prod).  Invoke once per schema.
 //
 // Consumed by:
 //   * scripts/validate-json.ts — validates a defs against its schema.
@@ -35,7 +37,7 @@
 
 import Type, { type Static, type TSchema } from "typebox"
 import { mkdirSync, writeFileSync } from "node:fs"
-import { dirname, join, resolve } from "node:path"
+import { dirname, join } from "node:path"
 
 import { PACKAGE_NAME } from "./package-info.ts"
 
@@ -532,31 +534,31 @@ export function schemaPath(root: string, name: SchemaName): string {
 }
 
 // ---------------------------------------------------------------------------
-// CLI entry — write each schema as pretty JSON.
+// CLI entry — write one schema as pretty JSON.  Invoke once per schema.
 // ---------------------------------------------------------------------------
 
 function main(): void {
-  const root = resolve(dirname(new URL(import.meta.url).pathname), "..")
-  const dir = schemaDir(root)
-  mkdirSync(dir, { recursive: true })
-
-  for (const name of SCHEMA_NAMES) {
-    const schema = SCHEMAS[name]
-    const annotated = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      // Version segment sits BEFORE the schema name so that a future
-      // schema-version bump can freely drop, rename, or add schemas
-      // without stepping on v1's $id namespace.
-      $id: `${PACKAGE_NAME}/v${JSON_SCHEMA_VERSION}/${name}`,
-      title: name,
-      ...schema,
-    }
-    const path = schemaPath(root, name)
-    mkdirSync(dirname(path), { recursive: true })
-    writeFileSync(path, JSON.stringify(annotated, null, 2) + "\n")
-    console.log(`wrote ${path}`)
+  const [name, outPath] = process.argv.slice(2)
+  if (!name || !outPath || !(name in SCHEMAS)) {
+    console.error(
+      `usage: bun scripts/json-schemas.ts <${SCHEMA_NAMES.join("|")}> <output-path>`,
+    )
+    process.exit(2)
   }
-  console.log(`\nJSON_SCHEMA_VERSION = ${JSON_SCHEMA_VERSION}`)
+
+  const schema = SCHEMAS[name as SchemaName]
+  const annotated = {
+    $schema: "http://json-schema.org/draft-07/schema#",
+    // Version segment sits BEFORE the schema name so that a future
+    // schema-version bump can freely drop, rename, or add schemas
+    // without stepping on v1's $id namespace.
+    $id: `${PACKAGE_NAME}/v${JSON_SCHEMA_VERSION}/${name}`,
+    title: name,
+    ...schema,
+  }
+  mkdirSync(dirname(outPath), { recursive: true })
+  writeFileSync(outPath, JSON.stringify(annotated, null, 2) + "\n")
+  console.log(`wrote ${outPath}`)
 }
 
 if (import.meta.main) {
