@@ -239,8 +239,6 @@ function emitTokenCodes(dump: RawDump): string {
     lines.push(`  ${sym.name}: ${sym.id},`)
   }
   lines.push("} as const")
-  lines.push("")
-  lines.push("export type TokenCode = typeof tokens[keyof typeof tokens]")
   return lines.join("\n")
 }
 
@@ -467,12 +465,7 @@ function emitDriver(): string {
     "const engineFactory = engineModuleForGrammar(PARSER_DEFS)",
     "",
     "import { makeParseState } from \"../../src/ast/parseState.ts\"",
-    "export { makeParseState }",
-    "",
-    "export interface ParseResult {",
-    "  readonly cmd: Cmd | undefined",
-    "  readonly errors: readonly ParseError[]",
-    "}",
+    "import type { ParseResult } from \"../../src/ast/parseState.ts\"",
     "",
     "/**",
     " * Parse a pre-tokenized stream.  Callers must end the stream by",
@@ -498,8 +491,7 @@ function emitDriver(): string {
     "    const tok = e.minor as Token",
     "    state.errors.push({",
     "      message: `near \"${tok.text}\": syntax error`,",
-    "      start: tok.span.offset,",
-    "      length: tok.span.length,",
+    "      span: tok.span,",
     "    })",
     "  }",
     "  return { cmd: finalizeCmd(state), errors: state.errors }",

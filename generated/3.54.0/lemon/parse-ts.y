@@ -43,18 +43,17 @@
 //
 %syntax_error {
   if( yymajor===0 /* TK_EOF */ ){
-    state.errors.push({ message: "incomplete input" });
+    state.errors.push({ message: "incomplete input", span: yyminor.span });
   }else{
     state.errors.push({
       message: `near "${yyminor.text}": syntax error`,
-      start: yyminor.span.offset,
-      length: yyminor.span.length,
+      span: yyminor.span,
     });
   }
 }
 
 %stack_overflow {
-  state.errors.push({ message: "parser stack overflow" });
+  state.errors.push({ message: "parser stack overflow", span: { offset: 0, length: 0, line: 0, col: 0 } });
 }
 
 // The name of the generated procedure that implements the parser is as follows:
@@ -79,7 +78,7 @@ import type {
   TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,
   Window, WindowDef, With,
 } from "../../../src/ast/nodes.ts";
-import type { ParseError, ParseState, Span, Token } from "../../../src/ast/parseState.ts";
+import type { AstParseError, ParseState, Span, Token } from "../../../src/ast/parseState.ts";
 import type { FromClauseMut } from "../../../src/ast/parseActions.ts";
 import {
   mkName, mkId, mkIdExpr, mkVariableExpr,
@@ -175,7 +174,7 @@ table_option(A) ::= WITHOUT nm(X). {
   if( X.name.toLowerCase()==="rowid" ){
     A = 0x00000080 /* TabFlags.WithoutRowid */;
   }else{
-    state.errors.push({ message: `unknown table option: ${X.name}` });
+    state.errors.push({ message: `unknown table option: ${X.name}`, span: X.span });
     A = 0;
   }
 }
@@ -183,7 +182,7 @@ table_option(A) ::= nm(X). {
   if( X.name.toLowerCase()==="strict" ){
     A = 0x00010000 /* TabFlags.Strict */;
   }else{
-    state.errors.push({ message: `unknown table option: ${X.name}` });
+    state.errors.push({ message: `unknown table option: ${X.name}`, span: X.span });
     A = 0;
   }
 }
@@ -542,8 +541,8 @@ values(A) ::= VALUES LP nexprlist(X) RP. { A = [X]; }
 //
 %type mvalues {Expr[][]}
 oneselect(A) ::= mvalues(X).                    { A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }; }
-mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP.  { valuesPush(state, A, Y); }
-mvalues(A) ::= mvalues(A) COMMA LP nexprlist(Y) RP. { valuesPush(state, A, Y); }
+mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP.  { valuesPush(state, A, Y, nodeSpan());}
+mvalues(A) ::= mvalues(A) COMMA LP nexprlist(Y) RP. { valuesPush(state, A, Y, nodeSpan());}
 
 // The "distinct" nonterminal is Distinct/All/none.
 //
@@ -750,42 +749,42 @@ cmd ::= with(W) insert_cmd(R) INTO xfullname(X) idlist_opt(F) DEFAULT VALUES ret
     kind: "InsertStmt",
     with: W, orConflict: R, tblName: X, columns: F,
     body: { kind: "DefaultValuesInsertBody", span: nodeSpan() },
-    returning: Y, span: nodeSpan()
+    returning: Y.columns, span: nodeSpan()
   };
 }
 
-%type upsert {{upsert: Upsert | undefined, returning: ResultColumn[] | undefined, span: Span}}
+%type upsert {{upsert: Upsert | undefined, returning: ResultColumn[] | undefined, returningSpan: Span | undefined, span: Span}}
 
-upsert(A) ::= .                               { A = { upsert: undefined, returning: undefined, span: nodeSpan() }; }
-upsert(A) ::= RETURNING selcollist(X).        { A = { upsert: undefined, returning: X, span: nodeSpan() };    }
+upsert(A) ::= .                               { A = { upsert: undefined, returning: undefined, returningSpan: undefined, span: nodeSpan() }; }
+upsert(A) ::= RETURNING selcollist(X).        { A = { upsert: undefined, returning: X, returningSpan: nodeSpan(), span: nodeSpan() }; }
 upsert(A) ::= ON CONFLICT LP sortlist(T) RP where_opt(TW)
               DO UPDATE SET setlist(Z) where_opt(W) upsert(N). {
   const idx = mkUpsertIndex(state, T, TW, nodeSpan());
   A = {
     upsert: { kind: "Upsert", index: idx, doClause: { kind: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() }, next: N.upsert, span: nodeSpan() },
-    returning: N.returning, span: nodeSpan()
+    returning: N.returning, returningSpan: N.returningSpan, span: nodeSpan()
   };
 }
 upsert(A) ::= ON CONFLICT LP sortlist(T) RP where_opt(TW) DO NOTHING upsert(N). {
   const idx = mkUpsertIndex(state, T, TW, nodeSpan());
   A = {
     upsert: { kind: "Upsert", index: idx, doClause: { kind: "NothingUpsertDo", span: nodeSpan() }, next: N.upsert, span: nodeSpan() },
-    returning: N.returning, span: nodeSpan()
+    returning: N.returning, returningSpan: N.returningSpan, span: nodeSpan()
   };
 }
 upsert(A) ::= ON CONFLICT DO NOTHING returning(R). {
-  A = { upsert: { kind: "Upsert", index: undefined, doClause: { kind: "NothingUpsertDo", span: nodeSpan() }, next: undefined, span: nodeSpan() }, returning: R, span: nodeSpan() };
+  A = { upsert: { kind: "Upsert", index: undefined, doClause: { kind: "NothingUpsertDo", span: nodeSpan() }, next: undefined, span: nodeSpan() }, returning: R.columns, returningSpan: R.span, span: nodeSpan() };
 }
 upsert(A) ::= ON CONFLICT DO UPDATE SET setlist(Z) where_opt(W) returning(R). {
   A = {
     upsert: { kind: "Upsert", index: undefined, doClause: { kind: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() }, next: undefined, span: nodeSpan() },
-    returning: R, span: nodeSpan()
+    returning: R.columns, returningSpan: R.span, span: nodeSpan()
   };
 }
 
-%type returning {ResultColumn[] | undefined}
-returning(A) ::= RETURNING selcollist(X). { A = X;    }
-returning(A) ::= .                        { A = undefined; }
+%type returning {{columns: ResultColumn[] | undefined, span: Span | undefined}}
+returning(A) ::= RETURNING selcollist(X). { A = { columns: X, span: nodeSpan() }; }
+returning(A) ::= .                        { A = { columns: undefined, span: undefined }; }
 
 %type insert_cmd {ResolveType | undefined}
 insert_cmd(A) ::= INSERT orconf(R).   { A = R; }
@@ -797,7 +796,7 @@ idlist_opt(A) ::= .                   { A = undefined; }
 idlist_opt(A) ::= LP idlist(X) RP.    { A = X;    }
 idlist(A) ::= idlist(A) COMMA nm(Y).  {
   if( A.some(n => n.name===Y.name) ){
-    state.errors.push({ message: `column "${Y.name}" specified more than once` });
+    state.errors.push({ message: `column "${Y.name}" specified more than once`, span: Y.span });
   }else{
     A.push(Y);
   }
@@ -1075,11 +1074,13 @@ tridxby ::= .
 tridxby ::= INDEXED BY nm. {
   state.errors.push({
     message: "the INDEXED BY clause is not allowed on UPDATE or DELETE statements within triggers",
+    span: nodeSpan(),
   });
 }
 tridxby ::= NOT INDEXED. {
   state.errors.push({
     message: "the NOT INDEXED clause is not allowed on UPDATE or DELETE statements within triggers",
+    span: nodeSpan(),
   });
 }
 
@@ -1091,7 +1092,10 @@ trigger_cmd(A) ::= UPDATE orconf(R) xfullname(X) tridxby SET setlist(Y) from(F) 
 // INSERT
 trigger_cmd(A) ::= insert_cmd(R) INTO xfullname(X) idlist_opt(F) select(S) upsert(U). {
   if( U.returning ){
-    state.errors.push({ message: "cannot use RETURNING in a trigger" });
+    state.errors.push({
+      message: "cannot use RETURNING in a trigger",
+      span: U.returningSpan ?? nodeSpan(),
+    });
   }
   A = {
     kind: "InsertTriggerCmd",
@@ -1377,8 +1381,7 @@ term(A) ::= QNUMBER(X). {
   if( dq.error ){
     state.errors.push({
       message: dq.error,
-      start: X.span.offset,
-      length: X.span.length,
+      span: X.span,
     });
   }
   A = { kind: "LiteralExpr", literal: { kind: "NumericLiteral", value: dq.text, span: X.span }, span: nodeSpan() };

@@ -8,17 +8,23 @@
 // callers have a single import site.
 
 import type { Span, Token } from "../tokenize.ts"
-import type { ExplainKind, Name, Stmt } from "./nodes.ts"
+import type { Cmd, ExplainKind, Name, Stmt } from "./nodes.ts"
 
 export type { Span, Token }
 
-/** One diagnostic produced by a parser action. */
-export interface ParseError {
+/**
+ * One semantic diagnostic produced by an AST-building parser action.
+ *
+ * The name emphasises that these are AST-layer findings (duplicate
+ * column names, DISTINCT-arity violations, misplaced digit separators,
+ * etc.) — distinct from syntax errors raised by the LALR engine, which
+ * travel on {@link engineModuleForGrammar}'s own error channel.  The
+ * driver merges both streams into a single `errors` array on the
+ * public {@link ParseResult}.
+ */
+export interface AstParseError {
   readonly message: string
-  /** Byte offset of the offending token, if known. */
-  readonly start?: number
-  /** Length of the offending token, if known. */
-  readonly length?: number
+  readonly span: Span
 }
 
 /**
@@ -40,7 +46,7 @@ export interface ParseState {
   /** Scratch buffer for the current vtabarg, flushed between args. */
   vtabArgCurrent: string
   /** Diagnostics emitted by parser actions. */
-  errors: ParseError[]
+  errors: AstParseError[]
   /**
    * Digit-separator character used by the tokenizer.  The `term ::=
    * QNUMBER` action passes this to `sqlite3DequoteNumber` so separator
@@ -48,6 +54,17 @@ export interface ParseState {
    * `undefined` falls back to util's default (`"_"`).
    */
   digitSeparator?: string
+}
+
+/**
+ * Result returned by the AST parser's `parseTokens` driver.  Combines
+ * the parsed {@link Cmd} (or `undefined` if the parse didn't reach
+ * accept) with both syntactic errors (pushed in by the LalrEngine
+ * wrapper) and semantic errors (pushed by reducer actions).
+ */
+export interface ParseResult {
+  readonly cmd: Cmd | undefined
+  readonly errors: readonly AstParseError[]
 }
 
 /** Allocate a fresh {@link ParseState} for a new parse session. */

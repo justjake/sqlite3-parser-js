@@ -25,7 +25,7 @@
 ** plumbing).  Until such a generator exists, this file is the
 ** specification for how each reduction should materialize in our AST.
 */
-#line 66 "parse-ts.y"
+#line 65 "parse-ts.y"
 
 import type {
   AlterTableBody, As, Cmd, ColFlags, ColumnConstraint, ColumnDefinition,
@@ -42,7 +42,7 @@ import type {
   TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,
   Window, WindowDef, With,
 } from "../../../src/ast/nodes.ts";
-import type { ParseError, ParseState, Span, Token } from "../../../src/ast/parseState.ts";
+import type { AstParseError, ParseState, Span, Token } from "../../../src/ast/parseState.ts";
 import type { FromClauseMut } from "../../../src/ast/parseActions.ts";
 import {
   mkName, mkId, mkIdExpr, mkVariableExpr,
@@ -339,7 +339,6 @@ typedef union {
   OneSelect yy32;
   FunctionTail yy53;
   TriggerCmd yy65;
-  ResultColumn[] | undefined yy72;
   TabFlags yy73;
   NamedTableConstraint | undefined yy77;
   WindowDef yy80;
@@ -390,7 +389,6 @@ typedef union {
   ColumnConstraint yy456;
   FrameMode yy457;
   QualifiedName yy458;
-  {upsert: Upsert | undefined, returning: ResultColumn[] | undefined, span: Span} yy480;
   TriggerCmd[] yy481;
   Indexed | undefined yy492;
   { not: boolean, op: LikeOperator, span: Span } yy493;
@@ -398,6 +396,7 @@ typedef union {
   ResultColumn[] yy518;
   DistinctNames | undefined yy529;
   Expr[] yy540;
+  {upsert: Upsert | undefined, returning: ResultColumn[] | undefined, returningSpan: Span | undefined, span: Span} yy542;
   Expr yy560;
   FromClause | undefined yy561;
   InitDeferredPred | undefined yy575;
@@ -405,6 +404,7 @@ typedef union {
   Type | undefined yy577;
   RefArg[] yy580;
   FrameExclude yy586;
+  {columns: ResultColumn[] | undefined, span: Span | undefined} yy599;
   TransactionType | undefined yy603;
   ResolveType | undefined yy613;
 } YYMINORTYPE;
@@ -2585,9 +2585,9 @@ static void yyStackOverflow(yyParser *yypParser){
    /* Here code is inserted which will execute if the parser
    ** stack every overflows */
 /******** Begin %stack_overflow code ******************************************/
-#line 56 "parse-ts.y"
+#line 55 "parse-ts.y"
 
-  state.errors.push({ message: "parser stack overflow" });
+  state.errors.push({ message: "parser stack overflow", span: { offset: 0, length: 0, line: 0, col: 0 } });
 #line 2592 "parse-ts.c"
 /******** End %stack_overflow code ********************************************/
    sqlite3ParserARG_STORE /* Suppress warning about unused %extra_argument var */
@@ -3527,90 +3527,90 @@ static YYACTIONTYPE yy_reduce(
 /********** Begin reduce actions **********************************************/
         YYMINORTYPE yylhsminor;
       case 0: /* explain ::= EXPLAIN */
-#line 118 "parse-ts.y"
+#line 117 "parse-ts.y"
 { state.explain = "Explain"; }
 #line 3533 "parse-ts.c"
         break;
       case 1: /* explain ::= EXPLAIN QUERY PLAN */
-#line 119 "parse-ts.y"
+#line 118 "parse-ts.y"
 { state.explain = "QueryPlan"; }
 #line 3538 "parse-ts.c"
         break;
       case 2: /* cmdx ::= cmd */
-#line 121 "parse-ts.y"
+#line 120 "parse-ts.y"
 { /* statement is complete; state.stmt has been assigned */ }
 #line 3543 "parse-ts.c"
         break;
       case 3: /* cmd ::= BEGIN transtype trans_opt */
-#line 125 "parse-ts.y"
+#line 124 "parse-ts.y"
 { state.stmt = { kind: "BeginStmt",    tx: yymsp[-1].minor.yy603, name: yymsp[0].minor.yy292, span: nodeSpan() }; }
 #line 3548 "parse-ts.c"
         break;
       case 4: /* trans_opt ::= */
       case 270: /* collate ::= */ yytestcase(yyruleno==270);
-#line 127 "parse-ts.y"
+#line 126 "parse-ts.y"
 { yymsp[1].minor.yy292 = undefined; }
 #line 3554 "parse-ts.c"
         break;
       case 5: /* trans_opt ::= TRANSACTION */
-#line 128 "parse-ts.y"
+#line 127 "parse-ts.y"
 { yymsp[0].minor.yy292 = undefined; }
 #line 3559 "parse-ts.c"
         break;
       case 6: /* trans_opt ::= TRANSACTION nm */
-#line 129 "parse-ts.y"
+#line 128 "parse-ts.y"
 { yymsp[-1].minor.yy292 = yymsp[0].minor.yy206; }
 #line 3564 "parse-ts.c"
         break;
       case 7: /* transtype ::= */
-#line 131 "parse-ts.y"
+#line 130 "parse-ts.y"
 { yymsp[1].minor.yy603 = undefined; }
 #line 3569 "parse-ts.c"
         break;
       case 8: /* transtype ::= DEFERRED */
-#line 132 "parse-ts.y"
+#line 131 "parse-ts.y"
 { yymsp[0].minor.yy603 = "Deferred"; }
 #line 3574 "parse-ts.c"
         break;
       case 9: /* transtype ::= IMMEDIATE */
-#line 133 "parse-ts.y"
+#line 132 "parse-ts.y"
 { yymsp[0].minor.yy603 = "Immediate"; }
 #line 3579 "parse-ts.c"
         break;
       case 10: /* transtype ::= EXCLUSIVE */
-#line 134 "parse-ts.y"
+#line 133 "parse-ts.y"
 { yymsp[0].minor.yy603 = "Exclusive"; }
 #line 3584 "parse-ts.c"
         break;
       case 11: /* cmd ::= COMMIT|END trans_opt */
-#line 135 "parse-ts.y"
+#line 134 "parse-ts.y"
 { state.stmt = { kind: "CommitStmt",   name: yymsp[0].minor.yy292, span: nodeSpan() }; }
 #line 3589 "parse-ts.c"
         break;
       case 12: /* cmd ::= ROLLBACK trans_opt */
-#line 136 "parse-ts.y"
+#line 135 "parse-ts.y"
 { state.stmt = { kind: "RollbackStmt", txName: yymsp[0].minor.yy292, savepointName: undefined, span: nodeSpan() }; }
 #line 3594 "parse-ts.c"
         break;
       case 13: /* cmd ::= SAVEPOINT nm */
-#line 140 "parse-ts.y"
+#line 139 "parse-ts.y"
 { state.stmt = { kind: "SavepointStmt", name: yymsp[0].minor.yy206, span: nodeSpan() }; }
 #line 3599 "parse-ts.c"
         break;
       case 14: /* cmd ::= RELEASE savepoint_opt nm */
-#line 141 "parse-ts.y"
+#line 140 "parse-ts.y"
 { state.stmt = { kind: "ReleaseStmt",   name: yymsp[0].minor.yy206, span: nodeSpan() }; }
 #line 3604 "parse-ts.c"
         break;
       case 15: /* cmd ::= ROLLBACK trans_opt TO savepoint_opt nm */
-#line 142 "parse-ts.y"
+#line 141 "parse-ts.y"
 {
   state.stmt = { kind: "RollbackStmt", txName: yymsp[-3].minor.yy292, savepointName: yymsp[0].minor.yy206, span: nodeSpan() };
 }
 #line 3611 "parse-ts.c"
         break;
       case 16: /* cmd ::= createkw temp TABLE ifnotexists fullname create_table_args */
-#line 148 "parse-ts.y"
+#line 147 "parse-ts.y"
 {
   state.stmt = { kind: "CreateTableStmt", temporary: yymsp[-4].minor.yy329, ifNotExists: yymsp[-2].minor.yy329, tblName: yymsp[-1].minor.yy458, body: yymsp[0].minor.yy131, span: nodeSpan() };
 }
@@ -3622,67 +3622,67 @@ static YYACTIONTYPE yy_reduce(
       case 96: /* ifexists ::= */ yytestcase(yyruleno==96);
       case 265: /* uniqueflag ::= */ yytestcase(yyruleno==265);
       case 298: /* foreach_clause ::= */ yytestcase(yyruleno==298);
-#line 154 "parse-ts.y"
+#line 153 "parse-ts.y"
 { yymsp[1].minor.yy329 = false; }
 #line 3628 "parse-ts.c"
         break;
       case 18: /* ifnotexists ::= IF NOT EXISTS */
       case 299: /* foreach_clause ::= FOR EACH ROW */ yytestcase(yyruleno==299);
-#line 155 "parse-ts.y"
+#line 154 "parse-ts.y"
 { yymsp[-2].minor.yy329 = true;  }
 #line 3634 "parse-ts.c"
         break;
       case 19: /* temp ::= TEMP */
       case 59: /* autoinc ::= AUTOINCR */ yytestcase(yyruleno==59);
       case 264: /* uniqueflag ::= UNIQUE */ yytestcase(yyruleno==264);
-#line 158 "parse-ts.y"
+#line 157 "parse-ts.y"
 { yymsp[0].minor.yy329 = true;  }
 #line 3641 "parse-ts.c"
         break;
       case 21: /* create_table_args ::= LP columnlist conslist_opt RP table_option_set */
-#line 163 "parse-ts.y"
+#line 162 "parse-ts.y"
 {
   yymsp[-4].minor.yy131 = mkColumnsAndConstraints(yymsp[-3].minor.yy392, yymsp[-2].minor.yy209, yymsp[0].minor.yy73, nodeSpan());
 }
 #line 3648 "parse-ts.c"
         break;
       case 22: /* create_table_args ::= AS select */
-#line 166 "parse-ts.y"
+#line 165 "parse-ts.y"
 {
   yymsp[-1].minor.yy131 = { kind: "AsSelectCreateTableBody", select: yymsp[0].minor.yy21, span: nodeSpan() };
 }
 #line 3655 "parse-ts.c"
         break;
       case 23: /* table_option_set ::= */
-#line 171 "parse-ts.y"
+#line 170 "parse-ts.y"
 { yymsp[1].minor.yy73 = 0; }
 #line 3660 "parse-ts.c"
         break;
       case 24: /* table_option_set ::= table_option_set COMMA table_option */
-#line 173 "parse-ts.y"
+#line 172 "parse-ts.y"
 { yylhsminor.yy73 = yymsp[-2].minor.yy73 | yymsp[0].minor.yy73; }
 #line 3665 "parse-ts.c"
   yymsp[-2].minor.yy73 = yylhsminor.yy73;
         break;
       case 25: /* table_option ::= WITHOUT nm */
-#line 174 "parse-ts.y"
+#line 173 "parse-ts.y"
 {
   if( yymsp[0].minor.yy206.name.toLowerCase()==="rowid" ){
     yymsp[-1].minor.yy73 = 0x00000080 /* TabFlags.WithoutRowid */;
   }else{
-    state.errors.push({ message: `unknown table option: ${yymsp[0].minor.yy206.name}` });
+    state.errors.push({ message: `unknown table option: ${yymsp[0].minor.yy206.name}`, span: yymsp[0].minor.yy206.span });
     yymsp[-1].minor.yy73 = 0;
   }
 }
 #line 3678 "parse-ts.c"
         break;
       case 26: /* table_option ::= nm */
-#line 182 "parse-ts.y"
+#line 181 "parse-ts.y"
 {
   if( yymsp[0].minor.yy206.name.toLowerCase()==="strict" ){
     yylhsminor.yy73 = 0x00010000 /* TabFlags.Strict */;
   }else{
-    state.errors.push({ message: `unknown table option: ${yymsp[0].minor.yy206.name}` });
+    state.errors.push({ message: `unknown table option: ${yymsp[0].minor.yy206.name}`, span: yymsp[0].minor.yy206.span });
     yylhsminor.yy73 = 0;
   }
 }
@@ -3690,7 +3690,7 @@ static YYACTIONTYPE yy_reduce(
   yymsp[0].minor.yy73 = yylhsminor.yy73;
         break;
       case 27: /* columnlist ::= columnlist COMMA columnname carglist */
-#line 191 "parse-ts.y"
+#line 190 "parse-ts.y"
 {
   const cd = mkColumnDefinition(yymsp[-1].minor.yy132.colName, yymsp[-1].minor.yy132.colType, yymsp[0].minor.yy513, nodeSpan());
   addColumn(state, yymsp[-3].minor.yy392, cd);
@@ -3698,7 +3698,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3699 "parse-ts.c"
         break;
       case 28: /* columnlist ::= columnname carglist */
-#line 195 "parse-ts.y"
+#line 194 "parse-ts.y"
 {
   const cd = mkColumnDefinition(yymsp[-1].minor.yy132.colName, yymsp[-1].minor.yy132.colType, yymsp[0].minor.yy513, nodeSpan());
   yylhsminor.yy392 = [];
@@ -3708,31 +3708,31 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-1].minor.yy392 = yylhsminor.yy392;
         break;
       case 29: /* columnname ::= nm typetoken */
-#line 201 "parse-ts.y"
+#line 200 "parse-ts.y"
 { yylhsminor.yy132 = { colName: yymsp[-1].minor.yy206, colType: yymsp[0].minor.yy577, span: nodeSpan() }; }
 #line 3714 "parse-ts.c"
   yymsp[-1].minor.yy132 = yylhsminor.yy132;
         break;
       case 30: /* nm ::= ID|INDEXED|JOIN_KW */
       case 31: /* nm ::= STRING */ yytestcase(yyruleno==31);
-#line 273 "parse-ts.y"
+#line 272 "parse-ts.y"
 { yylhsminor.yy206 = mkName(yymsp[0].minor.yy0); }
 #line 3721 "parse-ts.c"
   yymsp[0].minor.yy206 = yylhsminor.yy206;
         break;
       case 32: /* typetoken ::= */
-#line 281 "parse-ts.y"
+#line 280 "parse-ts.y"
 { yymsp[1].minor.yy577 = undefined; }
 #line 3727 "parse-ts.c"
         break;
       case 33: /* typetoken ::= typename */
-#line 282 "parse-ts.y"
+#line 281 "parse-ts.y"
 { yylhsminor.yy577 = { kind: "Type", name: yymsp[0].minor.yy576, size: undefined, span: nodeSpan() }; }
 #line 3732 "parse-ts.c"
   yymsp[0].minor.yy577 = yylhsminor.yy577;
         break;
       case 34: /* typetoken ::= typename LP signed RP */
-#line 283 "parse-ts.y"
+#line 282 "parse-ts.y"
 {
   yylhsminor.yy577 = { kind: "Type", name: yymsp[-3].minor.yy576, size: { kind: "MaxSizeTypeSize", size: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };
 }
@@ -3740,7 +3740,7 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-3].minor.yy577 = yylhsminor.yy577;
         break;
       case 35: /* typetoken ::= typename LP signed COMMA signed RP */
-#line 286 "parse-ts.y"
+#line 285 "parse-ts.y"
 {
   yylhsminor.yy577 = { kind: "Type", name: yymsp[-5].minor.yy576, size: { kind: "TypeSizeTypeSize", size1: yymsp[-3].minor.yy560, size2: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };
 }
@@ -3748,28 +3748,28 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-5].minor.yy577 = yylhsminor.yy577;
         break;
       case 36: /* typename ::= ID|STRING */
-#line 290 "parse-ts.y"
+#line 289 "parse-ts.y"
 { yylhsminor.yy576 = sqlite3Dequote(yymsp[0].minor.yy0.text) as string; }
 #line 3754 "parse-ts.c"
   yymsp[0].minor.yy576 = yylhsminor.yy576;
         break;
       case 37: /* typename ::= typename ID|STRING */
-#line 291 "parse-ts.y"
+#line 290 "parse-ts.y"
 { yymsp[-1].minor.yy576 = yymsp[-1].minor.yy576 + " " + (sqlite3Dequote(yymsp[0].minor.yy0.text) as string); }
 #line 3760 "parse-ts.c"
         break;
       case 38: /* carglist ::= carglist ccons */
-#line 300 "parse-ts.y"
+#line 299 "parse-ts.y"
 { if( yymsp[0].minor.yy31 ) yymsp[-1].minor.yy513.push(yymsp[0].minor.yy31); }
 #line 3765 "parse-ts.c"
         break;
       case 39: /* carglist ::= */
-#line 301 "parse-ts.y"
+#line 300 "parse-ts.y"
 { yymsp[1].minor.yy513 = []; }
 #line 3770 "parse-ts.c"
         break;
       case 40: /* ccons ::= CONSTRAINT nm */
-#line 303 "parse-ts.y"
+#line 302 "parse-ts.y"
 {
   // Stage the constraint name; the NEXT ccons consumes it.  This
   // production does not itself contribute to carglist.
@@ -3779,7 +3779,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3780 "parse-ts.c"
         break;
       case 41: /* ccons ::= DEFAULT term */
-#line 309 "parse-ts.y"
+#line 308 "parse-ts.y"
 {
   yymsp[-1].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "DefaultColumnConstraint", expr: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3787,7 +3787,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3788 "parse-ts.c"
         break;
       case 42: /* ccons ::= DEFAULT LP expr RP */
-#line 313 "parse-ts.y"
+#line 312 "parse-ts.y"
 {
   yymsp[-3].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "DefaultColumnConstraint", expr: mkParenthesized(yymsp[-1].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3795,7 +3795,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3796 "parse-ts.c"
         break;
       case 43: /* ccons ::= DEFAULT PLUS term */
-#line 317 "parse-ts.y"
+#line 316 "parse-ts.y"
 {
   yymsp[-2].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "DefaultColumnConstraint", expr: mkUnary("Positive", yymsp[0].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3803,7 +3803,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3804 "parse-ts.c"
         break;
       case 44: /* ccons ::= DEFAULT MINUS term */
-#line 321 "parse-ts.y"
+#line 320 "parse-ts.y"
 {
   yymsp[-2].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "DefaultColumnConstraint", expr: mkUnary("Negative", yymsp[0].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3811,7 +3811,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3812 "parse-ts.c"
         break;
       case 45: /* ccons ::= DEFAULT ID|INDEXED */
-#line 325 "parse-ts.y"
+#line 324 "parse-ts.y"
 {
   yymsp[-1].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "DefaultColumnConstraint", expr: mkIdExpr(yymsp[0].minor.yy0, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3819,7 +3819,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3820 "parse-ts.c"
         break;
       case 46: /* ccons ::= NULL onconf */
-#line 333 "parse-ts.y"
+#line 332 "parse-ts.y"
 {
   yymsp[-1].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "NotNullColumnConstraint", nullable: true,  conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3827,7 +3827,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3828 "parse-ts.c"
         break;
       case 47: /* ccons ::= NOT NULL onconf */
-#line 337 "parse-ts.y"
+#line 336 "parse-ts.y"
 {
   yymsp[-2].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "NotNullColumnConstraint", nullable: false, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3835,7 +3835,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3836 "parse-ts.c"
         break;
       case 48: /* ccons ::= PRIMARY KEY sortorder onconf autoinc */
-#line 341 "parse-ts.y"
+#line 340 "parse-ts.y"
 {
   yymsp[-4].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "PrimaryKeyColumnConstraint", order: yymsp[-2].minor.yy133, conflictClause: yymsp[-1].minor.yy613, autoIncrement: yymsp[0].minor.yy329, span: nodeSpan() }, span: nodeSpan()
   };
@@ -3844,7 +3844,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3845 "parse-ts.c"
         break;
       case 49: /* ccons ::= UNIQUE onconf */
-#line 346 "parse-ts.y"
+#line 345 "parse-ts.y"
 {
   yymsp[-1].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "UniqueColumnConstraint", conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3852,7 +3852,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3853 "parse-ts.c"
         break;
       case 50: /* ccons ::= CHECK LP expr RP */
-#line 350 "parse-ts.y"
+#line 349 "parse-ts.y"
 {
   yymsp[-3].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "CheckColumnConstraint", expr: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3860,7 +3860,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3861 "parse-ts.c"
         break;
       case 51: /* ccons ::= REFERENCES nm eidlist_opt refargs */
-#line 354 "parse-ts.y"
+#line 353 "parse-ts.y"
 {
   yymsp[-3].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "ForeignKeyColumnConstraint",
       clause: { kind: "ForeignKeyClause", tblName: yymsp[-2].minor.yy206, columns: yymsp[-1].minor.yy166, args: yymsp[0].minor.yy580, span: nodeSpan() },
@@ -3872,7 +3872,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3873 "parse-ts.c"
         break;
       case 52: /* ccons ::= defer_subclause */
-#line 362 "parse-ts.y"
+#line 361 "parse-ts.y"
 {
   yylhsminor.yy31 = { kind: "NamedColumnConstraint", name: undefined, constraint: { kind: "DeferColumnConstraint", clause: yymsp[0].minor.yy314, span: nodeSpan() }, span: nodeSpan() };
 }
@@ -3880,7 +3880,7 @@ static YYACTIONTYPE yy_reduce(
   yymsp[0].minor.yy31 = yylhsminor.yy31;
         break;
       case 53: /* ccons ::= COLLATE ID|STRING */
-#line 365 "parse-ts.y"
+#line 364 "parse-ts.y"
 {
   yymsp[-1].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "CollateColumnConstraint", collationName: mkName(yymsp[0].minor.yy0), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3888,7 +3888,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3889 "parse-ts.c"
         break;
       case 54: /* ccons ::= GENERATED ALWAYS AS generated */
-#line 369 "parse-ts.y"
+#line 368 "parse-ts.y"
 {
   yymsp[-3].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: yymsp[0].minor.yy456, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3896,7 +3896,7 @@ static YYACTIONTYPE yy_reduce(
 #line 3897 "parse-ts.c"
         break;
       case 55: /* ccons ::= AS generated */
-#line 373 "parse-ts.y"
+#line 372 "parse-ts.y"
 {
   yymsp[-1].minor.yy31 = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: yymsp[0].minor.yy456, span: nodeSpan() };
   state.constraintName = undefined;
@@ -3904,127 +3904,127 @@ static YYACTIONTYPE yy_reduce(
 #line 3905 "parse-ts.c"
         break;
       case 56: /* generated ::= LP expr RP */
-#line 378 "parse-ts.y"
+#line 377 "parse-ts.y"
 { yymsp[-2].minor.yy456 = { kind: "GeneratedColumnConstraint", expr: yymsp[-1].minor.yy560, typ: undefined, span: nodeSpan() }; }
 #line 3910 "parse-ts.c"
         break;
       case 57: /* generated ::= LP expr RP ID */
-#line 379 "parse-ts.y"
+#line 378 "parse-ts.y"
 { yymsp[-3].minor.yy456 = { kind: "GeneratedColumnConstraint", expr: yymsp[-2].minor.yy560, typ: mkId(yymsp[0].minor.yy0), span: nodeSpan() }; }
 #line 3915 "parse-ts.c"
         break;
       case 60: /* refargs ::= */
-#line 392 "parse-ts.y"
+#line 391 "parse-ts.y"
 { yymsp[1].minor.yy580 = []; }
 #line 3920 "parse-ts.c"
         break;
       case 61: /* refargs ::= refargs refarg */
-#line 393 "parse-ts.y"
+#line 392 "parse-ts.y"
 { yymsp[-1].minor.yy580.push(yymsp[0].minor.yy296); }
 #line 3925 "parse-ts.c"
         break;
       case 62: /* refarg ::= MATCH nm */
-#line 395 "parse-ts.y"
+#line 394 "parse-ts.y"
 { yymsp[-1].minor.yy296 = { kind: "MatchRefArg",    name: yymsp[0].minor.yy206, span: nodeSpan() };   }
 #line 3930 "parse-ts.c"
         break;
       case 63: /* refarg ::= ON INSERT refact */
-#line 396 "parse-ts.y"
+#line 395 "parse-ts.y"
 { yymsp[-2].minor.yy296 = { kind: "OnInsertRefArg", action: yymsp[0].minor.yy142, span: nodeSpan() }; }
 #line 3935 "parse-ts.c"
         break;
       case 64: /* refarg ::= ON DELETE refact */
-#line 397 "parse-ts.y"
+#line 396 "parse-ts.y"
 { yymsp[-2].minor.yy296 = { kind: "OnDeleteRefArg", action: yymsp[0].minor.yy142, span: nodeSpan() }; }
 #line 3940 "parse-ts.c"
         break;
       case 65: /* refarg ::= ON UPDATE refact */
-#line 398 "parse-ts.y"
+#line 397 "parse-ts.y"
 { yymsp[-2].minor.yy296 = { kind: "OnUpdateRefArg", action: yymsp[0].minor.yy142, span: nodeSpan() }; }
 #line 3945 "parse-ts.c"
         break;
       case 66: /* refact ::= SET NULL */
-#line 400 "parse-ts.y"
+#line 399 "parse-ts.y"
 { yymsp[-1].minor.yy142 = "SetNull"; }
 #line 3950 "parse-ts.c"
         break;
       case 67: /* refact ::= SET DEFAULT */
-#line 401 "parse-ts.y"
+#line 400 "parse-ts.y"
 { yymsp[-1].minor.yy142 = "SetDefault"; }
 #line 3955 "parse-ts.c"
         break;
       case 68: /* refact ::= CASCADE */
-#line 402 "parse-ts.y"
+#line 401 "parse-ts.y"
 { yymsp[0].minor.yy142 = "Cascade"; }
 #line 3960 "parse-ts.c"
         break;
       case 69: /* refact ::= RESTRICT */
-#line 403 "parse-ts.y"
+#line 402 "parse-ts.y"
 { yymsp[0].minor.yy142 = "Restrict"; }
 #line 3965 "parse-ts.c"
         break;
       case 70: /* refact ::= NO ACTION */
-#line 404 "parse-ts.y"
+#line 403 "parse-ts.y"
 { yymsp[-1].minor.yy142 = "NoAction"; }
 #line 3970 "parse-ts.c"
         break;
       case 71: /* defer_subclause ::= NOT DEFERRABLE init_deferred_pred_opt */
-#line 406 "parse-ts.y"
+#line 405 "parse-ts.y"
 {
   yymsp[-2].minor.yy314 = { kind: "DeferSubclause", deferrable: false, initDeferred: yymsp[0].minor.yy575, span: nodeSpan() };
 }
 #line 3977 "parse-ts.c"
         break;
       case 72: /* defer_subclause ::= DEFERRABLE init_deferred_pred_opt */
-#line 409 "parse-ts.y"
+#line 408 "parse-ts.y"
 {
   yymsp[-1].minor.yy314 = { kind: "DeferSubclause", deferrable: true,  initDeferred: yymsp[0].minor.yy575, span: nodeSpan() };
 }
 #line 3984 "parse-ts.c"
         break;
       case 73: /* init_deferred_pred_opt ::= */
-#line 413 "parse-ts.y"
+#line 412 "parse-ts.y"
 { yymsp[1].minor.yy575 = undefined; }
 #line 3989 "parse-ts.c"
         break;
       case 74: /* init_deferred_pred_opt ::= INITIALLY DEFERRED */
-#line 414 "parse-ts.y"
+#line 413 "parse-ts.y"
 { yymsp[-1].minor.yy575 = "InitiallyDeferred"; }
 #line 3994 "parse-ts.c"
         break;
       case 75: /* init_deferred_pred_opt ::= INITIALLY IMMEDIATE */
-#line 415 "parse-ts.y"
+#line 414 "parse-ts.y"
 { yymsp[-1].minor.yy575 = "InitiallyImmediate"; }
 #line 3999 "parse-ts.c"
         break;
       case 76: /* conslist_opt ::= */
-#line 418 "parse-ts.y"
+#line 417 "parse-ts.y"
 { yymsp[1].minor.yy209 = undefined;     }
 #line 4004 "parse-ts.c"
         break;
       case 77: /* conslist_opt ::= COMMA conslist */
-#line 419 "parse-ts.y"
+#line 418 "parse-ts.y"
 { yymsp[-1].minor.yy209 = yymsp[0].minor.yy383;        }
 #line 4009 "parse-ts.c"
         break;
       case 78: /* conslist ::= conslist tconscomma tcons */
-#line 421 "parse-ts.y"
+#line 420 "parse-ts.y"
 { if( yymsp[0].minor.yy77 ) yymsp[-2].minor.yy383.push(yymsp[0].minor.yy77); }
 #line 4014 "parse-ts.c"
         break;
       case 79: /* conslist ::= tcons */
-#line 422 "parse-ts.y"
+#line 421 "parse-ts.y"
 { yylhsminor.yy383 = yymsp[0].minor.yy77 ? [yymsp[0].minor.yy77] : []; }
 #line 4019 "parse-ts.c"
   yymsp[0].minor.yy383 = yylhsminor.yy383;
         break;
       case 80: /* tconscomma ::= COMMA */
-#line 423 "parse-ts.y"
+#line 422 "parse-ts.y"
 { state.constraintName = undefined; }
 #line 4025 "parse-ts.c"
         break;
       case 81: /* tcons ::= CONSTRAINT nm */
-#line 426 "parse-ts.y"
+#line 425 "parse-ts.y"
 {
   // Stage the constraint name for the NEXT tcons; this production does
   // not itself contribute to conslist.
@@ -4034,7 +4034,7 @@ static YYACTIONTYPE yy_reduce(
 #line 4035 "parse-ts.c"
         break;
       case 82: /* tcons ::= PRIMARY KEY LP sortlist autoinc RP onconf */
-#line 432 "parse-ts.y"
+#line 431 "parse-ts.y"
 {
   yymsp[-6].minor.yy77 = { kind: "NamedTableConstraint", name: state.constraintName, constraint: { kind: "PrimaryKeyTableConstraint", columns: yymsp[-3].minor.yy408, autoIncrement: yymsp[-2].minor.yy329, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -4042,7 +4042,7 @@ static YYACTIONTYPE yy_reduce(
 #line 4043 "parse-ts.c"
         break;
       case 83: /* tcons ::= UNIQUE LP sortlist RP onconf */
-#line 436 "parse-ts.y"
+#line 435 "parse-ts.y"
 {
   yymsp[-4].minor.yy77 = { kind: "NamedTableConstraint", name: state.constraintName, constraint: { kind: "UniqueTableConstraint", columns: yymsp[-2].minor.yy408, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -4050,7 +4050,7 @@ static YYACTIONTYPE yy_reduce(
 #line 4051 "parse-ts.c"
         break;
       case 84: /* tcons ::= CHECK LP expr RP onconf */
-#line 440 "parse-ts.y"
+#line 439 "parse-ts.y"
 {
   yymsp[-4].minor.yy77 = { kind: "NamedTableConstraint", name: state.constraintName, constraint: { kind: "CheckTableConstraint", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
@@ -4058,7 +4058,7 @@ static YYACTIONTYPE yy_reduce(
 #line 4059 "parse-ts.c"
         break;
       case 85: /* tcons ::= FOREIGN KEY LP eidlist RP REFERENCES nm eidlist_opt refargs defer_subclause_opt */
-#line 445 "parse-ts.y"
+#line 444 "parse-ts.y"
 {
   yymsp[-9].minor.yy77 = { kind: "NamedTableConstraint", name: state.constraintName, constraint: { kind: "ForeignKeyTableConstraint",
       columns: yymsp[-6].minor.yy300,
@@ -4071,44 +4071,44 @@ static YYACTIONTYPE yy_reduce(
 #line 4072 "parse-ts.c"
         break;
       case 86: /* defer_subclause_opt ::= */
-#line 455 "parse-ts.y"
+#line 454 "parse-ts.y"
 { yymsp[1].minor.yy248 = undefined; }
 #line 4077 "parse-ts.c"
         break;
       case 87: /* defer_subclause_opt ::= defer_subclause */
-#line 456 "parse-ts.y"
+#line 455 "parse-ts.y"
 { yylhsminor.yy248 = yymsp[0].minor.yy314;    }
 #line 4082 "parse-ts.c"
   yymsp[0].minor.yy248 = yylhsminor.yy248;
         break;
       case 88: /* onconf ::= */
       case 90: /* orconf ::= */ yytestcase(yyruleno==90);
-#line 464 "parse-ts.y"
+#line 463 "parse-ts.y"
 { yymsp[1].minor.yy613 = undefined; }
 #line 4089 "parse-ts.c"
         break;
       case 89: /* onconf ::= ON CONFLICT resolvetype */
-#line 465 "parse-ts.y"
+#line 464 "parse-ts.y"
 { yymsp[-2].minor.yy613 = yymsp[0].minor.yy115;    }
 #line 4094 "parse-ts.c"
         break;
       case 91: /* orconf ::= OR resolvetype */
-#line 467 "parse-ts.y"
+#line 466 "parse-ts.y"
 { yymsp[-1].minor.yy613 = yymsp[0].minor.yy115;    }
 #line 4099 "parse-ts.c"
         break;
       case 92: /* resolvetype ::= IGNORE */
-#line 469 "parse-ts.y"
+#line 468 "parse-ts.y"
 { yymsp[0].minor.yy115 = "Ignore"; }
 #line 4104 "parse-ts.c"
         break;
       case 93: /* resolvetype ::= REPLACE */
-#line 470 "parse-ts.y"
+#line 469 "parse-ts.y"
 { yymsp[0].minor.yy115 = "Replace"; }
 #line 4109 "parse-ts.c"
         break;
       case 94: /* cmd ::= DROP TABLE ifexists fullname */
-#line 474 "parse-ts.y"
+#line 473 "parse-ts.y"
 {
   state.stmt = { kind: "DropTableStmt", ifExists: yymsp[-1].minor.yy329, tblName: yymsp[0].minor.yy458, span: nodeSpan() };
 }
@@ -4117,45 +4117,45 @@ static YYACTIONTYPE yy_reduce(
       case 95: /* ifexists ::= IF EXISTS */
       case 241: /* between_op ::= NOT BETWEEN */ yytestcase(yyruleno==241);
       case 244: /* in_op ::= NOT IN */ yytestcase(yyruleno==244);
-#line 478 "parse-ts.y"
+#line 477 "parse-ts.y"
 { yymsp[-1].minor.yy329 = true;  }
 #line 4123 "parse-ts.c"
         break;
       case 97: /* cmd ::= createkw temp VIEW ifnotexists fullname eidlist_opt AS select */
-#line 484 "parse-ts.y"
+#line 483 "parse-ts.y"
 {
   state.stmt = { kind: "CreateViewStmt", temporary: yymsp[-6].minor.yy329, ifNotExists: yymsp[-4].minor.yy329, viewName: yymsp[-3].minor.yy458, columns: yymsp[-2].minor.yy166, select: yymsp[0].minor.yy21, span: nodeSpan() };
 }
 #line 4130 "parse-ts.c"
         break;
       case 98: /* cmd ::= DROP VIEW ifexists fullname */
-#line 487 "parse-ts.y"
+#line 486 "parse-ts.y"
 {
   state.stmt = { kind: "DropViewStmt", ifExists: yymsp[-1].minor.yy329, viewName: yymsp[0].minor.yy458, span: nodeSpan() };
 }
 #line 4137 "parse-ts.c"
         break;
       case 99: /* cmd ::= select */
-#line 494 "parse-ts.y"
+#line 493 "parse-ts.y"
 { state.stmt = { kind: "SelectStmt", select: yymsp[0].minor.yy21, span: nodeSpan() }; }
 #line 4142 "parse-ts.c"
         break;
       case 100: /* select ::= WITH wqlist selectnowith orderby_opt limit_opt */
-#line 501 "parse-ts.y"
+#line 500 "parse-ts.y"
 {
   yymsp[-4].minor.yy21 = mkSelect({ kind: "With", recursive: false, ctes: yymsp[-3].minor.yy121, span: nodeSpan() }, yymsp[-2].minor.yy3, yymsp[-1].minor.yy326, yymsp[0].minor.yy238, nodeSpan());
 }
 #line 4149 "parse-ts.c"
         break;
       case 101: /* select ::= WITH RECURSIVE wqlist selectnowith orderby_opt limit_opt */
-#line 504 "parse-ts.y"
+#line 503 "parse-ts.y"
 {
   yymsp[-5].minor.yy21 = mkSelect({ kind: "With", recursive: true,  ctes: yymsp[-3].minor.yy121, span: nodeSpan() }, yymsp[-2].minor.yy3, yymsp[-1].minor.yy326, yymsp[0].minor.yy238, nodeSpan());
 }
 #line 4156 "parse-ts.c"
         break;
       case 102: /* select ::= selectnowith orderby_opt limit_opt */
-#line 508 "parse-ts.y"
+#line 507 "parse-ts.y"
 {
   yylhsminor.yy21 = mkSelect(undefined, yymsp[-2].minor.yy3, yymsp[-1].minor.yy326, yymsp[0].minor.yy238, nodeSpan());
 }
@@ -4163,47 +4163,47 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-2].minor.yy21 = yylhsminor.yy21;
         break;
       case 103: /* selectnowith ::= oneselect */
-#line 512 "parse-ts.y"
+#line 511 "parse-ts.y"
 { yylhsminor.yy3 = { kind: "SelectBody", select: yymsp[0].minor.yy32, compounds: undefined, span: nodeSpan() }; }
 #line 4169 "parse-ts.c"
   yymsp[0].minor.yy3 = yylhsminor.yy3;
         break;
       case 104: /* selectnowith ::= selectnowith multiselect_op oneselect */
-#line 514 "parse-ts.y"
+#line 513 "parse-ts.y"
 {
   pushCompound(yymsp[-2].minor.yy3, { kind: "CompoundSelect", operator: yymsp[-1].minor.yy198, select: yymsp[0].minor.yy32, span: nodeSpan() });
 }
 #line 4177 "parse-ts.c"
         break;
       case 105: /* multiselect_op ::= UNION */
-#line 518 "parse-ts.y"
+#line 517 "parse-ts.y"
 { yymsp[0].minor.yy198 = "Union"; }
 #line 4182 "parse-ts.c"
         break;
       case 106: /* multiselect_op ::= UNION ALL */
-#line 519 "parse-ts.y"
+#line 518 "parse-ts.y"
 { yymsp[-1].minor.yy198 = "UnionAll"; }
 #line 4187 "parse-ts.c"
         break;
       case 107: /* multiselect_op ::= EXCEPT */
-#line 520 "parse-ts.y"
+#line 519 "parse-ts.y"
 { yymsp[0].minor.yy198 = "Except"; }
 #line 4192 "parse-ts.c"
         break;
       case 108: /* multiselect_op ::= INTERSECT */
-#line 521 "parse-ts.y"
+#line 520 "parse-ts.y"
 { yymsp[0].minor.yy198 = "Intersect"; }
 #line 4197 "parse-ts.c"
         break;
       case 109: /* oneselect ::= SELECT distinct selcollist from where_opt groupby_opt having_opt */
-#line 525 "parse-ts.y"
+#line 524 "parse-ts.y"
 {
   yymsp[-6].minor.yy32 = mkOneSelect(state, yymsp[-5].minor.yy450, yymsp[-4].minor.yy518, yymsp[-3].minor.yy561, yymsp[-2].minor.yy102, yymsp[-1].minor.yy246, yymsp[0].minor.yy102, undefined, nodeSpan());
 }
 #line 4204 "parse-ts.c"
         break;
       case 110: /* oneselect ::= SELECT distinct selcollist from where_opt groupby_opt having_opt window_clause */
-#line 530 "parse-ts.y"
+#line 529 "parse-ts.y"
 {
   yymsp[-7].minor.yy32 = mkOneSelect(state, yymsp[-6].minor.yy450, yymsp[-5].minor.yy518, yymsp[-4].minor.yy561, yymsp[-3].minor.yy102, yymsp[-2].minor.yy246, yymsp[-1].minor.yy102, yymsp[0].minor.yy28, nodeSpan());
 }
@@ -4211,116 +4211,116 @@ static YYACTIONTYPE yy_reduce(
         break;
       case 111: /* oneselect ::= values */
       case 113: /* oneselect ::= mvalues */ yytestcase(yyruleno==113);
-#line 538 "parse-ts.y"
+#line 537 "parse-ts.y"
 { yylhsminor.yy32 = { kind: "ValuesOneSelect", values: yymsp[0].minor.yy293, span: nodeSpan() }; }
 #line 4217 "parse-ts.c"
   yymsp[0].minor.yy32 = yylhsminor.yy32;
         break;
       case 112: /* values ::= VALUES LP nexprlist RP */
-#line 539 "parse-ts.y"
+#line 538 "parse-ts.y"
 { yymsp[-3].minor.yy293 = [yymsp[-1].minor.yy540]; }
 #line 4223 "parse-ts.c"
         break;
       case 114: /* mvalues ::= values COMMA LP nexprlist RP */
       case 115: /* mvalues ::= mvalues COMMA LP nexprlist RP */ yytestcase(yyruleno==115);
-#line 545 "parse-ts.y"
-{ valuesPush(state, yymsp[-4].minor.yy293, yymsp[-1].minor.yy540); }
+#line 544 "parse-ts.y"
+{ valuesPush(state, yymsp[-4].minor.yy293, yymsp[-1].minor.yy540, nodeSpan());}
 #line 4229 "parse-ts.c"
         break;
       case 116: /* distinct ::= DISTINCT */
-#line 551 "parse-ts.y"
+#line 550 "parse-ts.y"
 { yymsp[0].minor.yy450 = "Distinct"; }
 #line 4234 "parse-ts.c"
         break;
       case 117: /* distinct ::= ALL */
-#line 552 "parse-ts.y"
+#line 551 "parse-ts.y"
 { yymsp[0].minor.yy450 = "All"; }
 #line 4239 "parse-ts.c"
         break;
       case 118: /* distinct ::= */
-#line 553 "parse-ts.y"
+#line 552 "parse-ts.y"
 { yymsp[1].minor.yy450 = undefined;                 }
 #line 4244 "parse-ts.c"
         break;
       case 119: /* sclp ::= */
-#line 563 "parse-ts.y"
+#line 562 "parse-ts.y"
 { yymsp[1].minor.yy518 = []; }
 #line 4249 "parse-ts.c"
         break;
       case 120: /* selcollist ::= sclp expr as */
-#line 564 "parse-ts.y"
+#line 563 "parse-ts.y"
 { yymsp[-2].minor.yy518.push({ kind: "ExprResultColumn", expr: yymsp[-1].minor.yy560, alias: yymsp[0].minor.yy384, span: nodeSpan() }); }
 #line 4254 "parse-ts.c"
         break;
       case 121: /* selcollist ::= sclp STAR */
-#line 565 "parse-ts.y"
+#line 564 "parse-ts.y"
 { yymsp[-1].minor.yy518.push({ kind: "StarResultColumn", span: nodeSpan() }); }
 #line 4259 "parse-ts.c"
         break;
       case 122: /* selcollist ::= sclp nm DOT STAR */
-#line 566 "parse-ts.y"
+#line 565 "parse-ts.y"
 { yymsp[-3].minor.yy518.push({ kind: "TableStarResultColumn", table: yymsp[-2].minor.yy206, span: nodeSpan() }); }
 #line 4264 "parse-ts.c"
         break;
       case 123: /* as ::= AS nm */
-#line 572 "parse-ts.y"
+#line 571 "parse-ts.y"
 { yymsp[-1].minor.yy384 = { kind: "AsAs",     name: yymsp[0].minor.yy206, span: nodeSpan() }; }
 #line 4269 "parse-ts.c"
         break;
       case 124: /* as ::= ID|STRING */
-#line 573 "parse-ts.y"
+#line 572 "parse-ts.y"
 { yylhsminor.yy384 = { kind: "ElidedAs", name: mkName(yymsp[0].minor.yy0), span: nodeSpan() }; }
 #line 4274 "parse-ts.c"
   yymsp[0].minor.yy384 = yylhsminor.yy384;
         break;
       case 125: /* as ::= */
-#line 574 "parse-ts.y"
+#line 573 "parse-ts.y"
 { yymsp[1].minor.yy384 = undefined; }
 #line 4280 "parse-ts.c"
         break;
       case 126: /* from ::= */
-#line 582 "parse-ts.y"
+#line 581 "parse-ts.y"
 { yymsp[1].minor.yy561 = undefined; }
 #line 4285 "parse-ts.c"
         break;
       case 127: /* from ::= FROM seltablist */
-#line 583 "parse-ts.y"
+#line 582 "parse-ts.y"
 { yymsp[-1].minor.yy561 = freezeFrom(yymsp[0].minor.yy84, nodeSpan()); }
 #line 4290 "parse-ts.c"
         break;
       case 128: /* stl_prefix ::= seltablist joinop */
-#line 588 "parse-ts.y"
+#line 587 "parse-ts.y"
 { yymsp[-1].minor.yy84.pendingOp = yymsp[0].minor.yy345; }
 #line 4295 "parse-ts.c"
         break;
       case 129: /* stl_prefix ::= */
-#line 589 "parse-ts.y"
+#line 588 "parse-ts.y"
 { yymsp[1].minor.yy84 = emptyFromClause(); }
 #line 4300 "parse-ts.c"
         break;
       case 130: /* seltablist ::= stl_prefix fullname as indexed_opt on_using */
-#line 590 "parse-ts.y"
+#line 589 "parse-ts.y"
 {
   fromClausePush(state, yymsp[-4].minor.yy84, { kind: "TableSelectTable", name: yymsp[-3].minor.yy458, alias: yymsp[-2].minor.yy384, indexed: yymsp[-1].minor.yy492, span: nodeSpan() }, yymsp[0].minor.yy256);
 }
 #line 4307 "parse-ts.c"
         break;
       case 131: /* seltablist ::= stl_prefix fullname LP exprlist RP as on_using */
-#line 593 "parse-ts.y"
+#line 592 "parse-ts.y"
 {
   fromClausePush(state, yymsp[-6].minor.yy84, { kind: "TableCallSelectTable", name: yymsp[-5].minor.yy458, args: yymsp[-3].minor.yy246, alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);
 }
 #line 4314 "parse-ts.c"
         break;
       case 132: /* seltablist ::= stl_prefix LP select RP as on_using */
-#line 597 "parse-ts.y"
+#line 596 "parse-ts.y"
 {
   fromClausePush(state, yymsp[-5].minor.yy84, { kind: "SelectSelectTable", select: yymsp[-3].minor.yy21, alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);
 }
 #line 4321 "parse-ts.c"
         break;
       case 133: /* seltablist ::= stl_prefix LP seltablist RP as on_using */
-#line 600 "parse-ts.y"
+#line 599 "parse-ts.y"
 {
   fromClausePush(state, yymsp[-5].minor.yy84, { kind: "SubSelectTable", from: freezeFrom(yymsp[-3].minor.yy84, nodeSpan()), alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);
 }
@@ -4328,107 +4328,107 @@ static YYACTIONTYPE yy_reduce(
         break;
       case 134: /* fullname ::= nm */
       case 136: /* xfullname ::= nm */ yytestcase(yyruleno==136);
-#line 606 "parse-ts.y"
+#line 605 "parse-ts.y"
 { yylhsminor.yy458 = qnSingle(yymsp[0].minor.yy206, nodeSpan()); }
 #line 4334 "parse-ts.c"
   yymsp[0].minor.yy458 = yylhsminor.yy458;
         break;
       case 135: /* fullname ::= nm DOT nm */
       case 137: /* xfullname ::= nm DOT nm */ yytestcase(yyruleno==137);
-#line 607 "parse-ts.y"
+#line 606 "parse-ts.y"
 { yylhsminor.yy458 = qnFull(yymsp[-2].minor.yy206, yymsp[0].minor.yy206, nodeSpan()); }
 #line 4341 "parse-ts.c"
   yymsp[-2].minor.yy458 = yylhsminor.yy458;
         break;
       case 138: /* xfullname ::= nm AS nm */
-#line 612 "parse-ts.y"
+#line 611 "parse-ts.y"
 { yylhsminor.yy458 = qnAlias(yymsp[-2].minor.yy206, yymsp[0].minor.yy206, nodeSpan()); }
 #line 4347 "parse-ts.c"
   yymsp[-2].minor.yy458 = yylhsminor.yy458;
         break;
       case 139: /* xfullname ::= nm DOT nm AS nm */
-#line 613 "parse-ts.y"
+#line 612 "parse-ts.y"
 { yylhsminor.yy458 = qnXfull(yymsp[-4].minor.yy206, yymsp[-2].minor.yy206, yymsp[0].minor.yy206, nodeSpan()); }
 #line 4353 "parse-ts.c"
   yymsp[-4].minor.yy458 = yylhsminor.yy458;
         break;
       case 140: /* joinop ::= COMMA */
-#line 616 "parse-ts.y"
+#line 615 "parse-ts.y"
 { yymsp[0].minor.yy345 = { kind: "CommaJoinOperator", span: nodeSpan()                  }; }
 #line 4359 "parse-ts.c"
         break;
       case 141: /* joinop ::= JOIN */
-#line 617 "parse-ts.y"
+#line 616 "parse-ts.y"
 { yymsp[0].minor.yy345 = { kind: "TypedJoinJoinOperator", joinType: undefined, span: nodeSpan() }; }
 #line 4364 "parse-ts.c"
         break;
       case 142: /* joinop ::= JOIN_KW JOIN */
-#line 618 "parse-ts.y"
+#line 617 "parse-ts.y"
 { yylhsminor.yy345 = joinOperatorFrom(state, yymsp[-1].minor.yy0, undefined, undefined, nodeSpan()); }
 #line 4369 "parse-ts.c"
   yymsp[-1].minor.yy345 = yylhsminor.yy345;
         break;
       case 143: /* joinop ::= JOIN_KW nm JOIN */
-#line 619 "parse-ts.y"
+#line 618 "parse-ts.y"
 { yylhsminor.yy345 = joinOperatorFrom(state, yymsp[-2].minor.yy0, yymsp[-1].minor.yy206, undefined, nodeSpan()); }
 #line 4375 "parse-ts.c"
   yymsp[-2].minor.yy345 = yylhsminor.yy345;
         break;
       case 144: /* joinop ::= JOIN_KW nm nm JOIN */
-#line 620 "parse-ts.y"
+#line 619 "parse-ts.y"
 { yylhsminor.yy345 = joinOperatorFrom(state, yymsp[-3].minor.yy0, yymsp[-2].minor.yy206, yymsp[-1].minor.yy206, nodeSpan()); }
 #line 4381 "parse-ts.c"
   yymsp[-3].minor.yy345 = yylhsminor.yy345;
         break;
       case 145: /* on_using ::= ON expr */
-#line 629 "parse-ts.y"
+#line 628 "parse-ts.y"
 { yymsp[-1].minor.yy256 = { kind: "OnJoinConstraint",    expr: yymsp[0].minor.yy560, span: nodeSpan() };    }
 #line 4387 "parse-ts.c"
         break;
       case 146: /* on_using ::= USING LP idlist RP */
-#line 630 "parse-ts.y"
+#line 629 "parse-ts.y"
 { yymsp[-3].minor.yy256 = { kind: "UsingJoinConstraint", columns: yymsp[-1].minor.yy342, span: nodeSpan() }; }
 #line 4392 "parse-ts.c"
         break;
       case 147: /* on_using ::= */
-#line 631 "parse-ts.y"
+#line 630 "parse-ts.y"
 { yymsp[1].minor.yy256 = undefined; }
 #line 4397 "parse-ts.c"
         break;
       case 148: /* indexed_opt ::= */
-#line 636 "parse-ts.y"
+#line 635 "parse-ts.y"
 { yymsp[1].minor.yy492 = undefined; }
 #line 4402 "parse-ts.c"
         break;
       case 149: /* indexed_opt ::= INDEXED BY nm */
-#line 637 "parse-ts.y"
+#line 636 "parse-ts.y"
 { yymsp[-2].minor.yy492 = { kind: "IndexedByIndexed", name: yymsp[0].minor.yy206, span: nodeSpan() }; }
 #line 4407 "parse-ts.c"
         break;
       case 150: /* indexed_opt ::= NOT INDEXED */
-#line 638 "parse-ts.y"
+#line 637 "parse-ts.y"
 { yymsp[-1].minor.yy492 = { kind: "NotIndexedIndexed", span: nodeSpan() }; }
 #line 4412 "parse-ts.c"
         break;
       case 151: /* orderby_opt ::= */
-#line 643 "parse-ts.y"
+#line 642 "parse-ts.y"
 { yymsp[1].minor.yy326 = undefined; }
 #line 4417 "parse-ts.c"
         break;
       case 152: /* orderby_opt ::= ORDER BY sortlist */
-#line 644 "parse-ts.y"
+#line 643 "parse-ts.y"
 { yymsp[-2].minor.yy326 = yymsp[0].minor.yy408; }
 #line 4422 "parse-ts.c"
         break;
       case 153: /* sortlist ::= sortlist COMMA expr sortorder nulls */
-#line 645 "parse-ts.y"
+#line 644 "parse-ts.y"
 {
   yymsp[-4].minor.yy408.push({ kind: "SortedColumn", expr: yymsp[-2].minor.yy560, order: yymsp[-1].minor.yy133, nulls: yymsp[0].minor.yy122, span: nodeSpan() });
 }
 #line 4429 "parse-ts.c"
         break;
       case 154: /* sortlist ::= expr sortorder nulls */
-#line 648 "parse-ts.y"
+#line 647 "parse-ts.y"
 {
   yylhsminor.yy408 = [{ kind: "SortedColumn", expr: yymsp[-2].minor.yy560, order: yymsp[-1].minor.yy133, nulls: yymsp[0].minor.yy122, span: nodeSpan() }];
 }
@@ -4436,44 +4436,44 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-2].minor.yy408 = yylhsminor.yy408;
         break;
       case 155: /* sortorder ::= ASC */
-#line 653 "parse-ts.y"
+#line 652 "parse-ts.y"
 { yymsp[0].minor.yy133 = "Asc"; }
 #line 4442 "parse-ts.c"
         break;
       case 156: /* sortorder ::= DESC */
-#line 654 "parse-ts.y"
+#line 653 "parse-ts.y"
 { yymsp[0].minor.yy133 = "Desc"; }
 #line 4447 "parse-ts.c"
         break;
       case 157: /* sortorder ::= */
-#line 655 "parse-ts.y"
+#line 654 "parse-ts.y"
 { yymsp[1].minor.yy133 = undefined;             }
 #line 4452 "parse-ts.c"
         break;
       case 158: /* nulls ::= NULLS FIRST */
-#line 658 "parse-ts.y"
+#line 657 "parse-ts.y"
 { yymsp[-1].minor.yy122 = "First"; }
 #line 4457 "parse-ts.c"
         break;
       case 159: /* nulls ::= NULLS LAST */
-#line 659 "parse-ts.y"
+#line 658 "parse-ts.y"
 { yymsp[-1].minor.yy122 = "Last"; }
 #line 4462 "parse-ts.c"
         break;
       case 160: /* nulls ::= */
-#line 660 "parse-ts.y"
+#line 659 "parse-ts.y"
 { yymsp[1].minor.yy122 = undefined;              }
 #line 4467 "parse-ts.c"
         break;
       case 161: /* groupby_opt ::= */
       case 258: /* exprlist ::= */ yytestcase(yyruleno==258);
       case 261: /* paren_exprlist ::= */ yytestcase(yyruleno==261);
-#line 663 "parse-ts.y"
+#line 662 "parse-ts.y"
 { yymsp[1].minor.yy246 = undefined; }
 #line 4474 "parse-ts.c"
         break;
       case 162: /* groupby_opt ::= GROUP BY nexprlist */
-#line 664 "parse-ts.y"
+#line 663 "parse-ts.y"
 { yymsp[-2].minor.yy246 = yymsp[0].minor.yy540;    }
 #line 4479 "parse-ts.c"
         break;
@@ -4484,7 +4484,7 @@ static YYACTIONTYPE yy_reduce(
       case 276: /* vinto ::= */ yytestcase(yyruleno==276);
       case 300: /* when_clause ::= */ yytestcase(yyruleno==300);
       case 318: /* key_opt ::= */ yytestcase(yyruleno==318);
-#line 667 "parse-ts.y"
+#line 666 "parse-ts.y"
 { yymsp[1].minor.yy102 = undefined; }
 #line 4490 "parse-ts.c"
         break;
@@ -4494,32 +4494,32 @@ static YYACTIONTYPE yy_reduce(
       case 275: /* vinto ::= INTO expr */ yytestcase(yyruleno==275);
       case 301: /* when_clause ::= WHEN expr */ yytestcase(yyruleno==301);
       case 319: /* key_opt ::= KEY expr */ yytestcase(yyruleno==319);
-#line 668 "parse-ts.y"
+#line 667 "parse-ts.y"
 { yymsp[-1].minor.yy102 = yymsp[0].minor.yy560;    }
 #line 4500 "parse-ts.c"
         break;
       case 165: /* limit_opt ::= */
-#line 671 "parse-ts.y"
+#line 670 "parse-ts.y"
 { yymsp[1].minor.yy238 = undefined; }
 #line 4505 "parse-ts.c"
         break;
       case 166: /* limit_opt ::= LIMIT expr */
-#line 672 "parse-ts.y"
+#line 671 "parse-ts.y"
 { yymsp[-1].minor.yy238 = { kind: "Limit", expr: yymsp[0].minor.yy560, offset: undefined, span: nodeSpan() }; }
 #line 4510 "parse-ts.c"
         break;
       case 167: /* limit_opt ::= LIMIT expr OFFSET expr */
-#line 673 "parse-ts.y"
+#line 672 "parse-ts.y"
 { yymsp[-3].minor.yy238 = { kind: "Limit", expr: yymsp[-2].minor.yy560, offset: yymsp[0].minor.yy560, span: nodeSpan()    }; }
 #line 4515 "parse-ts.c"
         break;
       case 168: /* limit_opt ::= LIMIT expr COMMA expr */
-#line 674 "parse-ts.y"
+#line 673 "parse-ts.y"
 { yymsp[-3].minor.yy238 = { kind: "Limit", expr: yymsp[0].minor.yy560, offset: yymsp[-2].minor.yy560, span: nodeSpan()    }; }
 #line 4520 "parse-ts.c"
         break;
       case 169: /* cmd ::= with DELETE FROM xfullname indexed_opt where_opt_ret */
-#line 689 "parse-ts.y"
+#line 688 "parse-ts.y"
 {
   state.stmt = {
     kind: "DeleteStmt",
@@ -4531,27 +4531,27 @@ static YYACTIONTYPE yy_reduce(
 #line 4532 "parse-ts.c"
         break;
       case 172: /* where_opt_ret ::= */
-#line 704 "parse-ts.y"
+#line 703 "parse-ts.y"
 { yymsp[1].minor.yy240 = { where: undefined, returning: undefined, span: nodeSpan() }; }
 #line 4537 "parse-ts.c"
         break;
       case 173: /* where_opt_ret ::= WHERE expr */
-#line 705 "parse-ts.y"
+#line 704 "parse-ts.y"
 { yymsp[-1].minor.yy240 = { where: yymsp[0].minor.yy560,    returning: undefined, span: nodeSpan() }; }
 #line 4542 "parse-ts.c"
         break;
       case 174: /* where_opt_ret ::= RETURNING selcollist */
-#line 706 "parse-ts.y"
+#line 705 "parse-ts.y"
 { yymsp[-1].minor.yy240 = { where: undefined, returning: yymsp[0].minor.yy518, span: nodeSpan()    }; }
 #line 4547 "parse-ts.c"
         break;
       case 175: /* where_opt_ret ::= WHERE expr RETURNING selcollist */
-#line 708 "parse-ts.y"
+#line 707 "parse-ts.y"
 { yymsp[-3].minor.yy240 = { where: yymsp[-2].minor.yy560,    returning: yymsp[0].minor.yy518, span: nodeSpan()    }; }
 #line 4552 "parse-ts.c"
         break;
       case 176: /* cmd ::= with UPDATE orconf xfullname indexed_opt SET setlist from where_opt_ret */
-#line 723 "parse-ts.y"
+#line 722 "parse-ts.y"
 {
   state.stmt = {
     kind: "UpdateStmt",
@@ -4562,134 +4562,134 @@ static YYACTIONTYPE yy_reduce(
 #line 4563 "parse-ts.c"
         break;
       case 177: /* setlist ::= setlist COMMA nm EQ expr */
-#line 733 "parse-ts.y"
+#line 732 "parse-ts.y"
 { yymsp[-4].minor.yy4.push({ kind: "Set_", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }); }
 #line 4568 "parse-ts.c"
         break;
       case 178: /* setlist ::= setlist COMMA LP idlist RP EQ expr */
-#line 734 "parse-ts.y"
+#line 733 "parse-ts.y"
 { yymsp[-6].minor.yy4.push({ kind: "Set_", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }); }
 #line 4573 "parse-ts.c"
         break;
       case 179: /* setlist ::= nm EQ expr */
-#line 735 "parse-ts.y"
+#line 734 "parse-ts.y"
 { yylhsminor.yy4 = [{ kind: "Set_", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }]; }
 #line 4578 "parse-ts.c"
   yymsp[-2].minor.yy4 = yylhsminor.yy4;
         break;
       case 180: /* setlist ::= LP idlist RP EQ expr */
-#line 736 "parse-ts.y"
+#line 735 "parse-ts.y"
 { yymsp[-4].minor.yy4 = [{ kind: "Set_", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }]; }
 #line 4584 "parse-ts.c"
         break;
       case 181: /* cmd ::= with insert_cmd INTO xfullname idlist_opt select upsert */
-#line 740 "parse-ts.y"
+#line 739 "parse-ts.y"
 {
   state.stmt = {
     kind: "InsertStmt",
     with: yymsp[-6].minor.yy187, orConflict: yymsp[-5].minor.yy613, tblName: yymsp[-3].minor.yy458, columns: yymsp[-2].minor.yy529,
-    body: { kind: "SelectInsertBody", select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy480.upsert, span: nodeSpan() },
-    returning: yymsp[0].minor.yy480.returning, span: nodeSpan()
+    body: { kind: "SelectInsertBody", select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy542.upsert, span: nodeSpan() },
+    returning: yymsp[0].minor.yy542.returning, span: nodeSpan()
   };
 }
 #line 4596 "parse-ts.c"
         break;
       case 182: /* cmd ::= with insert_cmd INTO xfullname idlist_opt DEFAULT VALUES returning */
-#line 748 "parse-ts.y"
+#line 747 "parse-ts.y"
 {
   state.stmt = {
     kind: "InsertStmt",
     with: yymsp[-7].minor.yy187, orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-4].minor.yy458, columns: yymsp[-3].minor.yy529,
     body: { kind: "DefaultValuesInsertBody", span: nodeSpan() },
-    returning: yymsp[0].minor.yy72, span: nodeSpan()
+    returning: yymsp[0].minor.yy599.columns, span: nodeSpan()
   };
 }
 #line 4608 "parse-ts.c"
         break;
       case 183: /* upsert ::= */
-#line 759 "parse-ts.y"
-{ yymsp[1].minor.yy480 = { upsert: undefined, returning: undefined, span: nodeSpan() }; }
+#line 758 "parse-ts.y"
+{ yymsp[1].minor.yy542 = { upsert: undefined, returning: undefined, returningSpan: undefined, span: nodeSpan() }; }
 #line 4613 "parse-ts.c"
         break;
       case 184: /* upsert ::= RETURNING selcollist */
-#line 760 "parse-ts.y"
-{ yymsp[-1].minor.yy480 = { upsert: undefined, returning: yymsp[0].minor.yy518, span: nodeSpan() };    }
+#line 759 "parse-ts.y"
+{ yymsp[-1].minor.yy542 = { upsert: undefined, returning: yymsp[0].minor.yy518, returningSpan: nodeSpan(), span: nodeSpan() }; }
 #line 4618 "parse-ts.c"
         break;
       case 185: /* upsert ::= ON CONFLICT LP sortlist RP where_opt DO UPDATE SET setlist where_opt upsert */
-#line 762 "parse-ts.y"
+#line 761 "parse-ts.y"
 {
   const idx = mkUpsertIndex(state, yymsp[-8].minor.yy408, yymsp[-6].minor.yy102, nodeSpan());
-  yymsp[-11].minor.yy480 = {
-    upsert: { kind: "Upsert", index: idx, doClause: { kind: "SetUpsertDo", sets: yymsp[-2].minor.yy4, whereClause: yymsp[-1].minor.yy102, span: nodeSpan() }, next: yymsp[0].minor.yy480.upsert, span: nodeSpan() },
-    returning: yymsp[0].minor.yy480.returning, span: nodeSpan()
+  yymsp[-11].minor.yy542 = {
+    upsert: { kind: "Upsert", index: idx, doClause: { kind: "SetUpsertDo", sets: yymsp[-2].minor.yy4, whereClause: yymsp[-1].minor.yy102, span: nodeSpan() }, next: yymsp[0].minor.yy542.upsert, span: nodeSpan() },
+    returning: yymsp[0].minor.yy542.returning, returningSpan: yymsp[0].minor.yy542.returningSpan, span: nodeSpan()
   };
 }
 #line 4629 "parse-ts.c"
         break;
       case 186: /* upsert ::= ON CONFLICT LP sortlist RP where_opt DO NOTHING upsert */
-#line 769 "parse-ts.y"
+#line 768 "parse-ts.y"
 {
   const idx = mkUpsertIndex(state, yymsp[-5].minor.yy408, yymsp[-3].minor.yy102, nodeSpan());
-  yymsp[-8].minor.yy480 = {
-    upsert: { kind: "Upsert", index: idx, doClause: { kind: "NothingUpsertDo", span: nodeSpan() }, next: yymsp[0].minor.yy480.upsert, span: nodeSpan() },
-    returning: yymsp[0].minor.yy480.returning, span: nodeSpan()
+  yymsp[-8].minor.yy542 = {
+    upsert: { kind: "Upsert", index: idx, doClause: { kind: "NothingUpsertDo", span: nodeSpan() }, next: yymsp[0].minor.yy542.upsert, span: nodeSpan() },
+    returning: yymsp[0].minor.yy542.returning, returningSpan: yymsp[0].minor.yy542.returningSpan, span: nodeSpan()
   };
 }
 #line 4640 "parse-ts.c"
         break;
       case 187: /* upsert ::= ON CONFLICT DO NOTHING returning */
-#line 776 "parse-ts.y"
+#line 775 "parse-ts.y"
 {
-  yymsp[-4].minor.yy480 = { upsert: { kind: "Upsert", index: undefined, doClause: { kind: "NothingUpsertDo", span: nodeSpan() }, next: undefined, span: nodeSpan() }, returning: yymsp[0].minor.yy72, span: nodeSpan() };
+  yymsp[-4].minor.yy542 = { upsert: { kind: "Upsert", index: undefined, doClause: { kind: "NothingUpsertDo", span: nodeSpan() }, next: undefined, span: nodeSpan() }, returning: yymsp[0].minor.yy599.columns, returningSpan: yymsp[0].minor.yy599.span, span: nodeSpan() };
 }
 #line 4647 "parse-ts.c"
         break;
       case 188: /* upsert ::= ON CONFLICT DO UPDATE SET setlist where_opt returning */
-#line 779 "parse-ts.y"
+#line 778 "parse-ts.y"
 {
-  yymsp[-7].minor.yy480 = {
+  yymsp[-7].minor.yy542 = {
     upsert: { kind: "Upsert", index: undefined, doClause: { kind: "SetUpsertDo", sets: yymsp[-2].minor.yy4, whereClause: yymsp[-1].minor.yy102, span: nodeSpan() }, next: undefined, span: nodeSpan() },
-    returning: yymsp[0].minor.yy72, span: nodeSpan()
+    returning: yymsp[0].minor.yy599.columns, returningSpan: yymsp[0].minor.yy599.span, span: nodeSpan()
   };
 }
 #line 4657 "parse-ts.c"
         break;
       case 189: /* returning ::= RETURNING selcollist */
-#line 787 "parse-ts.y"
-{ yymsp[-1].minor.yy72 = yymsp[0].minor.yy518;    }
+#line 786 "parse-ts.y"
+{ yymsp[-1].minor.yy599 = { columns: yymsp[0].minor.yy518, span: nodeSpan() }; }
 #line 4662 "parse-ts.c"
         break;
       case 190: /* returning ::= */
-#line 788 "parse-ts.y"
-{ yymsp[1].minor.yy72 = undefined; }
+#line 787 "parse-ts.y"
+{ yymsp[1].minor.yy599 = { columns: undefined, span: undefined }; }
 #line 4667 "parse-ts.c"
         break;
       case 191: /* insert_cmd ::= INSERT orconf */
-#line 791 "parse-ts.y"
+#line 790 "parse-ts.y"
 { yymsp[-1].minor.yy613 = yymsp[0].minor.yy613; }
 #line 4672 "parse-ts.c"
         break;
       case 192: /* insert_cmd ::= REPLACE */
-#line 792 "parse-ts.y"
+#line 791 "parse-ts.y"
 { yymsp[0].minor.yy613 = "Replace"; }
 #line 4677 "parse-ts.c"
         break;
       case 193: /* idlist_opt ::= */
-#line 796 "parse-ts.y"
+#line 795 "parse-ts.y"
 { yymsp[1].minor.yy529 = undefined; }
 #line 4682 "parse-ts.c"
         break;
       case 194: /* idlist_opt ::= LP idlist RP */
-#line 797 "parse-ts.y"
+#line 796 "parse-ts.y"
 { yymsp[-2].minor.yy529 = yymsp[-1].minor.yy342;    }
 #line 4687 "parse-ts.c"
         break;
       case 195: /* idlist ::= idlist COMMA nm */
-#line 798 "parse-ts.y"
+#line 797 "parse-ts.y"
 {
   if( yymsp[-2].minor.yy342.some(n => n.name===yymsp[0].minor.yy206.name) ){
-    state.errors.push({ message: `column "${yymsp[0].minor.yy206.name}" specified more than once` });
+    state.errors.push({ message: `column "${yymsp[0].minor.yy206.name}" specified more than once`, span: yymsp[0].minor.yy206.span });
   }else{
     yymsp[-2].minor.yy342.push(yymsp[0].minor.yy206);
   }
@@ -4697,30 +4697,30 @@ static YYACTIONTYPE yy_reduce(
 #line 4698 "parse-ts.c"
         break;
       case 196: /* idlist ::= nm */
-#line 805 "parse-ts.y"
+#line 804 "parse-ts.y"
 { yylhsminor.yy342 = [yymsp[0].minor.yy206]; }
 #line 4703 "parse-ts.c"
   yymsp[0].minor.yy342 = yylhsminor.yy342;
         break;
       case 197: /* expr ::= LP expr RP */
-#line 813 "parse-ts.y"
+#line 812 "parse-ts.y"
 { yymsp[-2].minor.yy560 = mkParenthesized(yymsp[-1].minor.yy560, nodeSpan()); }
 #line 4709 "parse-ts.c"
         break;
       case 198: /* expr ::= ID|INDEXED|JOIN_KW */
-#line 814 "parse-ts.y"
+#line 813 "parse-ts.y"
 { yylhsminor.yy560 = mkIdExpr(yymsp[0].minor.yy0, nodeSpan()); }
 #line 4714 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 199: /* expr ::= nm DOT nm */
-#line 815 "parse-ts.y"
+#line 814 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "QualifiedExpr",        table: yymsp[-2].minor.yy206, column: yymsp[0].minor.yy206, span: nodeSpan() };               }
 #line 4720 "parse-ts.c"
   yymsp[-2].minor.yy560 = yylhsminor.yy560;
         break;
       case 200: /* expr ::= nm DOT nm DOT nm */
-#line 816 "parse-ts.y"
+#line 815 "parse-ts.y"
 {
   yylhsminor.yy560 = { kind: "DoublyQualifiedExpr", schema: yymsp[-4].minor.yy206, table: yymsp[-2].minor.yy206, column: yymsp[0].minor.yy206, span: nodeSpan() };
 }
@@ -4728,49 +4728,49 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
         break;
       case 201: /* term ::= NULL */
-#line 819 "parse-ts.y"
+#line 818 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "LiteralExpr", literal: mkNullLiteral(yymsp[0].minor.yy0), span: nodeSpan()    }; }
 #line 4734 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 202: /* term ::= BLOB */
-#line 820 "parse-ts.y"
+#line 819 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "LiteralExpr", literal: mkBlobLiteral(yymsp[0].minor.yy0), span: nodeSpan()    }; }
 #line 4740 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 203: /* term ::= STRING */
-#line 821 "parse-ts.y"
+#line 820 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "LiteralExpr", literal: mkStringLiteral(yymsp[0].minor.yy0), span: nodeSpan()  }; }
 #line 4746 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 204: /* term ::= FLOAT|INTEGER */
       case 287: /* plus_num ::= INTEGER|FLOAT */ yytestcase(yyruleno==287);
-#line 822 "parse-ts.y"
+#line 821 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "LiteralExpr", literal: mkNumericLiteral(yymsp[0].minor.yy0), span: nodeSpan() }; }
 #line 4753 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 205: /* expr ::= VARIABLE */
-#line 823 "parse-ts.y"
+#line 822 "parse-ts.y"
 { yylhsminor.yy560 = mkVariableExpr(yymsp[0].minor.yy0); }
 #line 4759 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 206: /* expr ::= expr COLLATE ID|STRING */
-#line 824 "parse-ts.y"
+#line 823 "parse-ts.y"
 { yylhsminor.yy560 = mkCollate(yymsp[-2].minor.yy560, yymsp[0].minor.yy0, nodeSpan()); }
 #line 4765 "parse-ts.c"
   yymsp[-2].minor.yy560 = yylhsminor.yy560;
         break;
       case 207: /* expr ::= CAST LP expr AS typetoken RP */
-#line 826 "parse-ts.y"
+#line 825 "parse-ts.y"
 { yymsp[-5].minor.yy560 = mkCast(yymsp[-3].minor.yy560, yymsp[-1].minor.yy577, nodeSpan()); }
 #line 4771 "parse-ts.c"
         break;
       case 208: /* expr ::= ID|INDEXED|JOIN_KW LP distinct exprlist RP */
-#line 829 "parse-ts.y"
+#line 828 "parse-ts.y"
 {
   yylhsminor.yy560 = mkFunctionCall(state, yymsp[-4].minor.yy0, yymsp[-2].minor.yy450, yymsp[-1].minor.yy246, undefined, undefined, nodeSpan());
 }
@@ -4778,7 +4778,7 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
         break;
       case 209: /* expr ::= ID|INDEXED|JOIN_KW LP distinct exprlist ORDER BY sortlist RP */
-#line 832 "parse-ts.y"
+#line 831 "parse-ts.y"
 {
   yylhsminor.yy560 = mkFunctionCall(state, yymsp[-7].minor.yy0, yymsp[-5].minor.yy450, yymsp[-4].minor.yy246, { kind: "SortListFunctionCallOrder", columns: yymsp[-1].minor.yy408, span: nodeSpan() }, undefined, nodeSpan());
 }
@@ -4786,13 +4786,13 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-7].minor.yy560 = yylhsminor.yy560;
         break;
       case 210: /* expr ::= ID|INDEXED|JOIN_KW LP STAR RP */
-#line 835 "parse-ts.y"
+#line 834 "parse-ts.y"
 { yylhsminor.yy560 = mkFunctionCallStar(yymsp[-3].minor.yy0, undefined, nodeSpan()); }
 #line 4792 "parse-ts.c"
   yymsp[-3].minor.yy560 = yylhsminor.yy560;
         break;
       case 211: /* expr ::= ID|INDEXED|JOIN_KW LP distinct exprlist RP WITHIN GROUP LP ORDER BY expr RP */
-#line 838 "parse-ts.y"
+#line 837 "parse-ts.y"
 {
   yylhsminor.yy560 = mkFunctionCall(state, yymsp[-11].minor.yy0, yymsp[-9].minor.yy450, yymsp[-8].minor.yy246, { kind: "WithinGroupFunctionCallOrder", expr: yymsp[-1].minor.yy560, span: nodeSpan() }, undefined, nodeSpan());
 }
@@ -4800,7 +4800,7 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-11].minor.yy560 = yylhsminor.yy560;
         break;
       case 212: /* expr ::= ID|INDEXED|JOIN_KW LP distinct exprlist RP filter_over */
-#line 844 "parse-ts.y"
+#line 843 "parse-ts.y"
 {
   yylhsminor.yy560 = mkFunctionCall(state, yymsp[-5].minor.yy0, yymsp[-3].minor.yy450, yymsp[-2].minor.yy246, undefined, yymsp[0].minor.yy53, nodeSpan());
 }
@@ -4808,7 +4808,7 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-5].minor.yy560 = yylhsminor.yy560;
         break;
       case 213: /* expr ::= ID|INDEXED|JOIN_KW LP distinct exprlist ORDER BY sortlist RP filter_over */
-#line 847 "parse-ts.y"
+#line 846 "parse-ts.y"
 {
   yylhsminor.yy560 = mkFunctionCall(state, yymsp[-8].minor.yy0, yymsp[-6].minor.yy450, yymsp[-5].minor.yy246, { kind: "SortListFunctionCallOrder", columns: yymsp[-2].minor.yy408, span: nodeSpan() }, yymsp[0].minor.yy53, nodeSpan());
 }
@@ -4816,13 +4816,13 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-8].minor.yy560 = yylhsminor.yy560;
         break;
       case 214: /* expr ::= ID|INDEXED|JOIN_KW LP STAR RP filter_over */
-#line 850 "parse-ts.y"
+#line 849 "parse-ts.y"
 { yylhsminor.yy560 = mkFunctionCallStar(yymsp[-4].minor.yy0, yymsp[0].minor.yy53, nodeSpan()); }
 #line 4822 "parse-ts.c"
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
         break;
       case 215: /* expr ::= ID|INDEXED|JOIN_KW LP distinct exprlist RP WITHIN GROUP LP ORDER BY expr RP filter_over */
-#line 852 "parse-ts.y"
+#line 851 "parse-ts.y"
 {
   yylhsminor.yy560 = mkFunctionCall(state, yymsp[-12].minor.yy0, yymsp[-10].minor.yy450, yymsp[-9].minor.yy246, { kind: "WithinGroupFunctionCallOrder", expr: yymsp[-2].minor.yy560, span: nodeSpan() }, yymsp[0].minor.yy53, nodeSpan());
 }
@@ -4830,13 +4830,13 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-12].minor.yy560 = yylhsminor.yy560;
         break;
       case 216: /* term ::= CTIME_KW */
-#line 858 "parse-ts.y"
+#line 857 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "LiteralExpr", literal: literalFromCtimeKw(yymsp[0].minor.yy0), span: nodeSpan() }; }
 #line 4836 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 217: /* expr ::= LP nexprlist COMMA expr RP */
-#line 860 "parse-ts.y"
+#line 859 "parse-ts.y"
 {
   yymsp[-4].minor.yy560 = { kind: "ParenthesizedExpr", exprs: [...yymsp[-3].minor.yy540, yymsp[-1].minor.yy560], span: nodeSpan() };
 }
@@ -4850,24 +4850,24 @@ static YYACTIONTYPE yy_reduce(
       case 223: /* expr ::= expr PLUS|MINUS expr */ yytestcase(yyruleno==223);
       case 224: /* expr ::= expr STAR|SLASH|REM expr */ yytestcase(yyruleno==224);
       case 225: /* expr ::= expr CONCAT expr */ yytestcase(yyruleno==225);
-#line 864 "parse-ts.y"
+#line 863 "parse-ts.y"
 { yylhsminor.yy560 = mkBinary(yymsp[-2].minor.yy560, binaryOperatorFromToken(yymsp[-1].minor.yy0.type, tokens), yymsp[0].minor.yy560, nodeSpan()); }
 #line 4856 "parse-ts.c"
   yymsp[-2].minor.yy560 = yylhsminor.yy560;
         break;
       case 226: /* likeop ::= LIKE_KW|MATCH */
-#line 878 "parse-ts.y"
+#line 877 "parse-ts.y"
 { yylhsminor.yy493 = { not: false, op: likeOperatorFromToken(yymsp[0].minor.yy0, tokens), span: nodeSpan() }; }
 #line 4862 "parse-ts.c"
   yymsp[0].minor.yy493 = yylhsminor.yy493;
         break;
       case 227: /* likeop ::= NOT LIKE_KW|MATCH */
-#line 879 "parse-ts.y"
+#line 878 "parse-ts.y"
 { yymsp[-1].minor.yy493 = { not: true,  op: likeOperatorFromToken(yymsp[0].minor.yy0, tokens), span: nodeSpan() }; }
 #line 4868 "parse-ts.c"
         break;
       case 228: /* expr ::= expr likeop expr */
-#line 880 "parse-ts.y"
+#line 879 "parse-ts.y"
 {
   yylhsminor.yy560 = mkLikeExpr(yymsp[-2].minor.yy560, yymsp[-1].minor.yy493.not, yymsp[-1].minor.yy493.op, yymsp[0].minor.yy560, undefined, nodeSpan());
 }
@@ -4875,7 +4875,7 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-2].minor.yy560 = yylhsminor.yy560;
         break;
       case 229: /* expr ::= expr likeop expr ESCAPE expr */
-#line 883 "parse-ts.y"
+#line 882 "parse-ts.y"
 {
   yylhsminor.yy560 = mkLikeExpr(yymsp[-4].minor.yy560, yymsp[-3].minor.yy493.not, yymsp[-3].minor.yy493.op, yymsp[-2].minor.yy560, yymsp[0].minor.yy560, nodeSpan());
 }
@@ -4883,37 +4883,37 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
         break;
       case 230: /* expr ::= expr ISNULL|NOTNULL */
-#line 887 "parse-ts.y"
+#line 886 "parse-ts.y"
 { yylhsminor.yy560 = mkNotNullExpr(yymsp[-1].minor.yy560, yymsp[0].minor.yy0.type, tokens, nodeSpan()); }
 #line 4889 "parse-ts.c"
   yymsp[-1].minor.yy560 = yylhsminor.yy560;
         break;
       case 231: /* expr ::= expr NOT NULL */
-#line 888 "parse-ts.y"
+#line 887 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "NotNullExpr", expr: yymsp[-2].minor.yy560, span: nodeSpan() }; }
 #line 4895 "parse-ts.c"
   yymsp[-2].minor.yy560 = yylhsminor.yy560;
         break;
       case 232: /* expr ::= expr IS expr */
-#line 893 "parse-ts.y"
+#line 892 "parse-ts.y"
 { yylhsminor.yy560 = mkBinary(yymsp[-2].minor.yy560, "Is", yymsp[0].minor.yy560, nodeSpan()); }
 #line 4901 "parse-ts.c"
   yymsp[-2].minor.yy560 = yylhsminor.yy560;
         break;
       case 233: /* expr ::= expr IS NOT expr */
-#line 894 "parse-ts.y"
+#line 893 "parse-ts.y"
 { yylhsminor.yy560 = mkBinary(yymsp[-3].minor.yy560, "IsNot", yymsp[0].minor.yy560, nodeSpan()); }
 #line 4907 "parse-ts.c"
   yymsp[-3].minor.yy560 = yylhsminor.yy560;
         break;
       case 234: /* expr ::= expr IS NOT DISTINCT FROM expr */
-#line 895 "parse-ts.y"
+#line 894 "parse-ts.y"
 { yylhsminor.yy560 = mkBinary(yymsp[-5].minor.yy560, "Is", yymsp[0].minor.yy560, nodeSpan()); }
 #line 4913 "parse-ts.c"
   yymsp[-5].minor.yy560 = yylhsminor.yy560;
         break;
       case 235: /* expr ::= expr IS DISTINCT FROM expr */
-#line 896 "parse-ts.y"
+#line 895 "parse-ts.y"
 { yylhsminor.yy560 = mkBinary(yymsp[-4].minor.yy560, "IsNot", yymsp[0].minor.yy560, nodeSpan()); }
 #line 4919 "parse-ts.c"
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
@@ -4921,25 +4921,25 @@ static YYACTIONTYPE yy_reduce(
       case 236: /* expr ::= NOT expr */
       case 237: /* expr ::= BITNOT expr */ yytestcase(yyruleno==237);
       case 238: /* expr ::= PLUS|MINUS expr */ yytestcase(yyruleno==238);
-#line 898 "parse-ts.y"
+#line 897 "parse-ts.y"
 { yylhsminor.yy560 = mkUnary(unaryOperatorFromToken(yymsp[-1].minor.yy0.type, tokens), yymsp[0].minor.yy560, nodeSpan()); }
 #line 4927 "parse-ts.c"
   yymsp[-1].minor.yy560 = yylhsminor.yy560;
         break;
       case 239: /* expr ::= expr PTR expr */
-#line 902 "parse-ts.y"
+#line 901 "parse-ts.y"
 { yylhsminor.yy560 = mkBinary(yymsp[-2].minor.yy560, ptrOperatorFromToken(yymsp[-1].minor.yy0), yymsp[0].minor.yy560, nodeSpan()); }
 #line 4933 "parse-ts.c"
   yymsp[-2].minor.yy560 = yylhsminor.yy560;
         break;
       case 240: /* between_op ::= BETWEEN */
       case 243: /* in_op ::= IN */ yytestcase(yyruleno==243);
-#line 905 "parse-ts.y"
+#line 904 "parse-ts.y"
 { yymsp[0].minor.yy329 = false; }
 #line 4940 "parse-ts.c"
         break;
       case 242: /* expr ::= expr between_op expr AND expr */
-#line 907 "parse-ts.y"
+#line 906 "parse-ts.y"
 {
   yylhsminor.yy560 = mkBetween(yymsp[-4].minor.yy560, yymsp[-3].minor.yy329, yymsp[-2].minor.yy560, yymsp[0].minor.yy560, nodeSpan());
 }
@@ -4947,24 +4947,24 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
         break;
       case 245: /* expr ::= expr in_op LP exprlist RP */
-#line 915 "parse-ts.y"
+#line 914 "parse-ts.y"
 { yylhsminor.yy560 = mkInList(yymsp[-4].minor.yy560, yymsp[-3].minor.yy329, yymsp[-1].minor.yy246, nodeSpan()); }
 #line 4953 "parse-ts.c"
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
         break;
       case 246: /* expr ::= LP select RP */
-#line 916 "parse-ts.y"
+#line 915 "parse-ts.y"
 { yymsp[-2].minor.yy560 = mkSubquery(yymsp[-1].minor.yy21, nodeSpan()); }
 #line 4959 "parse-ts.c"
         break;
       case 247: /* expr ::= expr in_op LP select RP */
-#line 917 "parse-ts.y"
+#line 916 "parse-ts.y"
 { yylhsminor.yy560 = mkInSelect(yymsp[-4].minor.yy560, yymsp[-3].minor.yy329, yymsp[-1].minor.yy21, nodeSpan()); }
 #line 4964 "parse-ts.c"
   yymsp[-4].minor.yy560 = yylhsminor.yy560;
         break;
       case 248: /* expr ::= expr in_op fullname paren_exprlist */
-#line 918 "parse-ts.y"
+#line 917 "parse-ts.y"
 {
     yylhsminor.yy560 = mkInTable(yymsp[-3].minor.yy560, yymsp[-2].minor.yy329, yymsp[-1].minor.yy458, yymsp[0].minor.yy246, nodeSpan());
   }
@@ -4972,61 +4972,61 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-3].minor.yy560 = yylhsminor.yy560;
         break;
       case 249: /* expr ::= EXISTS LP select RP */
-#line 921 "parse-ts.y"
+#line 920 "parse-ts.y"
 { yymsp[-3].minor.yy560 = mkExistsExpr(yymsp[-1].minor.yy21, nodeSpan()); }
 #line 4978 "parse-ts.c"
         break;
       case 250: /* expr ::= CASE case_operand case_exprlist case_else END */
-#line 925 "parse-ts.y"
+#line 924 "parse-ts.y"
 {
   yymsp[-4].minor.yy560 = { kind: "CaseExpr", base: yymsp[-3].minor.yy102, whenThenPairs: yymsp[-2].minor.yy394, elseExpr: yymsp[-1].minor.yy102, span: nodeSpan() };
 }
 #line 4985 "parse-ts.c"
         break;
       case 251: /* case_exprlist ::= case_exprlist WHEN expr THEN expr */
-#line 929 "parse-ts.y"
+#line 928 "parse-ts.y"
 {
   yymsp[-4].minor.yy394.push({ when: yymsp[-2].minor.yy560, then: yymsp[0].minor.yy560, span: nodeSpan() });
 }
 #line 4992 "parse-ts.c"
         break;
       case 252: /* case_exprlist ::= WHEN expr THEN expr */
-#line 932 "parse-ts.y"
+#line 931 "parse-ts.y"
 {
   yymsp[-3].minor.yy394 = [{ when: yymsp[-2].minor.yy560, then: yymsp[0].minor.yy560, span: nodeSpan() }];
 }
 #line 4999 "parse-ts.c"
         break;
       case 255: /* case_operand ::= expr */
-#line 939 "parse-ts.y"
+#line 938 "parse-ts.y"
 { yylhsminor.yy102 = yymsp[0].minor.yy560;    }
 #line 5004 "parse-ts.c"
   yymsp[0].minor.yy102 = yylhsminor.yy102;
         break;
       case 257: /* exprlist ::= nexprlist */
-#line 945 "parse-ts.y"
+#line 944 "parse-ts.y"
 { yylhsminor.yy246 = yymsp[0].minor.yy540;    }
 #line 5010 "parse-ts.c"
   yymsp[0].minor.yy246 = yylhsminor.yy246;
         break;
       case 259: /* nexprlist ::= nexprlist COMMA expr */
-#line 947 "parse-ts.y"
+#line 946 "parse-ts.y"
 { yymsp[-2].minor.yy540.push(yymsp[0].minor.yy560); }
 #line 5016 "parse-ts.c"
         break;
       case 260: /* nexprlist ::= expr */
-#line 948 "parse-ts.y"
+#line 947 "parse-ts.y"
 { yylhsminor.yy540 = [yymsp[0].minor.yy560];   }
 #line 5021 "parse-ts.c"
   yymsp[0].minor.yy540 = yylhsminor.yy540;
         break;
       case 262: /* paren_exprlist ::= LP exprlist RP */
-#line 955 "parse-ts.y"
+#line 954 "parse-ts.y"
 { yymsp[-2].minor.yy246 = yymsp[-1].minor.yy246;    }
 #line 5027 "parse-ts.c"
         break;
       case 263: /* cmd ::= createkw uniqueflag INDEX ifnotexists fullname ON nm LP sortlist RP where_opt */
-#line 961 "parse-ts.y"
+#line 960 "parse-ts.y"
 {
   state.stmt = {
     kind: "CreateIndexStmt",
@@ -5036,24 +5036,24 @@ static YYACTIONTYPE yy_reduce(
 #line 5037 "parse-ts.c"
         break;
       case 266: /* eidlist_opt ::= */
-#line 979 "parse-ts.y"
+#line 978 "parse-ts.y"
 { yymsp[1].minor.yy166 = undefined; }
 #line 5042 "parse-ts.c"
         break;
       case 267: /* eidlist_opt ::= LP eidlist RP */
-#line 980 "parse-ts.y"
+#line 979 "parse-ts.y"
 { yymsp[-2].minor.yy166 = yymsp[-1].minor.yy300;    }
 #line 5047 "parse-ts.c"
         break;
       case 268: /* eidlist ::= eidlist COMMA nm collate sortorder */
-#line 981 "parse-ts.y"
+#line 980 "parse-ts.y"
 {
   yymsp[-4].minor.yy300.push({ kind: "IndexedColumn", colName: yymsp[-2].minor.yy206, collationName: yymsp[-1].minor.yy292, order: yymsp[0].minor.yy133, span: nodeSpan() });
 }
 #line 5054 "parse-ts.c"
         break;
       case 269: /* eidlist ::= nm collate sortorder */
-#line 984 "parse-ts.y"
+#line 983 "parse-ts.y"
 {
   yylhsminor.yy300 = [{ kind: "IndexedColumn", colName: yymsp[-2].minor.yy206, collationName: yymsp[-1].minor.yy292, order: yymsp[0].minor.yy133, span: nodeSpan() }];
 }
@@ -5061,46 +5061,46 @@ static YYACTIONTYPE yy_reduce(
   yymsp[-2].minor.yy300 = yylhsminor.yy300;
         break;
       case 271: /* collate ::= COLLATE ID|STRING */
-#line 990 "parse-ts.y"
+#line 989 "parse-ts.y"
 { yymsp[-1].minor.yy292 = mkName(yymsp[0].minor.yy0); }
 #line 5067 "parse-ts.c"
         break;
       case 272: /* cmd ::= DROP INDEX ifexists fullname */
-#line 994 "parse-ts.y"
+#line 993 "parse-ts.y"
 {
   state.stmt = { kind: "DropIndexStmt", ifExists: yymsp[-1].minor.yy329, idxName: yymsp[0].minor.yy458, span: nodeSpan() };
 }
 #line 5074 "parse-ts.c"
         break;
       case 273: /* cmd ::= VACUUM vinto */
-#line 1002 "parse-ts.y"
+#line 1001 "parse-ts.y"
 { state.stmt = { kind: "VacuumStmt", name: undefined, into: yymsp[0].minor.yy102, span: nodeSpan() }; }
 #line 5079 "parse-ts.c"
         break;
       case 274: /* cmd ::= VACUUM nm vinto */
-#line 1003 "parse-ts.y"
+#line 1002 "parse-ts.y"
 { state.stmt = { kind: "VacuumStmt", name: yymsp[-1].minor.yy206,    into: yymsp[0].minor.yy102, span: nodeSpan() }; }
 #line 5084 "parse-ts.c"
         break;
       case 277: /* cmd ::= PRAGMA fullname */
-#line 1011 "parse-ts.y"
+#line 1010 "parse-ts.y"
 { state.stmt = { kind: "PragmaStmt", name: yymsp[0].minor.yy458, body: undefined, span: nodeSpan() }; }
 #line 5089 "parse-ts.c"
         break;
       case 278: /* cmd ::= PRAGMA fullname EQ nmnum */
       case 280: /* cmd ::= PRAGMA fullname EQ minus_num */ yytestcase(yyruleno==280);
-#line 1012 "parse-ts.y"
+#line 1011 "parse-ts.y"
 { state.stmt = { kind: "PragmaStmt", name: yymsp[-2].minor.yy458, body: { kind: "EqualsPragmaBody", value: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; }
 #line 5095 "parse-ts.c"
         break;
       case 279: /* cmd ::= PRAGMA fullname LP nmnum RP */
       case 281: /* cmd ::= PRAGMA fullname LP minus_num RP */ yytestcase(yyruleno==281);
-#line 1013 "parse-ts.y"
+#line 1012 "parse-ts.y"
 { state.stmt = { kind: "PragmaStmt", name: yymsp[-3].minor.yy458, body: { kind: "CallPragmaBody",   value: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; }
 #line 5101 "parse-ts.c"
         break;
       case 282: /* nmnum ::= nm */
-#line 1019 "parse-ts.y"
+#line 1018 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "NameExpr", name: yymsp[0].minor.yy206, span: nodeSpan() }; }
 #line 5106 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
@@ -5108,27 +5108,27 @@ static YYACTIONTYPE yy_reduce(
       case 283: /* nmnum ::= ON */
       case 284: /* nmnum ::= DELETE */ yytestcase(yyruleno==284);
       case 285: /* nmnum ::= DEFAULT */ yytestcase(yyruleno==285);
-#line 1020 "parse-ts.y"
+#line 1019 "parse-ts.y"
 { yylhsminor.yy560 = { kind: "LiteralExpr", literal: mkKeywordLiteral(yymsp[0].minor.yy0), span: nodeSpan() }; }
 #line 5114 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       case 286: /* plus_num ::= PLUS INTEGER|FLOAT */
-#line 1026 "parse-ts.y"
+#line 1025 "parse-ts.y"
 {
   yymsp[-1].minor.yy560 = mkUnary("Positive", { kind: "LiteralExpr", literal: mkNumericLiteral(yymsp[0].minor.yy0), span: nodeSpan() }, nodeSpan());
 }
 #line 5122 "parse-ts.c"
         break;
       case 288: /* minus_num ::= MINUS INTEGER|FLOAT */
-#line 1031 "parse-ts.y"
+#line 1030 "parse-ts.y"
 {
   yymsp[-1].minor.yy560 = mkUnary("Negative", { kind: "LiteralExpr", literal: mkNumericLiteral(yymsp[0].minor.yy0), span: nodeSpan() }, nodeSpan());
 }
 #line 5129 "parse-ts.c"
         break;
       case 289: /* cmd ::= createkw temp TRIGGER ifnotexists fullname trigger_time trigger_event ON fullname foreach_clause when_clause BEGIN trigger_cmd_list END */
-#line 1038 "parse-ts.y"
+#line 1037 "parse-ts.y"
 {
   state.stmt = {
     kind: "CreateTriggerStmt",
@@ -5139,230 +5139,235 @@ static YYACTIONTYPE yy_reduce(
 #line 5140 "parse-ts.c"
         break;
       case 290: /* trigger_time ::= BEFORE */
-#line 1047 "parse-ts.y"
+#line 1046 "parse-ts.y"
 { yymsp[0].minor.yy402 = "Before"; }
 #line 5145 "parse-ts.c"
         break;
       case 291: /* trigger_time ::= AFTER */
-#line 1048 "parse-ts.y"
+#line 1047 "parse-ts.y"
 { yymsp[0].minor.yy402 = "After"; }
 #line 5150 "parse-ts.c"
         break;
       case 292: /* trigger_time ::= INSTEAD OF */
-#line 1049 "parse-ts.y"
+#line 1048 "parse-ts.y"
 { yymsp[-1].minor.yy402 = "InsteadOf"; }
 #line 5155 "parse-ts.c"
         break;
       case 293: /* trigger_time ::= */
-#line 1050 "parse-ts.y"
+#line 1049 "parse-ts.y"
 { yymsp[1].minor.yy402 = undefined; }
 #line 5160 "parse-ts.c"
         break;
       case 294: /* trigger_event ::= DELETE */
-#line 1053 "parse-ts.y"
+#line 1052 "parse-ts.y"
 { yymsp[0].minor.yy243 = { kind: "DeleteTriggerEvent", span: nodeSpan() }; }
 #line 5165 "parse-ts.c"
         break;
       case 295: /* trigger_event ::= INSERT */
-#line 1054 "parse-ts.y"
+#line 1053 "parse-ts.y"
 { yymsp[0].minor.yy243 = { kind: "InsertTriggerEvent", span: nodeSpan() }; }
 #line 5170 "parse-ts.c"
         break;
       case 296: /* trigger_event ::= UPDATE */
-#line 1055 "parse-ts.y"
+#line 1054 "parse-ts.y"
 { yymsp[0].minor.yy243 = { kind: "UpdateTriggerEvent", span: nodeSpan() }; }
 #line 5175 "parse-ts.c"
         break;
       case 297: /* trigger_event ::= UPDATE OF idlist */
-#line 1056 "parse-ts.y"
+#line 1055 "parse-ts.y"
 { yymsp[-2].minor.yy243 = { kind: "UpdateOfTriggerEvent", columns: yymsp[0].minor.yy342, span: nodeSpan() }; }
 #line 5180 "parse-ts.c"
         break;
       case 302: /* trigger_cmd_list ::= trigger_cmd_list trigger_cmd SEMI */
-#line 1067 "parse-ts.y"
+#line 1066 "parse-ts.y"
 { yymsp[-2].minor.yy481.push(yymsp[-1].minor.yy65); }
 #line 5185 "parse-ts.c"
         break;
       case 303: /* trigger_cmd_list ::= trigger_cmd SEMI */
-#line 1068 "parse-ts.y"
+#line 1067 "parse-ts.y"
 { yylhsminor.yy481 = [yymsp[-1].minor.yy65];  }
 #line 5190 "parse-ts.c"
   yymsp[-1].minor.yy481 = yylhsminor.yy481;
         break;
       case 304: /* tridxby ::= INDEXED BY nm */
-#line 1075 "parse-ts.y"
+#line 1074 "parse-ts.y"
 {
   state.errors.push({
     message: "the INDEXED BY clause is not allowed on UPDATE or DELETE statements within triggers",
+    span: nodeSpan(),
   });
 }
-#line 5200 "parse-ts.c"
+#line 5201 "parse-ts.c"
         break;
       case 305: /* tridxby ::= NOT INDEXED */
 #line 1080 "parse-ts.y"
 {
   state.errors.push({
     message: "the NOT INDEXED clause is not allowed on UPDATE or DELETE statements within triggers",
+    span: nodeSpan(),
   });
 }
-#line 5209 "parse-ts.c"
+#line 5211 "parse-ts.c"
         break;
       case 306: /* trigger_cmd ::= UPDATE orconf xfullname tridxby SET setlist from where_opt */
-#line 1088 "parse-ts.y"
+#line 1089 "parse-ts.y"
 {
   yymsp[-7].minor.yy65 = { kind: "UpdateTriggerCmd", orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-5].minor.yy458, sets: yymsp[-2].minor.yy4, from: yymsp[-1].minor.yy561, whereClause: yymsp[0].minor.yy102, span: nodeSpan() };
 }
-#line 5216 "parse-ts.c"
+#line 5218 "parse-ts.c"
         break;
       case 307: /* trigger_cmd ::= insert_cmd INTO xfullname idlist_opt select upsert */
-#line 1092 "parse-ts.y"
+#line 1093 "parse-ts.y"
 {
-  if( yymsp[0].minor.yy480.returning ){
-    state.errors.push({ message: "cannot use RETURNING in a trigger" });
+  if( yymsp[0].minor.yy542.returning ){
+    state.errors.push({
+      message: "cannot use RETURNING in a trigger",
+      span: yymsp[0].minor.yy542.returningSpan ?? nodeSpan(),
+    });
   }
   yylhsminor.yy65 = {
     kind: "InsertTriggerCmd",
-    orConflict: yymsp[-5].minor.yy613, tblName: yymsp[-3].minor.yy458, colNames: yymsp[-2].minor.yy529, select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy480.upsert, span: nodeSpan()
+    orConflict: yymsp[-5].minor.yy613, tblName: yymsp[-3].minor.yy458, colNames: yymsp[-2].minor.yy529, select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy542.upsert, span: nodeSpan()
   };
 }
-#line 5229 "parse-ts.c"
+#line 5234 "parse-ts.c"
   yymsp[-5].minor.yy65 = yylhsminor.yy65;
         break;
       case 308: /* trigger_cmd ::= DELETE FROM xfullname tridxby where_opt */
-#line 1102 "parse-ts.y"
+#line 1106 "parse-ts.y"
 {
   yymsp[-4].minor.yy65 = { kind: "DeleteTriggerCmd", tblName: yymsp[-2].minor.yy458, whereClause: yymsp[0].minor.yy102, span: nodeSpan() };
 }
-#line 5237 "parse-ts.c"
+#line 5242 "parse-ts.c"
         break;
       case 309: /* trigger_cmd ::= select */
-#line 1106 "parse-ts.y"
+#line 1110 "parse-ts.y"
 { yylhsminor.yy65 = { kind: "SelectTriggerCmd", select: yymsp[0].minor.yy21, span: nodeSpan() }; }
-#line 5242 "parse-ts.c"
+#line 5247 "parse-ts.c"
   yymsp[0].minor.yy65 = yylhsminor.yy65;
         break;
       case 310: /* expr ::= RAISE LP IGNORE RP */
-#line 1109 "parse-ts.y"
+#line 1113 "parse-ts.y"
 {
   yymsp[-3].minor.yy560 = { kind: "RaiseExpr", resolve: "Ignore", message: undefined, span: nodeSpan() };
 }
-#line 5250 "parse-ts.c"
+#line 5255 "parse-ts.c"
         break;
       case 311: /* expr ::= RAISE LP raisetype COMMA expr RP */
-#line 1112 "parse-ts.y"
+#line 1116 "parse-ts.y"
 {
   yymsp[-5].minor.yy560 = { kind: "RaiseExpr", resolve: yymsp[-3].minor.yy115, message: yymsp[-1].minor.yy560, span: nodeSpan() };
 }
-#line 5257 "parse-ts.c"
-        break;
-      case 312: /* raisetype ::= ROLLBACK */
-#line 1118 "parse-ts.y"
-{ yymsp[0].minor.yy115 = "Rollback"; }
 #line 5262 "parse-ts.c"
         break;
-      case 313: /* raisetype ::= ABORT */
-#line 1119 "parse-ts.y"
-{ yymsp[0].minor.yy115 = "Abort"; }
+      case 312: /* raisetype ::= ROLLBACK */
+#line 1122 "parse-ts.y"
+{ yymsp[0].minor.yy115 = "Rollback"; }
 #line 5267 "parse-ts.c"
         break;
-      case 314: /* raisetype ::= FAIL */
-#line 1120 "parse-ts.y"
-{ yymsp[0].minor.yy115 = "Fail"; }
+      case 313: /* raisetype ::= ABORT */
+#line 1123 "parse-ts.y"
+{ yymsp[0].minor.yy115 = "Abort"; }
 #line 5272 "parse-ts.c"
         break;
-      case 315: /* cmd ::= DROP TRIGGER ifexists fullname */
+      case 314: /* raisetype ::= FAIL */
 #line 1124 "parse-ts.y"
+{ yymsp[0].minor.yy115 = "Fail"; }
+#line 5277 "parse-ts.c"
+        break;
+      case 315: /* cmd ::= DROP TRIGGER ifexists fullname */
+#line 1128 "parse-ts.y"
 {
   state.stmt = { kind: "DropTriggerStmt", ifExists: yymsp[-1].minor.yy329, triggerName: yymsp[0].minor.yy458, span: nodeSpan() };
 }
-#line 5279 "parse-ts.c"
+#line 5284 "parse-ts.c"
         break;
       case 316: /* cmd ::= ATTACH database_kw_opt expr AS expr key_opt */
-#line 1131 "parse-ts.y"
+#line 1135 "parse-ts.y"
 {
   state.stmt = { kind: "AttachStmt", expr: yymsp[-3].minor.yy560, dbName: yymsp[-1].minor.yy560, key: yymsp[0].minor.yy102, span: nodeSpan() };
 }
-#line 5286 "parse-ts.c"
+#line 5291 "parse-ts.c"
         break;
       case 317: /* cmd ::= DETACH database_kw_opt expr */
-#line 1134 "parse-ts.y"
+#line 1138 "parse-ts.y"
 {
   state.stmt = { kind: "DetachStmt", expr: yymsp[0].minor.yy560, span: nodeSpan() };
 }
-#line 5293 "parse-ts.c"
-        break;
-      case 320: /* cmd ::= REINDEX */
-#line 1148 "parse-ts.y"
-{ state.stmt = { kind: "ReindexStmt", objName: undefined, span: nodeSpan() }; }
 #line 5298 "parse-ts.c"
         break;
-      case 321: /* cmd ::= REINDEX fullname */
-#line 1149 "parse-ts.y"
-{ state.stmt = { kind: "ReindexStmt", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; }
+      case 320: /* cmd ::= REINDEX */
+#line 1152 "parse-ts.y"
+{ state.stmt = { kind: "ReindexStmt", objName: undefined, span: nodeSpan() }; }
 #line 5303 "parse-ts.c"
         break;
-      case 322: /* cmd ::= ANALYZE */
-#line 1154 "parse-ts.y"
-{ state.stmt = { kind: "AnalyzeStmt", objName: undefined, span: nodeSpan() }; }
+      case 321: /* cmd ::= REINDEX fullname */
+#line 1153 "parse-ts.y"
+{ state.stmt = { kind: "ReindexStmt", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; }
 #line 5308 "parse-ts.c"
         break;
-      case 323: /* cmd ::= ANALYZE fullname */
-#line 1155 "parse-ts.y"
-{ state.stmt = { kind: "AnalyzeStmt", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; }
+      case 322: /* cmd ::= ANALYZE */
+#line 1158 "parse-ts.y"
+{ state.stmt = { kind: "AnalyzeStmt", objName: undefined, span: nodeSpan() }; }
 #line 5313 "parse-ts.c"
         break;
+      case 323: /* cmd ::= ANALYZE fullname */
+#line 1159 "parse-ts.y"
+{ state.stmt = { kind: "AnalyzeStmt", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; }
+#line 5318 "parse-ts.c"
+        break;
       case 324: /* cmd ::= ALTER TABLE fullname RENAME TO nm */
-#line 1161 "parse-ts.y"
+#line 1165 "parse-ts.y"
 {
   state.stmt = { kind: "AlterTableStmt", tblName: yymsp[-3].minor.yy458, body: { kind: "RenameToAlterTableBody", name: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };
 }
-#line 5320 "parse-ts.c"
+#line 5325 "parse-ts.c"
         break;
       case 325: /* cmd ::= ALTER TABLE fullname ADD kwcolumn_opt nm typetoken carglist */
-#line 1164 "parse-ts.y"
+#line 1168 "parse-ts.y"
 {
   const cd = mkColumnDefinition(yymsp[-2].minor.yy206, yymsp[-1].minor.yy577, yymsp[0].minor.yy513, nodeSpan());
   state.stmt = { kind: "AlterTableStmt", tblName: yymsp[-5].minor.yy458, body: { kind: "AddColumnAlterTableBody", column: cd, span: nodeSpan() }, span: nodeSpan() };
 }
-#line 5328 "parse-ts.c"
+#line 5333 "parse-ts.c"
         break;
       case 326: /* cmd ::= ALTER TABLE fullname DROP kwcolumn_opt nm */
-#line 1168 "parse-ts.y"
+#line 1172 "parse-ts.y"
 {
   state.stmt = { kind: "AlterTableStmt", tblName: yymsp[-3].minor.yy458, body: { kind: "DropColumnAlterTableBody", column: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };
 }
-#line 5335 "parse-ts.c"
+#line 5340 "parse-ts.c"
         break;
       case 327: /* cmd ::= ALTER TABLE fullname RENAME kwcolumn_opt nm TO nm */
-#line 1171 "parse-ts.y"
+#line 1175 "parse-ts.y"
 {
   state.stmt = { kind: "AlterTableStmt", tblName: yymsp[-5].minor.yy458, body: { kind: "RenameColumnAlterTableBody", old: yymsp[-2].minor.yy206, new: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };
 }
-#line 5342 "parse-ts.c"
+#line 5347 "parse-ts.c"
         break;
       case 328: /* cmd ::= ALTER TABLE fullname DROP CONSTRAINT nm */
-#line 1174 "parse-ts.y"
+#line 1178 "parse-ts.y"
 {
   state.stmt = { kind: "AlterTableStmt", tblName: yymsp[-3].minor.yy458, body: { kind: "DropConstraintAlterTableBody", name: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };
 }
-#line 5349 "parse-ts.c"
+#line 5354 "parse-ts.c"
         break;
       case 329: /* cmd ::= ALTER TABLE fullname ALTER kwcolumn_opt nm DROP NOT NULL */
-#line 1177 "parse-ts.y"
+#line 1181 "parse-ts.y"
 {
   state.stmt = { kind: "AlterTableStmt", tblName: yymsp[-6].minor.yy458, body: { kind: "DropColumnNotNullAlterTableBody", column: yymsp[-3].minor.yy206, span: nodeSpan() }, span: nodeSpan() };
 }
-#line 5356 "parse-ts.c"
+#line 5361 "parse-ts.c"
         break;
       case 330: /* cmd ::= ALTER TABLE fullname ALTER kwcolumn_opt nm SET NOT NULL onconf */
-#line 1180 "parse-ts.y"
+#line 1184 "parse-ts.y"
 {
   state.stmt = { kind: "AlterTableStmt", tblName: yymsp[-7].minor.yy458, body: { kind: "SetColumnNotNullAlterTableBody", column: yymsp[-4].minor.yy206, onConflict: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };
 }
-#line 5363 "parse-ts.c"
+#line 5368 "parse-ts.c"
         break;
       case 331: /* cmd ::= ALTER TABLE fullname ADD CONSTRAINT nm CHECK LP expr RP onconf */
-#line 1183 "parse-ts.y"
+#line 1187 "parse-ts.y"
 {
   const constraint: TableConstraint = { kind: "CheckTableConstraint", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() };
   state.stmt = {
@@ -5370,10 +5375,10 @@ static YYACTIONTYPE yy_reduce(
     body: { kind: "AddConstraintAlterTableBody", constraint: { kind: "NamedTableConstraint", name: yymsp[-5].minor.yy206, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()
   };
 }
-#line 5374 "parse-ts.c"
+#line 5379 "parse-ts.c"
         break;
       case 332: /* cmd ::= ALTER TABLE fullname ADD CHECK LP expr RP onconf */
-#line 1190 "parse-ts.y"
+#line 1194 "parse-ts.y"
 {
   const constraint: TableConstraint = { kind: "CheckTableConstraint", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() };
   state.stmt = {
@@ -5381,15 +5386,15 @@ static YYACTIONTYPE yy_reduce(
     body: { kind: "AddConstraintAlterTableBody", constraint: { kind: "NamedTableConstraint", name: undefined, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()
   };
 }
-#line 5385 "parse-ts.c"
-        break;
-      case 333: /* cmd ::= create_vtab */
-#line 1205 "parse-ts.y"
-{ state.stmt = yymsp[0].minor.yy417; }
 #line 5390 "parse-ts.c"
         break;
+      case 333: /* cmd ::= create_vtab */
+#line 1209 "parse-ts.y"
+{ state.stmt = yymsp[0].minor.yy417; }
+#line 5395 "parse-ts.c"
+        break;
       case 334: /* cmd ::= create_vtab LP vtabarglist RP */
-#line 1206 "parse-ts.y"
+#line 1210 "parse-ts.y"
 {
   if( state.vtabArgCurrent.length>0 ){
     state.vtabArgs.push(state.vtabArgCurrent);
@@ -5402,282 +5407,282 @@ static YYACTIONTYPE yy_reduce(
   }
   state.vtabArgs = [];
 }
-#line 5406 "parse-ts.c"
+#line 5411 "parse-ts.c"
         break;
       case 335: /* create_vtab ::= createkw VIRTUAL TABLE ifnotexists fullname USING nm */
-#line 1219 "parse-ts.y"
+#line 1223 "parse-ts.y"
 {
   yymsp[-6].minor.yy417 = { kind: "CreateVirtualTableStmt", ifNotExists: yymsp[-3].minor.yy329, tblName: yymsp[-2].minor.yy458, moduleName: yymsp[0].minor.yy206, args: undefined, span: nodeSpan() };
 }
-#line 5413 "parse-ts.c"
+#line 5418 "parse-ts.c"
         break;
       case 336: /* vtabarg ::= */
-#line 1224 "parse-ts.y"
+#line 1228 "parse-ts.y"
 {
   if( state.vtabArgCurrent.length>0 ) state.vtabArgs.push(state.vtabArgCurrent);
   state.vtabArgCurrent = "";
 }
-#line 5421 "parse-ts.c"
+#line 5426 "parse-ts.c"
         break;
       case 337: /* vtabargtoken ::= ANY */
       case 338: /* vtabargtoken ::= lp anylist RP */ yytestcase(yyruleno==338);
       case 339: /* lp ::= LP */ yytestcase(yyruleno==339);
-#line 1229 "parse-ts.y"
+#line 1233 "parse-ts.y"
 { state.vtabArgCurrent += yymsp[0].minor.yy0.text; }
-#line 5428 "parse-ts.c"
-        break;
-      case 340: /* with ::= */
-#line 1242 "parse-ts.y"
-{ yymsp[1].minor.yy187 = undefined; }
 #line 5433 "parse-ts.c"
         break;
-      case 341: /* with ::= WITH wqlist */
-#line 1244 "parse-ts.y"
-{ yymsp[-1].minor.yy187 = { kind: "With", recursive: false, ctes: yymsp[0].minor.yy121, span: nodeSpan() }; }
+      case 340: /* with ::= */
+#line 1246 "parse-ts.y"
+{ yymsp[1].minor.yy187 = undefined; }
 #line 5438 "parse-ts.c"
         break;
-      case 342: /* with ::= WITH RECURSIVE wqlist */
-#line 1245 "parse-ts.y"
-{ yymsp[-2].minor.yy187 = { kind: "With", recursive: true,  ctes: yymsp[0].minor.yy121, span: nodeSpan() }; }
+      case 341: /* with ::= WITH wqlist */
+#line 1248 "parse-ts.y"
+{ yymsp[-1].minor.yy187 = { kind: "With", recursive: false, ctes: yymsp[0].minor.yy121, span: nodeSpan() }; }
 #line 5443 "parse-ts.c"
         break;
-      case 343: /* wqas ::= AS */
-#line 1248 "parse-ts.y"
-{ yymsp[0].minor.yy376 = "Any"; }
+      case 342: /* with ::= WITH RECURSIVE wqlist */
+#line 1249 "parse-ts.y"
+{ yymsp[-2].minor.yy187 = { kind: "With", recursive: true,  ctes: yymsp[0].minor.yy121, span: nodeSpan() }; }
 #line 5448 "parse-ts.c"
         break;
-      case 344: /* wqas ::= AS MATERIALIZED */
-#line 1249 "parse-ts.y"
-{ yymsp[-1].minor.yy376 = "Yes"; }
+      case 343: /* wqas ::= AS */
+#line 1252 "parse-ts.y"
+{ yymsp[0].minor.yy376 = "Any"; }
 #line 5453 "parse-ts.c"
         break;
-      case 345: /* wqas ::= AS NOT MATERIALIZED */
-#line 1250 "parse-ts.y"
-{ yymsp[-2].minor.yy376 = "No"; }
+      case 344: /* wqas ::= AS MATERIALIZED */
+#line 1253 "parse-ts.y"
+{ yymsp[-1].minor.yy376 = "Yes"; }
 #line 5458 "parse-ts.c"
         break;
+      case 345: /* wqas ::= AS NOT MATERIALIZED */
+#line 1254 "parse-ts.y"
+{ yymsp[-2].minor.yy376 = "No"; }
+#line 5463 "parse-ts.c"
+        break;
       case 346: /* wqitem ::= nm eidlist_opt wqas LP select RP */
-#line 1251 "parse-ts.y"
+#line 1255 "parse-ts.y"
 {
   yylhsminor.yy381 = { kind: "CommonTableExpr", tblName: yymsp[-5].minor.yy206, columns: yymsp[-4].minor.yy166, materialized: yymsp[-3].minor.yy376, select: yymsp[-1].minor.yy21, span: nodeSpan() };
 }
-#line 5465 "parse-ts.c"
+#line 5470 "parse-ts.c"
   yymsp[-5].minor.yy381 = yylhsminor.yy381;
         break;
       case 347: /* wqlist ::= wqitem */
-#line 1254 "parse-ts.y"
+#line 1258 "parse-ts.y"
 { yylhsminor.yy121 = [yymsp[0].minor.yy381]; }
-#line 5471 "parse-ts.c"
+#line 5476 "parse-ts.c"
   yymsp[0].minor.yy121 = yylhsminor.yy121;
         break;
       case 348: /* wqlist ::= wqlist COMMA wqitem */
-#line 1255 "parse-ts.y"
+#line 1259 "parse-ts.y"
 { addCte(state, yymsp[-2].minor.yy121, yymsp[0].minor.yy381); }
-#line 5477 "parse-ts.c"
+#line 5482 "parse-ts.c"
         break;
       case 349: /* windowdefn_list ::= windowdefn */
-#line 1267 "parse-ts.y"
+#line 1271 "parse-ts.y"
 { yylhsminor.yy28 = [yymsp[0].minor.yy80]; }
-#line 5482 "parse-ts.c"
+#line 5487 "parse-ts.c"
   yymsp[0].minor.yy28 = yylhsminor.yy28;
         break;
       case 350: /* windowdefn_list ::= windowdefn_list COMMA windowdefn */
-#line 1268 "parse-ts.y"
+#line 1272 "parse-ts.y"
 { yymsp[-2].minor.yy28.push(yymsp[0].minor.yy80); }
-#line 5488 "parse-ts.c"
+#line 5493 "parse-ts.c"
         break;
       case 351: /* windowdefn ::= nm AS LP window RP */
-#line 1271 "parse-ts.y"
+#line 1275 "parse-ts.y"
 { yylhsminor.yy80 = { kind: "WindowDef", name: yymsp[-4].minor.yy206, window: yymsp[-1].minor.yy101, span: nodeSpan() }; }
-#line 5493 "parse-ts.c"
+#line 5498 "parse-ts.c"
   yymsp[-4].minor.yy80 = yylhsminor.yy80;
         break;
       case 352: /* window ::= PARTITION BY nexprlist orderby_opt frame_opt */
-#line 1284 "parse-ts.y"
+#line 1288 "parse-ts.y"
 {
   yymsp[-4].minor.yy101 = { kind: "Window", base: undefined, partitionBy: yymsp[-2].minor.yy540,    orderBy: yymsp[-1].minor.yy326,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };
 }
-#line 5501 "parse-ts.c"
+#line 5506 "parse-ts.c"
         break;
       case 353: /* window ::= nm PARTITION BY nexprlist orderby_opt frame_opt */
-#line 1287 "parse-ts.y"
+#line 1291 "parse-ts.y"
 {
   yylhsminor.yy101 = { kind: "Window", base: yymsp[-5].minor.yy206,    partitionBy: yymsp[-2].minor.yy540,    orderBy: yymsp[-1].minor.yy326,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };
 }
-#line 5508 "parse-ts.c"
+#line 5513 "parse-ts.c"
   yymsp[-5].minor.yy101 = yylhsminor.yy101;
         break;
       case 354: /* window ::= ORDER BY sortlist frame_opt */
-#line 1290 "parse-ts.y"
+#line 1294 "parse-ts.y"
 {
   yymsp[-3].minor.yy101 = { kind: "Window", base: undefined, partitionBy: undefined, orderBy: yymsp[-1].minor.yy408,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };
 }
-#line 5516 "parse-ts.c"
+#line 5521 "parse-ts.c"
         break;
       case 355: /* window ::= nm ORDER BY sortlist frame_opt */
-#line 1293 "parse-ts.y"
+#line 1297 "parse-ts.y"
 {
   yylhsminor.yy101 = { kind: "Window", base: yymsp[-4].minor.yy206,    partitionBy: undefined, orderBy: yymsp[-1].minor.yy408,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };
 }
-#line 5523 "parse-ts.c"
+#line 5528 "parse-ts.c"
   yymsp[-4].minor.yy101 = yylhsminor.yy101;
         break;
       case 356: /* window ::= frame_opt */
-#line 1296 "parse-ts.y"
+#line 1300 "parse-ts.y"
 {
   yylhsminor.yy101 = { kind: "Window", base: undefined, partitionBy: undefined, orderBy: undefined, frameClause: yymsp[0].minor.yy399, span: nodeSpan() };
 }
-#line 5531 "parse-ts.c"
+#line 5536 "parse-ts.c"
   yymsp[0].minor.yy101 = yylhsminor.yy101;
         break;
       case 357: /* window ::= nm frame_opt */
-#line 1299 "parse-ts.y"
+#line 1303 "parse-ts.y"
 {
   yylhsminor.yy101 = { kind: "Window", base: yymsp[-1].minor.yy206,    partitionBy: undefined, orderBy: undefined, frameClause: yymsp[0].minor.yy399, span: nodeSpan() };
 }
-#line 5539 "parse-ts.c"
+#line 5544 "parse-ts.c"
   yymsp[-1].minor.yy101 = yylhsminor.yy101;
         break;
       case 358: /* frame_opt ::= */
-#line 1303 "parse-ts.y"
+#line 1307 "parse-ts.y"
 { yymsp[1].minor.yy399 = undefined; }
-#line 5545 "parse-ts.c"
+#line 5550 "parse-ts.c"
         break;
       case 359: /* frame_opt ::= range_or_rows frame_bound_s frame_exclude_opt */
-#line 1304 "parse-ts.y"
+#line 1308 "parse-ts.y"
 {
   yylhsminor.yy399 = { kind: "FrameClause", mode: yymsp[-2].minor.yy457, start: yymsp[-1].minor.yy104, end: undefined, exclude: yymsp[0].minor.yy409, span: nodeSpan() };
 }
-#line 5552 "parse-ts.c"
+#line 5557 "parse-ts.c"
   yymsp[-2].minor.yy399 = yylhsminor.yy399;
         break;
       case 360: /* frame_opt ::= range_or_rows BETWEEN frame_bound_s AND frame_bound_e frame_exclude_opt */
-#line 1307 "parse-ts.y"
+#line 1311 "parse-ts.y"
 {
   yylhsminor.yy399 = { kind: "FrameClause", mode: yymsp[-5].minor.yy457, start: yymsp[-3].minor.yy104, end: yymsp[-1].minor.yy104,    exclude: yymsp[0].minor.yy409, span: nodeSpan() };
 }
-#line 5560 "parse-ts.c"
+#line 5565 "parse-ts.c"
   yymsp[-5].minor.yy399 = yylhsminor.yy399;
         break;
       case 361: /* range_or_rows ::= RANGE */
-#line 1311 "parse-ts.y"
+#line 1315 "parse-ts.y"
 { yymsp[0].minor.yy457 = "Range"; }
-#line 5566 "parse-ts.c"
-        break;
-      case 362: /* range_or_rows ::= ROWS */
-#line 1312 "parse-ts.y"
-{ yymsp[0].minor.yy457 = "Rows"; }
 #line 5571 "parse-ts.c"
         break;
-      case 363: /* range_or_rows ::= GROUPS */
-#line 1313 "parse-ts.y"
-{ yymsp[0].minor.yy457 = "Groups"; }
+      case 362: /* range_or_rows ::= ROWS */
+#line 1316 "parse-ts.y"
+{ yymsp[0].minor.yy457 = "Rows"; }
 #line 5576 "parse-ts.c"
+        break;
+      case 363: /* range_or_rows ::= GROUPS */
+#line 1317 "parse-ts.y"
+{ yymsp[0].minor.yy457 = "Groups"; }
+#line 5581 "parse-ts.c"
         break;
       case 364: /* frame_bound_s ::= frame_bound */
       case 366: /* frame_bound_e ::= frame_bound */ yytestcase(yyruleno==366);
-#line 1315 "parse-ts.y"
+#line 1319 "parse-ts.y"
 { yylhsminor.yy104 = yymsp[0].minor.yy104; }
-#line 5582 "parse-ts.c"
+#line 5587 "parse-ts.c"
   yymsp[0].minor.yy104 = yylhsminor.yy104;
         break;
       case 365: /* frame_bound_s ::= UNBOUNDED PRECEDING */
-#line 1316 "parse-ts.y"
+#line 1320 "parse-ts.y"
 { yymsp[-1].minor.yy104 = { kind: "UnboundedPrecedingFrameBound", span: nodeSpan() }; }
-#line 5588 "parse-ts.c"
-        break;
-      case 367: /* frame_bound_e ::= UNBOUNDED FOLLOWING */
-#line 1318 "parse-ts.y"
-{ yymsp[-1].minor.yy104 = { kind: "UnboundedFollowingFrameBound", span: nodeSpan() }; }
 #line 5593 "parse-ts.c"
         break;
-      case 368: /* frame_bound ::= expr PRECEDING */
-#line 1320 "parse-ts.y"
-{ yylhsminor.yy104 = { kind: "PrecedingFrameBound",  expr: yymsp[-1].minor.yy560, span: nodeSpan() }; }
+      case 367: /* frame_bound_e ::= UNBOUNDED FOLLOWING */
+#line 1322 "parse-ts.y"
+{ yymsp[-1].minor.yy104 = { kind: "UnboundedFollowingFrameBound", span: nodeSpan() }; }
 #line 5598 "parse-ts.c"
+        break;
+      case 368: /* frame_bound ::= expr PRECEDING */
+#line 1324 "parse-ts.y"
+{ yylhsminor.yy104 = { kind: "PrecedingFrameBound",  expr: yymsp[-1].minor.yy560, span: nodeSpan() }; }
+#line 5603 "parse-ts.c"
   yymsp[-1].minor.yy104 = yylhsminor.yy104;
         break;
       case 369: /* frame_bound ::= CURRENT ROW */
-#line 1321 "parse-ts.y"
+#line 1325 "parse-ts.y"
 { yymsp[-1].minor.yy104 = { kind: "CurrentRowFrameBound", span: nodeSpan() }; }
-#line 5604 "parse-ts.c"
+#line 5609 "parse-ts.c"
         break;
       case 370: /* frame_bound ::= expr FOLLOWING */
-#line 1322 "parse-ts.y"
+#line 1326 "parse-ts.y"
 { yylhsminor.yy104 = { kind: "FollowingFrameBound",  expr: yymsp[-1].minor.yy560, span: nodeSpan() }; }
-#line 5609 "parse-ts.c"
+#line 5614 "parse-ts.c"
   yymsp[-1].minor.yy104 = yylhsminor.yy104;
         break;
       case 371: /* frame_exclude_opt ::= */
-#line 1325 "parse-ts.y"
+#line 1329 "parse-ts.y"
 { yymsp[1].minor.yy409 = undefined; }
-#line 5615 "parse-ts.c"
-        break;
-      case 372: /* frame_exclude_opt ::= EXCLUDE frame_exclude */
-#line 1326 "parse-ts.y"
-{ yymsp[-1].minor.yy409 = yymsp[0].minor.yy586;    }
 #line 5620 "parse-ts.c"
         break;
-      case 373: /* frame_exclude ::= NO OTHERS */
-#line 1329 "parse-ts.y"
-{ yymsp[-1].minor.yy586 = "NoOthers"; }
+      case 372: /* frame_exclude_opt ::= EXCLUDE frame_exclude */
+#line 1330 "parse-ts.y"
+{ yymsp[-1].minor.yy409 = yymsp[0].minor.yy586;    }
 #line 5625 "parse-ts.c"
         break;
-      case 374: /* frame_exclude ::= CURRENT ROW */
-#line 1330 "parse-ts.y"
-{ yymsp[-1].minor.yy586 = "CurrentRow"; }
+      case 373: /* frame_exclude ::= NO OTHERS */
+#line 1333 "parse-ts.y"
+{ yymsp[-1].minor.yy586 = "NoOthers"; }
 #line 5630 "parse-ts.c"
         break;
-      case 375: /* frame_exclude ::= GROUP */
-#line 1331 "parse-ts.y"
-{ yymsp[0].minor.yy586 = "Group"; }
+      case 374: /* frame_exclude ::= CURRENT ROW */
+#line 1334 "parse-ts.y"
+{ yymsp[-1].minor.yy586 = "CurrentRow"; }
 #line 5635 "parse-ts.c"
         break;
-      case 376: /* frame_exclude ::= TIES */
-#line 1332 "parse-ts.y"
-{ yymsp[0].minor.yy586 = "Ties"; }
+      case 375: /* frame_exclude ::= GROUP */
+#line 1335 "parse-ts.y"
+{ yymsp[0].minor.yy586 = "Group"; }
 #line 5640 "parse-ts.c"
         break;
-      case 377: /* window_clause ::= WINDOW windowdefn_list */
-#line 1335 "parse-ts.y"
-{ yymsp[-1].minor.yy28 = yymsp[0].minor.yy28; }
+      case 376: /* frame_exclude ::= TIES */
+#line 1336 "parse-ts.y"
+{ yymsp[0].minor.yy586 = "Ties"; }
 #line 5645 "parse-ts.c"
         break;
-      case 378: /* filter_over ::= filter_clause over_clause */
-#line 1337 "parse-ts.y"
-{ yylhsminor.yy53 = { kind: "FunctionTail", filterClause: yymsp[-1].minor.yy560,    overClause: yymsp[0].minor.yy421, span: nodeSpan()    }; }
+      case 377: /* window_clause ::= WINDOW windowdefn_list */
+#line 1339 "parse-ts.y"
+{ yymsp[-1].minor.yy28 = yymsp[0].minor.yy28; }
 #line 5650 "parse-ts.c"
+        break;
+      case 378: /* filter_over ::= filter_clause over_clause */
+#line 1341 "parse-ts.y"
+{ yylhsminor.yy53 = { kind: "FunctionTail", filterClause: yymsp[-1].minor.yy560,    overClause: yymsp[0].minor.yy421, span: nodeSpan()    }; }
+#line 5655 "parse-ts.c"
   yymsp[-1].minor.yy53 = yylhsminor.yy53;
         break;
       case 379: /* filter_over ::= over_clause */
-#line 1338 "parse-ts.y"
+#line 1342 "parse-ts.y"
 { yylhsminor.yy53 = { kind: "FunctionTail", filterClause: undefined, overClause: yymsp[0].minor.yy421, span: nodeSpan()    }; }
-#line 5656 "parse-ts.c"
+#line 5661 "parse-ts.c"
   yymsp[0].minor.yy53 = yylhsminor.yy53;
         break;
       case 380: /* filter_over ::= filter_clause */
-#line 1339 "parse-ts.y"
+#line 1343 "parse-ts.y"
 { yylhsminor.yy53 = { kind: "FunctionTail", filterClause: yymsp[0].minor.yy560,    overClause: undefined, span: nodeSpan() }; }
-#line 5662 "parse-ts.c"
+#line 5667 "parse-ts.c"
   yymsp[0].minor.yy53 = yylhsminor.yy53;
         break;
       case 381: /* over_clause ::= OVER LP window RP */
-#line 1341 "parse-ts.y"
+#line 1345 "parse-ts.y"
 { yymsp[-3].minor.yy421 = { kind: "WindowOver", window: yymsp[-1].minor.yy101, span: nodeSpan() }; }
-#line 5668 "parse-ts.c"
-        break;
-      case 382: /* over_clause ::= OVER nm */
-#line 1342 "parse-ts.y"
-{ yymsp[-1].minor.yy421 = { kind: "NameOver",   name:   yymsp[0].minor.yy206, span: nodeSpan() }; }
 #line 5673 "parse-ts.c"
         break;
-      case 383: /* filter_clause ::= FILTER LP WHERE expr RP */
-#line 1344 "parse-ts.y"
-{ yymsp[-4].minor.yy560 = yymsp[-1].minor.yy560; }
+      case 382: /* over_clause ::= OVER nm */
+#line 1346 "parse-ts.y"
+{ yymsp[-1].minor.yy421 = { kind: "NameOver",   name:   yymsp[0].minor.yy206, span: nodeSpan() }; }
 #line 5678 "parse-ts.c"
         break;
+      case 383: /* filter_clause ::= FILTER LP WHERE expr RP */
+#line 1348 "parse-ts.y"
+{ yymsp[-4].minor.yy560 = yymsp[-1].minor.yy560; }
+#line 5683 "parse-ts.c"
+        break;
       case 384: /* term ::= QNUMBER */
-#line 1371 "parse-ts.y"
+#line 1375 "parse-ts.y"
 {
   // Digit-separator literal.  `sqlite3DequoteNumber` strips the
   // separator run (`_` by default) and validates that every separator
@@ -5687,13 +5692,12 @@ static YYACTIONTYPE yy_reduce(
   if( dq.error ){
     state.errors.push({
       message: dq.error,
-      start: yymsp[0].minor.yy0.span.offset,
-      length: yymsp[0].minor.yy0.span.length,
+      span: yymsp[0].minor.yy0.span,
     });
   }
   yylhsminor.yy560 = { kind: "LiteralExpr", literal: { kind: "NumericLiteral", value: dq.text, span: yymsp[0].minor.yy0.span }, span: nodeSpan() };
 }
-#line 5697 "parse-ts.c"
+#line 5701 "parse-ts.c"
   yymsp[0].minor.yy560 = yylhsminor.yy560;
         break;
       default:
@@ -5787,15 +5791,14 @@ static void yy_syntax_error(
 #line 44 "parse-ts.y"
 
   if( yymajor===0 /* TK_EOF */ ){
-    state.errors.push({ message: "incomplete input" });
+    state.errors.push({ message: "incomplete input", span: yyminor.span });
   }else{
     state.errors.push({
       message: `near "${yyminor.text}": syntax error`,
-      start: yyminor.span.offset,
-      length: yyminor.span.length,
+      span: yyminor.span,
     });
   }
-#line 5799 "parse-ts.c"
+#line 5802 "parse-ts.c"
 /************ End %syntax_error code ******************************************/
   sqlite3ParserARG_STORE /* Suppress warning about unused %extra_argument variable */
   sqlite3ParserCTX_STORE

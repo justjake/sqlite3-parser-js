@@ -111,7 +111,7 @@ import type {
   WindowDef,
   With,
 } from "../../src/ast/nodes.ts"
-import type { ParseError, ParseState, Span, Token } from "../../src/ast/parseState.ts"
+import type { AstParseError, ParseState, Span, Token } from "../../src/ast/parseState.ts"
 import type { FromClauseMut } from "../../src/ast/parseActions.ts"
 import {
   mkName,
@@ -360,8 +360,6 @@ export const tokens = {
   COMMENT: 186,
   ILLEGAL: 187,
 } as const
-
-export type TokenCode = (typeof tokens)[keyof typeof tokens]
 
 // ---- LALR parser tables ----
 
@@ -4195,7 +4193,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         if (X.name.toLowerCase() === "rowid") {
           A = 0x00000080 /* TabFlags.WithoutRowid */
         } else {
-          state.errors.push({ message: `unknown table option: ${X.name}` })
+          state.errors.push({ message: `unknown table option: ${X.name}`, span: X.span })
           A = 0
         }
         return A
@@ -4208,7 +4206,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         if (X.name.toLowerCase() === "strict") {
           A = 0x00010000 /* TabFlags.Strict */
         } else {
-          state.errors.push({ message: `unknown table option: ${X.name}` })
+          state.errors.push({ message: `unknown table option: ${X.name}`, span: X.span })
           A = 0
         }
         return A
@@ -5103,14 +5101,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP
         const Y = popped[3].minor as Expr[]
         let A: Expr[][] = popped[0].minor as Expr[][]
-        valuesPush(state, A, Y)
+        valuesPush(state, A, Y, nodeSpan())
         return A
       }
       case 115: {
         // mvalues(A) ::= mvalues(A) COMMA LP nexprlist(Y) RP
         const Y = popped[3].minor as Expr[]
         let A: Expr[][] = popped[0].minor as Expr[][]
-        valuesPush(state, A, Y)
+        valuesPush(state, A, Y, nodeSpan())
         return A
       }
       case 116: {
@@ -5649,6 +5647,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const U = popped[6].minor as {
           upsert: Upsert | undefined
           returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
           span: Span
         }
 
@@ -5670,7 +5669,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const R = popped[1].minor as ResolveType | undefined
         const X = popped[3].minor as QualifiedName
         const F = popped[4].minor as DistinctNames | undefined
-        const Y = popped[7].minor as ResultColumn[] | undefined
+        const Y = popped[7].minor as { columns: ResultColumn[] | undefined; span: Span | undefined }
 
         state.stmt = {
           kind: "InsertStmt",
@@ -5679,22 +5678,32 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           tblName: X,
           columns: F,
           body: { kind: "DefaultValuesInsertBody", span: nodeSpan() },
-          returning: Y,
+          returning: Y.columns,
           span: nodeSpan(),
         }
         return undefined
       }
       case 183: {
         // upsert(A) ::=
-        let A: { upsert: Upsert | undefined; returning: ResultColumn[] | undefined; span: Span }
-        A = { upsert: undefined, returning: undefined, span: nodeSpan() }
+        let A: {
+          upsert: Upsert | undefined
+          returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
+          span: Span
+        }
+        A = { upsert: undefined, returning: undefined, returningSpan: undefined, span: nodeSpan() }
         return A
       }
       case 184: {
         // upsert(A) ::= RETURNING selcollist(X)
         const X = popped[1].minor as ResultColumn[]
-        let A: { upsert: Upsert | undefined; returning: ResultColumn[] | undefined; span: Span }
-        A = { upsert: undefined, returning: X, span: nodeSpan() }
+        let A: {
+          upsert: Upsert | undefined
+          returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
+          span: Span
+        }
+        A = { upsert: undefined, returning: X, returningSpan: nodeSpan(), span: nodeSpan() }
         return A
       }
       case 185: {
@@ -5706,9 +5715,15 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const N = popped[11].minor as {
           upsert: Upsert | undefined
           returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
           span: Span
         }
-        let A: { upsert: Upsert | undefined; returning: ResultColumn[] | undefined; span: Span }
+        let A: {
+          upsert: Upsert | undefined
+          returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
+          span: Span
+        }
 
         const idx = mkUpsertIndex(state, T, TW, nodeSpan())
         A = {
@@ -5720,6 +5735,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
             span: nodeSpan(),
           },
           returning: N.returning,
+          returningSpan: N.returningSpan,
           span: nodeSpan(),
         }
         return A
@@ -5731,9 +5747,15 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const N = popped[8].minor as {
           upsert: Upsert | undefined
           returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
           span: Span
         }
-        let A: { upsert: Upsert | undefined; returning: ResultColumn[] | undefined; span: Span }
+        let A: {
+          upsert: Upsert | undefined
+          returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
+          span: Span
+        }
 
         const idx = mkUpsertIndex(state, T, TW, nodeSpan())
         A = {
@@ -5745,14 +5767,20 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
             span: nodeSpan(),
           },
           returning: N.returning,
+          returningSpan: N.returningSpan,
           span: nodeSpan(),
         }
         return A
       }
       case 187: {
         // upsert(A) ::= ON CONFLICT DO NOTHING returning(R)
-        const R = popped[4].minor as ResultColumn[] | undefined
-        let A: { upsert: Upsert | undefined; returning: ResultColumn[] | undefined; span: Span }
+        const R = popped[4].minor as { columns: ResultColumn[] | undefined; span: Span | undefined }
+        let A: {
+          upsert: Upsert | undefined
+          returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
+          span: Span
+        }
 
         A = {
           upsert: {
@@ -5762,7 +5790,8 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
             next: undefined,
             span: nodeSpan(),
           },
-          returning: R,
+          returning: R.columns,
+          returningSpan: R.span,
           span: nodeSpan(),
         }
         return A
@@ -5771,8 +5800,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // upsert(A) ::= ON CONFLICT DO UPDATE SET setlist(Z) where_opt(W) returning(R)
         const Z = popped[5].minor as Set_[]
         const W = popped[6].minor as Expr | undefined
-        const R = popped[7].minor as ResultColumn[] | undefined
-        let A: { upsert: Upsert | undefined; returning: ResultColumn[] | undefined; span: Span }
+        const R = popped[7].minor as { columns: ResultColumn[] | undefined; span: Span | undefined }
+        let A: {
+          upsert: Upsert | undefined
+          returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
+          span: Span
+        }
 
         A = {
           upsert: {
@@ -5782,7 +5816,8 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
             next: undefined,
             span: nodeSpan(),
           },
-          returning: R,
+          returning: R.columns,
+          returningSpan: R.span,
           span: nodeSpan(),
         }
         return A
@@ -5790,14 +5825,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       case 189: {
         // returning(A) ::= RETURNING selcollist(X)
         const X = popped[1].minor as ResultColumn[]
-        let A: ResultColumn[] | undefined
-        A = X
+        let A: { columns: ResultColumn[] | undefined; span: Span | undefined }
+        A = { columns: X, span: nodeSpan() }
         return A
       }
       case 190: {
         // returning(A) ::=
-        let A: ResultColumn[] | undefined
-        A = undefined
+        let A: { columns: ResultColumn[] | undefined; span: Span | undefined }
+        A = { columns: undefined, span: undefined }
         return A
       }
       case 191: {
@@ -5832,7 +5867,10 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: Name[] = popped[0].minor as Name[]
 
         if (A.some((n) => n.name === Y.name)) {
-          state.errors.push({ message: `column "${Y.name}" specified more than once` })
+          state.errors.push({
+            message: `column "${Y.name}" specified more than once`,
+            span: Y.span,
+          })
         } else {
           A.push(Y)
         }
@@ -6768,6 +6806,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         state.errors.push({
           message:
             "the INDEXED BY clause is not allowed on UPDATE or DELETE statements within triggers",
+          span: nodeSpan(),
         })
         return undefined
       }
@@ -6777,6 +6816,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         state.errors.push({
           message:
             "the NOT INDEXED clause is not allowed on UPDATE or DELETE statements within triggers",
+          span: nodeSpan(),
         })
         return undefined
       }
@@ -6809,12 +6849,16 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const U = popped[5].minor as {
           upsert: Upsert | undefined
           returning: ResultColumn[] | undefined
+          returningSpan: Span | undefined
           span: Span
         }
         let A: TriggerCmd | undefined
 
         if (U.returning) {
-          state.errors.push({ message: "cannot use RETURNING in a trigger" })
+          state.errors.push({
+            message: "cannot use RETURNING in a trigger",
+            span: U.returningSpan ?? nodeSpan(),
+          })
         }
         A = {
           kind: "InsertTriggerCmd",
@@ -7537,8 +7581,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         if (dq.error) {
           state.errors.push({
             message: dq.error,
-            start: X.span.offset,
-            length: X.span.length,
+            span: X.span,
           })
         }
         A = {
@@ -7679,12 +7722,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
 const engineFactory = engineModuleForGrammar(PARSER_DEFS)
 
 import { makeParseState } from "../../src/ast/parseState.ts"
-export { makeParseState }
-
-export interface ParseResult {
-  readonly cmd: Cmd | undefined
-  readonly errors: readonly ParseError[]
-}
+import type { ParseResult } from "../../src/ast/parseState.ts"
 
 /**
  * Parse a pre-tokenized stream.  Callers must end the stream by
@@ -7710,8 +7748,7 @@ export function parseTokens(tokenStream: Iterable<Token>): ParseResult {
     const tok = e.minor as Token
     state.errors.push({
       message: `near "${tok.text}": syntax error`,
-      start: tok.span.offset,
-      length: tok.span.length,
+      span: tok.span,
     })
   }
   return { cmd: finalizeCmd(state), errors: state.errors }

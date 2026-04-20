@@ -307,8 +307,7 @@ export function mkFunctionCall(
   if (distinctness === "Distinct" && (args?.length ?? 0) !== 1) {
     state.errors.push({
       message: "DISTINCT aggregates must have exactly one argument",
-      start: nameTok.span.offset,
-      length: nameTok.span.length,
+      span: nameTok.span,
     })
   }
   return {
@@ -371,8 +370,7 @@ export function joinOperatorFrom(
   if (jt === undefined) {
     state.errors.push({
       message: `unknown join type: ${kw.text}`,
-      start: kw.span.offset,
-      length: kw.span.length,
+      span: kw.span,
     })
     return { kind: "TypedJoinJoinOperator", joinType: undefined, span }
   }
@@ -380,7 +378,7 @@ export function joinOperatorFrom(
     if (n === undefined) continue
     const extra = joinTypeFromKeyword(n.name)
     if (extra === undefined) {
-      state.errors.push({ message: `unknown join type: ${n.name}` })
+      state.errors.push({ message: `unknown join type: ${n.name}`, span: n.span })
       continue
     }
     jt |= extra
@@ -395,8 +393,7 @@ export function joinOperatorFrom(
   ) {
     state.errors.push({
       message: `unknown join type: ${kw.text} ${n1?.name ?? ""} ${n2?.name ?? ""}`.trimEnd(),
-      start: kw.span.offset,
-      length: kw.span.length,
+      span: kw.span,
     })
   }
   return { kind: "TypedJoinJoinOperator", joinType: jt, span }
@@ -462,12 +459,18 @@ export function fromClausePush(
       op.joinType !== undefined &&
       (op.joinType & 0x04) !== 0
     if (isNatural && jc) {
-      state.errors.push({ message: "a NATURAL join may not have an ON or USING clause" })
+      state.errors.push({
+        message: "a NATURAL join may not have an ON or USING clause",
+        span: jc.span,
+      })
     }
     from.joins.push({ operator: op, table, constraint: jc })
   } else {
     if (jc) {
-      state.errors.push({ message: "a JOIN clause is required before ON" })
+      state.errors.push({
+        message: "a JOIN clause is required before ON",
+        span: jc.span,
+      })
     }
     from.select = table
   }
@@ -505,11 +508,11 @@ export function mkOneSelect(
   windowClause: readonly WindowDef[] | undefined,
   span: Span,
 ): OneSelect {
-  if (
-    from === undefined &&
-    columns.some((c) => c.kind === "StarResultColumn" || c.kind === "TableStarResultColumn")
-  ) {
-    state.errors.push({ message: "no tables specified" })
+  const offendingStar = from === undefined
+    ? columns.find((c) => c.kind === "StarResultColumn" || c.kind === "TableStarResultColumn")
+    : undefined
+  if (offendingStar) {
+    state.errors.push({ message: "no tables specified", span: offendingStar.span })
   }
   return {
     kind: "SelectOneSelect",
@@ -529,9 +532,13 @@ export function valuesPush(
   state: ParseState,
   values: Expr[][],
   row: readonly Expr[],
+  span: Span,
 ): void {
   if (values.length > 0 && values[0]!.length !== row.length) {
-    state.errors.push({ message: "all VALUES must have the same number of terms" })
+    state.errors.push({
+      message: "all VALUES must have the same number of terms",
+      span,
+    })
   }
   values.push(row as Expr[])
 }
@@ -578,7 +585,10 @@ export function addColumn(
   cd: ColumnDefinition,
 ): void {
   if (columns.some((c) => c.colName.name === cd.colName.name)) {
-    state.errors.push({ message: `duplicate column name: ${cd.colName.name}` })
+    state.errors.push({
+      message: `duplicate column name: ${cd.colName.name}`,
+      span: cd.colName.span,
+    })
     return
   }
   columns.push(cd)
@@ -607,7 +617,10 @@ export function addCte(
   cte: CommonTableExpr,
 ): void {
   if (ctes.some((c) => c.tblName.name === cte.tblName.name)) {
-    state.errors.push({ message: `duplicate WITH table name: ${cte.tblName.name}` })
+    state.errors.push({
+      message: `duplicate WITH table name: ${cte.tblName.name}`,
+      span: cte.tblName.span,
+    })
     return
   }
   ctes.push(cte)
@@ -626,6 +639,7 @@ export function mkUpsertIndex(
     if (t.nulls) {
       state.errors.push({
         message: `unsupported use of NULLS ${t.nulls === "First" ? "FIRST" : "LAST"}`,
+        span: t.span,
       })
     }
   }
