@@ -92,7 +92,15 @@
     },
     "tables": {
       "type": "object",
-      "required": ["yy_action", "yy_lookahead", "yy_shift_ofst", "yy_reduce_ofst", "yy_default"],
+      "required": [
+        "yy_action",
+        "yy_lookahead",
+        "yy_shift_ofst",
+        "yy_reduce_ofst",
+        "yy_default",
+        "yyRuleInfoLhs",
+        "yyRuleInfoNRhs"
+      ],
       "properties": {
         "yy_action": {
           "type": "array",
@@ -132,6 +140,20 @@
             "type": "integer",
             "minimum": 0,
             "title": "TokenId"
+          }
+        },
+        "yyRuleInfoLhs": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "SymbolId"
+          }
+        },
+        "yyRuleInfoNRhs": {
+          "type": "array",
+          "items": {
+            "type": "integer"
           }
         },
         "yy_expected": {

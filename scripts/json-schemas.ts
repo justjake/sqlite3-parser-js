@@ -343,6 +343,11 @@ const ParserProdTables = matches<ParserTables>()(
     yy_reduce_ofst: Type.Array(Type.Integer()),
     yy_default: Type.Array(Type.Integer()),
     yyFallback: Type.Optional(Type.Array(TokenId)),
+    // Flat rule-info tables — counterparts of lempar.c:720 / 726.
+    // Derived from the dev `rules[]` by scripts/slim-dump.ts so the
+    // engine's reduce dispatch doesn't need to load full rule objects.
+    yyRuleInfoLhs: Type.Array(SymbolId),
+    yyRuleInfoNRhs: Type.Array(Type.Integer()),
     // Per-state sorted array of terminal ids the grammar will shift
     // from that state.  Precomputed by slim-dump.ts; consumed by
     // src/enhanceError.ts to render "expected: …" lists without

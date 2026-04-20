@@ -19,7 +19,12 @@ import { gzipSync } from "node:zlib"
 import { Clean } from "typebox/value"
 
 import { SCHEMAS, type SchemaName } from "./json-schemas.ts"
-import type { ParserConstants, ParserDefs, ParserTables } from "../src/lempar.ts"
+import type {
+  ParserConstants,
+  ParserDefs,
+  ParserTables,
+  SymbolId,
+} from "../src/lempar.ts"
 
 // ---------------------------------------------------------------------------
 // Expected-terminal table.
@@ -36,6 +41,27 @@ import type { ParserConstants, ParserDefs, ParserTables } from "../src/lempar.ts
 // walk `yy_lookahead[base..base+YYNTOKEN]` and keep slots where the
 // stored lookahead equals the offset.  Linear in YYNTOKEN per state.
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Rule-info tables.  Counterparts of lempar.c:720 `yyRuleInfoLhs[]`
+// and lempar.c:726 `yyRuleInfoNRhs[]` (the C table stores the negative
+// count; we store positive since our stack pops by count, not pointer
+// arithmetic).  The dev `rules[]` carries both fields per rule; we
+// flatten them so the runtime engine doesn't drag full rule objects
+// onto its hot path.
+// ---------------------------------------------------------------------------
+
+export function computeRuleInfo(
+  rules: readonly { readonly lhs: SymbolId; readonly rhs: readonly unknown[] }[],
+): { yyRuleInfoLhs: SymbolId[]; yyRuleInfoNRhs: number[] } {
+  const yyRuleInfoLhs: SymbolId[] = []
+  const yyRuleInfoNRhs: number[] = []
+  for (const rule of rules) {
+    yyRuleInfoLhs.push(rule.lhs)
+    yyRuleInfoNRhs.push(rule.rhs.length)
+  }
+  return { yyRuleInfoLhs, yyRuleInfoNRhs }
+}
 
 export function computeYyExpected(
   tables: Pick<ParserTables, "yy_lookahead" | "yy_shift_ofst">,
@@ -102,11 +128,16 @@ function main(): void {
   // so runtime diagnostics can render "expected: …" lists in O(|accepted|).
   let finalized: unknown = Clean(SCHEMAS[schemaName], defs)
   if (schemaName === "parser.prod") {
-    const parserDefs = finalized as ParserDefs
+    const parserDefs = finalized as ParserDefs & {
+      rules: readonly { lhs: SymbolId; rhs: readonly unknown[] }[]
+    }
+    const ruleInfo = computeRuleInfo(parserDefs.rules)
     finalized = {
       ...parserDefs,
       tables: {
         ...parserDefs.tables,
+        yyRuleInfoLhs: ruleInfo.yyRuleInfoLhs,
+        yyRuleInfoNRhs: ruleInfo.yyRuleInfoNRhs,
         yy_expected: computeYyExpected(parserDefs.tables, parserDefs.constants),
       },
     }

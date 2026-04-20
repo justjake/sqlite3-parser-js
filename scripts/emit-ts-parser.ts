@@ -19,7 +19,7 @@
 import { promises as fs } from "node:fs";
 import { dirname } from "node:path";
 import type { Static } from "typebox";
-import { computeYyExpected } from "./slim-dump";
+import { computeRuleInfo, computeYyExpected } from "./slim-dump";
 import { SCHEMAS } from "./json-schemas.ts";
 
 // ---------------------------------------------------------------------------
@@ -219,6 +219,8 @@ const TABLE_TYPES = {
   yy_reduce_ofst: "number[]",
   yy_default: "number[]",
   yyFallback: "TokenId[]",
+  yyRuleInfoLhs: "SymbolId[]",
+  yyRuleInfoNRhs: "number[]",
   yy_expected: "TokenId[][]",
 }
 
@@ -258,9 +260,14 @@ function emitParserDefs(dump: RawDump): string {
     return `const ${name} = [\n${rows.join(",\n")},\n] as unknown as ${ty}`;
   };
 
+  const ruleInfo = computeRuleInfo(dump.rules);
   for (const [name, ty] of Object.entries(TABLE_TYPES)) {
     if (name === "yy_expected") {
       lines.push(packArr2D(name, ty, computeYyExpected(dump.tables, dump.constants)));
+    } else if (name === "yyRuleInfoLhs") {
+      lines.push(packArr(name, ty, ruleInfo.yyRuleInfoLhs));
+    } else if (name === "yyRuleInfoNRhs") {
+      lines.push(packArr(name, ty, ruleInfo.yyRuleInfoNRhs));
     } else {
       const xs = dump.tables[name as keyof RawTables];
       if (xs === undefined) throw new Error(`missing table ${name}`);

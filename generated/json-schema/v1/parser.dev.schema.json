@@ -650,7 +650,9 @@
         "yy_lookahead": {
           "type": "array",
           "items": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0,
+            "title": "SymbolId"
           }
         },
         "yy_shift_ofst": {

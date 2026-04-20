@@ -137,6 +137,21 @@ export interface ParserTables {
   /** Terminal-id → fallback-terminal-id.  Present iff YYFALLBACK=1. */
   yyFallback?: TokenId[]
   /**
+   * For rule J, `yyRuleInfoLhs[J]` is the LHS nonterminal's SymbolId.
+   * Ported from lempar.c:720 `yyRuleInfoLhs[]` — lets the reduce
+   * dispatch look up the GOTO target without materialising full
+   * rule objects on the runtime hot path.
+   */
+  yyRuleInfoLhs: SymbolId[]
+  /**
+   * For rule J, `yyRuleInfoNRhs[J]` is the number of RHS symbols to
+   * pop before calling the reducer.  Ported from lempar.c:726
+   * `yyRuleInfoNRhs[]` (which stores the negative — we store positive
+   * because our stack is a JS array we pop from, not a pointer-indexed
+   * slab).
+   */
+  yyRuleInfoNRhs: number[]
+  /**
    * Per-state sorted list of terminal ids the grammar would shift (or
    * shift-reduce, or accept) from this state.  Precomputed at
    * slim-dump time so error diagnostics can read the "expected" set in
@@ -304,7 +319,7 @@ export interface CreateLalrEngine {
  *
  * Implementation note: the session class is defined *inside* this
  * factory so that {@link LalrEngine.next} and `#yy_reduce()` read
- * `K` / `T` / `rules` as lexically-bound locals rather than property
+ * `K` / `T` as lexically-bound locals rather than property
  * chains off `this`.
  * On hot dispatch paths that's measurably faster (the JIT hoists a
  * bound local out of the loop; it won't always hoist
@@ -519,8 +534,12 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
      * pure `onReduce` callback, which returns the new stack value.
      */
     #yy_reduce(yyruleno: RuleId): void {
-      const rule = rules[yyruleno]!
-      const nrhs = rule.rhs.length
+      // lempar.c:772 reads `yyRuleInfoLhs[yyruleno]` and
+      // `yyRuleInfoNRhs[yyruleno]` (the latter negative) off the flat
+      // rule-info tables.  Our tables carry the same data with NRhs
+      // stored as a positive count.
+      const nrhs = T.yyRuleInfoNRhs[yyruleno]!
+      const lhs = T.yyRuleInfoLhs[yyruleno]!
       const yystack = this.#yystack
 
       // Pop nrhs entries into `popped`, in source order.  We pop
@@ -535,10 +554,10 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
 
       const minor = this.#reducer(this.#state, yyruleno, popped)
 
-      // GOTO — see lempar.c:772 yyact = yy_find_reduce_action(...).
+      // GOTO — see lempar.c:774 yyact = yy_find_reduce_action(...).
       const baseState = yystack[yystack.length - 1]!.stateno
-      const act = yy_find_reduce_action(baseState, rule.lhs)
-      yystack.push({ stateno: act, major: rule.lhs, minor })
+      const act = yy_find_reduce_action(baseState, lhs)
+      yystack.push({ stateno: act, major: lhs, minor })
     }
   }
 
