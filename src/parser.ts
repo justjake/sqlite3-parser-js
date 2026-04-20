@@ -32,7 +32,12 @@ import {
   LalrReduce,
   LalrEngine,
 } from "./lempar.ts"
-import { buildIllegalTokenError, enhanceParseError, type ParseError } from "./enhanceError.ts"
+import {
+  buildIllegalTokenError,
+  enhanceParseError,
+  lineColAt,
+  type ParseError,
+} from "./enhanceError.ts"
 import { validate } from "./semantic.ts"
 
 // ---------------------------------------------------------------------------
@@ -53,13 +58,18 @@ export interface TokenNode {
   readonly start: number
   /** Length of the token in source characters.  Zero for synthetic tokens. */
   readonly length: number
+  /** 1-based line number of the token's first character (LF breaks lines). */
+  readonly line: number
+  /** 1-based column of the token's first character, in UTF-16 code units. */
+  readonly col: number
   /**
    * True iff this token was injected by the parser rather than read from
    * the source.  At end-of-input we inject a virtual SEMI (to close the
    * current statement) and a virtual `$` (to trigger YY_ACCEPT_ACTION);
    * both carry `synthetic: true`, `text: ""`, `length: 0`, `start:
-   * sql.length`.  `tokenLeaves()` filters these out by default so existing
-   * callers see only source tokens.
+   * sql.length`, and `line`/`col` pointing past the last source char.
+   * `tokenLeaves()` filters these out by default so existing callers see
+   * only source tokens.
    */
   readonly synthetic: boolean
 }
@@ -321,6 +331,8 @@ export function parserModuleForGrammar(args: {
         text: sql.slice(tok.start, tok.start + tok.length),
         start: tok.start,
         length: tok.length,
+        line: tok.line,
+        col: tok.col,
         synthetic: false,
       }
 
@@ -346,6 +358,7 @@ export function parserModuleForGrammar(args: {
     // both if the session already terminated during the token loop.
     if (session.state === "running") {
       const endPos = sql.length
+      const { line: endLine, col: endCol } = lineColAt(sql, endPos)
       if (lastMajor !== TK_SEMI) {
         const semiNode: TokenNode = {
           kind: "token",
@@ -354,6 +367,8 @@ export function parserModuleForGrammar(args: {
           text: "",
           start: endPos,
           length: 0,
+          line: endLine,
+          col: endCol,
           synthetic: true,
         }
         tokenStream.push(semiNode)
@@ -367,6 +382,8 @@ export function parserModuleForGrammar(args: {
           text: "",
           start: endPos,
           length: 0,
+          line: endLine,
+          col: endCol,
           synthetic: true,
         }
         tokenStream.push(eofNode)

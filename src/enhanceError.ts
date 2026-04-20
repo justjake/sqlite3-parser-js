@@ -59,8 +59,6 @@ export class ParseErrorImpl implements ParseError {
   readonly hint: string
   readonly expected: readonly string[]
 
-  #line: number | undefined
-  #col: number | undefined
   #range: readonly [number, number] | undefined
   #codeBlock: string | undefined
   #sql: string
@@ -80,11 +78,11 @@ export class ParseErrorImpl implements ParseError {
   }
 
   get line(): number {
-    return this.#line ?? this.#refreshLineCol().line
+    return this.token.line
   }
 
   get col(): number {
-    return this.#col ?? this.#refreshLineCol().col
+    return this.token.col
   }
 
   get range(): readonly [number, number] {
@@ -111,13 +109,6 @@ export class ParseErrorImpl implements ParseError {
 
   toString(): string {
     return this.getMessage()
-  }
-
-  #refreshLineCol(): { line: number; col: number } {
-    const loc = lineColAt(this.#sql, this.token.start)
-    this.#line = loc.line
-    this.#col = loc.col
-    return loc
   }
 }
 
@@ -293,8 +284,6 @@ export function canonicalParseMessage(token: TokenNode): string {
 export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
   const { sql, token, state, defs, tokens, tokenIndex } = opts
   const canonical = canonicalParseMessage(token)
-  const range = tokenRange(sql, token)
-  const { line, col } = lineColAt(sql, range[0])
 
   const idSymbolId = findIdSymbol(defs)
   const expected = collectExpectedTerminals(defs, state, idSymbolId)

@@ -139,6 +139,10 @@ export interface TokenSpan {
   readonly type: TokenId
   readonly start: number
   readonly length: number
+  /** 1-based line number of the token's first character (LF breaks lines). */
+  readonly line: number
+  /** 1-based column of the token's first character, in UTF-16 code units. */
+  readonly col: number
 }
 
 /**
@@ -1028,23 +1032,39 @@ export function tokenizerModuleForGrammar(
   }
 
   // Public entry: yield successive tokens.
+  //
+  // `line` / `col` are tracked as we scan: each consumed character
+  // (including trivia) advances `col` by one, each LF (0x0a) bumps
+  // `line` and resets `col` to 1.  CR is treated as a regular column —
+  // matching lineColAt() in src/enhanceError.ts.
   function* tokenize(
     sql: string,
     { skipTrivia = true }: TokenizeOpts = {},
   ): IterableIterator<TokenSpan> {
     const out: [TokenId] = [0 as TokenId]
     let i = 0
+    let line = 1
+    let col = 1
     const len = sql.length
     while (i < len) {
       const n = nextToken(sql, i, out)
       const type = out[0]
       if (n === 0) break // CC_NUL at offset i
-      if (skipTrivia && (type === T.SPACE || type === T.COMMENT)) {
-        i += n
-        continue
+      const start = i
+      const tokenLine = line
+      const tokenCol = col
+      const end = start + n
+      for (let k = start; k < end; k++) {
+        if (sql.charCodeAt(k) === 10) {
+          line++
+          col = 1
+        } else {
+          col++
+        }
       }
-      yield { type, start: i, length: n }
-      i += n
+      i = end
+      if (skipTrivia && (type === T.SPACE || type === T.COMMENT)) continue
+      yield { type, start, length: n, line: tokenLine, col: tokenCol }
     }
   }
 
