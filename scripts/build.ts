@@ -127,11 +127,17 @@ async function buildJs(versions: string[]): Promise<void> {
     // identifiers.  Sourcemaps are emitted alongside so debuggers and
     // error reporters can still show original symbol names.
     minify: true,
+    // Return {success,logs} instead of throwing an AggregateError on
+    // failure — otherwise bun's per-file BuildMessages get swallowed
+    // behind the generic "Bundle failed" top-level message.
+    throw: false,
   })
 
   if (!r.success) {
     for (const msg of r.logs) console.error(String(msg))
-    throw new Error("bun build failed")
+    throw new Error(
+      `bun build failed (${r.logs.length} diagnostic${r.logs.length === 1 ? "" : "s"})`,
+    )
   }
   log(`  → ${r.outputs.length} output file(s)`)
 }
@@ -262,6 +268,13 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error(err instanceof Error ? err.message : String(err))
+  // AggregateError (e.g. from Bun.build without throw:false) hides its
+  // real diagnostics in `.errors` — surface each one before exiting.
+  if (err instanceof AggregateError) {
+    for (const inner of err.errors) console.error(String(inner))
+    console.error(err.message)
+  } else {
+    console.error(err instanceof Error ? err.message : String(err))
+  }
   process.exit(1)
 })

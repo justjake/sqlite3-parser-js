@@ -96,11 +96,7 @@ function writeFileMkdir(path: string, contents: string): void {
   console.log(`wrote ${path}`)
 }
 
-function emitVersion(args: {
-  version: string
-  templatePath: string
-  indexOut: string
-}): void {
+function emitVersion(args: { version: string; templatePath: string; indexOut: string }): void {
   const templateContent = readFileSync(args.templatePath, "utf8")
   writeFileMkdir(args.indexOut, indexModule(args.version, templateContent))
 }

@@ -548,9 +548,7 @@ export function schemaPath(root: string, name: SchemaName): string {
 function main(): void {
   const [name, outPath] = process.argv.slice(2)
   if (!name || !outPath || !(name in SCHEMAS)) {
-    console.error(
-      `usage: bun scripts/json-schemas.ts <${SCHEMA_NAMES.join("|")}> <output-path>`,
-    )
+    console.error(`usage: bun scripts/json-schemas.ts <${SCHEMA_NAMES.join("|")}> <output-path>`)
     process.exit(2)
   }
 

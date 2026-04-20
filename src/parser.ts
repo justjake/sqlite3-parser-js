@@ -39,9 +39,9 @@ import {
   lineColAt,
   type ParseError,
 } from "./enhanceError.ts"
-import { Cmd } from "./ast/nodes.ts";
-import { AstNode } from "../vendor/liteparser/wasm/src/index.ts";
-import { ParseState } from "./ast/parseState.ts";
+import { Cmd } from "./ast/nodes.ts"
+import { AstNode } from "../vendor/liteparser/wasm/src/index.ts"
+import { ParseState } from "./ast/parseState.ts"
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -102,12 +102,9 @@ export type CstNode = TokenNode | RuleNode
 /** Parser options are forwarded to the tokenizer bound inside the parser. */
 export type CreateParserOptions = CreateTokenizerOptions
 
-export interface ParseResult {
-  /** The AST root, present iff the parser reached YY_ACCEPT_ACTION. */
-  readonly ast?: Cmd
-  /** Any errors encountered.  Non-empty implies either a partial or no AST. */
-  readonly errors: readonly ParseError[]
-}
+export type ParseResult =
+  | { status: "accepted"; ast: Cmd }
+  | { status: "errored"; errors: readonly ParseError[] }
 
 // ---------------------------------------------------------------------------
 // parserModuleForGrammar — bind the driver to a specific
@@ -144,7 +141,11 @@ export interface ParserModule {
 /**
  * Create a Parser for the grammar specified by `parserDefs` and `keywordDefs`.
  */
-export function parserModuleForGrammar(parserDefs: ParserDefs, keywordDefs: KeywordDefs, options: CreateParserOptions): ParserModule {
+export function parserModuleForGrammar(
+  parserDefs: ParserDefs,
+  keywordDefs: KeywordDefs,
+  options: CreateParserOptions,
+): ParserModule {
   const { symbols, reduce, createState } = parserDefs
   const tk = tokenizerModuleForGrammar(parserDefs, keywordDefs, options)
   const createEngine = engineModuleForGrammar(parserDefs)
@@ -193,7 +194,7 @@ export function parserModuleForGrammar(parserDefs: ParserDefs, keywordDefs: Keyw
         // We record it and bail — attempting to recover typically
         // cascades into noise.
         errors.push(buildIllegalTokenError(sql, node))
-        return { errors }
+        return { status: "errored", errors }
       }
 
       tokenStream.push(node)
@@ -262,7 +263,11 @@ export function parserModuleForGrammar(parserDefs: ParserDefs, keywordDefs: Keyw
       )
     }
 
-    return { ast: session.state === "accepted" ? session.root as Cmd : undefined, errors }
+    if (session.phase === "accepted") {
+      return { status: "accepted", ast: session.root as Cmd }
+    } else {
+      return { status: "errored", errors }
+    }
   }
 
   // Expose the tokenizer too so callers can inspect raw tokens for
@@ -280,12 +285,3 @@ export function parserModuleForGrammar(parserDefs: ParserDefs, keywordDefs: Keyw
     keywordDefs,
   }
 }
-
-// ---------------------------------------------------------------------------
-// Helpers — tree walking and pretty-printing.
-// ---------------------------------------------------------------------------
-
-// Re-export the defs type so callers can import it without reaching
-// into the engine module.
-export type { ParserDefs } from "./lempar.ts"
-export type { ParseError } from "./enhanceError.ts"

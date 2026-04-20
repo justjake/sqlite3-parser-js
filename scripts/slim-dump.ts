@@ -19,12 +19,7 @@ import { gzipSync } from "node:zlib"
 import { Clean } from "typebox/value"
 
 import { SCHEMAS, type SchemaName } from "./json-schemas.ts"
-import type {
-  ParserConstants,
-  ParserDefs,
-  ParserTables,
-  SymbolId,
-} from "../src/lempar.ts"
+import type { ParserConstants, ParserDefs, ParserTables, SymbolId } from "../src/lempar.ts"
 
 // ---------------------------------------------------------------------------
 // Expected-terminal table.

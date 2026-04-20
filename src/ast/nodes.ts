@@ -789,9 +789,7 @@ export type Expr =
   | VariableExpr
 
 /** `ORDER BY ...` or `WITHIN GROUP (ORDER BY expr)` after a function call's args. */
-export type FunctionCallOrder =
-  | SortListFunctionCallOrder
-  | WithinGroupFunctionCallOrder
+export type FunctionCallOrder = SortListFunctionCallOrder | WithinGroupFunctionCallOrder
 
 // ---------------------------------------------------------------------------
 // Literals.
@@ -977,9 +975,7 @@ export type CompoundOperator = "Union" | "UnionAll" | "Except" | "Intersect"
  * `SELECT` core: either a `SELECT` with clauses or a `VALUES` row set.
  * https://sqlite.org/syntax/select-core.html
  */
-export type OneSelect =
-  | SelectOneSelect
-  | ValuesOneSelect
+export type OneSelect = SelectOneSelect | ValuesOneSelect
 
 /**
  * `FROM` clause.  The first source and any `JOIN`-chained sources.
@@ -999,15 +995,10 @@ export type Distinctness = "Distinct" | "All"
  * `SELECT` result column.
  * https://sqlite.org/syntax/result-column.html
  */
-export type ResultColumn =
-  | ExprResultColumn
-  | StarResultColumn
-  | TableStarResultColumn
+export type ResultColumn = ExprResultColumn | StarResultColumn | TableStarResultColumn
 
 /** Alias introduced by `AS` (or elided). */
-export type As =
-  | AsAs
-  | ElidedAs
+export type As = AsAs | ElidedAs
 
 /** One `JOIN`ed source in a `FROM` clause. */
 export interface JoinedSelectTable {
@@ -1032,9 +1023,7 @@ export type SelectTable =
  * Join operator.
  * https://sqlite.org/syntax/join-operator.html
  */
-export type JoinOperator =
-  | CommaJoinOperator
-  | TypedJoinJoinOperator
+export type JoinOperator = CommaJoinOperator | TypedJoinJoinOperator
 
 /**
  * JOIN type flags.  Mirrors `SrcItem.fg.jointype` in SQLite.
@@ -1058,9 +1047,7 @@ export const JoinType = {
 } as const
 
 /** `JOIN` constraint: `ON expr` or `USING (cols)`. */
-export type JoinConstraint =
-  | OnJoinConstraint
-  | UsingJoinConstraint
+export type JoinConstraint = OnJoinConstraint | UsingJoinConstraint
 
 // ---------------------------------------------------------------------------
 // Identifiers.
@@ -1162,9 +1149,7 @@ export const TabFlags = {
  * `CREATE TABLE` body: explicit columns/constraints, or `AS SELECT`.
  * https://sqlite.org/lang_createtable.html
  */
-export type CreateTableBody =
-  | ColumnsAndConstraintsCreateTableBody
-  | AsSelectCreateTableBody
+export type CreateTableBody = ColumnsAndConstraintsCreateTableBody | AsSelectCreateTableBody
 
 /** Column definition bit-flags. */
 export type ColFlags = number
@@ -1439,9 +1424,7 @@ export interface IndexedColumn {
 }
 
 /** `INDEXED BY name` / `NOT INDEXED` on a table reference. */
-export type Indexed =
-  | IndexedByIndexed
-  | NotIndexedIndexed
+export type Indexed = IndexedByIndexed | NotIndexedIndexed
 
 /** One entry in an `ORDER BY`/`PRIMARY KEY`/`UNIQUE` column list. */
 export interface SortedColumn {
@@ -1477,11 +1460,7 @@ export interface ForeignKeyClause {
 }
 
 /** One action/option inside a foreign-key clause. */
-export type RefArg =
-  | OnDeleteRefArg
-  | OnInsertRefArg
-  | OnUpdateRefArg
-  | MatchRefArg
+export type RefArg = OnDeleteRefArg | OnInsertRefArg | OnUpdateRefArg | MatchRefArg
 
 /** Foreign-key referential action. */
 export type RefAct = "SetNull" | "SetDefault" | "Cascade" | "Restrict" | "NoAction"
@@ -1505,9 +1484,7 @@ export type InitDeferredPred = "InitiallyDeferred" | "InitiallyImmediate"
  * `INSERT` body: a SELECT (or VALUES) with optional upsert, or DEFAULT VALUES.
  * https://sqlite.org/lang_insert.html
  */
-export type InsertBody =
-  | SelectInsertBody
-  | DefaultValuesInsertBody
+export type InsertBody = SelectInsertBody | DefaultValuesInsertBody
 
 /**
  * One `SET` assignment in an UPDATE statement.
@@ -1521,9 +1498,7 @@ export interface Set_ {
 }
 
 /** `PRAGMA` body. https://sqlite.org/syntax/pragma-stmt.html */
-export type PragmaBody =
-  | EqualsPragmaBody
-  | CallPragmaBody
+export type PragmaBody = EqualsPragmaBody | CallPragmaBody
 
 /** A PRAGMA value.  Any expression is legal; typically an identifier or literal. */
 export type PragmaValue = Expr
@@ -1607,11 +1582,7 @@ export interface SelectTriggerCmd {
  * One command inside a trigger body.
  * https://sqlite.org/lang_createtrigger.html
  */
-export type TriggerCmd =
-  | UpdateTriggerCmd
-  | InsertTriggerCmd
-  | DeleteTriggerCmd
-  | SelectTriggerCmd
+export type TriggerCmd = UpdateTriggerCmd | InsertTriggerCmd | DeleteTriggerCmd | SelectTriggerCmd
 
 // ---------------------------------------------------------------------------
 // Resolve types (ON CONFLICT, OR).
@@ -1667,9 +1638,7 @@ export interface Type {
 }
 
 /** Column type size arguments. */
-export type TypeSize =
-  | MaxSizeTypeSize
-  | TypeSizeTypeSize
+export type TypeSize = MaxSizeTypeSize | TypeSizeTypeSize
 
 // ---------------------------------------------------------------------------
 // Transactions.
@@ -1703,9 +1672,7 @@ export interface UpsertIndex {
 }
 
 /** `DO UPDATE SET ... [WHERE ...]` or `DO NOTHING`. */
-export type UpsertDo =
-  | SetUpsertDo
-  | NothingUpsertDo
+export type UpsertDo = SetUpsertDo | NothingUpsertDo
 
 // ---------------------------------------------------------------------------
 // Window functions.
@@ -1720,9 +1687,7 @@ export interface FunctionTail {
 }
 
 /** `OVER (...)` or `OVER name`. */
-export type Over =
-  | WindowOver
-  | NameOver
+export type Over = WindowOver | NameOver
 
 /** One named window in a `WINDOW` clause. */
 export interface WindowDef {

@@ -195,31 +195,48 @@ export function likeOperatorFromToken(
 }
 
 /** Map a binary-op token type to its {@link Operator} variant. */
-export function binaryOperatorFromToken(
-  tokType: number,
-  tokens: Record<string, number>,
-): Operator {
+export function binaryOperatorFromToken(tokType: number, tokens: Record<string, number>): Operator {
   switch (tokType) {
-    case tokens.AND:    return "And"
-    case tokens.OR:     return "Or"
-    case tokens.LT:     return "Less"
-    case tokens.GT:     return "Greater"
-    case tokens.GE:     return "GreaterEquals"
-    case tokens.LE:     return "LessEquals"
-    case tokens.EQ:     return "Equals"
-    case tokens.NE:     return "NotEquals"
-    case tokens.BITAND: return "BitwiseAnd"
-    case tokens.BITOR:  return "BitwiseOr"
-    case tokens.LSHIFT: return "LeftShift"
-    case tokens.RSHIFT: return "RightShift"
-    case tokens.PLUS:   return "Add"
-    case tokens.MINUS:  return "Subtract"
-    case tokens.STAR:   return "Multiply"
-    case tokens.SLASH:  return "Divide"
-    case tokens.REM:    return "Modulus"
-    case tokens.CONCAT: return "Concat"
-    case tokens.IS:     return "Is"
-    case tokens.NOT:    return "IsNot"
+    case tokens.AND:
+      return "And"
+    case tokens.OR:
+      return "Or"
+    case tokens.LT:
+      return "Less"
+    case tokens.GT:
+      return "Greater"
+    case tokens.GE:
+      return "GreaterEquals"
+    case tokens.LE:
+      return "LessEquals"
+    case tokens.EQ:
+      return "Equals"
+    case tokens.NE:
+      return "NotEquals"
+    case tokens.BITAND:
+      return "BitwiseAnd"
+    case tokens.BITOR:
+      return "BitwiseOr"
+    case tokens.LSHIFT:
+      return "LeftShift"
+    case tokens.RSHIFT:
+      return "RightShift"
+    case tokens.PLUS:
+      return "Add"
+    case tokens.MINUS:
+      return "Subtract"
+    case tokens.STAR:
+      return "Multiply"
+    case tokens.SLASH:
+      return "Divide"
+    case tokens.REM:
+      return "Modulus"
+    case tokens.CONCAT:
+      return "Concat"
+    case tokens.IS:
+      return "Is"
+    case tokens.NOT:
+      return "IsNot"
     default:
       throw new Error(`unreachable binary op token: ${tokType}`)
   }
@@ -231,10 +248,14 @@ export function unaryOperatorFromToken(
   tokens: Record<string, number>,
 ): UnaryOperator {
   switch (tokType) {
-    case tokens.BITNOT: return "BitwiseNot"
-    case tokens.MINUS:  return "Negative"
-    case tokens.NOT:    return "Not"
-    case tokens.PLUS:   return "Positive"
+    case tokens.BITNOT:
+      return "BitwiseNot"
+    case tokens.MINUS:
+      return "Negative"
+    case tokens.NOT:
+      return "Not"
+    case tokens.PLUS:
+      return "Positive"
     default:
       throw new Error(`unreachable unary op token: ${tokType}`)
   }
@@ -251,14 +272,19 @@ export const ptrOperatorFromToken = (tok: Token): Operator =>
 // the top of the reducer function so it always reflects the range of
 // tokens popped for the current reduction.
 
-export const mkParenthesized = (e: Expr, span: Span): Expr =>
-  ({ kind: "ParenthesizedExpr", exprs: [e], span })
+export const mkParenthesized = (e: Expr, span: Span): Expr => ({
+  kind: "ParenthesizedExpr",
+  exprs: [e],
+  span,
+})
 
-export const mkIdExpr = (t: Token, span: Span): Expr =>
-  ({ kind: "IdExpr", id: mkId(t), span })
+export const mkIdExpr = (t: Token, span: Span): Expr => ({ kind: "IdExpr", id: mkId(t), span })
 
-export const mkVariableExpr = (t: Token): Expr =>
-  ({ kind: "VariableExpr", name: t.text, span: t.span })
+export const mkVariableExpr = (t: Token): Expr => ({
+  kind: "VariableExpr",
+  name: t.text,
+  span: t.span,
+})
 
 export const mkCollate = (e: Expr, c: Token, span: Span): Expr => ({
   kind: "CollateExpr",
@@ -267,17 +293,36 @@ export const mkCollate = (e: Expr, c: Token, span: Span): Expr => ({
   span,
 })
 
-export const mkCast = (e: Expr, typeName: Type | undefined, span: Span): Expr =>
-  ({ kind: "CastExpr", expr: e, typeName, span })
+export const mkCast = (e: Expr, typeName: Type | undefined, span: Span): Expr => ({
+  kind: "CastExpr",
+  expr: e,
+  typeName,
+  span,
+})
 
-export const mkBinary = (l: Expr, op: Operator, r: Expr, span: Span): Expr =>
-  ({ kind: "BinaryExpr", left: l, op, right: r, span })
+export const mkBinary = (l: Expr, op: Operator, r: Expr, span: Span): Expr => ({
+  kind: "BinaryExpr",
+  left: l,
+  op,
+  right: r,
+  span,
+})
 
-export const mkUnary = (op: UnaryOperator, e: Expr, span: Span): Expr =>
-  ({ kind: "UnaryExpr", op, expr: e, span })
+export const mkUnary = (op: UnaryOperator, e: Expr, span: Span): Expr => ({
+  kind: "UnaryExpr",
+  op,
+  expr: e,
+  span,
+})
 
-export const mkBetween = (l: Expr, not: boolean, s: Expr, e: Expr, span: Span): Expr =>
-  ({ kind: "BetweenExpr", lhs: l, not, start: s, end: e, span })
+export const mkBetween = (l: Expr, not: boolean, s: Expr, e: Expr, span: Span): Expr => ({
+  kind: "BetweenExpr",
+  lhs: l,
+  not,
+  start: s,
+  end: e,
+  span,
+})
 
 export const mkInList = (
   l: Expr,
@@ -286,8 +331,13 @@ export const mkInList = (
   span: Span,
 ): Expr => ({ kind: "InListExpr", lhs: l, not, rhs: r, span })
 
-export const mkInSelect = (l: Expr, not: boolean, s: Select, span: Span): Expr =>
-  ({ kind: "InSelectExpr", lhs: l, not, rhs: s, span })
+export const mkInSelect = (l: Expr, not: boolean, s: Select, span: Span): Expr => ({
+  kind: "InSelectExpr",
+  lhs: l,
+  not,
+  rhs: s,
+  span,
+})
 
 export const mkInTable = (
   l: Expr,
@@ -297,11 +347,17 @@ export const mkInTable = (
   span: Span,
 ): Expr => ({ kind: "InTableExpr", lhs: l, not, rhs: n, args, span })
 
-export const mkSubquery = (s: Select, span: Span): Expr =>
-  ({ kind: "SubqueryExpr", select: s, span })
+export const mkSubquery = (s: Select, span: Span): Expr => ({
+  kind: "SubqueryExpr",
+  select: s,
+  span,
+})
 
-export const mkExistsExpr = (s: Select, span: Span): Expr =>
-  ({ kind: "ExistsExpr", select: s, span })
+export const mkExistsExpr = (s: Select, span: Span): Expr => ({
+  kind: "ExistsExpr",
+  select: s,
+  span,
+})
 
 /** Build `IS NULL` / `NOT NULL` given the postfix token type. */
 export function mkNotNullExpr(
@@ -361,17 +417,37 @@ export const mkFunctionCallStar = (
 
 // ---- QualifiedName constructors --------------------------------------
 
-export const qnSingle = (n: Name, span: Span): QualifiedName =>
-  ({ kind: "QualifiedName", dbName: undefined, name: n, alias: undefined, span })
+export const qnSingle = (n: Name, span: Span): QualifiedName => ({
+  kind: "QualifiedName",
+  dbName: undefined,
+  name: n,
+  alias: undefined,
+  span,
+})
 
-export const qnFull = (db: Name, n: Name, span: Span): QualifiedName =>
-  ({ kind: "QualifiedName", dbName: db, name: n, alias: undefined, span })
+export const qnFull = (db: Name, n: Name, span: Span): QualifiedName => ({
+  kind: "QualifiedName",
+  dbName: db,
+  name: n,
+  alias: undefined,
+  span,
+})
 
-export const qnAlias = (n: Name, a: Name, span: Span): QualifiedName =>
-  ({ kind: "QualifiedName", dbName: undefined, name: n, alias: a, span })
+export const qnAlias = (n: Name, a: Name, span: Span): QualifiedName => ({
+  kind: "QualifiedName",
+  dbName: undefined,
+  name: n,
+  alias: a,
+  span,
+})
 
-export const qnXfull = (db: Name, n: Name, a: Name, span: Span): QualifiedName =>
-  ({ kind: "QualifiedName", dbName: db, name: n, alias: a, span })
+export const qnXfull = (db: Name, n: Name, a: Name, span: Span): QualifiedName => ({
+  kind: "QualifiedName",
+  dbName: db,
+  name: n,
+  alias: a,
+  span,
+})
 
 // ---- JOIN helpers ----------------------------------------------------
 
@@ -379,14 +455,22 @@ export const qnXfull = (db: Name, n: Name, a: Name, span: Span): QualifiedName =
 export function joinTypeFromKeyword(text: string): JoinType | undefined {
   const up = text.toUpperCase()
   switch (up) {
-    case "CROSS":   return 0x01 | 0x02        // INNER | CROSS
-    case "FULL":    return 0x08 | 0x10 | 0x20 // LEFT | RIGHT | OUTER
-    case "INNER":   return 0x01               // INNER
-    case "LEFT":    return 0x08 | 0x20        // LEFT | OUTER
-    case "NATURAL": return 0x04               // NATURAL
-    case "RIGHT":   return 0x10 | 0x20        // RIGHT | OUTER
-    case "OUTER":   return 0x20               // OUTER
-    default:        return undefined
+    case "CROSS":
+      return 0x01 | 0x02 // INNER | CROSS
+    case "FULL":
+      return 0x08 | 0x10 | 0x20 // LEFT | RIGHT | OUTER
+    case "INNER":
+      return 0x01 // INNER
+    case "LEFT":
+      return 0x08 | 0x20 // LEFT | OUTER
+    case "NATURAL":
+      return 0x04 // NATURAL
+    case "RIGHT":
+      return 0x10 | 0x20 // RIGHT | OUTER
+    case "OUTER":
+      return 0x20 // OUTER
+    default:
+      return undefined
   }
 }
 
@@ -419,10 +503,7 @@ export function joinOperatorFrom(
   const LEFT = 0x08
   const RIGHT = 0x10
   const OUTER = 0x20
-  if (
-    (jt & (INNER | OUTER)) === (INNER | OUTER) ||
-    (jt & (OUTER | LEFT | RIGHT)) === OUTER
-  ) {
+  if ((jt & (INNER | OUTER)) === (INNER | OUTER) || (jt & (OUTER | LEFT | RIGHT)) === OUTER) {
     state.errors.push({
       message: `unknown join type: ${kw.text} ${n1?.name ?? ""} ${n2?.name ?? ""}`.trimEnd(),
       span: kw.span,
@@ -450,7 +531,7 @@ export interface FromClauseMut {
 export const emptyFromClause = (): FromClauseMut => ({
   select: undefined,
   joins: [],
-  pendingOp: undefined
+  pendingOp: undefined,
 })
 
 /** Freeze a {@link FromClauseMut} into an immutable {@link FromClause}. */
@@ -487,9 +568,7 @@ export function fromClausePush(
   from.pendingOp = undefined
   if (op) {
     const isNatural =
-      op.kind === "TypedJoinJoinOperator" &&
-      op.joinType !== undefined &&
-      (op.joinType & 0x04) !== 0
+      op.kind === "TypedJoinJoinOperator" && op.joinType !== undefined && (op.joinType & 0x04) !== 0
     if (isNatural && jc) {
       state.errors.push({
         message: "a NATURAL join may not have an ON or USING clause",
@@ -540,9 +619,10 @@ export function mkOneSelect(
   windowClause: readonly WindowDef[] | undefined,
   span: Span,
 ): OneSelect {
-  const offendingStar = from === undefined
-    ? columns.find((c) => c.kind === "StarResultColumn" || c.kind === "TableStarResultColumn")
-    : undefined
+  const offendingStar =
+    from === undefined
+      ? columns.find((c) => c.kind === "StarResultColumn" || c.kind === "TableStarResultColumn")
+      : undefined
   if (offendingStar) {
     state.errors.push({ message: "no tables specified", span: offendingStar.span })
   }
@@ -568,16 +648,16 @@ export function valuesPush(
 ): void {
   const firstRow = values[0]
   if (firstRow && firstRow.length !== row.length) {
-    const firstRowSpan = firstRow.length > 0
-      ? spanOver(firstRow[0]!.span, firstRow[firstRow.length - 1]!.span)
-      : undefined
+    const firstRowSpan =
+      firstRow.length > 0
+        ? spanOver(firstRow[0]!.span, firstRow[firstRow.length - 1]!.span)
+        : undefined
     state.errors.push(
       firstRowSpan
-        ? mkAstParseError(
-            "all VALUES must have the same number of terms",
-            span,
-            { message: `first row has ${firstRow.length} terms`, span: firstRowSpan },
-          )
+        ? mkAstParseError("all VALUES must have the same number of terms", span, {
+            message: `first row has ${firstRow.length} terms`,
+            span: firstRowSpan,
+          })
         : mkAstParseError("all VALUES must have the same number of terms", span),
     )
   }
@@ -627,11 +707,13 @@ export function addColumn(
 ): void {
   const duplicateOf = columns.find((c) => c.colName.name === cd.colName.name)
   if (duplicateOf) {
-    state.errors.push(mkDuplicateError(
-      `duplicate column name: ${cd.colName.name}`,
-      cd.colName.span,
-      duplicateOf.colName.span,
-    ))
+    state.errors.push(
+      mkDuplicateError(
+        `duplicate column name: ${cd.colName.name}`,
+        cd.colName.span,
+        duplicateOf.colName.span,
+      ),
+    )
     return
   }
   columns.push(cd)
@@ -654,18 +736,16 @@ export function mkColumnsAndConstraints(
 // ---- CTE helpers -----------------------------------------------------
 
 /** Append a CTE, rejecting duplicate names. */
-export function addCte(
-  state: ParseState,
-  ctes: CommonTableExpr[],
-  cte: CommonTableExpr,
-): void {
+export function addCte(state: ParseState, ctes: CommonTableExpr[], cte: CommonTableExpr): void {
   const duplicateOf = ctes.find((c) => c.tblName.name === cte.tblName.name)
   if (duplicateOf) {
-    state.errors.push(mkDuplicateError(
-      `duplicate WITH table name: ${cte.tblName.name}`,
-      cte.tblName.span,
-      duplicateOf.tblName.span,
-    ))
+    state.errors.push(
+      mkDuplicateError(
+        `duplicate WITH table name: ${cte.tblName.name}`,
+        cte.tblName.span,
+        duplicateOf.tblName.span,
+      ),
+    )
     return
   }
   ctes.push(cte)

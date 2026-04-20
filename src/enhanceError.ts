@@ -461,7 +461,6 @@ function findIdSymbol(defs: ParserDefs): SymbolId | null {
   return null
 }
 
-
 // Punctuation sorts before words; within a class, alphabetic.  Keeps
 // "(", ")", "," ahead of "identifier" / "select" in the rendered list.
 function compareExpectedLabels(left: string, right: string): number {

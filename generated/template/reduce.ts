@@ -1,6 +1,6 @@
-import { ParserTables } from ".";
-import { ParseState } from "../../src/ast/parseState";
-import { LalrReduce, ParserConstants, ParserSymbolNames } from "../../src/lempar";
+import { ParserTables } from "."
+import { ParseState } from "../../src/ast/parseState"
+import { LalrReduce, ParserConstants, ParserSymbolNames } from "../../src/lempar"
 
 export const constants: ParserConstants = undefined as any
 export const tables: ParserTables = undefined as any
