@@ -4036,7 +4036,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // cmd ::= BEGIN transtype(Y) trans_opt(X)
         const Y = popped[1].minor as TransactionType | undefined
         const X = popped[2].minor as Name | undefined
-        state.stmt = { kind: "Begin", tx: Y, name: X, span: nodeSpan() }
+        state.stmt = { kind: "BeginStmt", tx: Y, name: X, span: nodeSpan() }
         return undefined
       }
       case 4: {
@@ -4085,25 +4085,25 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       case 11: {
         // cmd ::= ? trans_opt(X)
         const X = popped[1].minor as Name | undefined
-        state.stmt = { kind: "Commit", name: X, span: nodeSpan() }
+        state.stmt = { kind: "CommitStmt", name: X, span: nodeSpan() }
         return undefined
       }
       case 12: {
         // cmd ::= ROLLBACK trans_opt(X)
         const X = popped[1].minor as Name | undefined
-        state.stmt = { kind: "Rollback", txName: X, savepointName: undefined, span: nodeSpan() }
+        state.stmt = { kind: "RollbackStmt", txName: X, savepointName: undefined, span: nodeSpan() }
         return undefined
       }
       case 13: {
         // cmd ::= SAVEPOINT nm(X)
         const X = popped[1].minor as Name
-        state.stmt = { kind: "Savepoint", name: X, span: nodeSpan() }
+        state.stmt = { kind: "SavepointStmt", name: X, span: nodeSpan() }
         return undefined
       }
       case 14: {
         // cmd ::= RELEASE savepoint_opt nm(X)
         const X = popped[2].minor as Name
-        state.stmt = { kind: "Release", name: X, span: nodeSpan() }
+        state.stmt = { kind: "ReleaseStmt", name: X, span: nodeSpan() }
         return undefined
       }
       case 15: {
@@ -4111,7 +4111,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[1].minor as Name | undefined
         const X = popped[4].minor as Name
 
-        state.stmt = { kind: "Rollback", txName: Y, savepointName: X, span: nodeSpan() }
+        state.stmt = { kind: "RollbackStmt", txName: Y, savepointName: X, span: nodeSpan() }
         return undefined
       }
       case 16: {
@@ -4122,7 +4122,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[5].minor as CreateTableBody
 
         state.stmt = {
-          kind: "CreateTable",
+          kind: "CreateTableStmt",
           temporary: T,
           ifNotExists: E,
           tblName: Y,
@@ -4170,7 +4170,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const S = popped[1].minor as Select
         let A: CreateTableBody | undefined
 
-        A = { kind: "AsSelect", select: S, span: nodeSpan() }
+        A = { kind: "AsSelectCreateTableBody", select: S, span: nodeSpan() }
         return A
       }
       case 23: {
@@ -4266,7 +4266,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // typetoken(A) ::= typename(X)
         const X = popped[0].minor as string
         let A: Type | undefined
-        A = { name: X, size: undefined, span: nodeSpan() }
+        A = { kind: "Type", name: X, size: undefined, span: nodeSpan() }
         return A
       }
       case 34: {
@@ -4275,7 +4275,12 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[2].minor as Expr
         let A: Type | undefined
 
-        A = { name: X, size: { kind: "MaxSize", size: Y, span: nodeSpan() }, span: nodeSpan() }
+        A = {
+          kind: "Type",
+          name: X,
+          size: { kind: "MaxSizeTypeSize", size: Y, span: nodeSpan() },
+          span: nodeSpan(),
+        }
         return A
       }
       case 35: {
@@ -4286,8 +4291,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: Type | undefined
 
         A = {
+          kind: "Type",
           name: X,
-          size: { kind: "TypeSize", size1: Y, size2: Z, span: nodeSpan() },
+          size: { kind: "TypeSizeTypeSize", size1: Y, size2: Z, span: nodeSpan() },
           span: nodeSpan(),
         }
         return A
@@ -4336,8 +4342,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "Default", expr: X, span: nodeSpan() },
+          constraint: { kind: "DefaultColumnConstraint", expr: X, span: nodeSpan() },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4349,8 +4356,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "Default", expr: mkParenthesized(X, nodeSpan()), span: nodeSpan() },
+          constraint: {
+            kind: "DefaultColumnConstraint",
+            expr: mkParenthesized(X, nodeSpan()),
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4362,9 +4374,10 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
           constraint: {
-            kind: "Default",
+            kind: "DefaultColumnConstraint",
             expr: mkUnary("Positive", X, nodeSpan()),
             span: nodeSpan(),
           },
@@ -4379,9 +4392,10 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
           constraint: {
-            kind: "Default",
+            kind: "DefaultColumnConstraint",
             expr: mkUnary("Negative", X, nodeSpan()),
             span: nodeSpan(),
           },
@@ -4396,8 +4410,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "Default", expr: mkIdExpr(X, nodeSpan()), span: nodeSpan() },
+          constraint: {
+            kind: "DefaultColumnConstraint",
+            expr: mkIdExpr(X, nodeSpan()),
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4409,8 +4428,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "NotNull", nullable: true, conflictClause: R, span: nodeSpan() },
+          constraint: {
+            kind: "NotNullColumnConstraint",
+            nullable: true,
+            conflictClause: R,
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4422,8 +4447,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "NotNull", nullable: false, conflictClause: R, span: nodeSpan() },
+          constraint: {
+            kind: "NotNullColumnConstraint",
+            nullable: false,
+            conflictClause: R,
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4437,9 +4468,10 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
           constraint: {
-            kind: "PrimaryKey",
+            kind: "PrimaryKeyColumnConstraint",
             order: Z,
             conflictClause: R,
             autoIncrement: I,
@@ -4456,8 +4488,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "Unique", conflictClause: R, span: nodeSpan() },
+          constraint: { kind: "UniqueColumnConstraint", conflictClause: R, span: nodeSpan() },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4469,8 +4502,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "Check", expr: X, span: nodeSpan() },
+          constraint: { kind: "CheckColumnConstraint", expr: X, span: nodeSpan() },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4484,10 +4518,17 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
           constraint: {
-            kind: "ForeignKey",
-            clause: { tblName: T, columns: TA, args: R, span: nodeSpan() },
+            kind: "ForeignKeyColumnConstraint",
+            clause: {
+              kind: "ForeignKeyClause",
+              tblName: T,
+              columns: TA,
+              args: R,
+              span: nodeSpan(),
+            },
             deferClause: undefined,
             span: nodeSpan(),
           },
@@ -4502,8 +4543,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: undefined,
-          constraint: { kind: "Defer", clause: D, span: nodeSpan() },
+          constraint: { kind: "DeferColumnConstraint", clause: D, span: nodeSpan() },
           span: nodeSpan(),
         }
         return A
@@ -4514,8 +4556,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedColumnConstraint | undefined
 
         A = {
+          kind: "NamedColumnConstraint",
           name: state.constraintName,
-          constraint: { kind: "Collate", collationName: mkName(C), span: nodeSpan() },
+          constraint: {
+            kind: "CollateColumnConstraint",
+            collationName: mkName(C),
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4526,7 +4573,12 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[3].minor as ColumnConstraint
         let A: NamedColumnConstraint | undefined
 
-        A = { name: state.constraintName, constraint: X, span: nodeSpan() }
+        A = {
+          kind: "NamedColumnConstraint",
+          name: state.constraintName,
+          constraint: X,
+          span: nodeSpan(),
+        }
         state.constraintName = undefined
         return A
       }
@@ -4535,7 +4587,12 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as ColumnConstraint
         let A: NamedColumnConstraint | undefined
 
-        A = { name: state.constraintName, constraint: X, span: nodeSpan() }
+        A = {
+          kind: "NamedColumnConstraint",
+          name: state.constraintName,
+          constraint: X,
+          span: nodeSpan(),
+        }
         state.constraintName = undefined
         return A
       }
@@ -4543,7 +4600,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // generated(X) ::= LP expr(E) RP
         const E = popped[1].minor as Expr
         let X: ColumnConstraint | undefined
-        X = { kind: "Generated", expr: E, typ: undefined, span: nodeSpan() }
+        X = { kind: "GeneratedColumnConstraint", expr: E, typ: undefined, span: nodeSpan() }
         return X
       }
       case 57: {
@@ -4551,7 +4608,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const E = popped[1].minor as Expr
         const TYPE = popped[3].minor as Token
         let X: ColumnConstraint | undefined
-        X = { kind: "Generated", expr: E, typ: mkId(TYPE), span: nodeSpan() }
+        X = { kind: "GeneratedColumnConstraint", expr: E, typ: mkId(TYPE), span: nodeSpan() }
         return X
       }
       case 58: {
@@ -4583,28 +4640,28 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // refarg(A) ::= MATCH nm(X)
         const X = popped[1].minor as Name
         let A: RefArg | undefined
-        A = { kind: "Match", name: X, span: nodeSpan() }
+        A = { kind: "MatchRefArg", name: X, span: nodeSpan() }
         return A
       }
       case 63: {
         // refarg(A) ::= ON INSERT refact(X)
         const X = popped[2].minor as RefAct
         let A: RefArg | undefined
-        A = { kind: "OnInsert", action: X, span: nodeSpan() }
+        A = { kind: "OnInsertRefArg", action: X, span: nodeSpan() }
         return A
       }
       case 64: {
         // refarg(A) ::= ON DELETE refact(X)
         const X = popped[2].minor as RefAct
         let A: RefArg | undefined
-        A = { kind: "OnDelete", action: X, span: nodeSpan() }
+        A = { kind: "OnDeleteRefArg", action: X, span: nodeSpan() }
         return A
       }
       case 65: {
         // refarg(A) ::= ON UPDATE refact(X)
         const X = popped[2].minor as RefAct
         let A: RefArg | undefined
-        A = { kind: "OnUpdate", action: X, span: nodeSpan() }
+        A = { kind: "OnUpdateRefArg", action: X, span: nodeSpan() }
         return A
       }
       case 66: {
@@ -4642,7 +4699,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[2].minor as InitDeferredPred | undefined
         let A: DeferSubclause | undefined
 
-        A = { deferrable: false, initDeferred: X, span: nodeSpan() }
+        A = { kind: "DeferSubclause", deferrable: false, initDeferred: X, span: nodeSpan() }
         return A
       }
       case 72: {
@@ -4650,7 +4707,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as InitDeferredPred | undefined
         let A: DeferSubclause | undefined
 
-        A = { deferrable: true, initDeferred: X, span: nodeSpan() }
+        A = { kind: "DeferSubclause", deferrable: true, initDeferred: X, span: nodeSpan() }
         return A
       }
       case 73: {
@@ -4722,9 +4779,10 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedTableConstraint | undefined
 
         A = {
+          kind: "NamedTableConstraint",
           name: state.constraintName,
           constraint: {
-            kind: "PrimaryKey",
+            kind: "PrimaryKeyTableConstraint",
             columns: X,
             autoIncrement: I,
             conflictClause: R,
@@ -4742,8 +4800,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedTableConstraint | undefined
 
         A = {
+          kind: "NamedTableConstraint",
           name: state.constraintName,
-          constraint: { kind: "Unique", columns: X, conflictClause: R, span: nodeSpan() },
+          constraint: {
+            kind: "UniqueTableConstraint",
+            columns: X,
+            conflictClause: R,
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4756,8 +4820,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedTableConstraint | undefined
 
         A = {
+          kind: "NamedTableConstraint",
           name: state.constraintName,
-          constraint: { kind: "Check", expr: E, conflictClause: R, span: nodeSpan() },
+          constraint: {
+            kind: "CheckTableConstraint",
+            expr: E,
+            conflictClause: R,
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         state.constraintName = undefined
@@ -4773,11 +4843,18 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: NamedTableConstraint | undefined
 
         A = {
+          kind: "NamedTableConstraint",
           name: state.constraintName,
           constraint: {
-            kind: "ForeignKey",
+            kind: "ForeignKeyTableConstraint",
             columns: FA,
-            clause: { tblName: T, columns: TA, args: R, span: nodeSpan() },
+            clause: {
+              kind: "ForeignKeyClause",
+              tblName: T,
+              columns: TA,
+              args: R,
+              span: nodeSpan(),
+            },
             deferClause: D,
             span: nodeSpan(),
           },
@@ -4842,7 +4919,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const E = popped[2].minor as boolean
         const X = popped[3].minor as QualifiedName
 
-        state.stmt = { kind: "DropTable", ifExists: E, tblName: X, span: nodeSpan() }
+        state.stmt = { kind: "DropTableStmt", ifExists: E, tblName: X, span: nodeSpan() }
         return undefined
       }
       case 95: {
@@ -4866,7 +4943,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const S = popped[7].minor as Select
 
         state.stmt = {
-          kind: "CreateView",
+          kind: "CreateViewStmt",
           temporary: T,
           ifNotExists: E,
           viewName: Y,
@@ -4881,13 +4958,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const E = popped[2].minor as boolean
         const X = popped[3].minor as QualifiedName
 
-        state.stmt = { kind: "DropView", ifExists: E, viewName: X, span: nodeSpan() }
+        state.stmt = { kind: "DropViewStmt", ifExists: E, viewName: X, span: nodeSpan() }
         return undefined
       }
       case 99: {
         // cmd ::= select(X)
         const X = popped[0].minor as Select
-        state.stmt = { kind: "Select", select: X, span: nodeSpan() }
+        state.stmt = { kind: "SelectStmt", select: X, span: nodeSpan() }
         return undefined
       }
       case 100: {
@@ -4898,7 +4975,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const L = popped[4].minor as Limit | undefined
         let A: Select | undefined
 
-        A = mkSelect({ recursive: false, ctes: W, span: nodeSpan() }, X, Z, L, nodeSpan())
+        A = mkSelect(
+          { kind: "With", recursive: false, ctes: W, span: nodeSpan() },
+          X,
+          Z,
+          L,
+          nodeSpan(),
+        )
         return A
       }
       case 101: {
@@ -4909,7 +4992,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const L = popped[5].minor as Limit | undefined
         let A: Select | undefined
 
-        A = mkSelect({ recursive: true, ctes: W, span: nodeSpan() }, X, Z, L, nodeSpan())
+        A = mkSelect(
+          { kind: "With", recursive: true, ctes: W, span: nodeSpan() },
+          X,
+          Z,
+          L,
+          nodeSpan(),
+        )
         return A
       }
       case 102: {
@@ -4926,7 +5015,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // selectnowith(A) ::= oneselect(X)
         const X = popped[0].minor as OneSelect
         let A: SelectBody | undefined
-        A = { select: X, compounds: undefined, span: nodeSpan() }
+        A = { kind: "SelectBody", select: X, compounds: undefined, span: nodeSpan() }
         return A
       }
       case 104: {
@@ -4935,7 +5024,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[2].minor as OneSelect
         let A: SelectBody = popped[0].minor as SelectBody
 
-        pushCompound(A, { operator: Y, select: Z, span: nodeSpan() })
+        pushCompound(A, { kind: "CompoundSelect", operator: Y, select: Z, span: nodeSpan() })
         return A
       }
       case 105: {
@@ -4993,7 +5082,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // oneselect(A) ::= values(X)
         const X = popped[0].minor as Expr[][]
         let A: OneSelect | undefined
-        A = { kind: "Values", values: X, span: nodeSpan() }
+        A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }
         return A
       }
       case 112: {
@@ -5007,7 +5096,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // oneselect(A) ::= mvalues(X)
         const X = popped[0].minor as Expr[][]
         let A: OneSelect | undefined
-        A = { kind: "Values", values: X, span: nodeSpan() }
+        A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }
         return A
       }
       case 114: {
@@ -5053,34 +5142,34 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as Expr
         const Y = popped[2].minor as As | undefined
         let A: ResultColumn[] = popped[0].minor as ResultColumn[]
-        A.push({ kind: "Expr", expr: X, alias: Y, span: nodeSpan() })
+        A.push({ kind: "ExprResultColumn", expr: X, alias: Y, span: nodeSpan() })
         return A
       }
       case 121: {
         // selcollist(A) ::= sclp(A) STAR
         let A: ResultColumn[] = popped[0].minor as ResultColumn[]
-        A.push({ kind: "Star", span: nodeSpan() })
+        A.push({ kind: "StarResultColumn", span: nodeSpan() })
         return A
       }
       case 122: {
         // selcollist(A) ::= sclp(A) nm(X) DOT STAR
         const X = popped[1].minor as Name
         let A: ResultColumn[] = popped[0].minor as ResultColumn[]
-        A.push({ kind: "TableStar", table: X, span: nodeSpan() })
+        A.push({ kind: "TableStarResultColumn", table: X, span: nodeSpan() })
         return A
       }
       case 123: {
         // as(X) ::= AS nm(Y)
         const Y = popped[1].minor as Name
         let X: As | undefined
-        X = { kind: "As", name: Y, span: nodeSpan() }
+        X = { kind: "AsAs", name: Y, span: nodeSpan() }
         return X
       }
       case 124: {
         // as(X) ::= ?(Y)
         const Y = popped[0].minor as Token
         let X: As | undefined
-        X = { kind: "Elided", name: mkName(Y), span: nodeSpan() }
+        X = { kind: "ElidedAs", name: mkName(Y), span: nodeSpan() }
         return X
       }
       case 125: {
@@ -5126,7 +5215,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         fromClausePush(
           state,
           A,
-          { kind: "Table", name: Y, alias: Z, indexed: I, span: nodeSpan() },
+          { kind: "TableSelectTable", name: Y, alias: Z, indexed: I, span: nodeSpan() },
           N,
         )
         return A
@@ -5142,7 +5231,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         fromClausePush(
           state,
           A,
-          { kind: "TableCall", name: Y, args: E, alias: Z, span: nodeSpan() },
+          { kind: "TableCallSelectTable", name: Y, args: E, alias: Z, span: nodeSpan() },
           N,
         )
         return A
@@ -5154,7 +5243,12 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const N = popped[5].minor as JoinConstraint | undefined
         let A: FromClauseMut = popped[0].minor as FromClauseMut
 
-        fromClausePush(state, A, { kind: "Select", select: S, alias: Z, span: nodeSpan() }, N)
+        fromClausePush(
+          state,
+          A,
+          { kind: "SelectSelectTable", select: S, alias: Z, span: nodeSpan() },
+          N,
+        )
         return A
       }
       case 133: {
@@ -5167,7 +5261,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         fromClausePush(
           state,
           A,
-          { kind: "Sub", from: freezeFrom(F, nodeSpan()), alias: Z, span: nodeSpan() },
+          { kind: "SubSelectTable", from: freezeFrom(F, nodeSpan()), alias: Z, span: nodeSpan() },
           N,
         )
         return A
@@ -5222,13 +5316,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       case 140: {
         // joinop(X) ::= COMMA
         let X: JoinOperator | undefined
-        X = { kind: "Comma", span: nodeSpan() }
+        X = { kind: "CommaJoinOperator", span: nodeSpan() }
         return X
       }
       case 141: {
         // joinop(X) ::= JOIN
         let X: JoinOperator | undefined
-        X = { kind: "TypedJoin", joinType: undefined, span: nodeSpan() }
+        X = { kind: "TypedJoinJoinOperator", joinType: undefined, span: nodeSpan() }
         return X
       }
       case 142: {
@@ -5259,14 +5353,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // on_using(N) ::= ON expr(E)
         const E = popped[1].minor as Expr
         let N: JoinConstraint | undefined
-        N = { kind: "On", expr: E, span: nodeSpan() }
+        N = { kind: "OnJoinConstraint", expr: E, span: nodeSpan() }
         return N
       }
       case 146: {
         // on_using(N) ::= USING LP idlist(L) RP
         const L = popped[2].minor as Name[]
         let N: JoinConstraint | undefined
-        N = { kind: "Using", columns: L, span: nodeSpan() }
+        N = { kind: "UsingJoinConstraint", columns: L, span: nodeSpan() }
         return N
       }
       case 147: {
@@ -5285,13 +5379,13 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // indexed_opt(A) ::= INDEXED BY nm(X)
         const X = popped[2].minor as Name
         let A: Indexed | undefined
-        A = { kind: "IndexedBy", name: X, span: nodeSpan() }
+        A = { kind: "IndexedByIndexed", name: X, span: nodeSpan() }
         return A
       }
       case 150: {
         // indexed_opt(A) ::= NOT INDEXED
         let A: Indexed | undefined
-        A = { kind: "NotIndexed", span: nodeSpan() }
+        A = { kind: "NotIndexedIndexed", span: nodeSpan() }
         return A
       }
       case 151: {
@@ -5314,7 +5408,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[4].minor as NullsOrder | undefined
         let A: SortedColumn[] = popped[0].minor as SortedColumn[]
 
-        A.push({ expr: Y, order: Z, nulls: X, span: nodeSpan() })
+        A.push({ kind: "SortedColumn", expr: Y, order: Z, nulls: X, span: nodeSpan() })
         return A
       }
       case 154: {
@@ -5324,7 +5418,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[2].minor as NullsOrder | undefined
         let A: SortedColumn[] | undefined
 
-        A = [{ expr: Y, order: Z, nulls: X, span: nodeSpan() }]
+        A = [{ kind: "SortedColumn", expr: Y, order: Z, nulls: X, span: nodeSpan() }]
         return A
       }
       case 155: {
@@ -5399,7 +5493,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // limit_opt(A) ::= LIMIT expr(X)
         const X = popped[1].minor as Expr
         let A: Limit | undefined
-        A = { expr: X, offset: undefined, span: nodeSpan() }
+        A = { kind: "Limit", expr: X, offset: undefined, span: nodeSpan() }
         return A
       }
       case 167: {
@@ -5407,7 +5501,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as Expr
         const Y = popped[3].minor as Expr
         let A: Limit | undefined
-        A = { expr: X, offset: Y, span: nodeSpan() }
+        A = { kind: "Limit", expr: X, offset: Y, span: nodeSpan() }
         return A
       }
       case 168: {
@@ -5415,7 +5509,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as Expr
         const Y = popped[3].minor as Expr
         let A: Limit | undefined
-        A = { expr: Y, offset: X, span: nodeSpan() }
+        A = { kind: "Limit", expr: Y, offset: X, span: nodeSpan() }
         return A
       }
       case 169: {
@@ -5430,7 +5524,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         }
 
         state.stmt = {
-          kind: "Delete",
+          kind: "DeleteStmt",
           with: C,
           tblName: X,
           indexed: I,
@@ -5498,7 +5592,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         }
 
         state.stmt = {
-          kind: "Update",
+          kind: "UpdateStmt",
           with: C,
           orConflict: R,
           tblName: X,
@@ -5518,7 +5612,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[2].minor as Name
         const Y = popped[4].minor as Expr
         let A: Set_[] = popped[0].minor as Set_[]
-        A.push({ colNames: [X], expr: Y, span: nodeSpan() })
+        A.push({ kind: "Set_", colNames: [X], expr: Y, span: nodeSpan() })
         return A
       }
       case 178: {
@@ -5526,7 +5620,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[3].minor as Name[]
         const Y = popped[6].minor as Expr
         let A: Set_[] = popped[0].minor as Set_[]
-        A.push({ colNames: X, expr: Y, span: nodeSpan() })
+        A.push({ kind: "Set_", colNames: X, expr: Y, span: nodeSpan() })
         return A
       }
       case 179: {
@@ -5534,7 +5628,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[0].minor as Name
         const Y = popped[2].minor as Expr
         let A: Set_[] | undefined
-        A = [{ colNames: [X], expr: Y, span: nodeSpan() }]
+        A = [{ kind: "Set_", colNames: [X], expr: Y, span: nodeSpan() }]
         return A
       }
       case 180: {
@@ -5542,7 +5636,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as Name[]
         const Y = popped[4].minor as Expr
         let A: Set_[] | undefined
-        A = [{ colNames: X, expr: Y, span: nodeSpan() }]
+        A = [{ kind: "Set_", colNames: X, expr: Y, span: nodeSpan() }]
         return A
       }
       case 181: {
@@ -5559,12 +5653,12 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         }
 
         state.stmt = {
-          kind: "Insert",
+          kind: "InsertStmt",
           with: W,
           orConflict: R,
           tblName: X,
           columns: F,
-          body: { kind: "Select", select: S, upsert: U.upsert, span: nodeSpan() },
+          body: { kind: "SelectInsertBody", select: S, upsert: U.upsert, span: nodeSpan() },
           returning: U.returning,
           span: nodeSpan(),
         }
@@ -5579,12 +5673,12 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[7].minor as ResultColumn[] | undefined
 
         state.stmt = {
-          kind: "Insert",
+          kind: "InsertStmt",
           with: W,
           orConflict: R,
           tblName: X,
           columns: F,
-          body: { kind: "DefaultValues", span: nodeSpan() },
+          body: { kind: "DefaultValuesInsertBody", span: nodeSpan() },
           returning: Y,
           span: nodeSpan(),
         }
@@ -5619,8 +5713,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const idx = mkUpsertIndex(state, T, TW, nodeSpan())
         A = {
           upsert: {
+            kind: "Upsert",
             index: idx,
-            doClause: { kind: "Set", sets: Z, whereClause: W, span: nodeSpan() },
+            doClause: { kind: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() },
             next: N.upsert,
             span: nodeSpan(),
           },
@@ -5643,8 +5738,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const idx = mkUpsertIndex(state, T, TW, nodeSpan())
         A = {
           upsert: {
+            kind: "Upsert",
             index: idx,
-            doClause: { kind: "Nothing", span: nodeSpan() },
+            doClause: { kind: "NothingUpsertDo", span: nodeSpan() },
             next: N.upsert,
             span: nodeSpan(),
           },
@@ -5660,8 +5756,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
 
         A = {
           upsert: {
+            kind: "Upsert",
             index: undefined,
-            doClause: { kind: "Nothing", span: nodeSpan() },
+            doClause: { kind: "NothingUpsertDo", span: nodeSpan() },
             next: undefined,
             span: nodeSpan(),
           },
@@ -5679,8 +5776,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
 
         A = {
           upsert: {
+            kind: "Upsert",
             index: undefined,
-            doClause: { kind: "Set", sets: Z, whereClause: W, span: nodeSpan() },
+            doClause: { kind: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() },
             next: undefined,
             span: nodeSpan(),
           },
@@ -5766,7 +5864,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[0].minor as Name
         const Y = popped[2].minor as Name
         let A: Expr | undefined
-        A = { kind: "Qualified", table: X, column: Y, span: nodeSpan() }
+        A = { kind: "QualifiedExpr", table: X, column: Y, span: nodeSpan() }
         return A
       }
       case 200: {
@@ -5776,35 +5874,35 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[4].minor as Name
         let A: Expr | undefined
 
-        A = { kind: "DoublyQualified", schema: X, table: Y, column: Z, span: nodeSpan() }
+        A = { kind: "DoublyQualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() }
         return A
       }
       case 201: {
         // term(A) ::= NULL(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkNullLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkNullLiteral(X), span: nodeSpan() }
         return A
       }
       case 202: {
         // term(A) ::= BLOB(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkBlobLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkBlobLiteral(X), span: nodeSpan() }
         return A
       }
       case 203: {
         // term(A) ::= STRING(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkStringLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkStringLiteral(X), span: nodeSpan() }
         return A
       }
       case 204: {
         // term(A) ::= ?(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() }
         return A
       }
       case 205: {
@@ -5853,7 +5951,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           X,
           D,
           Y,
-          { kind: "SortList", columns: O, span: nodeSpan() },
+          { kind: "SortListFunctionCallOrder", columns: O, span: nodeSpan() },
           undefined,
           nodeSpan(),
         )
@@ -5879,7 +5977,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           X,
           D,
           Y,
-          { kind: "WithinGroup", expr: E, span: nodeSpan() },
+          { kind: "WithinGroupFunctionCallOrder", expr: E, span: nodeSpan() },
           undefined,
           nodeSpan(),
         )
@@ -5910,7 +6008,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           X,
           D,
           Y,
-          { kind: "SortList", columns: O, span: nodeSpan() },
+          { kind: "SortListFunctionCallOrder", columns: O, span: nodeSpan() },
           Z,
           nodeSpan(),
         )
@@ -5938,7 +6036,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           X,
           D,
           Y,
-          { kind: "WithinGroup", expr: E, span: nodeSpan() },
+          { kind: "WithinGroupFunctionCallOrder", expr: E, span: nodeSpan() },
           Z,
           nodeSpan(),
         )
@@ -5948,7 +6046,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // term(A) ::= CTIME_KW(OP)
         const OP = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: literalFromCtimeKw(OP), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: literalFromCtimeKw(OP), span: nodeSpan() }
         return A
       }
       case 217: {
@@ -5957,7 +6055,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[3].minor as Expr
         let A: Expr | undefined
 
-        A = { kind: "Parenthesized", exprs: [...X, Y], span: nodeSpan() }
+        A = { kind: "ParenthesizedExpr", exprs: [...X, Y], span: nodeSpan() }
         return A
       }
       case 218: {
@@ -6079,7 +6177,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // expr(A) ::= expr(X) NOT NULL
         const X = popped[0].minor as Expr
         let A: Expr | undefined
-        A = { kind: "NotNull", expr: X, span: nodeSpan() }
+        A = { kind: "NotNullExpr", expr: X, span: nodeSpan() }
         return A
       }
       case 232: {
@@ -6232,7 +6330,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[3].minor as Expr | undefined
         let A: Expr | undefined
 
-        A = { kind: "Case", base: X, whenThenPairs: Y, elseExpr: Z, span: nodeSpan() }
+        A = { kind: "CaseExpr", base: X, whenThenPairs: Y, elseExpr: Z, span: nodeSpan() }
         return A
       }
       case 251: {
@@ -6333,7 +6431,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const W = popped[10].minor as Expr | undefined
 
         state.stmt = {
-          kind: "CreateIndex",
+          kind: "CreateIndexStmt",
           unique: U,
           ifNotExists: NE,
           idxName: X,
@@ -6376,7 +6474,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[4].minor as SortOrder | undefined
         let A: IndexedColumn[] = popped[0].minor as IndexedColumn[]
 
-        A.push({ colName: Y, collationName: C, order: Z, span: nodeSpan() })
+        A.push({ kind: "IndexedColumn", colName: Y, collationName: C, order: Z, span: nodeSpan() })
         return A
       }
       case 269: {
@@ -6386,7 +6484,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[2].minor as SortOrder | undefined
         let A: IndexedColumn[] | undefined
 
-        A = [{ colName: Y, collationName: C, order: Z, span: nodeSpan() }]
+        A = [{ kind: "IndexedColumn", colName: Y, collationName: C, order: Z, span: nodeSpan() }]
         return A
       }
       case 270: {
@@ -6407,20 +6505,20 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const E = popped[2].minor as boolean
         const X = popped[3].minor as QualifiedName
 
-        state.stmt = { kind: "DropIndex", ifExists: E, idxName: X, span: nodeSpan() }
+        state.stmt = { kind: "DropIndexStmt", ifExists: E, idxName: X, span: nodeSpan() }
         return undefined
       }
       case 273: {
         // cmd ::= VACUUM vinto(Y)
         const Y = popped[1].minor as Expr | undefined
-        state.stmt = { kind: "Vacuum", name: undefined, into: Y, span: nodeSpan() }
+        state.stmt = { kind: "VacuumStmt", name: undefined, into: Y, span: nodeSpan() }
         return undefined
       }
       case 274: {
         // cmd ::= VACUUM nm(X) vinto(Y)
         const X = popped[1].minor as Name
         const Y = popped[2].minor as Expr | undefined
-        state.stmt = { kind: "Vacuum", name: X, into: Y, span: nodeSpan() }
+        state.stmt = { kind: "VacuumStmt", name: X, into: Y, span: nodeSpan() }
         return undefined
       }
       case 275: {
@@ -6439,7 +6537,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       case 277: {
         // cmd ::= PRAGMA fullname(X)
         const X = popped[1].minor as QualifiedName
-        state.stmt = { kind: "Pragma", name: X, body: undefined, span: nodeSpan() }
+        state.stmt = { kind: "PragmaStmt", name: X, body: undefined, span: nodeSpan() }
         return undefined
       }
       case 278: {
@@ -6447,9 +6545,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as QualifiedName
         const Y = popped[3].minor as Expr
         state.stmt = {
-          kind: "Pragma",
+          kind: "PragmaStmt",
           name: X,
-          body: { kind: "Equals", value: Y, span: nodeSpan() },
+          body: { kind: "EqualsPragmaBody", value: Y, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6459,9 +6557,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as QualifiedName
         const Y = popped[3].minor as Expr
         state.stmt = {
-          kind: "Pragma",
+          kind: "PragmaStmt",
           name: X,
-          body: { kind: "Call", value: Y, span: nodeSpan() },
+          body: { kind: "CallPragmaBody", value: Y, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6471,9 +6569,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as QualifiedName
         const Y = popped[3].minor as Expr
         state.stmt = {
-          kind: "Pragma",
+          kind: "PragmaStmt",
           name: X,
-          body: { kind: "Equals", value: Y, span: nodeSpan() },
+          body: { kind: "EqualsPragmaBody", value: Y, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6483,9 +6581,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[1].minor as QualifiedName
         const Y = popped[3].minor as Expr
         state.stmt = {
-          kind: "Pragma",
+          kind: "PragmaStmt",
           name: X,
-          body: { kind: "Call", value: Y, span: nodeSpan() },
+          body: { kind: "CallPragmaBody", value: Y, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6494,28 +6592,28 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // nmnum(A) ::= nm(X)
         const X = popped[0].minor as Name
         let A: Expr | undefined
-        A = { kind: "Name", name: X, span: nodeSpan() }
+        A = { kind: "NameExpr", name: X, span: nodeSpan() }
         return A
       }
       case 283: {
         // nmnum(A) ::= ON(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkKeywordLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkKeywordLiteral(X), span: nodeSpan() }
         return A
       }
       case 284: {
         // nmnum(A) ::= DELETE(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkKeywordLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkKeywordLiteral(X), span: nodeSpan() }
         return A
       }
       case 285: {
         // nmnum(A) ::= DEFAULT(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkKeywordLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkKeywordLiteral(X), span: nodeSpan() }
         return A
       }
       case 286: {
@@ -6525,7 +6623,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
 
         A = mkUnary(
           "Positive",
-          { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() },
+          { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() },
           nodeSpan(),
         )
         return A
@@ -6534,7 +6632,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // plus_num(A) ::= ?(X)
         const X = popped[0].minor as Token
         let A: Expr | undefined
-        A = { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() }
+        A = { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() }
         return A
       }
       case 288: {
@@ -6544,7 +6642,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
 
         A = mkUnary(
           "Negative",
-          { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() },
+          { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() },
           nodeSpan(),
         )
         return A
@@ -6562,7 +6660,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const S = popped[12].minor as TriggerCmd[]
 
         state.stmt = {
-          kind: "CreateTrigger",
+          kind: "CreateTriggerStmt",
           temporary: T,
           ifNotExists: NOERR,
           triggerName: B,
@@ -6603,26 +6701,26 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       case 294: {
         // trigger_event(A) ::= DELETE
         let A: TriggerEvent | undefined
-        A = { kind: "Delete", span: nodeSpan() }
+        A = { kind: "DeleteTriggerEvent", span: nodeSpan() }
         return A
       }
       case 295: {
         // trigger_event(A) ::= INSERT
         let A: TriggerEvent | undefined
-        A = { kind: "Insert", span: nodeSpan() }
+        A = { kind: "InsertTriggerEvent", span: nodeSpan() }
         return A
       }
       case 296: {
         // trigger_event(A) ::= UPDATE
         let A: TriggerEvent | undefined
-        A = { kind: "Update", span: nodeSpan() }
+        A = { kind: "UpdateTriggerEvent", span: nodeSpan() }
         return A
       }
       case 297: {
         // trigger_event(A) ::= UPDATE OF idlist(X)
         const X = popped[2].minor as Name[]
         let A: TriggerEvent | undefined
-        A = { kind: "UpdateOf", columns: X, span: nodeSpan() }
+        A = { kind: "UpdateOfTriggerEvent", columns: X, span: nodeSpan() }
         return A
       }
       case 298: {
@@ -6692,7 +6790,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: TriggerCmd | undefined
 
         A = {
-          kind: "Update",
+          kind: "UpdateTriggerCmd",
           orConflict: R,
           tblName: X,
           sets: Y,
@@ -6719,7 +6817,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           state.errors.push({ message: "cannot use RETURNING in a trigger" })
         }
         A = {
-          kind: "Insert",
+          kind: "InsertTriggerCmd",
           orConflict: R,
           tblName: X,
           colNames: F,
@@ -6735,21 +6833,21 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[4].minor as Expr | undefined
         let A: TriggerCmd | undefined
 
-        A = { kind: "Delete", tblName: X, whereClause: Y, span: nodeSpan() }
+        A = { kind: "DeleteTriggerCmd", tblName: X, whereClause: Y, span: nodeSpan() }
         return A
       }
       case 309: {
         // trigger_cmd(A) ::= select(X)
         const X = popped[0].minor as Select
         let A: TriggerCmd | undefined
-        A = { kind: "Select", select: X, span: nodeSpan() }
+        A = { kind: "SelectTriggerCmd", select: X, span: nodeSpan() }
         return A
       }
       case 310: {
         // expr(A) ::= RAISE LP IGNORE RP
         let A: Expr | undefined
 
-        A = { kind: "Raise", resolve: "Ignore", message: undefined, span: nodeSpan() }
+        A = { kind: "RaiseExpr", resolve: "Ignore", message: undefined, span: nodeSpan() }
         return A
       }
       case 311: {
@@ -6758,7 +6856,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[4].minor as Expr
         let A: Expr | undefined
 
-        A = { kind: "Raise", resolve: T, message: Z, span: nodeSpan() }
+        A = { kind: "RaiseExpr", resolve: T, message: Z, span: nodeSpan() }
         return A
       }
       case 312: {
@@ -6784,7 +6882,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const NOERR = popped[2].minor as boolean
         const X = popped[3].minor as QualifiedName
 
-        state.stmt = { kind: "DropTrigger", ifExists: NOERR, triggerName: X, span: nodeSpan() }
+        state.stmt = { kind: "DropTriggerStmt", ifExists: NOERR, triggerName: X, span: nodeSpan() }
         return undefined
       }
       case 316: {
@@ -6793,14 +6891,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const D = popped[4].minor as Expr
         const K = popped[5].minor as Expr | undefined
 
-        state.stmt = { kind: "Attach", expr: F, dbName: D, key: K, span: nodeSpan() }
+        state.stmt = { kind: "AttachStmt", expr: F, dbName: D, key: K, span: nodeSpan() }
         return undefined
       }
       case 317: {
         // cmd ::= DETACH database_kw_opt expr(D)
         const D = popped[2].minor as Expr
 
-        state.stmt = { kind: "Detach", expr: D, span: nodeSpan() }
+        state.stmt = { kind: "DetachStmt", expr: D, span: nodeSpan() }
         return undefined
       }
       case 318: {
@@ -6818,24 +6916,24 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       }
       case 320: {
         // cmd ::= REINDEX
-        state.stmt = { kind: "Reindex", objName: undefined, span: nodeSpan() }
+        state.stmt = { kind: "ReindexStmt", objName: undefined, span: nodeSpan() }
         return undefined
       }
       case 321: {
         // cmd ::= REINDEX fullname(X)
         const X = popped[1].minor as QualifiedName
-        state.stmt = { kind: "Reindex", objName: X, span: nodeSpan() }
+        state.stmt = { kind: "ReindexStmt", objName: X, span: nodeSpan() }
         return undefined
       }
       case 322: {
         // cmd ::= ANALYZE
-        state.stmt = { kind: "Analyze", objName: undefined, span: nodeSpan() }
+        state.stmt = { kind: "AnalyzeStmt", objName: undefined, span: nodeSpan() }
         return undefined
       }
       case 323: {
         // cmd ::= ANALYZE fullname(X)
         const X = popped[1].minor as QualifiedName
-        state.stmt = { kind: "Analyze", objName: X, span: nodeSpan() }
+        state.stmt = { kind: "AnalyzeStmt", objName: X, span: nodeSpan() }
         return undefined
       }
       case 324: {
@@ -6844,9 +6942,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[5].minor as Name
 
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
-          body: { kind: "RenameTo", name: Z, span: nodeSpan() },
+          body: { kind: "RenameToAlterTableBody", name: Z, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6860,9 +6958,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
 
         const cd = mkColumnDefinition(Y, Z, C, nodeSpan())
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
-          body: { kind: "AddColumn", column: cd, span: nodeSpan() },
+          body: { kind: "AddColumnAlterTableBody", column: cd, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6873,9 +6971,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[5].minor as Name
 
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
-          body: { kind: "DropColumn", column: Y, span: nodeSpan() },
+          body: { kind: "DropColumnAlterTableBody", column: Y, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6887,9 +6985,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[7].minor as Name
 
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
-          body: { kind: "RenameColumn", old: Y, new: Z, span: nodeSpan() },
+          body: { kind: "RenameColumnAlterTableBody", old: Y, new: Z, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6900,9 +6998,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[5].minor as Name
 
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
-          body: { kind: "DropConstraint", name: Y, span: nodeSpan() },
+          body: { kind: "DropConstraintAlterTableBody", name: Y, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6913,9 +7011,9 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Y = popped[5].minor as Name
 
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
-          body: { kind: "DropColumnNotNull", column: Y, span: nodeSpan() },
+          body: { kind: "DropColumnNotNullAlterTableBody", column: Y, span: nodeSpan() },
           span: nodeSpan(),
         }
         return undefined
@@ -6927,9 +7025,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const R = popped[9].minor as ResolveType | undefined
 
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
-          body: { kind: "SetColumnNotNull", column: Y, onConflict: R, span: nodeSpan() },
+          body: {
+            kind: "SetColumnNotNullAlterTableBody",
+            column: Y,
+            onConflict: R,
+            span: nodeSpan(),
+          },
           span: nodeSpan(),
         }
         return undefined
@@ -6942,17 +7045,17 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const R = popped[10].minor as ResolveType | undefined
 
         const constraint: TableConstraint = {
-          kind: "Check",
+          kind: "CheckTableConstraint",
           expr: E,
           conflictClause: R,
           span: nodeSpan(),
         }
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
           body: {
-            kind: "AddConstraint",
-            constraint: { name: Z, constraint, span: nodeSpan() },
+            kind: "AddConstraintAlterTableBody",
+            constraint: { kind: "NamedTableConstraint", name: Z, constraint, span: nodeSpan() },
             span: nodeSpan(),
           },
           span: nodeSpan(),
@@ -6966,17 +7069,22 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const R = popped[8].minor as ResolveType | undefined
 
         const constraint: TableConstraint = {
-          kind: "Check",
+          kind: "CheckTableConstraint",
           expr: E,
           conflictClause: R,
           span: nodeSpan(),
         }
         state.stmt = {
-          kind: "AlterTable",
+          kind: "AlterTableStmt",
           tblName: X,
           body: {
-            kind: "AddConstraint",
-            constraint: { name: undefined, constraint, span: nodeSpan() },
+            kind: "AddConstraintAlterTableBody",
+            constraint: {
+              kind: "NamedTableConstraint",
+              name: undefined,
+              constraint,
+              span: nodeSpan(),
+            },
             span: nodeSpan(),
           },
           span: nodeSpan(),
@@ -6997,7 +7105,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           state.vtabArgs.push(state.vtabArgCurrent)
           state.vtabArgCurrent = ""
         }
-        if (X.kind === "CreateVirtualTable") {
+        if (X.kind === "CreateVirtualTableStmt") {
           state.stmt = { ...X, args: state.vtabArgs.slice(), span: nodeSpan() }
         } else {
           state.stmt = X
@@ -7013,7 +7121,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: Stmt | undefined
 
         A = {
-          kind: "CreateVirtualTable",
+          kind: "CreateVirtualTableStmt",
           ifNotExists: E,
           tblName: X,
           moduleName: Z,
@@ -7057,14 +7165,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         // with(A) ::= WITH wqlist(W)
         const W = popped[1].minor as CommonTableExpr[]
         let A: With | undefined
-        A = { recursive: false, ctes: W, span: nodeSpan() }
+        A = { kind: "With", recursive: false, ctes: W, span: nodeSpan() }
         return A
       }
       case 342: {
         // with(A) ::= WITH RECURSIVE wqlist(W)
         const W = popped[2].minor as CommonTableExpr[]
         let A: With | undefined
-        A = { recursive: true, ctes: W, span: nodeSpan() }
+        A = { kind: "With", recursive: true, ctes: W, span: nodeSpan() }
         return A
       }
       case 343: {
@@ -7093,7 +7201,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[4].minor as Select
         let A: CommonTableExpr | undefined
 
-        A = { tblName: X, columns: Y, materialized: M, select: Z, span: nodeSpan() }
+        A = {
+          kind: "CommonTableExpr",
+          tblName: X,
+          columns: Y,
+          materialized: M,
+          select: Z,
+          span: nodeSpan(),
+        }
         return A
       }
       case 347: {
@@ -7129,7 +7244,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const X = popped[0].minor as Name
         const Y = popped[3].minor as Window
         let A: WindowDef | undefined
-        A = { name: X, window: Y, span: nodeSpan() }
+        A = { kind: "WindowDef", name: X, window: Y, span: nodeSpan() }
         return A
       }
       case 352: {
@@ -7139,7 +7254,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[4].minor as FrameClause | undefined
         let A: Window | undefined
 
-        A = { base: undefined, partitionBy: X, orderBy: Y, frameClause: Z, span: nodeSpan() }
+        A = {
+          kind: "Window",
+          base: undefined,
+          partitionBy: X,
+          orderBy: Y,
+          frameClause: Z,
+          span: nodeSpan(),
+        }
         return A
       }
       case 353: {
@@ -7150,7 +7272,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[5].minor as FrameClause | undefined
         let A: Window | undefined
 
-        A = { base: W, partitionBy: X, orderBy: Y, frameClause: Z, span: nodeSpan() }
+        A = {
+          kind: "Window",
+          base: W,
+          partitionBy: X,
+          orderBy: Y,
+          frameClause: Z,
+          span: nodeSpan(),
+        }
         return A
       }
       case 354: {
@@ -7160,6 +7289,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: Window | undefined
 
         A = {
+          kind: "Window",
           base: undefined,
           partitionBy: undefined,
           orderBy: Y,
@@ -7175,7 +7305,14 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[4].minor as FrameClause | undefined
         let A: Window | undefined
 
-        A = { base: W, partitionBy: undefined, orderBy: Y, frameClause: Z, span: nodeSpan() }
+        A = {
+          kind: "Window",
+          base: W,
+          partitionBy: undefined,
+          orderBy: Y,
+          frameClause: Z,
+          span: nodeSpan(),
+        }
         return A
       }
       case 356: {
@@ -7184,6 +7321,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: Window | undefined
 
         A = {
+          kind: "Window",
           base: undefined,
           partitionBy: undefined,
           orderBy: undefined,
@@ -7199,6 +7337,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         let A: Window | undefined
 
         A = {
+          kind: "Window",
           base: W,
           partitionBy: undefined,
           orderBy: undefined,
@@ -7220,7 +7359,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const Z = popped[2].minor as FrameExclude | undefined
         let A: FrameClause | undefined
 
-        A = { mode: X, start: Y, end: undefined, exclude: Z, span: nodeSpan() }
+        A = { kind: "FrameClause", mode: X, start: Y, end: undefined, exclude: Z, span: nodeSpan() }
         return A
       }
       case 360: {
@@ -7231,7 +7370,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const W = popped[5].minor as FrameExclude | undefined
         let A: FrameClause | undefined
 
-        A = { mode: X, start: Y, end: Z, exclude: W, span: nodeSpan() }
+        A = { kind: "FrameClause", mode: X, start: Y, end: Z, exclude: W, span: nodeSpan() }
         return A
       }
       case 361: {
@@ -7262,7 +7401,7 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       case 365: {
         // frame_bound_s(A) ::= UNBOUNDED PRECEDING
         let A: FrameBound | undefined
-        A = { kind: "UnboundedPreceding", span: nodeSpan() }
+        A = { kind: "UnboundedPrecedingFrameBound", span: nodeSpan() }
         return A
       }
       case 366: {
@@ -7275,27 +7414,27 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
       case 367: {
         // frame_bound_e(A) ::= UNBOUNDED FOLLOWING
         let A: FrameBound | undefined
-        A = { kind: "UnboundedFollowing", span: nodeSpan() }
+        A = { kind: "UnboundedFollowingFrameBound", span: nodeSpan() }
         return A
       }
       case 368: {
         // frame_bound(A) ::= expr(X) PRECEDING
         const X = popped[0].minor as Expr
         let A: FrameBound | undefined
-        A = { kind: "Preceding", expr: X, span: nodeSpan() }
+        A = { kind: "PrecedingFrameBound", expr: X, span: nodeSpan() }
         return A
       }
       case 369: {
         // frame_bound(A) ::= CURRENT ROW
         let A: FrameBound | undefined
-        A = { kind: "CurrentRow", span: nodeSpan() }
+        A = { kind: "CurrentRowFrameBound", span: nodeSpan() }
         return A
       }
       case 370: {
         // frame_bound(A) ::= expr(X) FOLLOWING
         const X = popped[0].minor as Expr
         let A: FrameBound | undefined
-        A = { kind: "Following", expr: X, span: nodeSpan() }
+        A = { kind: "FollowingFrameBound", expr: X, span: nodeSpan() }
         return A
       }
       case 371: {
@@ -7347,35 +7486,35 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
         const F = popped[0].minor as Expr
         const O = popped[1].minor as Over
         let A: FunctionTail | undefined
-        A = { filterClause: F, overClause: O, span: nodeSpan() }
+        A = { kind: "FunctionTail", filterClause: F, overClause: O, span: nodeSpan() }
         return A
       }
       case 379: {
         // filter_over(A) ::= over_clause(O)
         const O = popped[0].minor as Over
         let A: FunctionTail | undefined
-        A = { filterClause: undefined, overClause: O, span: nodeSpan() }
+        A = { kind: "FunctionTail", filterClause: undefined, overClause: O, span: nodeSpan() }
         return A
       }
       case 380: {
         // filter_over(A) ::= filter_clause(F)
         const F = popped[0].minor as Expr
         let A: FunctionTail | undefined
-        A = { filterClause: F, overClause: undefined, span: nodeSpan() }
+        A = { kind: "FunctionTail", filterClause: F, overClause: undefined, span: nodeSpan() }
         return A
       }
       case 381: {
         // over_clause(A) ::= OVER LP window(Z) RP
         const Z = popped[2].minor as Window
         let A: Over | undefined
-        A = { kind: "Window", window: Z, span: nodeSpan() }
+        A = { kind: "WindowOver", window: Z, span: nodeSpan() }
         return A
       }
       case 382: {
         // over_clause(A) ::= OVER nm(Z)
         const Z = popped[1].minor as Name
         let A: Over | undefined
-        A = { kind: "Name", name: Z, span: nodeSpan() }
+        A = { kind: "NameOver", name: Z, span: nodeSpan() }
         return A
       }
       case 383: {
@@ -7403,8 +7542,8 @@ export function createReducer(state: ParseState): LalrReduce<unknown> {
           })
         }
         A = {
-          kind: "Literal",
-          literal: { kind: "Numeric", value: dq.text, span: X.span },
+          kind: "LiteralExpr",
+          literal: { kind: "NumericLiteral", value: dq.text, span: X.span },
           span: nodeSpan(),
         }
         return A
