@@ -11,19 +11,17 @@
  * with non-default options (flag set, digit separator, …).
  */
 
-import parserDefs from "./parser.prod.json" with { type: "json" }
-import keywordDefs from "./keywords.prod.json" with { type: "json" }
 import { parserModuleForGrammar } from "../../src/parser"
-import { KeywordDefs } from "../../src/tokenize"
-import { ParserDefs } from "../../src/lempar"
+import type { KeywordDefs } from "../../src/tokenize"
+import type { ParserDefs } from "../../src/lempar"
+import * as parserDefs from "./reduce"
 
 export type * from "../../src/parser"
 export type * from "../../src/tokenize"
 export type * from "../../src/lempar"
 export type * from "../../src/enhanceError"
-export type * from "./stable-keys.ts"
+export type * from "../../src/ast/nodes"
 
-export * from "../../src/extras"
 
 /** The specific SQLite version this bundle was generated from. */
 export const SQLITE_VERSION = "__VERSION__" as const

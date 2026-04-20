@@ -176,10 +176,14 @@ export interface ParserRule {
   doesReduce: boolean
 }
 
-export interface ParserDefs {
+export type ParserSymbolNames = readonly string[]
+
+export interface ParserDefs<Ctx = unknown, V = unknown> {
   constants: ParserConstants
   tables: ParserTables
-  symbols: readonly string[]
+  symbols: ParserSymbolNames
+  reduce: LalrReduce<Ctx, V>
+  createState: () => Ctx
 }
 
 // ---------------------------------------------------------------------------

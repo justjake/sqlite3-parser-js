@@ -227,7 +227,7 @@ function emitParserDefs(dump: RawDump): string {
   const lines: string[] = [];
   lines.push("// ---- LALR parser tables ----");
   lines.push("");
-  lines.push("const CONSTANTS = {");
+  lines.push("export const constants = {");
   for (const k of CONSTANTS) {
     const v = dump.constants[k];
     if (v === undefined) throw new Error(`missing constant ${k}`);
@@ -271,19 +271,15 @@ function emitParserDefs(dump: RawDump): string {
 
   lines.push("");
 
-  lines.push('const SYMBOLS: ParserDefs["symbols"] = [');
+  lines.push('export const symbols: ParserSymbolNames = [');
   for (const s of dump.symbols) {
     lines.push(`  ${JSON.stringify(s.name)},`);
   }
   lines.push("]");
   lines.push("");
 
-  lines.push(`export const PARSER_DEFS: ParserDefs = {
-    constants: CONSTANTS,
-    tables: {
+  lines.push(`export const tables: ParserTables = {
       ${Object.keys(TABLE_TYPES).join(",\n")}
-    },
-    symbols: SYMBOLS,
   }`);
   return lines.join("\n");
 }

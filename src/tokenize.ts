@@ -596,10 +596,9 @@ export function tokenizerModuleForGrammar(
   const tokenNameMap = new Map<TokenId, string>()
   for (let i = 0; i < parserDefs.symbols.length; i++) {
     const sym = parserDefs.symbols[i]!
-    if (!sym.isTerminal) continue
     const id = i as TokenId
-    tokenCode.set(sym.name, id)
-    tokenNameMap.set(id, sym.name)
+    tokenCode.set(sym, id)
+    tokenNameMap.set(id, sym)
   }
   function requireToken(name: string): TokenId {
     const code = tokenCode.get(name)
