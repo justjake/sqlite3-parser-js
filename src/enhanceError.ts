@@ -283,7 +283,7 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
     tokens,
     tokenIndex,
   })
-  return new ParseErrorImpl({
+  return new ParserError({
     token,
     canonical,
     hint,
@@ -297,7 +297,7 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
  * classify.  No grammar state is consulted, so `expected` is empty.
  */
 export function buildIllegalTokenError(sql: string, token: TokenNode): ParseError {
-  return new ParseErrorImpl({
+  return new ParserError({
     token,
     canonical: `unrecognized token: ${JSON.stringify(token.text)}`,
     hint: illegalTokenHint(token.text),

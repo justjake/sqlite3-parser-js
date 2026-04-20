@@ -35,13 +35,14 @@ import {
 } from "./lempar.ts"
 import {
   buildIllegalTokenError,
+  createParserError,
   enhanceParseError,
   lineColAt,
   type ParseError,
 } from "./enhanceError.ts"
-import { Cmd } from "./ast/nodes.ts"
-import { AstNode } from "../vendor/liteparser/wasm/src/index.ts"
-import { ParseState } from "./ast/parseState.ts"
+import type { CmdList } from "./ast/nodes.ts"
+import { finalizeCmdList } from "./ast/parseActions.ts"
+import type { ParseState } from "./ast/parseState.ts"
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -99,11 +100,22 @@ export interface RuleNode {
 
 export type CstNode = TokenNode | RuleNode
 
-/** Parser options are forwarded to the tokenizer bound inside the parser. */
-export type CreateParserOptions = CreateTokenizerOptions
+/** Options for a parser module.  Tokenizer-level options are forwarded verbatim. */
+export interface CreateParserOptions extends CreateTokenizerOptions {
+  /**
+   * Reject input containing more than one top-level SQL statement.  When
+   * set, the parser stops at the first statement's terminating `SEMI`
+   * and, if any further tokens (other than additional bare `;`
+   * separators) remain, returns `{status: "errored"}` with a single
+   * `ParseError` whose span covers from the first trailing token to
+   * end-of-input.  Useful for contexts like `prepare_v2`-style call sites
+   * where only one statement is meaningful.  Defaults to `false`.
+   */
+  readonly singleStatement?: boolean
+}
 
 export type ParseResult =
-  | { status: "accepted"; ast: Cmd }
+  | { status: "accepted"; ast: CmdList }
   | { status: "errored"; errors: readonly ParseError[] }
 
 // ---------------------------------------------------------------------------
@@ -167,7 +179,8 @@ export function parserModuleForGrammar(
     // sqlite3RunParser: get a token, feed it to the parser, repeat
     // until end-of-input or error; then inject a virtual SEMI (if the
     // last real token wasn't one) and the `$` end marker.
-    const session = createEngine(reduce, createState())
+    const state = createState()
+    const session = createEngine(reduce, state)
 
     // Chronological token stream we actually fed the session.
     // enhanceParseError scans this backward from the failing token to
@@ -175,6 +188,15 @@ export function parserModuleForGrammar(
     // so it needs to include synthetic SEMI/EOF markers too.
     const tokenStream: TokenNode[] = []
 
+    // `singleStatement` tripwire: the `ecmd ::= cmdx SEMI` reduction
+    // that bumps `state.cmds` from 0 to 1 is deferred by LALR lookahead
+    // — it fires when we feed the token *after* the terminating SEMI.
+    // So we check *after* each `session.next`: once `state.cmds >= 1`,
+    // any non-SEMI token is the start of trailing content (a bare `;`
+    // is a no-op `ecmd ::= SEMI` and stays allowed).  The check covers
+    // both "garbage past first stmt" (engine errors on the token) and
+    // "second valid stmt past first" (engine would keep running) — in
+    // both cases the token's offset is the start of the trailing range.
     let lastMajor: TokenId | undefined
     for (const tok of tk.tokenize(sql)) {
       const node: TokenNode = {
@@ -199,6 +221,23 @@ export function parserModuleForGrammar(
 
       tokenStream.push(node)
       session.next(tok.type, node)
+
+      if (options.singleStatement && state.cmds.length >= 1 && tok.type !== SEMI) {
+        errors.push(
+          createParserError({
+            message: "expected end of input after single statement",
+            span: {
+              offset: tok.span.offset,
+              length: sql.length - tok.span.offset,
+              line: tok.span.line,
+              col: tok.span.col,
+            },
+            sql,
+          }),
+        )
+        return { status: "errored", errors }
+      }
+
       if (session.phase !== "running") break
       lastMajor = tok.type
     } // end parse loop
@@ -264,7 +303,7 @@ export function parserModuleForGrammar(
     }
 
     if (session.phase === "accepted") {
-      return { status: "accepted", ast: session.root as Cmd }
+      return { status: "accepted", ast: finalizeCmdList(state) }
     } else {
       return { status: "errored", errors }
     }

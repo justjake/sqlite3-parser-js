@@ -18,30 +18,28 @@
 // doesn't exist, run `bun scripts/json-schemas.ts` first.
 
 import { readFileSync, existsSync } from "node:fs"
-import { dirname, resolve } from "node:path"
 import { Check, Errors } from "typebox/value"
 
 import { JSON_SCHEMA_VERSION, SCHEMA_NAMES, schemaPath, type SchemaName } from "./json-schemas.ts"
+import { REPO_ROOT, runScript } from "./utils.ts"
 
-const ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
+const USAGE =
+  `usage: bun scripts/validate-json.ts <schema-name> <path-to-file>\n` +
+  `  schema-name: one of ${SCHEMA_NAMES.join(", ")}`
 
-function usage(): never {
-  console.error(
-    `usage: bun scripts/validate-json.ts <schema-name> <path-to-file>\n` +
-      `  schema-name: one of ${SCHEMA_NAMES.join(", ")}`,
-  )
-  process.exit(2)
-}
-
-function main(): void {
-  const [, , schemaName, filePath] = process.argv
-  if (!schemaName || !filePath) usage()
+await runScript(import.meta.main, { usage: USAGE }, ({ positionals }) => {
+  const [schemaName, filePath] = positionals
+  if (!schemaName || !filePath) {
+    console.error(USAGE)
+    process.exit(2)
+  }
   if (!SCHEMA_NAMES.includes(schemaName as SchemaName)) {
     console.error(`unknown schema "${schemaName}"`)
-    usage()
+    console.error(USAGE)
+    process.exit(2)
   }
 
-  const sp = schemaPath(ROOT, schemaName as SchemaName)
+  const sp = schemaPath(REPO_ROOT, schemaName as SchemaName)
   if (!existsSync(sp)) {
     console.error(
       `schema file not found: ${sp}\n` + `run \`bun scripts/json-schemas.ts\` to (re)generate it.`,
@@ -68,6 +66,4 @@ function main(): void {
   }
   console.error(`\n${errors.length} error(s)`)
   process.exit(1)
-}
-
-main()
+})

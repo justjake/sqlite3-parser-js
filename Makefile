@@ -161,7 +161,7 @@ generated/%/parser.dev.json: \
 generated/%/parse.ts: \
     scripts/emit-ts-parser.ts \
     generated/%/parser.dev.json
-	bun scripts/emit-ts-parser.ts generated/$*/parser.dev.json $@
+	bun scripts/emit-ts-parser.ts generated/$*/parser.dev.json > $@
 	bun run fmt $@
 
 # mkkeywordhash has no input files — its keyword table is compiled in.
@@ -207,11 +207,8 @@ $(VERSION_INDEX_TS): generated/%/index.ts: \
     generated/template/index.ts \
     generated/%/parser.prod.json \
     generated/%/keywords.prod.json
-	bun scripts/emit-version-modules.ts version \
-	  $* \
-	  generated/template/index.ts \
-	  generated/$*/index.ts
-	bun run fmt generated/$*/index.ts
+	bun scripts/emit-version-modules.ts version $* generated/template/index.ts > $@
+	bun run fmt $@
 
 # ---------------------------------------------------------------------------
 # The cross-version `current` re-export.  Sourced from
@@ -221,7 +218,7 @@ $(VERSION_INDEX_TS): generated/%/index.ts: \
 generated/current.ts: \
     scripts/emit-version-modules.ts \
     vendor/manifest.json
-	bun scripts/emit-version-modules.ts current vendor/manifest.json $@
+	bun scripts/emit-version-modules.ts current vendor/manifest.json > $@
 	bun run fmt $@
 
 .PHONY: current

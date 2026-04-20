@@ -4,3 +4,6 @@
 [submodule "vendor/liteparser"]
 	path = vendor/liteparser
 	url = https://github.com/sqliteai/liteparser.git
+[submodule "sqlite-3.54.0"]
+	path = vendor/submodule/3.54.0
+	url = https://github.com/sqlite/sqlite.git

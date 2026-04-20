@@ -33,6 +33,15 @@ import type { Span } from "../tokenize.ts"
 // Top-level: command (EXPLAIN wrapper).
 // ---------------------------------------------------------------------------
 
+/**
+ * A series of SQL statement separated by `;`
+ */
+export interface CmdList {
+  readonly kind: "CmdList"
+  readonly cmds: readonly Cmd[]
+  readonly span: Span
+}
+
 /** Kind of EXPLAIN prefix, if any. */
 export type ExplainKind = "Explain" | "QueryPlan"
 

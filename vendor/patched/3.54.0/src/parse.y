@@ -91,7 +91,7 @@ import {
   joinOperatorFrom, fromClausePush, emptyFromClause, freezeFrom,
   mkSelect, pushCompound, mkOneSelect, valuesPush,
   mkColumnDefinition, addColumn, mkColumnsAndConstraints,
-  addCte, mkUpsertIndex, finalizeCmd,
+  addCte, mkUpsertIndex, flushCmd,
   spanFromPopped,
   mkAstParseError, mkDuplicateError,
 } from "../../../src/ast/parseActions.ts";
@@ -110,9 +110,9 @@ input     ::= cmdlist.
 cmdlist   ::= cmdlist ecmd.
 cmdlist   ::= ecmd.
 ecmd      ::= SEMI.
-ecmd      ::= cmdx SEMI.
+ecmd      ::= cmdx SEMI.               { flushCmd(state); }
 %ifndef SQLITE_OMIT_EXPLAIN
-ecmd      ::= explain cmdx SEMI.       {NEVER-REDUCE}
+ecmd      ::= explain cmdx SEMI.       { flushCmd(state); }
 explain   ::= EXPLAIN.              { state.explain = "Explain"; }
 explain   ::= EXPLAIN QUERY PLAN.   { state.explain = "QueryPlan"; }
 %endif  SQLITE_OMIT_EXPLAIN

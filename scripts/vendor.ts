@@ -2,7 +2,7 @@
 // scripts/vendor.ts — the `bun run vendor <ref>` entry point.
 //
 // Onboards a new SQLite release into this package (name taken from
-// package.json via PACKAGE_NAME):
+// package.json via PACKAGE_JSON):
 //
 //   1. Ensures vendor/submodule/<ref>/ exists.  If missing, adds it as
 //      a git submodule pointing at sqlite.org's GitHub mirror and
@@ -46,7 +46,7 @@ import { dirname, join, resolve } from "node:path"
 import { spawnSync } from "node:child_process"
 
 import { JSON_SCHEMA_VERSION } from "./json-schemas.ts"
-import { PACKAGE_NAME } from "./package-info.ts"
+import { PACKAGE_JSON, runScript } from "./utils.ts"
 
 // ---------------------------------------------------------------------------
 // Paths.  Resolve everything relative to the package root so the script
@@ -286,19 +286,7 @@ interface CliOptions {
   upstreamCommit?: string
 }
 
-function parseCli(argv: string[]): CliOptions {
-  const opts: Partial<CliOptions> & { useSubmodule?: boolean } = {
-    useSubmodule: true,
-  }
-  const positional: string[] = []
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]!
-    if (a === "--no-submodule") opts.useSubmodule = false
-    else if (a === "--from") opts.fromDir = argv[++i]
-    else if (a === "--commit") opts.upstreamCommit = argv[++i]
-    else if (a === "--help" || a === "-h") {
-      console.log(
-        `usage: bun run vendor <ref> [--no-submodule] [--from <dir>] [--commit <sha>]
+const VENDOR_USAGE = `usage: bun run vendor <ref> [--no-submodule] [--from <dir>] [--commit <sha>]
 
   <ref>              SQLite version tag, e.g. 3.55.0
   --no-submodule     Do not add a git submodule; --from is required.
@@ -306,24 +294,34 @@ function parseCli(argv: string[]): CliOptions {
                      instead of the submodule.  Useful for testing and for
                      building against an unreleased sqlite development tree.
   --commit <sha>     Record this commit hash in the manifest.  Defaults to
-                     the HEAD of the submodule (or \`unknown\` with --from).`,
-      )
-      process.exit(0)
-    } else positional.push(a)
-  }
-  if (positional.length !== 1) {
-    throw new Error("expected exactly one positional argument: the version ref")
-  }
-  return {
-    ref: positional[0]!,
-    useSubmodule: opts.useSubmodule ?? true,
-    fromDir: opts.fromDir,
-    upstreamCommit: opts.upstreamCommit,
-  }
-}
+                     the HEAD of the submodule (or \`unknown\` with --from).`
 
-async function main(): Promise<void> {
-  const cli = parseCli(process.argv.slice(2))
+await runScript(
+  import.meta.main,
+  {
+    usage: VENDOR_USAGE,
+    options: {
+      "no-submodule": { type: "boolean" },
+      from: { type: "string" },
+      commit: { type: "string" },
+    },
+  },
+  async ({ positionals, values }) => {
+    if (positionals.length !== 1) {
+      console.error(VENDOR_USAGE)
+      throw new Error("expected exactly one positional argument: the version ref")
+    }
+    const cli: CliOptions = {
+      ref: positionals[0]!,
+      useSubmodule: !values["no-submodule"],
+      fromDir: values.from as string | undefined,
+      upstreamCommit: values.commit as string | undefined,
+    }
+    await vendorMain(cli)
+  },
+)
+
+async function vendorMain(cli: CliOptions): Promise<void> {
 
   const manifest = readManifest()
   verifyExistingHashes(manifest)
@@ -408,14 +406,9 @@ async function main(): Promise<void> {
   )
 
   console.log(
-    `\n${PACKAGE_NAME}: version ${cli.ref} is now current.  Next:\n` +
+    `\n${PACKAGE_JSON.name}: version ${cli.ref} is now current.  Next:\n` +
       `  * review vendor/patched/${cli.ref}/tool/*.c for correctness\n` +
       `  * run \`bun test\`\n` +
       `  * commit the new files + manifest if everything looks right`,
   )
 }
-
-main().catch((err) => {
-  console.error(err instanceof Error ? err.message : String(err))
-  process.exit(1)
-})

@@ -39,7 +39,7 @@ import Type, { type Static, type TSchema } from "typebox"
 import { mkdirSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 
-import { PACKAGE_NAME } from "./package-info.ts"
+import { PACKAGE_JSON, runScript } from "./utils.ts"
 
 // Runtime source-of-truth types.  The *.prod schemas below are locked
 // to these via the `matches<T>()` helper: any drift (schema field
@@ -545,28 +545,28 @@ export function schemaPath(root: string, name: SchemaName): string {
 // CLI entry — write one schema as pretty JSON.  Invoke once per schema.
 // ---------------------------------------------------------------------------
 
-function main(): void {
-  const [name, outPath] = process.argv.slice(2)
-  if (!name || !outPath || !(name in SCHEMAS)) {
-    console.error(`usage: bun scripts/json-schemas.ts <${SCHEMA_NAMES.join("|")}> <output-path>`)
-    process.exit(2)
-  }
+await runScript(
+  import.meta.main,
+  { usage: `usage: bun scripts/json-schemas.ts <${SCHEMA_NAMES.join("|")}> <output-path>` },
+  ({ positionals }) => {
+    const [name, outPath] = positionals
+    if (!name || !outPath || !(name in SCHEMAS)) {
+      console.error(`usage: bun scripts/json-schemas.ts <${SCHEMA_NAMES.join("|")}> <output-path>`)
+      process.exit(2)
+    }
 
-  const schema = SCHEMAS[name as SchemaName]
-  const annotated = {
-    $schema: "http://json-schema.org/draft-07/schema#",
-    // Version segment sits BEFORE the schema name so that a future
-    // schema-version bump can freely drop, rename, or add schemas
-    // without stepping on v1's $id namespace.
-    $id: `${PACKAGE_NAME}/v${JSON_SCHEMA_VERSION}/${name}`,
-    title: name,
-    ...schema,
-  }
-  mkdirSync(dirname(outPath), { recursive: true })
-  writeFileSync(outPath, JSON.stringify(annotated, null, 2) + "\n")
-  console.log(`wrote ${outPath}`)
-}
-
-if (import.meta.main) {
-  main()
-}
+    const schema = SCHEMAS[name as SchemaName]
+    const annotated = {
+      $schema: "http://json-schema.org/draft-07/schema#",
+      // Version segment sits BEFORE the schema name so that a future
+      // schema-version bump can freely drop, rename, or add schemas
+      // without stepping on v1's $id namespace.
+      $id: `${PACKAGE_JSON.name}/v${JSON_SCHEMA_VERSION}/${name}`,
+      title: name,
+      ...schema,
+    }
+    mkdirSync(dirname(outPath), { recursive: true })
+    writeFileSync(outPath, JSON.stringify(annotated, null, 2) + "\n")
+    console.error(`wrote ${outPath}`)
+  },
+)

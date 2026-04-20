@@ -19,6 +19,7 @@ import { gzipSync } from "node:zlib"
 import { Clean } from "typebox/value"
 
 import { SCHEMAS, type SchemaName } from "./json-schemas.ts"
+import { runScript } from "./utils.ts"
 import type { ParserConstants, ParserDefs, ParserTables, SymbolId } from "../src/lempar.ts"
 
 // ---------------------------------------------------------------------------
@@ -108,50 +109,51 @@ function fmt(n: number): string {
 // ---------------------------------------------------------------------------
 // CLI entry.
 // ---------------------------------------------------------------------------
-function main(): void {
-  const [, , inPath, outPath] = process.argv
-  if (!inPath || !outPath) {
-    console.error("usage: bun scripts/slim-dump.ts <input.json> <output.json>")
-    process.exit(2)
-  }
 
-  const inBytes = readFileSync(inPath)
-  const defs = JSON.parse(inBytes.toString("utf8")) as Record<string, unknown>
-  const schemaName = detectSchemaName(defs)
-  // `Clean` returns `unknown`; the schema controls the resulting shape.
-  // For parser.prod dumps, splice in the computed `yy_expected` table
-  // so runtime diagnostics can render "expected: …" lists in O(|accepted|).
-  let finalized: unknown = Clean(SCHEMAS[schemaName], defs)
-  if (schemaName === "parser.prod") {
-    const parserDefs = finalized as ParserDefs & {
-      rules: readonly { lhs: SymbolId; rhs: readonly unknown[] }[]
+await runScript(
+  import.meta.main,
+  { usage: "usage: bun scripts/slim-dump.ts <input.json> <output.json>" },
+  ({ positionals }) => {
+    const [inPath, outPath] = positionals
+    if (!inPath || !outPath) {
+      console.error("usage: bun scripts/slim-dump.ts <input.json> <output.json>")
+      process.exit(2)
     }
-    const ruleInfo = computeRuleInfo(parserDefs.rules)
-    finalized = {
-      ...parserDefs,
-      tables: {
-        ...parserDefs.tables,
-        yyRuleInfoLhs: ruleInfo.yyRuleInfoLhs,
-        yyRuleInfoNRhs: ruleInfo.yyRuleInfoNRhs,
-        yy_expected: computeYyExpected(parserDefs.tables, parserDefs.constants),
-      },
+
+    const inBytes = readFileSync(inPath)
+    const defs = JSON.parse(inBytes.toString("utf8")) as Record<string, unknown>
+    const schemaName = detectSchemaName(defs)
+    // `Clean` returns `unknown`; the schema controls the resulting shape.
+    // For parser.prod dumps, splice in the computed `yy_expected` table
+    // so runtime diagnostics can render "expected: …" lists in O(|accepted|).
+    let finalized: unknown = Clean(SCHEMAS[schemaName], defs)
+    if (schemaName === "parser.prod") {
+      const parserDefs = finalized as ParserDefs & {
+        rules: readonly { lhs: SymbolId; rhs: readonly unknown[] }[]
+      }
+      const ruleInfo = computeRuleInfo(parserDefs.rules)
+      finalized = {
+        ...parserDefs,
+        tables: {
+          ...parserDefs.tables,
+          yyRuleInfoLhs: ruleInfo.yyRuleInfoLhs,
+          yyRuleInfoNRhs: ruleInfo.yyRuleInfoNRhs,
+          yy_expected: computeYyExpected(parserDefs.tables, parserDefs.constants),
+        },
+      }
     }
-  }
 
-  // Compact JSON — every saved byte counts when the defs dominates the bundle.
-  const outText = JSON.stringify(finalized)
-  writeFileSync(outPath, outText)
+    // Compact JSON — every saved byte counts when the defs dominates the bundle.
+    const outText = JSON.stringify(finalized)
+    writeFileSync(outPath, outText)
 
-  const before = sizes(inBytes)
-  const after = sizes(outText)
-  const pct = (n: number, d: number) => ((1 - n / d) * 100).toFixed(1)
-  console.log(`${inPath}  ->  ${outPath}  (schema: ${schemaName})`)
-  console.log(
-    `  raw:     ${fmt(before.raw)}  →  ${fmt(after.raw)}  (-${pct(after.raw, before.raw)}%)`,
-  )
-  console.log(`  gzipped: ${fmt(before.gz)}  →  ${fmt(after.gz)}  (-${pct(after.gz, before.gz)}%)`)
-}
-
-if (import.meta.main) {
-  main()
-}
+    const before = sizes(inBytes)
+    const after = sizes(outText)
+    const pct = (n: number, d: number) => ((1 - n / d) * 100).toFixed(1)
+    console.error(`${inPath}  ->  ${outPath}  (schema: ${schemaName})`)
+    console.error(
+      `  raw:     ${fmt(before.raw)}  →  ${fmt(after.raw)}  (-${pct(after.raw, before.raw)}%)`,
+    )
+    console.error(`  gzipped: ${fmt(before.gz)}  →  ${fmt(after.gz)}  (-${pct(after.gz, before.gz)}%)`)
+  },
+)

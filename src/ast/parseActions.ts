@@ -47,6 +47,7 @@ import type {
   WindowDef,
   With,
   Cmd,
+  CmdList,
 } from "./nodes.ts"
 import type { Span, Token } from "../tokenize.ts"
 import type { AstParseError, ParseState } from "./parseState.ts"
@@ -774,16 +775,48 @@ export function mkUpsertIndex(
 
 // ---- Finalization ----------------------------------------------------
 
-/** Wrap the parsed statement in the EXPLAIN prefix, if any. */
-export function finalizeCmd(state: ParseState): Cmd | undefined {
-  const stmt: Stmt | undefined = state.stmt
-  if (stmt === undefined) return undefined
-  // For the outer Cmd, mirror the inner statement's span — the EXPLAIN
-  // prefix (if any) widens the physical range a few chars but we don't
-  // have its token in hand here.  Consumers that need the EXPLAIN token
-  // range can inspect the first token of the input.
+/**
+ * Flush the pending `state.stmt` (+ `state.explain`) as a {@link Cmd} onto
+ * `state.cmds`, then clear both slots for the next statement.  Called
+ * from the `ecmd ::= cmdx SEMI` / `ecmd ::= explain cmdx SEMI` rule
+ * actions, so the accumulator grows by one per top-level statement.
+ *
+ * A missing `stmt` is a no-op — it happens at `ecmd ::= SEMI` (a bare
+ * statement separator with nothing before it), which reduces to `ecmd`
+ * but never calls this hook.
+ */
+export function flushCmd(state: ParseState): void {
+  const stmt = state.stmt
+  if (stmt === undefined) return
   const span = stmt.span
-  if (state.explain === "Explain") return { kind: "ExplainCmd", stmt, span }
-  if (state.explain === "QueryPlan") return { kind: "ExplainQueryPlanCmd", stmt, span }
-  return { kind: "StmtCmd", stmt, span }
+  const cmd: Cmd =
+    state.explain === "Explain"
+      ? { kind: "ExplainCmd", stmt, span }
+      : state.explain === "QueryPlan"
+        ? { kind: "ExplainQueryPlanCmd", stmt, span }
+        : { kind: "StmtCmd", stmt, span }
+  state.cmds.push(cmd)
+  state.stmt = undefined
+  state.explain = undefined
+}
+
+/**
+ * Wrap the accumulated `state.cmds` in a {@link CmdList}.  Span runs from
+ * the first command's start to the last's end; empty input produces a
+ * zero-length span at the beginning of the source.
+ */
+export function finalizeCmdList(state: ParseState): CmdList {
+  const cmds = state.cmds
+  const first = cmds[0]?.span
+  const last = cmds[cmds.length - 1]?.span
+  const span: Span =
+    first !== undefined && last !== undefined
+      ? {
+          offset: first.offset,
+          length: last.offset + last.length - first.offset,
+          line: first.line,
+          col: first.col,
+        }
+      : { offset: 0, length: 0, line: 1, col: 1 }
+  return { kind: "CmdList", cmds, span }
 }

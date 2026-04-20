@@ -59,6 +59,8 @@ import { basename, dirname, join, relative, resolve } from "node:path"
 import { spawnSync } from "node:child_process"
 import { gzipSync } from "node:zlib"
 
+import { runScript } from "./utils.ts"
+
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
 const GENERATED = join(ROOT, "generated")
 const BIN = join(ROOT, "bin")
@@ -253,7 +255,7 @@ function reportSizes(): void {
   }
 }
 
-async function main(): Promise<void> {
+await runScript(import.meta.main, { usage: "usage: bun scripts/build.ts" }, async () => {
   clean()
   const versions = discoverVersions()
   log(`versions: ${versions.join(", ") || "(none)"}`)
@@ -265,16 +267,4 @@ async function main(): Promise<void> {
   buildTypes()
   reportSizes()
   log("done.")
-}
-
-main().catch((err) => {
-  // AggregateError (e.g. from Bun.build without throw:false) hides its
-  // real diagnostics in `.errors` — surface each one before exiting.
-  if (err instanceof AggregateError) {
-    for (const inner of err.errors) console.error(String(inner))
-    console.error(err.message)
-  } else {
-    console.error(err instanceof Error ? err.message : String(err))
-  }
-  process.exit(1)
 })

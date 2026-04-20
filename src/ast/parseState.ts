@@ -1,11 +1,9 @@
-// Parser-session types shared by the action-based parser (parse-ts.y →
-// lemonpar2.ts) and its downstream helpers in parseActions.ts.
+// Parser-session types shared by the action-based parser (parse.y →
+// generated/<ver>/parse.ts) and its downstream helpers in parseActions.ts.
 //
-// The canonical shapes for source ranges and tokens live in
-// `src/tokenize.ts`: `Span` is the position tuple every AST node
-// carries, and `Token` is the runtime value the tokenizer yields
-// (`type` + `text` + `span`).  This file re-exports them so AST-layer
-// callers have a single import site.
+// `Span` (position tuple every AST node carries) and `Token` (the
+// tokenizer's runtime value — `type` + `text` + `span`) are defined in
+// `src/tokenize.ts` and imported here by the types that need them.
 
 import type { Span, Token } from "../tokenize.ts"
 import type { Cmd, ExplainKind, Name, Stmt } from "./nodes.ts"
@@ -43,10 +41,24 @@ export interface AstParseError {
  * codegen — only AST construction.
  */
 export interface ParseState {
-  /** The parsed top-level statement, set by whichever `cmd ::= …` rule fired. */
+  /**
+   * The statement currently being built by the active `cmd ::= …` rule.
+   * `flushCmd` reads it (together with `explain`) at each `ecmd ::= … SEMI`
+   * reduction, wraps it into a {@link Cmd}, pushes it onto `cmds`, and
+   * clears this slot for the next statement.
+   */
   stmt: Stmt | undefined
-  /** `EXPLAIN` / `EXPLAIN QUERY PLAN` prefix, set by the explain rules. */
+  /**
+   * `EXPLAIN` / `EXPLAIN QUERY PLAN` prefix for the pending statement, set
+   * by the explain rules and consumed by `flushCmd` alongside `stmt`.
+   */
   explain: ExplainKind | undefined
+  /**
+   * Accumulated, reduced commands in source order.  Each `ecmd ::= cmdx
+   * SEMI` (and its explain-prefixed twin) runs `flushCmd`, which converts
+   * the pending `stmt` into a {@link Cmd} and pushes it here.
+   */
+  cmds: Cmd[]
   /** Scratch slot holding the current CREATE TABLE constraint name. */
   constraintName: Name | undefined
   /** Accumulated virtual-table module args (one per vtabarg). */
@@ -80,6 +92,7 @@ export function makeParseState(): ParseState {
   return {
     stmt: undefined,
     explain: undefined,
+    cmds: [],
     constraintName: undefined,
     vtabArgs: [],
     vtabArgCurrent: "",
