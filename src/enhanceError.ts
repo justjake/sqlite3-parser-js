@@ -326,11 +326,11 @@ function tokenRange(sql: string, token: TokenNode): [number, number] {
 
 export function lineColAt(sql: string, offset: number, startAt: Span | undefined): { line: number; col: number } {
   let line = startAt?.line ?? 1
-  let col = startAt?.col ?? 1
+  let col = startAt?.col ?? 0
   for (let i = startAt?.offset ?? 0; i < offset; i++) {
     if (sql.charCodeAt(i) === 10) {
       line++
-      col = 1
+      col = 0
     } else {
       col++
     }
@@ -356,9 +356,12 @@ const CODE_BLOCK_SEPARATOR = '│ '
  *     6│ greet = \name -> name + "!"
  *                              ^^^^^
  *
- * Line numbers right-align in a gutter separated by `│`.  The underline
- * sits on the first line of the range; multi-line spans are clipped to
- * end-of-line.  An empty range (`start === end`) renders as a single `^`.
+ * Line numbers right-align in a gutter separated by `│`.  Every line the
+ * span covers gets its own underline directly below the code: the first
+ * line starts at `startLoc.col` and runs to end-of-line, intermediate
+ * lines underline the whole line, and the final line runs from column 0
+ * to `endLoc.col`.  An empty range (`start === end`) renders as a
+ * single `^`.  `col` is 0-based.
  */
 export function renderCodeBlock(args: {
   sql: string,
@@ -367,34 +370,34 @@ export function renderCodeBlock(args: {
   contextAfter?: number,
   indent?: string,
 }): string {
-  const { sql, span, } = args
+  const { sql, span } = args
   const contextBefore = Math.max(0, args.contextBefore ?? 1)
   const contextAfter = Math.max(0, args.contextAfter ?? 1)
   const indent = args.indent ?? ""
 
   const start = Math.max(0, Math.min(span.offset, sql.length))
   const end = Math.max(start, Math.min(span.offset + span.length, sql.length))
-  const sqlLines = sql.split("\n")
+  const lines = sql.split("\n")
 
-  const startLoc = span.offset === start ? span: lineColAt(sql, start, undefined)
+  const startLoc = span.offset === start ? span : lineColAt(sql, start, undefined)
   const endLoc = lineColAt(sql, end, span)
 
   const firstLine = Math.max(1, startLoc.line - contextBefore)
-  const lastLine = Math.min(sqlLines.length, endLoc.line + contextAfter)
+  const lastLine = Math.min(lines.length, endLoc.line + contextAfter)
   const gutterWidth = Math.max(2, String(lastLine).length)
 
-  const lines = sql.split("\n")
   const out: string[] = []
   for (let ln = firstLine; ln <= lastLine; ln++) {
     const text = lines[ln - 1] ?? ""
     out.push(`${indent}${String(ln).padStart(gutterWidth, " ")}${CODE_BLOCK_SEPARATOR}${text}`)
-  }
 
-  const firstLineText = lines[startLoc.line - 1] ?? ""
-  const underlineEndCol = endLoc.line === startLoc.line ? endLoc.col : firstLineText.length + 1
-  const caretCount = Math.max(1, underlineEndCol - startLoc.col)
-  const pad = " ".repeat(gutterWidth) + CODE_BLOCK_SEPARATOR + " ".repeat(startLoc.col - 1)
-  out.push(indent + pad + "^".repeat(caretCount))
+    if (ln < startLoc.line || ln > endLoc.line) continue
+    const startCol = ln === startLoc.line ? startLoc.col : 0
+    const endCol = ln === endLoc.line ? endLoc.col : text.length
+    const caretCount = Math.max(1, endCol - startCol)
+    const pad = " ".repeat(gutterWidth) + CODE_BLOCK_SEPARATOR + " ".repeat(startCol)
+    out.push(indent + pad + "^".repeat(caretCount))
+  }
 
   return out.join("\n")
 }
