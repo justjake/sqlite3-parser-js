@@ -269,7 +269,10 @@ const ParserDevRule = Strict({
 // of the others are always emitted.
 const ParserDevTables = Strict({
   yy_action: Type.Array(Type.Integer()),
-  yy_lookahead: Type.Array(Type.Integer()),
+  // Each slot stores the symbol id whose action lives at the
+  // corresponding index in yy_action — brand so the dev shape matches
+  // the runtime `ParserTables` contract in src/lempar.ts.
+  yy_lookahead: Type.Array(SymbolId),
   yy_shift_ofst: Type.Array(Type.Integer()),
   yy_reduce_ofst: Type.Array(Type.Integer()),
   yy_default: Type.Array(Type.Integer()),

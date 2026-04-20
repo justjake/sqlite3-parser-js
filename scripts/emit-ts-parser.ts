@@ -18,72 +18,21 @@
 
 import { promises as fs } from "node:fs";
 import { dirname } from "node:path";
+import type { Static } from "typebox";
+import { computeYyExpected } from "./slim-dump";
+import { SCHEMAS } from "./json-schemas.ts";
 
 // ---------------------------------------------------------------------------
-// Shape of parser.dev.json (only the fields we consume).
+// Raw dump shape — derived from the authoritative parser.dev TypeBox
+// schema in scripts/json-schemas.ts, which mirrors tool/lemon.c's JSON
+// emitter.  Adding a field there picks it up here automatically.
 // ---------------------------------------------------------------------------
 
-interface RawRhsPos {
-  readonly pos: number;
-  readonly alias: string | null;
-  readonly symbol?: number;
-  readonly name?: string;
-  readonly multi?: ReadonlyArray<{
-    readonly symbol: number;
-    readonly name: string;
-  }>;
-}
-
-interface RawRule {
-  readonly id: number;
-  readonly lhs: number;
-  readonly lhsName: string;
-  readonly lhsAlias?: string | null;
-  readonly nrhs: number;
-  readonly rhs: readonly RawRhsPos[];
-  readonly doesReduce: boolean;
-  readonly canReduce: boolean;
-  readonly neverReduce: boolean;
-  readonly noCode: boolean;
-  readonly actionC?: string;
-  readonly codePrefix?: string | null;
-  readonly codeSuffix?: string | null;
-}
-
-interface RawSymbol {
-  readonly id: number;
-  readonly name: string;
-  readonly type: "TERMINAL" | "NONTERMINAL" | "MULTITERMINAL";
-  readonly isTerminal: boolean;
-  readonly datatype?: string;
-  readonly dtnum?: number;
-  readonly lambda?: boolean;
-  readonly useCnt?: number;
-}
-
-interface RawTables {
-  readonly yy_action: readonly number[];
-  readonly yy_lookahead: readonly number[];
-  readonly yy_shift_ofst: readonly number[];
-  readonly yy_reduce_ofst: readonly number[];
-  readonly yy_default: readonly number[];
-  readonly yyFallback?: readonly number[];
-}
-
-interface RawDump {
-  readonly meta: { readonly sourceFile: string };
-  readonly name: string;
-  readonly tokenPrefix: string;
-  readonly tokenType: string;
-  readonly preamble: string;
-  readonly syntaxError: string;
-  readonly stackOverflow: string;
-  readonly extraContext: string;
-  readonly constants: Record<string, number>;
-  readonly symbols: readonly RawSymbol[];
-  readonly rules: readonly RawRule[];
-  readonly tables: RawTables;
-}
+type RawDump = Static<(typeof SCHEMAS)["parser.dev"]>;
+type RawRule = RawDump["rules"][number];
+type RawSymbol = RawDump["symbols"][number];
+type RawRhsPos = RawRule["rhs"][number];
+type RawTables = RawDump["tables"];
 
 // ---------------------------------------------------------------------------
 // Rewriter for action-body text: reverse Lemon's alias-to-stack-slot
@@ -279,7 +228,7 @@ function emitParserDefs(dump: RawDump): string {
   lines.push("// ---- LALR parser tables ----");
   lines.push("");
   lines.push("const CONSTANTS = {");
-  for (const k of []) {
+  for (const k of CONSTANTS) {
     const v = dump.constants[k];
     if (v === undefined) throw new Error(`missing constant ${k}`);
     lines.push(`  ${k}: ${v},`);
@@ -298,10 +247,25 @@ function emitParserDefs(dump: RawDump): string {
     return `const ${name} = [\n${chunks.join(",\n")},\n] as unknown as ${ty}`;
   };
 
+  // yy_expected is a per-state list of expected terminal ids; emit as a
+  // literal `number[][]` with one inner array per line.
+  const packArr2D = (
+    name: string,
+    ty: string,
+    xs: readonly (readonly number[])[],
+  ): string => {
+    const rows = xs.map((row) => `  [${row.join(", ")}]`);
+    return `const ${name} = [\n${rows.join(",\n")},\n] as unknown as ${ty}`;
+  };
+
   for (const [name, ty] of Object.entries(TABLE_TYPES)) {
-    const xs = dump.tables[name as keyof RawTables];
-    if (xs === undefined) throw new Error(`missing table ${name}`);
-    lines.push(packArr(name, ty, xs as readonly number[]));
+    if (name === "yy_expected") {
+      lines.push(packArr2D(name, ty, computeYyExpected(dump.tables, dump.constants)));
+    } else {
+      const xs = dump.tables[name as keyof RawTables];
+      if (xs === undefined) throw new Error(`missing table ${name}`);
+      lines.push(packArr(name, ty, xs as readonly number[]));
+    }
     lines.push("");
   }
 
@@ -331,21 +295,25 @@ function emitParserDefs(dump: RawDump): string {
  */
 function typeForSymbol(dump: RawDump, sym: RawSymbol): string {
   if (sym.datatype && sym.datatype.trim().length > 0) return sym.datatype;
-  if (sym.isTerminal) return dump.tokenType;
+  if (sym.isTerminal) return dump.tokenType ?? "unknown";
   return "unknown";
 }
 
-/** Emit the reducer's switch-case for one rule. */
-function emitReducerCase(dump: RawDump, rule: RawRule): string {
-  const lines: string[] = [];
+/**
+ * Emit the reducer's body for one rule, split into a header comment and
+ * the body lines.  `emitReducer` groups consecutive rules with identical
+ * bodies into fallthrough case blocks.
+ */
+function emitReducerCase(dump: RawDump, rule: RawRule): { header: string; body: string } {
   const rhsSig = rule.rhs
     .map((p) => {
-      const nm = p.name ?? "?";
+      const nm = "name" in p ? p.name : "?";
       return p.alias ? `${nm}(${p.alias})` : nm;
     })
     .join(" ");
   const header = `${rule.lhsName}${rule.lhsAlias ? `(${rule.lhsAlias})` : ""} ::= ${rhsSig}`;
-  lines.push(`    case ${rule.id}: { // ${header}`);
+
+  const lines: string[] = [];
 
   // Bind each aliased RHS position to a local variable (skip LHS-alias
   // RHS collisions — they get their own `let` below).
@@ -357,9 +325,9 @@ function emitReducerCase(dump: RawDump, rule: RawRule): string {
     if (!p.alias) continue;
     if (lhsSharesRhs0 && i === 0) continue; // the `let A` below covers this slot
     const sym =
-      p.symbol !== undefined
+      "symbol" in p
         ? dump.symbols[p.symbol]
-        : p.multi && p.multi[0]
+        : p.multi[0]
           ? dump.symbols[p.multi[0].symbol]
           : undefined;
     const ty = sym ? typeForSymbol(dump, sym) : "unknown";
@@ -410,21 +378,41 @@ function emitReducerCase(dump: RawDump, rule: RawRule): string {
   } else {
     lines.push(`      return undefined`);
   }
-  lines.push(`    }`);
-  return lines.join("\n");
+  return { header, body: lines.join("\n") };
 }
 
 function emitReducer(dump: RawDump): string {
-  const cases = dump.rules.map(rule => emitReducerCase(dump, rule)).join("\n");
+  const entries = dump.rules.map((rule) => ({
+    id: rule.id,
+    ...emitReducerCase(dump, rule),
+  }));
+
+  // Collapse runs of consecutive rules with identical bodies into a
+  // single fallthrough block so the generated file stays readable.
+  const out: string[] = [];
+  let i = 0;
+  while (i < entries.length) {
+    let j = i;
+    while (j + 1 < entries.length && entries[j + 1].body === entries[i].body) j++;
+    for (let k = i; k < j; k++) {
+      out.push(`    case ${entries[k].id}: // ${entries[k].header}`);
+    }
+    out.push(`    case ${entries[j].id}: { // ${entries[j].header}`);
+    out.push(entries[i].body);
+    out.push(`    }`);
+    i = j + 1;
+  }
+  const cases = out.join("\n");
   return `
 /**
  * Reducer function that dispatches the actions defined for each rule in the grammar to build the AST.
  */
-export const reduce: LalrReduce<ParseState, unknown> = (ctx, ruleId, popped) => {
-  const err = (message: string, span: Span, ...hints: { message: string, span?: Span }[]) => {
-    ctx.errors.push({ message, span, hints });
+export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) => {
+  const err = (message: string, span: Span, ...hints: { message: string, span: Span | undefined }[]) => {
+    state.errors.push({ message, span, hints });
   }
-  const nodeSpan = (): Span => spanFromPopped(popped)
+  let _cachedSpan: Span | undefined = undefined;
+  const nodeSpan = (): Span => (_cachedSpan ??= spanFromPopped(popped))
 
   switch (ruleId as number) {
     ${cases}
@@ -432,6 +420,8 @@ export const reduce: LalrReduce<ParseState, unknown> = (ctx, ruleId, popped) => 
       return undefined
   }
 }
+
+export const createState: () => ParseState = makeParseState
 `
 }
 
@@ -456,7 +446,7 @@ async function main(): Promise<void> {
   parts.push("");
   parts.push("// ---- Preamble (inlined from the .y %include) ----");
   parts.push("");
-  parts.push(preparePreamble(dump.preamble));
+  parts.push(preparePreamble(dump.preamble ?? ""));
   parts.push("");
   parts.push(emitTokenCodes(dump));
   parts.push("");

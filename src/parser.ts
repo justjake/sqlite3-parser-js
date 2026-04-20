@@ -38,7 +38,6 @@ import {
   lineColAt,
   type ParseError,
 } from "./enhanceError.ts"
-import { validate } from "./semantic.ts"
 
 // ---------------------------------------------------------------------------
 // CST node shapes.  These are emitter-defined — the engine knows
@@ -124,7 +123,7 @@ export interface ParserModule {
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
   tokenName(code: TokenId): string | undefined
   /** Create the underlying LALR state machine engine, used by {@link parse}. */
-  createEngine<T>(reducer: LalrReduce<T>): LalrEngine<T>
+  createEngine<Ctx, T>(reducer: LalrReduce<Ctx, T>): LalrEngine<Ctx, T>
   /**
    * Create a new parser module with the given options.
    * Parser modules are stateless, you should create one at module scope and reuse it.
@@ -346,7 +345,7 @@ export function parserModuleForGrammar(args: {
 
       tokenStream.push(node)
       session.next(tok.type, node)
-      if (session.state !== "running") break
+      if (session.phase !== "running") break
       lastMajor = tok.type
     }
 
@@ -356,7 +355,7 @@ export function parserModuleForGrammar(args: {
     // the final reduce/accept.  Both are real TokenNodes with
     // `synthetic: true` and zero-length span at `sql.length`.  Skip
     // both if the session already terminated during the token loop.
-    if (session.state === "running") {
+    if (session.phase === "running") {
       const endPos = sql.length
       const { line: endLine, col: endCol } = lineColAt(sql, endPos)
       if (lastMajor !== TK_SEMI) {
@@ -374,7 +373,7 @@ export function parserModuleForGrammar(args: {
         tokenStream.push(semiNode)
         session.next(TK_SEMI, semiNode)
       }
-      if (session.state === "running") {
+      if (session.phase === "running") {
         const eofNode: TokenNode = {
           kind: "token",
           type: TK_EOF,
@@ -408,7 +407,7 @@ export function parserModuleForGrammar(args: {
       )
     }
 
-    if (session.state === "accepted" && session.root) {
+    if (session.phase === "accepted" && session.root) {
       // Run the parse.y semantic-action port against the CST.  See
       // src/semantic.ts and generated/<ver>/semantic-actions.snapshot.json.
       for (const e of validate(session.root, PARSER_DEFS, sql, {

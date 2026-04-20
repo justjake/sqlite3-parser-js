@@ -37,7 +37,7 @@ import type { ParserConstants, ParserDefs, ParserTables } from "../src/lempar.ts
 // stored lookahead equals the offset.  Linear in YYNTOKEN per state.
 // ---------------------------------------------------------------------------
 
-function computeYyExpected(
+export function computeYyExpected(
   tables: Pick<ParserTables, "yy_lookahead" | "yy_shift_ofst">,
   constants: Pick<ParserConstants, "YYNSTATE" | "YYNTOKEN" | "YY_ACTTAB_COUNT">,
 ): number[][] {
@@ -126,4 +126,6 @@ function main(): void {
   console.log(`  gzipped: ${fmt(before.gz)}  →  ${fmt(after.gz)}  (-${pct(after.gz, before.gz)}%)`)
 }
 
-main()
+if (import.meta.main) {
+  main()
+}

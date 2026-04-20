@@ -53,7 +53,7 @@ help:
 	  '  make generated/<ver>/parser.dev.json    # full dump for debugging' \
 	  '  make generated/<ver>/keywords.dev.json  # full keyword list' \
 	  '  make generated/<ver>/index.ts           # per-version TS wrapper' \
-	  '  make generated/<ver>/lemonpar2.ts       # emitted AST-building parser' \
+	  '  make generated/<ver>/parse.ts       # emitted AST-building parser' \
 	  '  make build/lemon-<ver>                  # patched lemon compiled' \
 	  '  make build/mkkeywordhash-<ver>          # patched mkkeywordhash' \
 	  '' \
@@ -152,13 +152,13 @@ generated/%/parser.dev.json: \
 	bun run fmt $@
 
 # ---------------------------------------------------------------------------
-# lemonpar2.ts — the emitted TypeScript parser.  scripts/emit-ts-parser.ts
+# parse.ts — the emitted TypeScript parser.  scripts/emit-ts-parser.ts
 # reads parser.dev.json and produces a self-contained module that bundles
 # the LALR tables, per-rule reducer (with actionC text reversed from
 # yymsp[...] back to the grammar's alias names), and a driver on top of
 # src/lempar.ts.
 # ---------------------------------------------------------------------------
-generated/%/lemonpar2.ts: \
+generated/%/parse.ts: \
     scripts/emit-ts-parser.ts \
     generated/%/parser.dev.json
 	bun scripts/emit-ts-parser.ts generated/$*/parser.dev.json $@

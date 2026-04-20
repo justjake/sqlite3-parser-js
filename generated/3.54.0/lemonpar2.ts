@@ -7739,9 +7739,9 @@ export function parseTokens(tokenStream: Iterable<Token>): ParseResult {
   const engine = engineFactory<unknown>(createReducer(state))
   for (const tok of tokenStream) {
     engine.next(tok.type as unknown as TokenId, tok)
-    if (engine.state !== "running") break
+    if (engine.phase !== "running") break
   }
-  if (engine.state === "running") {
+  if (engine.phase === "running") {
     // Callers that forgot to feed EOF can still recover.
     const eof: Token = {
       type: 0 as unknown as TokenId,

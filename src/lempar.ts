@@ -179,8 +179,7 @@ export interface ParserRule {
 export interface ParserDefs {
   constants: ParserConstants
   tables: ParserTables
-  symbols: ParserSymbol[]
-  rules: ParserRule[]
+  symbols: readonly string[]
 }
 
 // ---------------------------------------------------------------------------
@@ -243,7 +242,7 @@ export interface LalrError<V> {
  * {@link LalrEngine.next} call to know whether to keep feeding tokens.
  * C callers look at `pParse->nErr` for the same purpose.
  */
-export type LalrSessionState = "running" | "accepted" | "errored"
+export type LalrSessionPhase = "running" | "accepted" | "errored"
 
 /**
  * Incremental LALR parser session.  One per parse; feed tokens one at
@@ -253,7 +252,7 @@ export type LalrSessionState = "running" | "accepted" | "errored"
  * is a pure callback, whereas C's reducer side-effects into the user's
  * %extra argument (`pParse`).
  */
-export interface LalrEngine<V> {
+export interface LalrEngine<Ctx, V> {
   /**
    * Feed one token.  Matches lempar.c's
    * `void Parse(void *yyp, int yymajor, YYMINORTYPE yyminor, ...)`.
@@ -272,9 +271,11 @@ export interface LalrEngine<V> {
    */
   next(yymajor: TokenId, yyminor: V): void
   /** The current state of the parser. */
-  readonly state: LalrSessionState
+  readonly phase: LalrSessionPhase
   /** The final top-of-stack value when accepted. */
   readonly root: V | undefined
+  /** Arbitrary state used by the reducer. */
+  readonly state: Ctx
   /** Live stack reference for diagnostics / IDE hooks — do not mutate. */
   readonly stack: readonly yyStackEntry<V>[]
   /** Errors accumulated so far.  Today always ≤1.  Live reference — do not mutate. */
@@ -282,7 +283,7 @@ export interface LalrEngine<V> {
 }
 
 export interface CreateLalrEngine {
-  <V>(reducer: LalrReduce<V>): LalrEngine<V>
+  <Ctx, V>(reducer: LalrReduce<Ctx, V>, state: Ctx): LalrEngine<Ctx, V>
 }
 
 // ---------------------------------------------------------------------------
@@ -311,7 +312,6 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
   const K = defs.constants
   const T = defs.tables
   const yyFallback = T.yyFallback ?? []
-  const rules = defs.rules
 
   // -------------------------------------------------------------------------
   // Table lookups — faithful ports of lempar.c:549 and lempar.c:614.
@@ -391,7 +391,7 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
   // scope.  Callers see this through the exported `LalrEngine<V>`
   // interface above; the class itself is not exported.
   // -------------------------------------------------------------------------
-  class YYParser<V> implements LalrEngine<V> {
+  class YYParser<Ctx, V> implements LalrEngine<Ctx, V> {
     // The LR stack (lempar.c's `yystack` / `yystk0`).  The bottom
     // sentinel's `minor` is synthesised as `undefined as V`; because we
     // never pop it, the caller's reducer never observes the cast.
@@ -399,22 +399,24 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
       { stateno: 0, major: 0 as SymbolId, minor: undefined as V },
     ]
     readonly #errors: LalrError<V>[] = []
-    #state: LalrSessionState = "running"
+    #phase: LalrSessionPhase = "running"
     #root: V | undefined
+    #state: Ctx
     #inputIndex = 0
-    readonly #reducer: LalrReduce<V>
+    readonly #reducer: LalrReduce<Ctx, V>
 
     /**
      * Allocate a fresh incremental parse session.  Matches lempar.c's
      * `void *ParseAlloc(void *(*mallocProc)(size_t), void *pCtx)`
      * (minus the allocator callback — JS GC handles that).
      */
-    constructor(onReduce: LalrReduce<V>) {
+    constructor(onReduce: LalrReduce<Ctx, V>, state: Ctx) {
       this.#reducer = onReduce
+      this.#state = state
     }
 
-    get state(): LalrSessionState {
-      return this.#state
+    get phase(): LalrSessionPhase {
+      return this.#phase
     }
 
     get root(): V | undefined {
@@ -429,6 +431,10 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
       return this.#errors
     }
 
+    get state(): Ctx {
+      return this.#state
+    }
+
     /**
      * Main dispatch.  lempar.c:915 `Parse()` — the C function's outer
      * while(1) loop has been unrolled: each call to this method
@@ -438,7 +444,7 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
      * The caller should check `this.state` after each call.
      */
     next(yymajor: TokenId, yyminor: V): void {
-      if (this.#state !== "running") return
+      if (this.#phase !== "running") return
 
       // Hoist the stack field into a local so the hot loop reads a
       // closure slot instead of a hidden-class property on `this`.
@@ -482,7 +488,7 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
           // capture the top value first (that's the CST root or
           // semantic value the reducer built).
           this.#root = yystack[yystack.length - 1]!.minor
-          this.#state = "accepted"
+          this.#phase = "accepted"
           return
         }
 
@@ -496,7 +502,7 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
           minor: yyminor,
           inputIndex: this.#inputIndex,
         })
-        this.#state = "errored"
+        this.#phase = "errored"
         return
       }
     }
@@ -523,7 +529,7 @@ export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
       }
       popped.reverse()
 
-      const minor = this.#reducer(yyruleno, popped)
+      const minor = this.#reducer(this.#state, yyruleno, popped)
 
       // GOTO — see lempar.c:772 yyact = yy_find_reduce_action(...).
       const baseState = yystack[yystack.length - 1]!.stateno
