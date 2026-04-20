@@ -53,7 +53,6 @@ help:
 	  '  make generated/<ver>/parser.dev.json    # full dump for debugging' \
 	  '  make generated/<ver>/keywords.dev.json  # full keyword list' \
 	  '  make generated/<ver>/index.ts           # per-version TS wrapper' \
-	  '  make generated/<ver>/parse-ts.dev.json  # lemon run on parse-ts.y' \
 	  '  make generated/<ver>/lemonpar2.ts       # emitted AST-building parser' \
 	  '  make build/lemon-<ver>                  # patched lemon compiled' \
 	  '  make build/mkkeywordhash-<ver>          # patched mkkeywordhash' \
@@ -125,62 +124,40 @@ json-schemas: $(JSON_SCHEMAS)
 # ---------------------------------------------------------------------------
 # Run Lemon to produce the full (dev) parser dump for a given version.
 #
-# Lemon writes parse.c, parse.h, parse.out, parse.sql as side-effects
-# alongside the grammar file it's pointed at.  We cd into a per-version
-# workdir so those side-effects stay isolated and the caller can look at
-# them if they need to.
+# Lemon writes parse.c, parse.h, parse.out, parse.sql as side-effects.
+# -d directs them into a per-version workdir so they stay isolated and
+# the caller can inspect them; -T points at the upstream lempar.c
+# template in place.
 #
 # Every .json output is checked against its schema via validate-json as
 # a post-step so malformed dumps never sit silently on disk.
 # ---------------------------------------------------------------------------
 generated/%/parser.dev.json: \
     build/lemon-% \
-    vendor/upstream/%/src/parse.y \
+    vendor/patched/%/src/parse.y \
     vendor/upstream/%/tool/lempar.c \
     scripts/validate-json.ts \
     generated/json-schema/v1/parser.dev.schema.json
-	@mkdir -p generated/$*/lemon
-	cp vendor/upstream/$*/tool/lempar.c generated/$*/lemon/lempar.c
-	cp vendor/upstream/$*/src/parse.y   generated/$*/lemon/parse.y
-	cd generated/$*/lemon && \
-	  $(ROOT)/build/lemon-$* \
-	    -DSQLITE_ENABLE_ORDERED_SET_AGGREGATES \
-	    -J$(ROOT)/$@ \
-	    parse.y
+	@mkdir -p build/lemon-workdir-$*
+	build/lemon-$* \
+	  -DSQLITE_ENABLE_ORDERED_SET_AGGREGATES \
+	  -Tvendor/upstream/$*/tool/lempar.c \
+	  -dbuild/lemon-workdir-$* \
+	  -J$@ \
+	  vendor/patched/$*/src/parse.y
 	bun scripts/validate-json.ts parser.dev $@
 	bun run fmt $@
 
 # ---------------------------------------------------------------------------
-# parse-ts.y — the TypeScript-targeted grammar fork.  Same lemon binary,
-# different .y input; the JSON output has TypeScript action bodies in the
-# `rules[].actionC` strings (lemon doesn't validate action-body syntax,
-# it just copies braces-delimited blocks into its output).  The JSON is
-# NOT validated against the parser.dev schema because the top-level
-# `preamble`/`syntaxError` etc. contain TypeScript instead of C.
-# ---------------------------------------------------------------------------
-generated/%/parse-ts.dev.json: \
-    build/lemon-% \
-    generated/%/lemon/parse-ts.y \
-    vendor/upstream/%/tool/lempar.c
-	@mkdir -p generated/$*/lemon
-	cp vendor/upstream/$*/tool/lempar.c generated/$*/lemon/lempar.c
-	cd generated/$*/lemon && \
-	  $(ROOT)/build/lemon-$* \
-	    -DSQLITE_ENABLE_ORDERED_SET_AGGREGATES \
-	    -J$(ROOT)/$@ \
-	    parse-ts.y
-	bun run fmt $@
-
-# ---------------------------------------------------------------------------
 # lemonpar2.ts — the emitted TypeScript parser.  scripts/emit-ts-parser.ts
-# reads parse-ts.dev.json and produces a self-contained module that bundles
+# reads parser.dev.json and produces a self-contained module that bundles
 # the LALR tables, per-rule reducer (with actionC text reversed from
 # yymsp[...] back to the grammar's alias names), and a driver on top of
 # src/lempar.ts.
 # ---------------------------------------------------------------------------
 generated/%/lemonpar2.ts: \
     scripts/emit-ts-parser.ts \
-    generated/%/parse-ts.dev.json
+    generated/%/parser.dev.json
 	bun scripts/emit-ts-parser.ts $*
 	bun run fmt $@
 

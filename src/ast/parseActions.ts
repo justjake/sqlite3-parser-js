@@ -56,7 +56,7 @@ import type { AstParseError, ParseState, Span, Token } from "./parseState.ts"
 export function mkAstParseError(
   message: string,
   span: Span,
-  ...hints: ReadonlyArray<{ readonly message: string; readonly span: Span }>
+  ...hints: ReadonlyArray<{ readonly message: string; readonly span: Span | undefined }>
 ): AstParseError {
   return hints.length > 0 ? { message, span, hints } : { message, span }
 }

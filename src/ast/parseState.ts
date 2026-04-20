@@ -33,7 +33,7 @@ export interface AstParseError {
    */
   readonly hints?: ReadonlyArray<{
     readonly message: string
-    readonly span: Span
+    readonly span: Span | undefined
   }>
 }
 

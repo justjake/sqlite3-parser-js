@@ -66,7 +66,7 @@ const VENDORED_FILES = [
 ] as const
 
 /** Subset of VENDORED_FILES that we patch — 3-way-merged into vendor/patched/<ver>/. */
-const MERGE_TARGETS = ["tool/lemon.c", "tool/mkkeywordhash.c"] as const
+const MERGE_TARGETS = ["tool/lemon.c", "tool/mkkeywordhash.c", "src/parse.y"] as const
 
 // ---------------------------------------------------------------------------
 // Manifest schema.
@@ -200,13 +200,13 @@ interface MergeOutcome {
 
 function threeWayMerge(newRef: string, baseRef: string): MergeOutcome {
   const out: MergeOutcome = { hadConflict: false, conflictFiles: [] }
-  mkdirSync(join(VENDOR, "patched", newRef, "tool"), { recursive: true })
 
   for (const rel of MERGE_TARGETS) {
     const mine = join(VENDOR, "patched", baseRef, rel)
     const base = join(VENDOR, "upstream", baseRef, rel)
     const next = join(VENDOR, "upstream", newRef, rel)
     const dst = join(VENDOR, "patched", newRef, rel)
+    mkdirSync(dirname(dst), { recursive: true })
 
     const r = run(
       "git",

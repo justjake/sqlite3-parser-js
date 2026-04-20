@@ -175,7 +175,11 @@ table_option(A) ::= WITHOUT nm(X). {
   if( X.name.toLowerCase()==="rowid" ){
     A = 0x00000080 /* TabFlags.WithoutRowid */;
   }else{
-    state.errors.push({ message: `unknown table option: ${X.name}`, span: X.span });
+    state.errors.push({
+      message: `unknown table option: ${X.name}`,
+      span: X.span,
+      hints: [{ message: "expected WITHOUT ROWID", span: undefined }],
+    });
     A = 0;
   }
 }
@@ -183,7 +187,14 @@ table_option(A) ::= nm(X). {
   if( X.name.toLowerCase()==="strict" ){
     A = 0x00010000 /* TabFlags.Strict */;
   }else{
-    state.errors.push({ message: `unknown table option: ${X.name}`, span: X.span });
+    state.errors.push({
+      message: `unknown table option: ${X.name}`,
+      span: X.span,
+      hints: [{
+        message: "expected STRICT or WITHOUT ROWID",
+        span: undefined,
+      }],
+    });
     A = 0;
   }
 }
@@ -1388,6 +1399,10 @@ term(A) ::= QNUMBER(X). {
     state.errors.push({
       message: dq.error,
       span: X.span,
+      hints: [{
+        message: "digit separators must sit between two digits (e.g. 1_000, 0xDE_AD)",
+        span: undefined,
+      }],
     });
   }
   A = { kind: "LiteralExpr", literal: { kind: "NumericLiteral", value: dq.text, span: X.span }, span: nodeSpan() };
