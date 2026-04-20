@@ -14,9 +14,23 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "lib": ["ES2022"],
-    "types": ["bun"]
+    "lib": [
+      "ES2022"
+    ],
+    "types": [
+      "bun"
+    ]
   },
-  "include": ["src/**/*", "test/**/*", "bin/**/*.ts", "scripts/**/*.ts", "generated/**/*.ts"],
-  "exclude": ["node_modules", "vendor", "generated/**/lemon"]
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "bin/**/*.ts",
+    "scripts/**/*.ts",
+    "generated/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "vendor/**/*",
+    "generated/**/lemon"
+  ]
 }

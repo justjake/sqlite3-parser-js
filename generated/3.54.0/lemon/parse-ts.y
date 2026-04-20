@@ -79,7 +79,7 @@ import type {
   TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,
   Window, WindowDef, With,
 } from "../../../src/ast/nodes.ts";
-import type { ParseError, ParseState, Token } from "../../../src/ast/parseState.ts";
+import type { ParseError, ParseState, Span, Token } from "../../../src/ast/parseState.ts";
 import type { FromClauseMut } from "../../../src/ast/parseActions.ts";
 import {
   mkName, mkId, mkIdExpr, mkVariableExpr,
@@ -95,6 +95,7 @@ import {
   mkSelect, pushCompound, mkOneSelect, valuesPush,
   mkColumnDefinition, addColumn, mkColumnsAndConstraints,
   addCte, mkUpsertIndex, finalizeCmd,
+  spanFromPopped,
 } from "../../../src/ast/parseActions.ts";
 import { sqlite3Dequote, sqlite3DequoteNumber } from "../../../src/util.ts";
 
@@ -121,7 +122,7 @@ cmdx      ::= cmd.           { /* statement is complete; state.stmt has been ass
 
 ///////////////////// Begin and end transactions. ////////////////////////////
 //
-cmd ::= BEGIN transtype(Y) trans_opt(X). { state.stmt = { kind: "Begin",    tx: Y, name: X }; }
+cmd ::= BEGIN transtype(Y) trans_opt(X). { state.stmt = { kind: "Begin",    tx: Y, name: X, span: nodeSpan() }; }
 %type trans_opt {Name | undefined}
 trans_opt(A) ::= .                  { A = undefined; }
 trans_opt(A) ::= TRANSACTION.       { A = undefined; }
@@ -131,21 +132,21 @@ transtype(A) ::= .              { A = undefined; }
 transtype(A) ::= DEFERRED.      { A = "Deferred"; }
 transtype(A) ::= IMMEDIATE.     { A = "Immediate"; }
 transtype(A) ::= EXCLUSIVE.     { A = "Exclusive"; }
-cmd ::= COMMIT|END trans_opt(X).           { state.stmt = { kind: "Commit",   name: X }; }
-cmd ::= ROLLBACK trans_opt(X).             { state.stmt = { kind: "Rollback", txName: X, savepointName: undefined }; }
+cmd ::= COMMIT|END trans_opt(X).           { state.stmt = { kind: "Commit",   name: X, span: nodeSpan() }; }
+cmd ::= ROLLBACK trans_opt(X).             { state.stmt = { kind: "Rollback", txName: X, savepointName: undefined, span: nodeSpan() }; }
 
 savepoint_opt ::= SAVEPOINT.
 savepoint_opt ::= .
-cmd ::= SAVEPOINT nm(X).                            { state.stmt = { kind: "Savepoint", name: X }; }
-cmd ::= RELEASE savepoint_opt nm(X).                { state.stmt = { kind: "Release",   name: X }; }
+cmd ::= SAVEPOINT nm(X).                            { state.stmt = { kind: "Savepoint", name: X, span: nodeSpan() }; }
+cmd ::= RELEASE savepoint_opt nm(X).                { state.stmt = { kind: "Release",   name: X, span: nodeSpan() }; }
 cmd ::= ROLLBACK trans_opt(Y) TO savepoint_opt nm(X). {
-  state.stmt = { kind: "Rollback", txName: Y, savepointName: X };
+  state.stmt = { kind: "Rollback", txName: Y, savepointName: X, span: nodeSpan() };
 }
 
 ///////////////////// The CREATE TABLE statement ////////////////////////////
 //
 cmd ::= createkw temp(T) TABLE ifnotexists(E) fullname(Y) create_table_args(X). {
-  state.stmt = { kind: "CreateTable", temporary: T, ifNotExists: E, tblName: Y, body: X };
+  state.stmt = { kind: "CreateTable", temporary: T, ifNotExists: E, tblName: Y, body: X, span: nodeSpan() };
 }
 createkw(A) ::= CREATE(A).
 
@@ -160,10 +161,10 @@ temp(A) ::= .      { A = false; }
 
 %type create_table_args {CreateTableBody}
 create_table_args(A) ::= LP columnlist(C) conslist_opt(X) RP table_option_set(F). {
-  A = mkColumnsAndConstraints(C, X, F);
+  A = mkColumnsAndConstraints(C, X, F, nodeSpan());
 }
 create_table_args(A) ::= AS select(S). {
-  A = { kind: "AsSelect", select: S };
+  A = { kind: "AsSelect", select: S, span: nodeSpan() };
 }
 %type table_option_set {TabFlags}
 %type table_option     {TabFlags}
@@ -188,16 +189,16 @@ table_option(A) ::= nm(X). {
 }
 %type columnlist {ColumnDefinition[]}
 columnlist(A) ::= columnlist(A) COMMA columnname(X) carglist(Y). {
-  const cd = mkColumnDefinition(X.colName, X.colType, Y);
+  const cd = mkColumnDefinition(X.colName, X.colType, Y, nodeSpan());
   addColumn(state, A, cd);
 }
 columnlist(A) ::= columnname(X) carglist(Y). {
-  const cd = mkColumnDefinition(X.colName, X.colType, Y);
+  const cd = mkColumnDefinition(X.colName, X.colType, Y, nodeSpan());
   A = [];
   addColumn(state, A, cd);
 }
-%type columnname {{colName: Name, colType: Type | undefined}}
-columnname(A) ::= nm(X) typetoken(Y). { A = { colName: X, colType: Y }; }
+%type columnname {{colName: Name, colType: Type | undefined, span: Span}}
+columnname(A) ::= nm(X) typetoken(Y). { A = { colName: X, colType: Y, span: nodeSpan() }; }
 
 // Declare some tokens early in order to influence their values, to
 // improve performance and reduce the executable size.  The goal here is
@@ -278,12 +279,12 @@ nm(A) ::= STRING(X). { A = mkName(X); }
 //
 %type typetoken {Type | undefined}
 typetoken(A) ::= .                                              { A = undefined; }
-typetoken(A) ::= typename(X).                                   { A = { name: X, size: undefined }; }
+typetoken(A) ::= typename(X).                                   { A = { name: X, size: undefined, span: nodeSpan() }; }
 typetoken(A) ::= typename(X) LP signed(Y) RP. {
-  A = { name: X, size: { kind: "MaxSize", size: Y } };
+  A = { name: X, size: { kind: "MaxSize", size: Y, span: nodeSpan() }, span: nodeSpan() };
 }
 typetoken(A) ::= typename(X) LP signed(Y) COMMA signed(Z) RP. {
-  A = { name: X, size: { kind: "TypeSize", size1: Y, size2: Z } };
+  A = { name: X, size: { kind: "TypeSize", size1: Y, size2: Z, span: nodeSpan() }, span: nodeSpan() };
 }
 %type typename {string}
 typename(A) ::= ids(X).               { A = sqlite3Dequote(X.text) as string; }
@@ -306,23 +307,23 @@ ccons(A) ::= CONSTRAINT nm(X). {
   A = undefined;
 }
 ccons(A) ::= DEFAULT term(X). {
-  A = { name: state.constraintName, constraint: { kind: "Default", expr: X } };
+  A = { name: state.constraintName, constraint: { kind: "Default", expr: X, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= DEFAULT LP expr(X) RP. {
-  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkParenthesized(X) } };
+  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkParenthesized(X, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= DEFAULT PLUS term(X). {
-  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkUnary("Positive", X) } };
+  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkUnary("Positive", X, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= DEFAULT MINUS term(X). {
-  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkUnary("Negative", X) } };
+  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkUnary("Negative", X, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= DEFAULT id(X). {
-  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkIdExpr(X) } };
+  A = { name: state.constraintName, constraint: { kind: "Default", expr: mkIdExpr(X, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 
@@ -330,26 +331,26 @@ ccons(A) ::= DEFAULT id(X). {
 // UNIQUE constraints.
 //
 ccons(A) ::= NULL onconf(R). {
-  A = { name: state.constraintName, constraint: { kind: "NotNull", nullable: true,  conflictClause: R } };
+  A = { name: state.constraintName, constraint: { kind: "NotNull", nullable: true,  conflictClause: R, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= NOT NULL onconf(R). {
-  A = { name: state.constraintName, constraint: { kind: "NotNull", nullable: false, conflictClause: R } };
+  A = { name: state.constraintName, constraint: { kind: "NotNull", nullable: false, conflictClause: R, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= PRIMARY KEY sortorder(Z) onconf(R) autoinc(I). {
   A = {
     name: state.constraintName,
-    constraint: { kind: "PrimaryKey", order: Z, conflictClause: R, autoIncrement: I },
+    constraint: { kind: "PrimaryKey", order: Z, conflictClause: R, autoIncrement: I, span: nodeSpan() }, span: nodeSpan()
   };
   state.constraintName = undefined;
 }
 ccons(A) ::= UNIQUE onconf(R). {
-  A = { name: state.constraintName, constraint: { kind: "Unique", conflictClause: R } };
+  A = { name: state.constraintName, constraint: { kind: "Unique", conflictClause: R, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= CHECK LP expr(X) RP. {
-  A = { name: state.constraintName, constraint: { kind: "Check", expr: X } };
+  A = { name: state.constraintName, constraint: { kind: "Check", expr: X, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= REFERENCES nm(T) eidlist_opt(TA) refargs(R). {
@@ -357,30 +358,30 @@ ccons(A) ::= REFERENCES nm(T) eidlist_opt(TA) refargs(R). {
     name: state.constraintName,
     constraint: {
       kind: "ForeignKey",
-      clause: { tblName: T, columns: TA, args: R },
-      deferClause: undefined,
-    },
+      clause: { tblName: T, columns: TA, args: R, span: nodeSpan() },
+      deferClause: undefined, span: nodeSpan()
+    }, span: nodeSpan()
   };
   state.constraintName = undefined;
 }
 ccons(A) ::= defer_subclause(D). {
-  A = { name: undefined, constraint: { kind: "Defer", clause: D } };
+  A = { name: undefined, constraint: { kind: "Defer", clause: D, span: nodeSpan() }, span: nodeSpan() };
 }
 ccons(A) ::= COLLATE ids(C). {
-  A = { name: state.constraintName, constraint: { kind: "Collate", collationName: mkName(C) } };
+  A = { name: state.constraintName, constraint: { kind: "Collate", collationName: mkName(C), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= GENERATED ALWAYS AS generated(X). {
-  A = { name: state.constraintName, constraint: X };
+  A = { name: state.constraintName, constraint: X, span: nodeSpan() };
   state.constraintName = undefined;
 }
 ccons(A) ::= AS generated(X). {
-  A = { name: state.constraintName, constraint: X };
+  A = { name: state.constraintName, constraint: X, span: nodeSpan() };
   state.constraintName = undefined;
 }
 %type generated {ColumnConstraint}
-generated(X) ::= LP expr(E) RP.           { X = { kind: "Generated", expr: E, typ: undefined }; }
-generated(X) ::= LP expr(E) RP ID(TYPE).  { X = { kind: "Generated", expr: E, typ: mkId(TYPE) }; }
+generated(X) ::= LP expr(E) RP.           { X = { kind: "Generated", expr: E, typ: undefined, span: nodeSpan() }; }
+generated(X) ::= LP expr(E) RP ID(TYPE).  { X = { kind: "Generated", expr: E, typ: mkId(TYPE), span: nodeSpan() }; }
 
 // The optional AUTOINCREMENT keyword
 %type autoinc {boolean}
@@ -396,10 +397,10 @@ autoinc(X) ::= AUTOINCR.  { X = true;  }
 refargs(A) ::= .                       { A = []; }
 refargs(A) ::= refargs(A) refarg(Y).   { A.push(Y); }
 %type refarg {RefArg}
-refarg(A) ::= MATCH nm(X).              { A = { kind: "Match",    name: X };   }
-refarg(A) ::= ON INSERT refact(X).      { A = { kind: "OnInsert", action: X }; }
-refarg(A) ::= ON DELETE refact(X).      { A = { kind: "OnDelete", action: X }; }
-refarg(A) ::= ON UPDATE refact(X).      { A = { kind: "OnUpdate", action: X }; }
+refarg(A) ::= MATCH nm(X).              { A = { kind: "Match",    name: X, span: nodeSpan() };   }
+refarg(A) ::= ON INSERT refact(X).      { A = { kind: "OnInsert", action: X, span: nodeSpan() }; }
+refarg(A) ::= ON DELETE refact(X).      { A = { kind: "OnDelete", action: X, span: nodeSpan() }; }
+refarg(A) ::= ON UPDATE refact(X).      { A = { kind: "OnUpdate", action: X, span: nodeSpan() }; }
 %type refact {RefAct}
 refact(A) ::= SET NULL.                 { A = "SetNull"; }
 refact(A) ::= SET DEFAULT.              { A = "SetDefault"; }
@@ -408,10 +409,10 @@ refact(A) ::= RESTRICT.                 { A = "Restrict"; }
 refact(A) ::= NO ACTION.                { A = "NoAction"; }
 %type defer_subclause {DeferSubclause}
 defer_subclause(A) ::= NOT DEFERRABLE init_deferred_pred_opt(X). {
-  A = { deferrable: false, initDeferred: X };
+  A = { deferrable: false, initDeferred: X, span: nodeSpan() };
 }
 defer_subclause(A) ::= DEFERRABLE init_deferred_pred_opt(X). {
-  A = { deferrable: true,  initDeferred: X };
+  A = { deferrable: true,  initDeferred: X, span: nodeSpan() };
 }
 %type init_deferred_pred_opt {InitDeferredPred | undefined}
 init_deferred_pred_opt(A) ::= .                      { A = undefined; }
@@ -434,15 +435,15 @@ tcons(A) ::= CONSTRAINT nm(X). {
   A = undefined;
 }
 tcons(A) ::= PRIMARY KEY LP sortlist(X) autoinc(I) RP onconf(R). {
-  A = { name: state.constraintName, constraint: { kind: "PrimaryKey", columns: X, autoIncrement: I, conflictClause: R } };
+  A = { name: state.constraintName, constraint: { kind: "PrimaryKey", columns: X, autoIncrement: I, conflictClause: R, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 tcons(A) ::= UNIQUE LP sortlist(X) RP onconf(R). {
-  A = { name: state.constraintName, constraint: { kind: "Unique", columns: X, conflictClause: R } };
+  A = { name: state.constraintName, constraint: { kind: "Unique", columns: X, conflictClause: R, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 tcons(A) ::= CHECK LP expr(E) RP onconf(R). {
-  A = { name: state.constraintName, constraint: { kind: "Check", expr: E, conflictClause: R } };
+  A = { name: state.constraintName, constraint: { kind: "Check", expr: E, conflictClause: R, span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 tcons(A) ::= FOREIGN KEY LP eidlist(FA) RP
@@ -452,9 +453,9 @@ tcons(A) ::= FOREIGN KEY LP eidlist(FA) RP
     constraint: {
       kind: "ForeignKey",
       columns: FA,
-      clause: { tblName: T, columns: TA, args: R },
-      deferClause: D,
-    },
+      clause: { tblName: T, columns: TA, args: R, span: nodeSpan() },
+      deferClause: D, span: nodeSpan()
+    }, span: nodeSpan()
   };
   state.constraintName = undefined;
 }
@@ -479,7 +480,7 @@ resolvetype(A) ::= REPLACE.                  { A = "Replace"; }
 ////////////////////////// The DROP TABLE /////////////////////////////////////
 //
 cmd ::= DROP TABLE ifexists(E) fullname(X). {
-  state.stmt = { kind: "DropTable", ifExists: E, tblName: X };
+  state.stmt = { kind: "DropTable", ifExists: E, tblName: X, span: nodeSpan() };
 }
 %type ifexists {boolean}
 ifexists(A) ::= IF EXISTS.   { A = true;  }
@@ -489,16 +490,16 @@ ifexists(A) ::= .            { A = false; }
 //
 %ifndef SQLITE_OMIT_VIEW
 cmd ::= createkw temp(T) VIEW ifnotexists(E) fullname(Y) eidlist_opt(C) AS select(S). {
-  state.stmt = { kind: "CreateView", temporary: T, ifNotExists: E, viewName: Y, columns: C, select: S };
+  state.stmt = { kind: "CreateView", temporary: T, ifNotExists: E, viewName: Y, columns: C, select: S, span: nodeSpan() };
 }
 cmd ::= DROP VIEW ifexists(E) fullname(X). {
-  state.stmt = { kind: "DropView", ifExists: E, viewName: X };
+  state.stmt = { kind: "DropView", ifExists: E, viewName: X, span: nodeSpan() };
 }
 %endif  SQLITE_OMIT_VIEW
 
 //////////////////////// The SELECT statement /////////////////////////////////
 //
-cmd ::= select(X).  { state.stmt = { kind: "Select", select: X }; }
+cmd ::= select(X).  { state.stmt = { kind: "Select", select: X, span: nodeSpan() }; }
 
 %type select       {Select}
 %type selectnowith {SelectBody}
@@ -506,20 +507,20 @@ cmd ::= select(X).  { state.stmt = { kind: "Select", select: X }; }
 
 %ifndef SQLITE_OMIT_CTE
 select(A) ::= WITH wqlist(W) selectnowith(X) orderby_opt(Z) limit_opt(L). {
-  A = mkSelect({ recursive: false, ctes: W }, X, Z, L);
+  A = mkSelect({ recursive: false, ctes: W, span: nodeSpan() }, X, Z, L, nodeSpan());
 }
 select(A) ::= WITH RECURSIVE wqlist(W) selectnowith(X) orderby_opt(Z) limit_opt(L). {
-  A = mkSelect({ recursive: true,  ctes: W }, X, Z, L);
+  A = mkSelect({ recursive: true,  ctes: W, span: nodeSpan() }, X, Z, L, nodeSpan());
 }
 %endif /* SQLITE_OMIT_CTE */
 select(A) ::= selectnowith(X) orderby_opt(Z) limit_opt(L). {
-  A = mkSelect(undefined, X, Z, L);
+  A = mkSelect(undefined, X, Z, L, nodeSpan());
 }
 
-selectnowith(A) ::= oneselect(X). { A = { select: X, compounds: undefined }; }
+selectnowith(A) ::= oneselect(X). { A = { select: X, compounds: undefined, span: nodeSpan() }; }
 %ifndef SQLITE_OMIT_COMPOUND_SELECT
 selectnowith(A) ::= selectnowith(A) multiselect_op(Y) oneselect(Z). {
-  pushCompound(A, { operator: Y, select: Z });
+  pushCompound(A, { operator: Y, select: Z, span: nodeSpan() });
 }
 %type multiselect_op {CompoundOperator}
 multiselect_op(A) ::= UNION.             { A = "Union"; }
@@ -530,25 +531,25 @@ multiselect_op(A) ::= INTERSECT.         { A = "Intersect"; }
 
 oneselect(A) ::= SELECT distinct(D) selcollist(W) from(X) where_opt(Y)
                  groupby_opt(P) having_opt(Q). {
-  A = mkOneSelect(state, D, W, X, Y, P, Q, undefined);
+  A = mkOneSelect(state, D, W, X, Y, P, Q, undefined, nodeSpan());
 }
 %ifndef SQLITE_OMIT_WINDOWFUNC
 oneselect(A) ::= SELECT distinct(D) selcollist(W) from(X) where_opt(Y)
                  groupby_opt(P) having_opt(Q) window_clause(R). {
-  A = mkOneSelect(state, D, W, X, Y, P, Q, R);
+  A = mkOneSelect(state, D, W, X, Y, P, Q, R, nodeSpan());
 }
 %endif
 
 // Single row VALUES clause.
 //
 %type values {Expr[][]}
-oneselect(A) ::= values(X).             { A = { kind: "Values", values: X }; }
+oneselect(A) ::= values(X).             { A = { kind: "Values", values: X, span: nodeSpan() }; }
 values(A) ::= VALUES LP nexprlist(X) RP. { A = [X]; }
 
 // Multiple row VALUES clause.
 //
 %type mvalues {Expr[][]}
-oneselect(A) ::= mvalues(X).                    { A = { kind: "Values", values: X }; }
+oneselect(A) ::= mvalues(X).                    { A = { kind: "Values", values: X, span: nodeSpan() }; }
 mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP.  { valuesPush(state, A, Y); }
 mvalues(A) ::= mvalues(A) COMMA LP nexprlist(Y) RP. { valuesPush(state, A, Y); }
 
@@ -568,16 +569,16 @@ distinct(A) ::= .           { A = undefined;                 }
 %type sclp       {ResultColumn[]}
 sclp(A) ::= selcollist(A) COMMA.
 sclp(A) ::= .                                   { A = []; }
-selcollist(A) ::= sclp(A) expr(X) as(Y).        { A.push({ kind: "Expr", expr: X, alias: Y }); }
-selcollist(A) ::= sclp(A) STAR.                 { A.push({ kind: "Star" }); }
-selcollist(A) ::= sclp(A) nm(X) DOT STAR.       { A.push({ kind: "TableStar", table: X }); }
+selcollist(A) ::= sclp(A) expr(X) as(Y).        { A.push({ kind: "Expr", expr: X, alias: Y, span: nodeSpan() }); }
+selcollist(A) ::= sclp(A) STAR.                 { A.push({ kind: "Star", span: nodeSpan() }); }
+selcollist(A) ::= sclp(A) nm(X) DOT STAR.       { A.push({ kind: "TableStar", table: X, span: nodeSpan() }); }
 
 // An option "AS <id>" phrase that can follow one of the expressions that
 // define the result set, or one of the tables in the FROM clause.
 //
 %type as {As | undefined}
-as(X) ::= AS nm(Y).    { X = { kind: "As",     name: Y }; }
-as(X) ::= ids(Y).      { X = { kind: "Elided", name: mkName(Y) }; }
+as(X) ::= AS nm(Y).    { X = { kind: "As",     name: Y, span: nodeSpan() }; }
+as(X) ::= ids(Y).      { X = { kind: "Elided", name: mkName(Y), span: nodeSpan() }; }
 as(X) ::= .            { X = undefined; }
 
 %type seltablist {FromClauseMut}
@@ -587,7 +588,7 @@ as(X) ::= .            { X = undefined; }
 // A complete FROM clause.
 //
 from(A) ::= .                      { A = undefined; }
-from(A) ::= FROM seltablist(X).    { A = freezeFrom(X); }
+from(A) ::= FROM seltablist(X).    { A = freezeFrom(X, nodeSpan()); }
 
 // "seltablist" is a "Select Table List" - the content of the FROM clause
 // in a SELECT statement.  "stl_prefix" is a prefix of this list.
@@ -595,36 +596,36 @@ from(A) ::= FROM seltablist(X).    { A = freezeFrom(X); }
 stl_prefix(A) ::= seltablist(A) joinop(Y).    { A.pendingOp = Y; }
 stl_prefix(A) ::= .                           { A = emptyFromClause(); }
 seltablist(A) ::= stl_prefix(A) fullname(Y) as(Z) indexed_opt(I) on_using(N). {
-  fromClausePush(state, A, { kind: "Table", name: Y, alias: Z, indexed: I }, N);
+  fromClausePush(state, A, { kind: "Table", name: Y, alias: Z, indexed: I, span: nodeSpan() }, N);
 }
 seltablist(A) ::= stl_prefix(A) fullname(Y) LP exprlist(E) RP as(Z) on_using(N). {
-  fromClausePush(state, A, { kind: "TableCall", name: Y, args: E, alias: Z }, N);
+  fromClausePush(state, A, { kind: "TableCall", name: Y, args: E, alias: Z, span: nodeSpan() }, N);
 }
 %ifndef SQLITE_OMIT_SUBQUERY
 seltablist(A) ::= stl_prefix(A) LP select(S) RP as(Z) on_using(N). {
-  fromClausePush(state, A, { kind: "Select", select: S, alias: Z }, N);
+  fromClausePush(state, A, { kind: "Select", select: S, alias: Z, span: nodeSpan() }, N);
 }
 seltablist(A) ::= stl_prefix(A) LP seltablist(F) RP as(Z) on_using(N). {
-  fromClausePush(state, A, { kind: "Sub", from: freezeFrom(F), alias: Z }, N);
+  fromClausePush(state, A, { kind: "Sub", from: freezeFrom(F, nodeSpan()), alias: Z, span: nodeSpan() }, N);
 }
 %endif  SQLITE_OMIT_SUBQUERY
 
 %type fullname {QualifiedName}
-fullname(A) ::= nm(X).               { A = qnSingle(X); }
-fullname(A) ::= nm(X) DOT nm(Y).     { A = qnFull(X, Y); }
+fullname(A) ::= nm(X).               { A = qnSingle(X, nodeSpan()); }
+fullname(A) ::= nm(X) DOT nm(Y).     { A = qnFull(X, Y, nodeSpan()); }
 
 %type xfullname {QualifiedName}
-xfullname(A) ::= nm(X).                       { A = qnSingle(X); }
-xfullname(A) ::= nm(X) DOT nm(Y).             { A = qnFull(X, Y); }
-xfullname(A) ::= nm(X) AS nm(Z).              { A = qnAlias(X, Z); }
-xfullname(A) ::= nm(X) DOT nm(Y) AS nm(Z).    { A = qnXfull(X, Y, Z); }
+xfullname(A) ::= nm(X).                       { A = qnSingle(X, nodeSpan()); }
+xfullname(A) ::= nm(X) DOT nm(Y).             { A = qnFull(X, Y, nodeSpan()); }
+xfullname(A) ::= nm(X) AS nm(Z).              { A = qnAlias(X, Z, nodeSpan()); }
+xfullname(A) ::= nm(X) DOT nm(Y) AS nm(Z).    { A = qnXfull(X, Y, Z, nodeSpan()); }
 
 %type joinop {JoinOperator}
-joinop(X) ::= COMMA.                                { X = { kind: "Comma"                  }; }
-joinop(X) ::= JOIN.                                 { X = { kind: "TypedJoin", joinType: undefined }; }
-joinop(X) ::= JOIN_KW(A) JOIN.                      { X = joinOperatorFrom(state, A, undefined, undefined); }
-joinop(X) ::= JOIN_KW(A) nm(B) JOIN.                { X = joinOperatorFrom(state, A, B, undefined); }
-joinop(X) ::= JOIN_KW(A) nm(B) nm(C) JOIN.          { X = joinOperatorFrom(state, A, B, C); }
+joinop(X) ::= COMMA.                                { X = { kind: "Comma", span: nodeSpan()                  }; }
+joinop(X) ::= JOIN.                                 { X = { kind: "TypedJoin", joinType: undefined, span: nodeSpan() }; }
+joinop(X) ::= JOIN_KW(A) JOIN.                      { X = joinOperatorFrom(state, A, undefined, undefined, nodeSpan()); }
+joinop(X) ::= JOIN_KW(A) nm(B) JOIN.                { X = joinOperatorFrom(state, A, B, undefined, nodeSpan()); }
+joinop(X) ::= JOIN_KW(A) nm(B) nm(C) JOIN.          { X = joinOperatorFrom(state, A, B, C, nodeSpan()); }
 
 // There is a parsing ambiguity in an upsert statement that uses a
 // SELECT on the RHS of a the INSERT: the ON token may introduce either
@@ -633,16 +634,16 @@ joinop(X) ::= JOIN_KW(A) nm(B) nm(C) JOIN.          { X = joinOperatorFrom(state
 // the JOIN.
 //
 %type on_using {JoinConstraint | undefined}
-on_using(N) ::= ON expr(E).            { N = { kind: "On",    expr: E };    }
-on_using(N) ::= USING LP idlist(L) RP. { N = { kind: "Using", columns: L }; }
+on_using(N) ::= ON expr(E).            { N = { kind: "On",    expr: E, span: nodeSpan() };    }
+on_using(N) ::= USING LP idlist(L) RP. { N = { kind: "Using", columns: L, span: nodeSpan() }; }
 on_using(N) ::= .                 [OR] { N = undefined; }
 
 // INDEXED BY / NOT INDEXED.
 //
 %type indexed_opt {Indexed | undefined}
 indexed_opt(A) ::= .                  { A = undefined; }
-indexed_opt(A) ::= INDEXED BY nm(X).  { A = { kind: "IndexedBy", name: X }; }
-indexed_opt(A) ::= NOT INDEXED.       { A = { kind: "NotIndexed" }; }
+indexed_opt(A) ::= INDEXED BY nm(X).  { A = { kind: "IndexedBy", name: X, span: nodeSpan() }; }
+indexed_opt(A) ::= NOT INDEXED.       { A = { kind: "NotIndexed", span: nodeSpan() }; }
 
 %type orderby_opt {SortedColumn[] | undefined}
 %type sortlist    {SortedColumn[]}
@@ -650,10 +651,10 @@ indexed_opt(A) ::= NOT INDEXED.       { A = { kind: "NotIndexed" }; }
 orderby_opt(A) ::= .                          { A = undefined; }
 orderby_opt(A) ::= ORDER BY sortlist(X).      { A = X; }
 sortlist(A) ::= sortlist(A) COMMA expr(Y) sortorder(Z) nulls(X). {
-  A.push({ expr: Y, order: Z, nulls: X });
+  A.push({ expr: Y, order: Z, nulls: X, span: nodeSpan() });
 }
 sortlist(A) ::= expr(Y) sortorder(Z) nulls(X). {
-  A = [{ expr: Y, order: Z, nulls: X }];
+  A = [{ expr: Y, order: Z, nulls: X, span: nodeSpan() }];
 }
 
 %type sortorder {SortOrder | undefined}
@@ -676,9 +677,9 @@ having_opt(A) ::= HAVING expr(X).  { A = X;    }
 
 %type limit_opt {Limit | undefined}
 limit_opt(A) ::= .                             { A = undefined; }
-limit_opt(A) ::= LIMIT expr(X).                { A = { expr: X, offset: undefined }; }
-limit_opt(A) ::= LIMIT expr(X) OFFSET expr(Y). { A = { expr: X, offset: Y    }; }
-limit_opt(A) ::= LIMIT expr(X) COMMA expr(Y).  { A = { expr: Y, offset: X    }; }
+limit_opt(A) ::= LIMIT expr(X).                { A = { expr: X, offset: undefined, span: nodeSpan() }; }
+limit_opt(A) ::= LIMIT expr(X) OFFSET expr(Y). { A = { expr: X, offset: Y, span: nodeSpan()    }; }
+limit_opt(A) ::= LIMIT expr(X) COMMA expr(Y).  { A = { expr: Y, offset: X, span: nodeSpan()    }; }
 
 /////////////////////////// The DELETE statement /////////////////////////////
 //
@@ -689,7 +690,7 @@ cmd ::= with(C) DELETE FROM xfullname(X) indexed_opt(I) where_opt_ret(W)
     kind: "Delete",
     with: C, tblName: X, indexed: I,
     whereClause: W.where, returning: W.returning,
-    orderBy: O, limit: L,
+    orderBy: O, limit: L, span: nodeSpan()
   };
 }
 %else
@@ -698,21 +699,21 @@ cmd ::= with(C) DELETE FROM xfullname(X) indexed_opt(I) where_opt_ret(W). {
     kind: "Delete",
     with: C, tblName: X, indexed: I,
     whereClause: W.where, returning: W.returning,
-    orderBy: undefined, limit: undefined,
+    orderBy: undefined, limit: undefined, span: nodeSpan()
   };
 }
 %endif
 
 %type where_opt     {Expr | undefined}
-%type where_opt_ret {{where: Expr | undefined, returning: ResultColumn[] | undefined}}
+%type where_opt_ret {{where: Expr | undefined, returning: ResultColumn[] | undefined, span: Span}}
 
 where_opt(A) ::= .                                       { A = undefined; }
 where_opt(A) ::= WHERE expr(X).                          { A = X;    }
-where_opt_ret(A) ::= .                                   { A = { where: undefined, returning: undefined }; }
-where_opt_ret(A) ::= WHERE expr(X).                      { A = { where: X,    returning: undefined }; }
-where_opt_ret(A) ::= RETURNING selcollist(X).            { A = { where: undefined, returning: X    }; }
+where_opt_ret(A) ::= .                                   { A = { where: undefined, returning: undefined, span: nodeSpan() }; }
+where_opt_ret(A) ::= WHERE expr(X).                      { A = { where: X,    returning: undefined, span: nodeSpan() }; }
+where_opt_ret(A) ::= RETURNING selcollist(X).            { A = { where: undefined, returning: X, span: nodeSpan()    }; }
 where_opt_ret(A) ::= WHERE expr(X) RETURNING selcollist(Y).
-                                                         { A = { where: X,    returning: Y    }; }
+                                                         { A = { where: X,    returning: Y, span: nodeSpan()    }; }
 
 ////////////////////////// The UPDATE command ////////////////////////////////
 //
@@ -722,7 +723,7 @@ cmd ::= with(C) UPDATE orconf(R) xfullname(X) indexed_opt(I) SET setlist(Y) from
   state.stmt = {
     kind: "Update",
     with: C, orConflict: R, tblName: X, indexed: I, sets: Y, from: F,
-    whereClause: W.where, returning: W.returning, orderBy: O, limit: L,
+    whereClause: W.where, returning: W.returning, orderBy: O, limit: L, span: nodeSpan()
   };
 }
 %else
@@ -731,16 +732,16 @@ cmd ::= with(C) UPDATE orconf(R) xfullname(X) indexed_opt(I) SET setlist(Y) from
   state.stmt = {
     kind: "Update",
     with: C, orConflict: R, tblName: X, indexed: I, sets: Y, from: F,
-    whereClause: W.where, returning: W.returning, orderBy: undefined, limit: undefined,
+    whereClause: W.where, returning: W.returning, orderBy: undefined, limit: undefined, span: nodeSpan()
   };
 }
 %endif
 
 %type setlist {Set_[]}
-setlist(A) ::= setlist(A) COMMA nm(X) EQ expr(Y).           { A.push({ colNames: [X], expr: Y }); }
-setlist(A) ::= setlist(A) COMMA LP idlist(X) RP EQ expr(Y). { A.push({ colNames: X,   expr: Y }); }
-setlist(A) ::= nm(X) EQ expr(Y).                            { A = [{ colNames: [X], expr: Y }]; }
-setlist(A) ::= LP idlist(X) RP EQ expr(Y).                  { A = [{ colNames: X,   expr: Y }]; }
+setlist(A) ::= setlist(A) COMMA nm(X) EQ expr(Y).           { A.push({ colNames: [X], expr: Y, span: nodeSpan() }); }
+setlist(A) ::= setlist(A) COMMA LP idlist(X) RP EQ expr(Y). { A.push({ colNames: X,   expr: Y, span: nodeSpan() }); }
+setlist(A) ::= nm(X) EQ expr(Y).                            { A = [{ colNames: [X], expr: Y, span: nodeSpan() }]; }
+setlist(A) ::= LP idlist(X) RP EQ expr(Y).                  { A = [{ colNames: X,   expr: Y, span: nodeSpan() }]; }
 
 ////////////////////////// The INSERT command /////////////////////////////////
 //
@@ -748,45 +749,45 @@ cmd ::= with(W) insert_cmd(R) INTO xfullname(X) idlist_opt(F) select(S) upsert(U
   state.stmt = {
     kind: "Insert",
     with: W, orConflict: R, tblName: X, columns: F,
-    body: { kind: "Select", select: S, upsert: U.upsert },
-    returning: U.returning,
+    body: { kind: "Select", select: S, upsert: U.upsert, span: nodeSpan() },
+    returning: U.returning, span: nodeSpan()
   };
 }
 cmd ::= with(W) insert_cmd(R) INTO xfullname(X) idlist_opt(F) DEFAULT VALUES returning(Y). {
   state.stmt = {
     kind: "Insert",
     with: W, orConflict: R, tblName: X, columns: F,
-    body: { kind: "DefaultValues" },
-    returning: Y,
+    body: { kind: "DefaultValues", span: nodeSpan() },
+    returning: Y, span: nodeSpan()
   };
 }
 
-%type upsert {{upsert: Upsert | undefined, returning: ResultColumn[] | undefined}}
+%type upsert {{upsert: Upsert | undefined, returning: ResultColumn[] | undefined, span: Span}}
 
-upsert(A) ::= .                               { A = { upsert: undefined, returning: undefined }; }
-upsert(A) ::= RETURNING selcollist(X).        { A = { upsert: undefined, returning: X };    }
+upsert(A) ::= .                               { A = { upsert: undefined, returning: undefined, span: nodeSpan() }; }
+upsert(A) ::= RETURNING selcollist(X).        { A = { upsert: undefined, returning: X, span: nodeSpan() };    }
 upsert(A) ::= ON CONFLICT LP sortlist(T) RP where_opt(TW)
               DO UPDATE SET setlist(Z) where_opt(W) upsert(N). {
-  const idx = mkUpsertIndex(state, T, TW);
+  const idx = mkUpsertIndex(state, T, TW, nodeSpan());
   A = {
-    upsert: { index: idx, doClause: { kind: "Set", sets: Z, whereClause: W }, next: N.upsert },
-    returning: N.returning,
+    upsert: { index: idx, doClause: { kind: "Set", sets: Z, whereClause: W, span: nodeSpan() }, next: N.upsert, span: nodeSpan() },
+    returning: N.returning, span: nodeSpan()
   };
 }
 upsert(A) ::= ON CONFLICT LP sortlist(T) RP where_opt(TW) DO NOTHING upsert(N). {
-  const idx = mkUpsertIndex(state, T, TW);
+  const idx = mkUpsertIndex(state, T, TW, nodeSpan());
   A = {
-    upsert: { index: idx, doClause: { kind: "Nothing" }, next: N.upsert },
-    returning: N.returning,
+    upsert: { index: idx, doClause: { kind: "Nothing", span: nodeSpan() }, next: N.upsert, span: nodeSpan() },
+    returning: N.returning, span: nodeSpan()
   };
 }
 upsert(A) ::= ON CONFLICT DO NOTHING returning(R). {
-  A = { upsert: { index: undefined, doClause: { kind: "Nothing" }, next: undefined }, returning: R };
+  A = { upsert: { index: undefined, doClause: { kind: "Nothing", span: nodeSpan() }, next: undefined, span: nodeSpan() }, returning: R, span: nodeSpan() };
 }
 upsert(A) ::= ON CONFLICT DO UPDATE SET setlist(Z) where_opt(W) returning(R). {
   A = {
-    upsert: { index: undefined, doClause: { kind: "Set", sets: Z, whereClause: W }, next: undefined },
-    returning: R,
+    upsert: { index: undefined, doClause: { kind: "Set", sets: Z, whereClause: W, span: nodeSpan() }, next: undefined, span: nodeSpan() },
+    returning: R, span: nodeSpan()
   };
 }
 
@@ -817,127 +818,127 @@ idlist(A) ::= nm(Y).                  { A = [Y]; }
 %type term {Expr}
 
 expr(A) ::= term(A).
-expr(A) ::= LP expr(X) RP.        { A = mkParenthesized(X); }
-expr(A) ::= idj(X).               { A = mkIdExpr(X); }
-expr(A) ::= nm(X) DOT nm(Y).      { A = { kind: "Qualified",        table: X, column: Y };               }
+expr(A) ::= LP expr(X) RP.        { A = mkParenthesized(X, nodeSpan()); }
+expr(A) ::= idj(X).               { A = mkIdExpr(X, nodeSpan()); }
+expr(A) ::= nm(X) DOT nm(Y).      { A = { kind: "Qualified",        table: X, column: Y, span: nodeSpan() };               }
 expr(A) ::= nm(X) DOT nm(Y) DOT nm(Z). {
-  A = { kind: "DoublyQualified", schema: X, table: Y, column: Z };
+  A = { kind: "DoublyQualified", schema: X, table: Y, column: Z, span: nodeSpan() };
 }
-term(A) ::= NULL(X).              { A = { kind: "Literal", literal: mkNullLiteral(X)    }; }
-term(A) ::= BLOB(X).              { A = { kind: "Literal", literal: mkBlobLiteral(X)    }; }
-term(A) ::= STRING(X).            { A = { kind: "Literal", literal: mkStringLiteral(X)  }; }
-term(A) ::= FLOAT|INTEGER(X).     { A = { kind: "Literal", literal: mkNumericLiteral(X) }; }
+term(A) ::= NULL(X).              { A = { kind: "Literal", literal: mkNullLiteral(X), span: nodeSpan()    }; }
+term(A) ::= BLOB(X).              { A = { kind: "Literal", literal: mkBlobLiteral(X), span: nodeSpan()    }; }
+term(A) ::= STRING(X).            { A = { kind: "Literal", literal: mkStringLiteral(X), span: nodeSpan()  }; }
+term(A) ::= FLOAT|INTEGER(X).     { A = { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() }; }
 expr(A) ::= VARIABLE(X).          { A = mkVariableExpr(X); }
-expr(A) ::= expr(X) COLLATE ids(C). { A = mkCollate(X, C); }
+expr(A) ::= expr(X) COLLATE ids(C). { A = mkCollate(X, C, nodeSpan()); }
 %ifndef SQLITE_OMIT_CAST
-expr(A) ::= CAST LP expr(E) AS typetoken(T) RP. { A = mkCast(E, T); }
+expr(A) ::= CAST LP expr(E) AS typetoken(T) RP. { A = mkCast(E, T, nodeSpan()); }
 %endif  SQLITE_OMIT_CAST
 
 expr(A) ::= idj(X) LP distinct(D) exprlist(Y) RP. {
-  A = mkFunctionCall(state, X, D, Y, undefined, undefined);
+  A = mkFunctionCall(state, X, D, Y, undefined, undefined, nodeSpan());
 }
 expr(A) ::= idj(X) LP distinct(D) exprlist(Y) ORDER BY sortlist(O) RP. {
-  A = mkFunctionCall(state, X, D, Y, { kind: "SortList", columns: O }, undefined);
+  A = mkFunctionCall(state, X, D, Y, { kind: "SortList", columns: O, span: nodeSpan() }, undefined, nodeSpan());
 }
-expr(A) ::= idj(X) LP STAR RP. { A = mkFunctionCallStar(X, undefined); }
+expr(A) ::= idj(X) LP STAR RP. { A = mkFunctionCallStar(X, undefined, nodeSpan()); }
 
 %ifdef SQLITE_ENABLE_ORDERED_SET_AGGREGATES
 expr(A) ::= idj(X) LP distinct(D) exprlist(Y) RP WITHIN GROUP LP ORDER BY expr(E) RP. {
-  A = mkFunctionCall(state, X, D, Y, { kind: "WithinGroup", expr: E }, undefined);
+  A = mkFunctionCall(state, X, D, Y, { kind: "WithinGroup", expr: E, span: nodeSpan() }, undefined, nodeSpan());
 }
 %endif SQLITE_ENABLE_ORDERED_SET_AGGREGATES
 
 %ifndef SQLITE_OMIT_WINDOWFUNC
 expr(A) ::= idj(X) LP distinct(D) exprlist(Y) RP filter_over(Z). {
-  A = mkFunctionCall(state, X, D, Y, undefined, Z);
+  A = mkFunctionCall(state, X, D, Y, undefined, Z, nodeSpan());
 }
 expr(A) ::= idj(X) LP distinct(D) exprlist(Y) ORDER BY sortlist(O) RP filter_over(Z). {
-  A = mkFunctionCall(state, X, D, Y, { kind: "SortList", columns: O }, Z);
+  A = mkFunctionCall(state, X, D, Y, { kind: "SortList", columns: O, span: nodeSpan() }, Z, nodeSpan());
 }
-expr(A) ::= idj(X) LP STAR RP filter_over(Z). { A = mkFunctionCallStar(X, Z); }
+expr(A) ::= idj(X) LP STAR RP filter_over(Z). { A = mkFunctionCallStar(X, Z, nodeSpan()); }
 %ifdef SQLITE_ENABLE_ORDERED_SET_AGGREGATES
 expr(A) ::= idj(X) LP distinct(D) exprlist(Y) RP WITHIN GROUP LP ORDER BY expr(E) RP filter_over(Z). {
-  A = mkFunctionCall(state, X, D, Y, { kind: "WithinGroup", expr: E }, Z);
+  A = mkFunctionCall(state, X, D, Y, { kind: "WithinGroup", expr: E, span: nodeSpan() }, Z, nodeSpan());
 }
 %endif SQLITE_ENABLE_ORDERED_SET_AGGREGATES
 %endif SQLITE_OMIT_WINDOWFUNC
 
-term(A) ::= CTIME_KW(OP). { A = { kind: "Literal", literal: literalFromCtimeKw(OP) }; }
+term(A) ::= CTIME_KW(OP). { A = { kind: "Literal", literal: literalFromCtimeKw(OP), span: nodeSpan() }; }
 
 expr(A) ::= LP nexprlist(X) COMMA expr(Y) RP. {
-  A = { kind: "Parenthesized", exprs: [...X, Y] };
+  A = { kind: "Parenthesized", exprs: [...X, Y], span: nodeSpan() };
 }
 
-expr(A) ::= expr(X) AND(OP) expr(Y).    { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
-expr(A) ::= expr(X) OR(OP) expr(Y).     { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
+expr(A) ::= expr(X) AND(OP) expr(Y).    { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
+expr(A) ::= expr(X) OR(OP) expr(Y).     { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
 expr(A) ::= expr(X) LT|GT|GE|LE(OP) expr(Y).
-                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
-expr(A) ::= expr(X) EQ|NE(OP) expr(Y).  { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
+                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
+expr(A) ::= expr(X) EQ|NE(OP) expr(Y).  { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
 expr(A) ::= expr(X) BITAND|BITOR|LSHIFT|RSHIFT(OP) expr(Y).
-                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
+                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
 expr(A) ::= expr(X) PLUS|MINUS(OP) expr(Y).
-                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
+                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
 expr(A) ::= expr(X) STAR|SLASH|REM(OP) expr(Y).
-                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
-expr(A) ::= expr(X) CONCAT(OP) expr(Y). { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y); }
+                                        { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
+expr(A) ::= expr(X) CONCAT(OP) expr(Y). { A = mkBinary(X, binaryOperatorFromToken(OP.type, tokens), Y, nodeSpan()); }
 
-%type likeop {{ not: boolean, op: LikeOperator }}
-likeop(A) ::= LIKE_KW|MATCH(X).        { A = { not: false, op: likeOperatorFromToken(X, tokens) }; }
-likeop(A) ::= NOT LIKE_KW|MATCH(X).    { A = { not: true,  op: likeOperatorFromToken(X, tokens) }; }
+%type likeop {{ not: boolean, op: LikeOperator, span: Span }}
+likeop(A) ::= LIKE_KW|MATCH(X).        { A = { not: false, op: likeOperatorFromToken(X, tokens), span: nodeSpan() }; }
+likeop(A) ::= NOT LIKE_KW|MATCH(X).    { A = { not: true,  op: likeOperatorFromToken(X, tokens), span: nodeSpan() }; }
 expr(A) ::= expr(X) likeop(OP) expr(Y).  [LIKE_KW] {
-  A = mkLikeExpr(X, OP.not, OP.op, Y, undefined);
+  A = mkLikeExpr(X, OP.not, OP.op, Y, undefined, nodeSpan());
 }
 expr(A) ::= expr(X) likeop(OP) expr(Y) ESCAPE expr(E).  [LIKE_KW] {
-  A = mkLikeExpr(X, OP.not, OP.op, Y, E);
+  A = mkLikeExpr(X, OP.not, OP.op, Y, E, nodeSpan());
 }
 
-expr(A) ::= expr(X) ISNULL|NOTNULL(E).  { A = mkNotNullExpr(X, E.type, tokens); }
-expr(A) ::= expr(X) NOT NULL.           { A = { kind: "NotNull", expr: X }; }
+expr(A) ::= expr(X) ISNULL|NOTNULL(E).  { A = mkNotNullExpr(X, E.type, tokens, nodeSpan()); }
+expr(A) ::= expr(X) NOT NULL.           { A = { kind: "NotNull", expr: X, span: nodeSpan() }; }
 
 //    expr1 IS expr2       same as    expr1 IS NOT DISTINCT FROM expr2
 //    expr1 IS NOT expr2   same as    expr1 IS DISTINCT FROM expr2
 //
-expr(A) ::= expr(X) IS expr(Y).                 { A = mkBinary(X, "Is", Y); }
-expr(A) ::= expr(X) IS NOT expr(Y).             { A = mkBinary(X, "IsNot", Y); }
-expr(A) ::= expr(X) IS NOT DISTINCT FROM expr(Y). { A = mkBinary(X, "Is", Y); }
-expr(A) ::= expr(X) IS DISTINCT FROM expr(Y).     { A = mkBinary(X, "IsNot", Y); }
+expr(A) ::= expr(X) IS expr(Y).                 { A = mkBinary(X, "Is", Y, nodeSpan()); }
+expr(A) ::= expr(X) IS NOT expr(Y).             { A = mkBinary(X, "IsNot", Y, nodeSpan()); }
+expr(A) ::= expr(X) IS NOT DISTINCT FROM expr(Y). { A = mkBinary(X, "Is", Y, nodeSpan()); }
+expr(A) ::= expr(X) IS DISTINCT FROM expr(Y).     { A = mkBinary(X, "IsNot", Y, nodeSpan()); }
 
-expr(A) ::= NOT(B) expr(X).                    { A = mkUnary(unaryOperatorFromToken(B.type, tokens), X); }
-expr(A) ::= BITNOT(B) expr(X).                 { A = mkUnary(unaryOperatorFromToken(B.type, tokens), X); }
-expr(A) ::= PLUS|MINUS(B) expr(X). [BITNOT]    { A = mkUnary(unaryOperatorFromToken(B.type, tokens), X); }
+expr(A) ::= NOT(B) expr(X).                    { A = mkUnary(unaryOperatorFromToken(B.type, tokens), X, nodeSpan()); }
+expr(A) ::= BITNOT(B) expr(X).                 { A = mkUnary(unaryOperatorFromToken(B.type, tokens), X, nodeSpan()); }
+expr(A) ::= PLUS|MINUS(B) expr(X). [BITNOT]    { A = mkUnary(unaryOperatorFromToken(B.type, tokens), X, nodeSpan()); }
 
-expr(A) ::= expr(B) PTR(C) expr(D). { A = mkBinary(B, ptrOperatorFromToken(C), D); }
+expr(A) ::= expr(B) PTR(C) expr(D). { A = mkBinary(B, ptrOperatorFromToken(C), D, nodeSpan()); }
 
 %type between_op {boolean}
 between_op(A) ::= BETWEEN.          { A = false; }
 between_op(A) ::= NOT BETWEEN.      { A = true;  }
 expr(A) ::= expr(B) between_op(N) expr(X) AND expr(Y). [BETWEEN] {
-  A = mkBetween(B, N, X, Y);
+  A = mkBetween(B, N, X, Y, nodeSpan());
 }
 
 %ifndef SQLITE_OMIT_SUBQUERY
   %type in_op {boolean}
   in_op(A) ::= IN.       { A = false; }
   in_op(A) ::= NOT IN.   { A = true;  }
-  expr(A) ::= expr(X) in_op(N) LP exprlist(Y) RP. [IN] { A = mkInList(X, N, Y); }
-  expr(A) ::= LP select(X) RP.                         { A = mkSubquery(X); }
-  expr(A) ::= expr(X) in_op(N) LP select(Y) RP.  [IN]  { A = mkInSelect(X, N, Y); }
+  expr(A) ::= expr(X) in_op(N) LP exprlist(Y) RP. [IN] { A = mkInList(X, N, Y, nodeSpan()); }
+  expr(A) ::= LP select(X) RP.                         { A = mkSubquery(X, nodeSpan()); }
+  expr(A) ::= expr(X) in_op(N) LP select(Y) RP.  [IN]  { A = mkInSelect(X, N, Y, nodeSpan()); }
   expr(A) ::= expr(X) in_op(N) fullname(Y) paren_exprlist(E). [IN] {
-    A = mkInTable(X, N, Y, E);
+    A = mkInTable(X, N, Y, E, nodeSpan());
   }
-  expr(A) ::= EXISTS LP select(Y) RP.                  { A = mkExistsExpr(Y); }
+  expr(A) ::= EXISTS LP select(Y) RP.                  { A = mkExistsExpr(Y, nodeSpan()); }
 %endif SQLITE_OMIT_SUBQUERY
 
 /* CASE expressions */
 expr(A) ::= CASE case_operand(X) case_exprlist(Y) case_else(Z) END. {
-  A = { kind: "Case", base: X, whenThenPairs: Y, elseExpr: Z };
+  A = { kind: "Case", base: X, whenThenPairs: Y, elseExpr: Z, span: nodeSpan() };
 }
-%type case_exprlist {{when: Expr, then: Expr}[]}
+%type case_exprlist {{when: Expr, then: Expr, span: Span}[]}
 case_exprlist(A) ::= case_exprlist(A) WHEN expr(Y) THEN expr(Z). {
-  A.push({ when: Y, then: Z });
+  A.push({ when: Y, then: Z, span: nodeSpan() });
 }
 case_exprlist(A) ::= WHEN expr(Y) THEN expr(Z). {
-  A = [{ when: Y, then: Z }];
+  A = [{ when: Y, then: Z, span: nodeSpan() }];
 }
 %type case_else {Expr | undefined}
 case_else(A) ::= ELSE expr(X).         { A = X;    }
@@ -968,7 +969,7 @@ cmd ::= createkw uniqueflag(U) INDEX ifnotexists(NE) fullname(X)
         ON nm(Y) LP sortlist(Z) RP where_opt(W). {
   state.stmt = {
     kind: "CreateIndex",
-    unique: U, ifNotExists: NE, idxName: X, tblName: Y, columns: Z, whereClause: W,
+    unique: U, ifNotExists: NE, idxName: X, tblName: Y, columns: Z, whereClause: W, span: nodeSpan()
   };
 }
 
@@ -986,10 +987,10 @@ uniqueflag(A) ::= .         { A = false; }
 eidlist_opt(A) ::= .                                          { A = undefined; }
 eidlist_opt(A) ::= LP eidlist(X) RP.                          { A = X;    }
 eidlist(A) ::= eidlist(A) COMMA nm(Y) collate(C) sortorder(Z). {
-  A.push({ colName: Y, collationName: C, order: Z });
+  A.push({ colName: Y, collationName: C, order: Z, span: nodeSpan() });
 }
 eidlist(A) ::= nm(Y) collate(C) sortorder(Z). {
-  A = [{ colName: Y, collationName: C, order: Z }];
+  A = [{ colName: Y, collationName: C, order: Z, span: nodeSpan() }];
 }
 
 %type collate {Name | undefined}
@@ -999,15 +1000,15 @@ collate(C) ::= COLLATE ids(X).   { C = mkName(X); }
 ///////////////////////////// The DROP INDEX command /////////////////////////
 //
 cmd ::= DROP INDEX ifexists(E) fullname(X). {
-  state.stmt = { kind: "DropIndex", ifExists: E, idxName: X };
+  state.stmt = { kind: "DropIndex", ifExists: E, idxName: X, span: nodeSpan() };
 }
 
 ///////////////////////////// The VACUUM command /////////////////////////////
 //
 %if !SQLITE_OMIT_VACUUM && !SQLITE_OMIT_ATTACH
 %type vinto {Expr | undefined}
-cmd ::= VACUUM vinto(Y).                { state.stmt = { kind: "Vacuum", name: undefined, into: Y }; }
-cmd ::= VACUUM nm(X) vinto(Y).          { state.stmt = { kind: "Vacuum", name: X,    into: Y }; }
+cmd ::= VACUUM vinto(Y).                { state.stmt = { kind: "Vacuum", name: undefined, into: Y, span: nodeSpan() }; }
+cmd ::= VACUUM nm(X) vinto(Y).          { state.stmt = { kind: "Vacuum", name: X,    into: Y, span: nodeSpan() }; }
 vinto(A) ::= INTO expr(X).              { A = X;    }
 vinto(A) ::= .                          { A = undefined; }
 %endif
@@ -1015,28 +1016,28 @@ vinto(A) ::= .                          { A = undefined; }
 ///////////////////////////// The PRAGMA command /////////////////////////////
 //
 %ifndef SQLITE_OMIT_PRAGMA
-cmd ::= PRAGMA fullname(X).                  { state.stmt = { kind: "Pragma", name: X, body: undefined }; }
-cmd ::= PRAGMA fullname(X) EQ nmnum(Y).      { state.stmt = { kind: "Pragma", name: X, body: { kind: "Equals", value: Y } }; }
-cmd ::= PRAGMA fullname(X) LP nmnum(Y) RP.   { state.stmt = { kind: "Pragma", name: X, body: { kind: "Call",   value: Y } }; }
-cmd ::= PRAGMA fullname(X) EQ minus_num(Y).  { state.stmt = { kind: "Pragma", name: X, body: { kind: "Equals", value: Y } }; }
-cmd ::= PRAGMA fullname(X) LP minus_num(Y) RP. { state.stmt = { kind: "Pragma", name: X, body: { kind: "Call",   value: Y } }; }
+cmd ::= PRAGMA fullname(X).                  { state.stmt = { kind: "Pragma", name: X, body: undefined, span: nodeSpan() }; }
+cmd ::= PRAGMA fullname(X) EQ nmnum(Y).      { state.stmt = { kind: "Pragma", name: X, body: { kind: "Equals", value: Y, span: nodeSpan() }, span: nodeSpan() }; }
+cmd ::= PRAGMA fullname(X) LP nmnum(Y) RP.   { state.stmt = { kind: "Pragma", name: X, body: { kind: "Call",   value: Y, span: nodeSpan() }, span: nodeSpan() }; }
+cmd ::= PRAGMA fullname(X) EQ minus_num(Y).  { state.stmt = { kind: "Pragma", name: X, body: { kind: "Equals", value: Y, span: nodeSpan() }, span: nodeSpan() }; }
+cmd ::= PRAGMA fullname(X) LP minus_num(Y) RP. { state.stmt = { kind: "Pragma", name: X, body: { kind: "Call",   value: Y, span: nodeSpan() }, span: nodeSpan() }; }
 
 %type nmnum {Expr}
 nmnum(A) ::= plus_num(A).
-nmnum(A) ::= nm(X).      { A = { kind: "Name", name: X }; }
-nmnum(A) ::= ON(X).      { A = { kind: "Literal", literal: mkKeywordLiteral(X) }; }
-nmnum(A) ::= DELETE(X).  { A = { kind: "Literal", literal: mkKeywordLiteral(X) }; }
-nmnum(A) ::= DEFAULT(X). { A = { kind: "Literal", literal: mkKeywordLiteral(X) }; }
+nmnum(A) ::= nm(X).      { A = { kind: "Name", name: X, span: nodeSpan() }; }
+nmnum(A) ::= ON(X).      { A = { kind: "Literal", literal: mkKeywordLiteral(X), span: nodeSpan() }; }
+nmnum(A) ::= DELETE(X).  { A = { kind: "Literal", literal: mkKeywordLiteral(X), span: nodeSpan() }; }
+nmnum(A) ::= DEFAULT(X). { A = { kind: "Literal", literal: mkKeywordLiteral(X), span: nodeSpan() }; }
 %endif SQLITE_OMIT_PRAGMA
 %token_class number INTEGER|FLOAT.
 %type plus_num  {Expr}
 plus_num(A) ::= PLUS number(X). {
-  A = mkUnary("Positive", { kind: "Literal", literal: mkNumericLiteral(X) });
+  A = mkUnary("Positive", { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() }, nodeSpan());
 }
-plus_num(A) ::= number(X).      { A = { kind: "Literal", literal: mkNumericLiteral(X) }; }
+plus_num(A) ::= number(X).      { A = { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() }; }
 %type minus_num {Expr}
 minus_num(A) ::= MINUS number(X). {
-  A = mkUnary("Negative", { kind: "Literal", literal: mkNumericLiteral(X) });
+  A = mkUnary("Negative", { kind: "Literal", literal: mkNumericLiteral(X), span: nodeSpan() }, nodeSpan());
 }
 
 //////////////////////////// The CREATE TRIGGER command /////////////////////
@@ -1046,7 +1047,7 @@ cmd ::= createkw temp(T) TRIGGER ifnotexists(NOERR) fullname(B) trigger_time(C) 
   state.stmt = {
     kind: "CreateTrigger",
     temporary: T, ifNotExists: NOERR, triggerName: B, time: C, event: D, tblName: E,
-    forEachRow: X, whenClause: G, commands: S,
+    forEachRow: X, whenClause: G, commands: S, span: nodeSpan()
   };
 }
 
@@ -1057,10 +1058,10 @@ trigger_time(A) ::= INSTEAD OF. { A = "InsteadOf"; }
 trigger_time(A) ::= .           { A = undefined; }
 
 %type trigger_event {TriggerEvent}
-trigger_event(A) ::= DELETE.              { A = { kind: "Delete" }; }
-trigger_event(A) ::= INSERT.              { A = { kind: "Insert" }; }
-trigger_event(A) ::= UPDATE.              { A = { kind: "Update" }; }
-trigger_event(A) ::= UPDATE OF idlist(X). { A = { kind: "UpdateOf", columns: X }; }
+trigger_event(A) ::= DELETE.              { A = { kind: "Delete", span: nodeSpan() }; }
+trigger_event(A) ::= INSERT.              { A = { kind: "Insert", span: nodeSpan() }; }
+trigger_event(A) ::= UPDATE.              { A = { kind: "Update", span: nodeSpan() }; }
+trigger_event(A) ::= UPDATE OF idlist(X). { A = { kind: "UpdateOf", columns: X, span: nodeSpan() }; }
 
 %type foreach_clause {boolean}
 foreach_clause(A) ::= .             { A = false; }
@@ -1093,7 +1094,7 @@ tridxby ::= NOT INDEXED. {
 %type trigger_cmd {TriggerCmd}
 // UPDATE
 trigger_cmd(A) ::= UPDATE orconf(R) xfullname(X) tridxby SET setlist(Y) from(F) where_opt(Z). {
-  A = { kind: "Update", orConflict: R, tblName: X, sets: Y, from: F, whereClause: Z };
+  A = { kind: "Update", orConflict: R, tblName: X, sets: Y, from: F, whereClause: Z, span: nodeSpan() };
 }
 // INSERT
 trigger_cmd(A) ::= insert_cmd(R) INTO xfullname(X) idlist_opt(F) select(S) upsert(U). {
@@ -1102,22 +1103,22 @@ trigger_cmd(A) ::= insert_cmd(R) INTO xfullname(X) idlist_opt(F) select(S) upser
   }
   A = {
     kind: "Insert",
-    orConflict: R, tblName: X, colNames: F, select: S, upsert: U.upsert,
+    orConflict: R, tblName: X, colNames: F, select: S, upsert: U.upsert, span: nodeSpan()
   };
 }
 // DELETE
 trigger_cmd(A) ::= DELETE FROM xfullname(X) tridxby where_opt(Y). {
-  A = { kind: "Delete", tblName: X, whereClause: Y };
+  A = { kind: "Delete", tblName: X, whereClause: Y, span: nodeSpan() };
 }
 // SELECT
-trigger_cmd(A) ::= select(X). { A = { kind: "Select", select: X }; }
+trigger_cmd(A) ::= select(X). { A = { kind: "Select", select: X, span: nodeSpan() }; }
 
 // The special RAISE expression that may occur in trigger programs
 expr(A) ::= RAISE LP IGNORE RP. {
-  A = { kind: "Raise", resolve: "Ignore", message: undefined };
+  A = { kind: "Raise", resolve: "Ignore", message: undefined, span: nodeSpan() };
 }
 expr(A) ::= RAISE LP raisetype(T) COMMA expr(Z) RP. {
-  A = { kind: "Raise", resolve: T, message: Z };
+  A = { kind: "Raise", resolve: T, message: Z, span: nodeSpan() };
 }
 %endif  !SQLITE_OMIT_TRIGGER
 
@@ -1129,17 +1130,17 @@ raisetype(A) ::= FAIL.      { A = "Fail"; }
 ////////////////////////  DROP TRIGGER statement //////////////////////////////
 %ifndef SQLITE_OMIT_TRIGGER
 cmd ::= DROP TRIGGER ifexists(NOERR) fullname(X). {
-  state.stmt = { kind: "DropTrigger", ifExists: NOERR, triggerName: X };
+  state.stmt = { kind: "DropTrigger", ifExists: NOERR, triggerName: X, span: nodeSpan() };
 }
 %endif  !SQLITE_OMIT_TRIGGER
 
 //////////////////////// ATTACH DATABASE file AS name /////////////////////////
 %ifndef SQLITE_OMIT_ATTACH
 cmd ::= ATTACH database_kw_opt expr(F) AS expr(D) key_opt(K). {
-  state.stmt = { kind: "Attach", expr: F, dbName: D, key: K };
+  state.stmt = { kind: "Attach", expr: F, dbName: D, key: K, span: nodeSpan() };
 }
 cmd ::= DETACH database_kw_opt expr(D). {
-  state.stmt = { kind: "Detach", expr: D };
+  state.stmt = { kind: "Detach", expr: D, span: nodeSpan() };
 }
 
 %type key_opt {Expr | undefined}
@@ -1152,53 +1153,53 @@ database_kw_opt ::= .
 
 ////////////////////////// REINDEX collation //////////////////////////////////
 %ifndef SQLITE_OMIT_REINDEX
-cmd ::= REINDEX.                { state.stmt = { kind: "Reindex", objName: undefined }; }
-cmd ::= REINDEX fullname(X).    { state.stmt = { kind: "Reindex", objName: X    }; }
+cmd ::= REINDEX.                { state.stmt = { kind: "Reindex", objName: undefined, span: nodeSpan() }; }
+cmd ::= REINDEX fullname(X).    { state.stmt = { kind: "Reindex", objName: X, span: nodeSpan()    }; }
 %endif  SQLITE_OMIT_REINDEX
 
 /////////////////////////////////// ANALYZE ///////////////////////////////////
 %ifndef SQLITE_OMIT_ANALYZE
-cmd ::= ANALYZE.                { state.stmt = { kind: "Analyze", objName: undefined }; }
-cmd ::= ANALYZE fullname(X).    { state.stmt = { kind: "Analyze", objName: X    }; }
+cmd ::= ANALYZE.                { state.stmt = { kind: "Analyze", objName: undefined, span: nodeSpan() }; }
+cmd ::= ANALYZE fullname(X).    { state.stmt = { kind: "Analyze", objName: X, span: nodeSpan()    }; }
 %endif
 
 //////////////////////// ALTER TABLE table ... ////////////////////////////////
 %ifndef SQLITE_OMIT_ALTERTABLE
 %ifndef SQLITE_OMIT_VIRTUALTABLE
 cmd ::= ALTER TABLE fullname(X) RENAME TO nm(Z). {
-  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "RenameTo", name: Z } };
+  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "RenameTo", name: Z, span: nodeSpan() }, span: nodeSpan() };
 }
 cmd ::= ALTER TABLE fullname(X) ADD kwcolumn_opt nm(Y) typetoken(Z) carglist(C). {
-  const cd = mkColumnDefinition(Y, Z, C);
-  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "AddColumn", column: cd } };
+  const cd = mkColumnDefinition(Y, Z, C, nodeSpan());
+  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "AddColumn", column: cd, span: nodeSpan() }, span: nodeSpan() };
 }
 cmd ::= ALTER TABLE fullname(X) DROP kwcolumn_opt nm(Y). {
-  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "DropColumn", column: Y } };
+  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "DropColumn", column: Y, span: nodeSpan() }, span: nodeSpan() };
 }
 cmd ::= ALTER TABLE fullname(X) RENAME kwcolumn_opt nm(Y) TO nm(Z). {
-  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "RenameColumn", old: Y, new: Z } };
+  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "RenameColumn", old: Y, new: Z, span: nodeSpan() }, span: nodeSpan() };
 }
 cmd ::= ALTER TABLE fullname(X) DROP CONSTRAINT nm(Y). {
-  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "DropConstraint", name: Y } };
+  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "DropConstraint", name: Y, span: nodeSpan() }, span: nodeSpan() };
 }
 cmd ::= ALTER TABLE fullname(X) ALTER kwcolumn_opt nm(Y) DROP NOT NULL. {
-  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "DropColumnNotNull", column: Y } };
+  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "DropColumnNotNull", column: Y, span: nodeSpan() }, span: nodeSpan() };
 }
 cmd ::= ALTER TABLE fullname(X) ALTER kwcolumn_opt nm(Y) SET NOT NULL onconf(R). {
-  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "SetColumnNotNull", column: Y, onConflict: R } };
+  state.stmt = { kind: "AlterTable", tblName: X, body: { kind: "SetColumnNotNull", column: Y, onConflict: R, span: nodeSpan() }, span: nodeSpan() };
 }
 cmd ::= ALTER TABLE fullname(X) ADD CONSTRAINT nm(Z) CHECK LP expr(E) RP onconf(R). {
-  const constraint: TableConstraint = { kind: "Check", expr: E, conflictClause: R };
+  const constraint: TableConstraint = { kind: "Check", expr: E, conflictClause: R, span: nodeSpan() };
   state.stmt = {
     kind: "AlterTable", tblName: X,
-    body: { kind: "AddConstraint", constraint: { name: Z, constraint } },
+    body: { kind: "AddConstraint", constraint: { name: Z, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()
   };
 }
 cmd ::= ALTER TABLE fullname(X) ADD CHECK LP expr(E) RP onconf(R). {
-  const constraint: TableConstraint = { kind: "Check", expr: E, conflictClause: R };
+  const constraint: TableConstraint = { kind: "Check", expr: E, conflictClause: R, span: nodeSpan() };
   state.stmt = {
     kind: "AlterTable", tblName: X,
-    body: { kind: "AddConstraint", constraint: { name: undefined, constraint } },
+    body: { kind: "AddConstraint", constraint: { name: undefined, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()
   };
 }
 
@@ -1216,7 +1217,7 @@ cmd ::= create_vtab(X) LP vtabarglist RP.  {
     state.vtabArgCurrent = "";
   }
   if( X.kind==="CreateVirtualTable" ){
-    state.stmt = { ...X, args: state.vtabArgs.slice() };
+    state.stmt = { ...X, args: state.vtabArgs.slice(), span: nodeSpan() };
   }else{
     state.stmt = X;
   }
@@ -1224,7 +1225,7 @@ cmd ::= create_vtab(X) LP vtabarglist RP.  {
 }
 %type create_vtab {Stmt}
 create_vtab(A) ::= createkw VIRTUAL TABLE ifnotexists(E) fullname(X) USING nm(Z). {
-  A = { kind: "CreateVirtualTable", ifNotExists: E, tblName: X, moduleName: Z, args: undefined };
+  A = { kind: "CreateVirtualTable", ifNotExists: E, tblName: X, moduleName: Z, args: undefined, span: nodeSpan() };
 }
 vtabarglist ::= vtabarg.
 vtabarglist ::= vtabarglist COMMA vtabarg.
@@ -1248,15 +1249,15 @@ anylist ::= anylist ANY.
 
 with(A) ::= .                           { A = undefined; }
 %ifndef SQLITE_OMIT_CTE
-with(A) ::= WITH wqlist(W).             { A = { recursive: false, ctes: W }; }
-with(A) ::= WITH RECURSIVE wqlist(W).   { A = { recursive: true,  ctes: W }; }
+with(A) ::= WITH wqlist(W).             { A = { recursive: false, ctes: W, span: nodeSpan() }; }
+with(A) ::= WITH RECURSIVE wqlist(W).   { A = { recursive: true,  ctes: W, span: nodeSpan() }; }
 
 %type wqas {Materialized}
 wqas(A)   ::= AS.                  { A = "Any"; }
 wqas(A)   ::= AS MATERIALIZED.     { A = "Yes"; }
 wqas(A)   ::= AS NOT MATERIALIZED. { A = "No"; }
 wqitem(A) ::= nm(X) eidlist_opt(Y) wqas(M) LP select(Z) RP. {
-  A = { tblName: X, columns: Y, materialized: M, select: Z };
+  A = { tblName: X, columns: Y, materialized: M, select: Z, span: nodeSpan() };
 }
 wqlist(A) ::= wqitem(X).                  { A = [X]; }
 wqlist(A) ::= wqlist(A) COMMA wqitem(X).  { addCte(state, A, X); }
@@ -1275,7 +1276,7 @@ windowdefn_list(A) ::= windowdefn(Z).                         { A = [Z]; }
 windowdefn_list(A) ::= windowdefn_list(A) COMMA windowdefn(Z). { A.push(Z); }
 
 %type windowdefn {WindowDef}
-windowdefn(A) ::= nm(X) AS LP window(Y) RP. { A = { name: X, window: Y }; }
+windowdefn(A) ::= nm(X) AS LP window(Y) RP. { A = { name: X, window: Y, span: nodeSpan() }; }
 
 %type window {Window}
 
@@ -1289,30 +1290,30 @@ windowdefn(A) ::= nm(X) AS LP window(Y) RP. { A = { name: X, window: Y }; }
 %type frame_bound_e {FrameBound}
 
 window(A) ::= PARTITION BY nexprlist(X) orderby_opt(Y) frame_opt(Z). {
-  A = { base: undefined, partitionBy: X,    orderBy: Y,    frameClause: Z };
+  A = { base: undefined, partitionBy: X,    orderBy: Y,    frameClause: Z, span: nodeSpan() };
 }
 window(A) ::= nm(W) PARTITION BY nexprlist(X) orderby_opt(Y) frame_opt(Z). {
-  A = { base: W,    partitionBy: X,    orderBy: Y,    frameClause: Z };
+  A = { base: W,    partitionBy: X,    orderBy: Y,    frameClause: Z, span: nodeSpan() };
 }
 window(A) ::= ORDER BY sortlist(Y) frame_opt(Z). {
-  A = { base: undefined, partitionBy: undefined, orderBy: Y,    frameClause: Z };
+  A = { base: undefined, partitionBy: undefined, orderBy: Y,    frameClause: Z, span: nodeSpan() };
 }
 window(A) ::= nm(W) ORDER BY sortlist(Y) frame_opt(Z). {
-  A = { base: W,    partitionBy: undefined, orderBy: Y,    frameClause: Z };
+  A = { base: W,    partitionBy: undefined, orderBy: Y,    frameClause: Z, span: nodeSpan() };
 }
 window(A) ::= frame_opt(Z). {
-  A = { base: undefined, partitionBy: undefined, orderBy: undefined, frameClause: Z };
+  A = { base: undefined, partitionBy: undefined, orderBy: undefined, frameClause: Z, span: nodeSpan() };
 }
 window(A) ::= nm(W) frame_opt(Z). {
-  A = { base: W,    partitionBy: undefined, orderBy: undefined, frameClause: Z };
+  A = { base: W,    partitionBy: undefined, orderBy: undefined, frameClause: Z, span: nodeSpan() };
 }
 
 frame_opt(A) ::= .                             { A = undefined; }
 frame_opt(A) ::= range_or_rows(X) frame_bound_s(Y) frame_exclude_opt(Z). {
-  A = { mode: X, start: Y, end: undefined, exclude: Z };
+  A = { mode: X, start: Y, end: undefined, exclude: Z, span: nodeSpan() };
 }
 frame_opt(A) ::= range_or_rows(X) BETWEEN frame_bound_s(Y) AND frame_bound_e(Z) frame_exclude_opt(W). {
-  A = { mode: X, start: Y, end: Z,    exclude: W };
+  A = { mode: X, start: Y, end: Z,    exclude: W, span: nodeSpan() };
 }
 
 range_or_rows(A) ::= RANGE.   { A = "Range"; }
@@ -1320,13 +1321,13 @@ range_or_rows(A) ::= ROWS.    { A = "Rows"; }
 range_or_rows(A) ::= GROUPS.  { A = "Groups"; }
 
 frame_bound_s(A) ::= frame_bound(X).       { A = X; }
-frame_bound_s(A) ::= UNBOUNDED PRECEDING.  { A = { kind: "UnboundedPreceding" }; }
+frame_bound_s(A) ::= UNBOUNDED PRECEDING.  { A = { kind: "UnboundedPreceding", span: nodeSpan() }; }
 frame_bound_e(A) ::= frame_bound(X).       { A = X; }
-frame_bound_e(A) ::= UNBOUNDED FOLLOWING.  { A = { kind: "UnboundedFollowing" }; }
+frame_bound_e(A) ::= UNBOUNDED FOLLOWING.  { A = { kind: "UnboundedFollowing", span: nodeSpan() }; }
 
-frame_bound(A) ::= expr(X) PRECEDING.     { A = { kind: "Preceding",  expr: X }; }
-frame_bound(A) ::= CURRENT ROW.           { A = { kind: "CurrentRow" }; }
-frame_bound(A) ::= expr(X) FOLLOWING.     { A = { kind: "Following",  expr: X }; }
+frame_bound(A) ::= expr(X) PRECEDING.     { A = { kind: "Preceding",  expr: X, span: nodeSpan() }; }
+frame_bound(A) ::= CURRENT ROW.           { A = { kind: "CurrentRow", span: nodeSpan() }; }
+frame_bound(A) ::= expr(X) FOLLOWING.     { A = { kind: "Following",  expr: X, span: nodeSpan() }; }
 
 %type frame_exclude_opt {FrameExclude | undefined}
 frame_exclude_opt(A) ::= .                         { A = undefined; }
@@ -1341,12 +1342,12 @@ frame_exclude(A) ::= TIES.        { A = "Ties"; }
 %type window_clause {WindowDef[]}
 window_clause(A) ::= WINDOW windowdefn_list(B). { A = B; }
 
-filter_over(A) ::= filter_clause(F) over_clause(O). { A = { filterClause: F,    overClause: O    }; }
-filter_over(A) ::= over_clause(O).                  { A = { filterClause: undefined, overClause: O    }; }
-filter_over(A) ::= filter_clause(F).                { A = { filterClause: F,    overClause: undefined }; }
+filter_over(A) ::= filter_clause(F) over_clause(O). { A = { filterClause: F,    overClause: O, span: nodeSpan()    }; }
+filter_over(A) ::= over_clause(O).                  { A = { filterClause: undefined, overClause: O, span: nodeSpan()    }; }
+filter_over(A) ::= filter_clause(F).                { A = { filterClause: F,    overClause: undefined, span: nodeSpan() }; }
 
-over_clause(A) ::= OVER LP window(Z) RP.  { A = { kind: "Window", window: Z }; }
-over_clause(A) ::= OVER nm(Z).            { A = { kind: "Name",   name:   Z }; }
+over_clause(A) ::= OVER LP window(Z) RP.  { A = { kind: "Window", window: Z, span: nodeSpan() }; }
+over_clause(A) ::= OVER nm(Z).            { A = { kind: "Name",   name:   Z, span: nodeSpan() }; }
 
 filter_clause(A) ::= FILTER LP WHERE expr(X) RP.  { A = X; }
 %endif /* SQLITE_OMIT_WINDOWFUNC */
@@ -1388,7 +1389,7 @@ term(A) ::= QNUMBER(X). {
       length: X.span.length,
     });
   }
-  A = { kind: "Literal", literal: { kind: "Numeric", value: dq.text, span: X.span } };
+  A = { kind: "Literal", literal: { kind: "Numeric", value: dq.text, span: X.span }, span: nodeSpan() };
 }
 
 /*
