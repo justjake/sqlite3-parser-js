@@ -53,6 +53,8 @@ help:
 	  '  make generated/<ver>/parser.dev.json    # full dump for debugging' \
 	  '  make generated/<ver>/keywords.dev.json  # full keyword list' \
 	  '  make generated/<ver>/index.ts           # per-version TS wrapper' \
+	  '  make generated/<ver>/parse-ts.dev.json  # lemon run on parse-ts.y' \
+	  '  make generated/<ver>/lemonpar2.ts       # emitted AST-building parser' \
 	  '  make build/lemon-<ver>                  # patched lemon compiled' \
 	  '  make build/mkkeywordhash-<ver>          # patched mkkeywordhash' \
 	  '' \
@@ -146,6 +148,40 @@ generated/%/parser.dev.json: \
 	    -J$(ROOT)/$@ \
 	    parse.y
 	bun scripts/validate-json.ts parser.dev $@
+	bun run fmt $@
+
+# ---------------------------------------------------------------------------
+# parse-ts.y — the TypeScript-targeted grammar fork.  Same lemon binary,
+# different .y input; the JSON output has TypeScript action bodies in the
+# `rules[].actionC` strings (lemon doesn't validate action-body syntax,
+# it just copies braces-delimited blocks into its output).  The JSON is
+# NOT validated against the parser.dev schema because the top-level
+# `preamble`/`syntaxError` etc. contain TypeScript instead of C.
+# ---------------------------------------------------------------------------
+generated/%/parse-ts.dev.json: \
+    build/lemon-% \
+    generated/%/lemon/parse-ts.y \
+    vendor/upstream/%/tool/lempar.c
+	@mkdir -p generated/$*/lemon
+	cp vendor/upstream/$*/tool/lempar.c generated/$*/lemon/lempar.c
+	cd generated/$*/lemon && \
+	  $(ROOT)/build/lemon-$* \
+	    -DSQLITE_ENABLE_ORDERED_SET_AGGREGATES \
+	    -J$(ROOT)/$@ \
+	    parse-ts.y
+	bun run fmt $@
+
+# ---------------------------------------------------------------------------
+# lemonpar2.ts — the emitted TypeScript parser.  scripts/emit-ts-parser.ts
+# reads parse-ts.dev.json and produces a self-contained module that bundles
+# the LALR tables, per-rule reducer (with actionC text reversed from
+# yymsp[...] back to the grammar's alias names), and a driver on top of
+# src/lempar.ts.
+# ---------------------------------------------------------------------------
+generated/%/lemonpar2.ts: \
+    scripts/emit-ts-parser.ts \
+    generated/%/parse-ts.dev.json
+	bun scripts/emit-ts-parser.ts $*
 	bun run fmt $@
 
 # mkkeywordhash has no input files — its keyword table is compiled in.
@@ -253,3 +289,16 @@ check-semantic-actions:
 	@for v in $(GEN_VERSIONS); do \
 	  bun scripts/semantic-snapshot.ts --check $$v || exit $$?; \
 	done
+
+# ---------------------------------------------------------------------------
+# Benchmark comparison: build the liteparser submodule to WebAssembly so
+# `bun run bench:compare` has a peer SQLite parser to measure against.
+# Requires emscripten (emcc on PATH); see vendor/liteparser/WASM.md.
+# The output is a self-contained .mjs (SINGLE_FILE=1 in liteparser's own
+# Makefile) — we just delegate.
+# ---------------------------------------------------------------------------
+vendor/liteparser/wasm/dist/liteparser.mjs:
+	$(MAKE) -C vendor/liteparser wasm
+
+.PHONY: liteparser-wasm
+liteparser-wasm: vendor/liteparser/wasm/dist/liteparser.mjs

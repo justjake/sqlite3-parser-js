@@ -17,7 +17,7 @@
 import {
   TokenizeOpts,
   tokenizerModuleForGrammar,
-  TokenSpan,
+  Token as LexerToken,
   type CreateTokenizerOptions,
   type KeywordDefs,
 } from "./tokenize.ts"
@@ -120,7 +120,7 @@ export interface ParserModule {
   /** Parse a SQL string into a CST. */
   parse(source: string): ParseResult
   /** Tokenize a SQL string into a stream of tokens. */
-  tokenize(source: string, opts?: TokenizeOpts): IterableIterator<TokenSpan>
+  tokenize(source: string, opts?: TokenizeOpts): IterableIterator<LexerToken>
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
   tokenName(code: TokenId): string | undefined
   /** Create the underlying LALR state machine engine, used by {@link parse}. */
@@ -328,11 +328,11 @@ export function parserModuleForGrammar(args: {
         kind: "token",
         type: tok.type,
         name: symbols[tok.type]?.name ?? String(tok.type),
-        text: sql.slice(tok.start, tok.start + tok.length),
-        start: tok.start,
-        length: tok.length,
-        line: tok.line,
-        col: tok.col,
+        text: tok.text,
+        start: tok.span.offset,
+        length: tok.span.length,
+        line: tok.span.line,
+        col: tok.span.col,
         synthetic: false,
       }
 

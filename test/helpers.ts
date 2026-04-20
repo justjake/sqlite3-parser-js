@@ -51,7 +51,7 @@ export function lex(sql: string, opts?: TokenizeOpts, t: Tokenizer = tk): LexedT
   for (const tok of t.tokenize(sql, opts)) {
     out.push({
       name: t.tokenName(tok.type) ?? String(tok.type),
-      text: sql.slice(tok.start, tok.start + tok.length),
+      text: tok.text,
     })
   }
   return out
@@ -84,7 +84,7 @@ export function tokenTriples(sql: string, t: Tokenizer = tk): TokenTriple[] {
     out.push({
       tokenName: name,
       rawTokenName: name,
-      lexeme: sql.slice(tok.start, tok.start + tok.length),
+      lexeme: tok.text,
     })
   }
   return out
@@ -94,7 +94,7 @@ export function tokenTriples(sql: string, t: Tokenizer = tk): TokenTriple[] {
 export function firstIllegalLexeme(sql: string, t: Tokenizer = tk): string | null {
   for (const tok of t.tokenize(sql)) {
     const name = t.tokenName(tok.type)
-    if (name === "ILLEGAL") return sql.slice(tok.start, tok.start + tok.length)
+    if (name === "ILLEGAL") return tok.text
   }
   return null
 }

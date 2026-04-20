@@ -46,10 +46,14 @@
     "typecheck": "tsc --noEmit",
     "vendor": "bun scripts/vendor.ts",
     "diff:ast": "bun scripts/diff-ast.ts",
-    "coverage:ast": "bun scripts/ast-coverage.ts"
+    "coverage:ast": "bun scripts/ast-coverage.ts",
+    "bench": "bun scripts/bench.ts",
+    "bench:compare": "make liteparser-wasm && bun scripts/bench-compare.ts"
   },
   "devDependencies": {
+    "@appland/sql-parser": "^1.5.1",
     "@types/bun": "latest",
+    "mitata": "^1.0.34",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
     "typebox": "1.1.28",

@@ -135,14 +135,32 @@ export interface TokenizeOpts {
 }
 
 /** One token as yielded by `tokenizer.tokenize()`. */
-export interface TokenSpan {
-  readonly type: TokenId
-  readonly start: number
+/**
+ * Source range shared by tokens and AST nodes.  Byte `offset` into the
+ * input string plus the token's `length`, plus the 1-based `line` and
+ * `col` of the first character.  LF breaks lines; CR is treated as a
+ * regular column char (matches `lineColAt` in src/enhanceError.ts).
+ */
+export interface Span {
+  readonly offset: number
   readonly length: number
-  /** 1-based line number of the token's first character (LF breaks lines). */
   readonly line: number
-  /** 1-based column of the token's first character, in UTF-16 code units. */
   readonly col: number
+}
+
+/**
+ * One token produced by the tokenizer.  `type` is the numeric TK_*
+ * code Lemon assigned; `text` is the source slice the token covers;
+ * `span` is the position/length of that slice in the input.
+ *
+ * Note: this type intentionally does NOT include the `synthetic` flag
+ * {@link TokenNode} carries — runtime Tokens fed to the parser are
+ * always real lexer output.  The CST wrapper adds that flag if needed.
+ */
+export interface Token {
+  readonly type: TokenId
+  readonly text: string
+  readonly span: Span
 }
 
 /**
@@ -195,7 +213,7 @@ export interface Tokenizer {
   /** TokenId → display name (`"SELECT"`, `"ID"`, …) or undefined. */
   tokenName(code: TokenId): string | undefined
   /** Iterate tokens in `sql`.  Trivia is skipped by default. */
-  tokenize(sql: string, opts?: TokenizeOpts): IterableIterator<TokenSpan>
+  tokenize(sql: string, opts?: TokenizeOpts): IterableIterator<Token>
   /** @internal — exposed for tests. */
   _nextToken(z: string, p: number, outType: [TokenId]): number
   /** @internal — exposed for tests. */
@@ -1040,7 +1058,7 @@ export function tokenizerModuleForGrammar(
   function* tokenize(
     sql: string,
     { skipTrivia = true }: TokenizeOpts = {},
-  ): IterableIterator<TokenSpan> {
+  ): IterableIterator<Token> {
     const out: [TokenId] = [0 as TokenId]
     let i = 0
     let line = 1
@@ -1050,11 +1068,11 @@ export function tokenizerModuleForGrammar(
       const n = nextToken(sql, i, out)
       const type = out[0]
       if (n === 0) break // CC_NUL at offset i
-      const start = i
+      const offset = i
       const tokenLine = line
       const tokenCol = col
-      const end = start + n
-      for (let k = start; k < end; k++) {
+      const end = offset + n
+      for (let k = offset; k < end; k++) {
         if (sql.charCodeAt(k) === 10) {
           line++
           col = 1
@@ -1064,7 +1082,11 @@ export function tokenizerModuleForGrammar(
       }
       i = end
       if (skipTrivia && (type === T.SPACE || type === T.COMMENT)) continue
-      yield { type, start, length: n, line: tokenLine, col: tokenCol }
+      yield {
+        type,
+        text: sql.slice(offset, end),
+        span: { offset, length: n, line: tokenLine, col: tokenCol },
+      }
     }
   }
 

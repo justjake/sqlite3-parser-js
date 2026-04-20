@@ -81,11 +81,8 @@ const mod = withOptions(
 for (const tok of mod.tokenize(sql, { skipTrivia: !cli.includeTrivia })) {
   console.log(
     JSON.stringify({
-      type: tok.type,
+      ...tok,
       name: mod.tokenName(tok.type) ?? null,
-      start: tok.start,
-      length: tok.length,
-      text: sql.slice(tok.start, tok.start + tok.length),
     }),
   )
 }
