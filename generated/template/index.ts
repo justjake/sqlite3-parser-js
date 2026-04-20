@@ -11,10 +11,10 @@
  * with non-default options (flag set, digit separator, …).
  */
 
-import { parserModuleForGrammar } from "../../src/parser"
+import { ParserModule, parserModuleForGrammar } from "../../src/parser"
 import type { KeywordDefs } from "../../src/tokenize"
-import type { ParserDefs } from "../../src/lempar"
-import * as parserDefs from "./reduce"
+import * as _parserDefs from "./reduce"
+import * as _keywordDefs from './keywords.prod.json' with { type: 'json' }
 
 export type * from "../../src/parser"
 export type * from "../../src/tokenize"
@@ -22,50 +22,52 @@ export type * from "../../src/lempar"
 export type * from "../../src/enhanceError"
 export type * from "../../src/ast/nodes"
 
-
 /** The specific SQLite version this bundle was generated from. */
 export const SQLITE_VERSION = "__VERSION__" as const
 
-/**
- * Lemon LALR(1) parser definition.
- * Part of a complete grammar definition.
- */
-export const PARSER_DEFS = parserDefs as unknown as ParserDefs
-
-/**
- * SQLite keywords recognized by the tokenizer.
- * Part of a complete grammar definition.
- */
-export const KEYWORD_DEFS = keywordDefs as unknown as KeywordDefs
-
-const mod = parserModuleForGrammar({
-  SQLITE_VERSION,
-  PARSER_DEFS,
-  KEYWORD_DEFS,
-  options: {},
-})
+const mod = parserModuleForGrammar(_parserDefs, _keywordDefs as KeywordDefs, {})
 
 /**
  * Parse a SQL string into a CST.
  */
-export const parse = mod.parse
+export const parse: ParserModule["parse"] = mod.parse
 
 /**
  * Tokenize a SQL string into a stream of tokens.
  */
-export const tokenize = mod.tokenize
+export const tokenize: ParserModule["tokenize"] = mod.tokenize
 
 /**
  * Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`.
  */
-export const tokenName = mod.tokenName
+export const tokenName: ParserModule["tokenName"] = mod.tokenName
 
 /**
  * Create the underlying LALR state machine engine, used by {@link parse}.
  */
-export const createEngine = mod.createEngine
+export const createEngine: ParserModule["createEngine"] = mod.createEngine
 
 /**
  * Create a new parser module with the given options.
  */
-export const withOptions = mod.withOptions
+export const withOptions: ParserModule["withOptions"] = mod.withOptions
+
+/**
+ * Reducer function that evaluates parse rules to build the AST.
+ */
+export const reduce: ParserModule["reduce"] = mod.reduce
+
+/**
+ * Create a new parse state for use with {@link createEngine}.
+ */
+export const createState: ParserModule["createState"] = mod.createState
+
+/**
+ * Lemon LALR(1) parser definition.
+ */
+export const parserDefs: ParserModule["parserDefs"] = mod.parserDefs
+
+/**
+ * SQLite keywords recognized by the tokenizer.
+ */
+export const keywordDefs: ParserModule["keywordDefs"] = mod.keywordDefs
