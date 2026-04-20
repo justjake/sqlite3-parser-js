@@ -29,7 +29,7 @@ export interface ParseError {
   /** The offending token. */
   readonly span: Span
   /** Additional information about the error, optionally pointing to another location. */
-  readonly hints: readonly {
+  readonly hints?: readonly {
     readonly message: string
     readonly span: Span | undefined
   }[]
@@ -39,49 +39,62 @@ export interface ParseError {
   toString(): string
 }
 
-export class ParserError implements ParseError {
-  /** Error message. */
-  readonly message: string
-  /** The offending token. */
-  readonly span: Span
-  /** Additional information about the error, optionally pointing to another location. */
-  readonly hints: readonly {
-    readonly message: string
-    readonly span: Span | undefined
-  }[]
+export type CreateParserErrorArgs = Pick<ParseError,  "message" | "span" | "hints"> & { sql: string, filename?: string }
 
+export function formatParseError(args: CreateParserErrorArgs): string {
+  const { sql, filename, message, span, hints } = args
+    const loc = filename ? `At ${filename}:${span.line}:${span.col}:` : `At ${span.line}:${span.col}:`
+    const parts: string[] = [
+      message,
+      "",
+      loc,
+      renderCodeBlock({ sql, span, indent: "  " }),
+    ]
+
+    hints?.forEach(({ message, span }, i) => {
+      if (i === 0 || span) {
+        parts.push("")
+      }
+      parts.push(`  hint: ${message}`)
+      if (span) {
+        parts.push(renderCodeBlock({ sql, span, indent: "    ", contextBefore: 0, contextAfter: 0 }))
+      }
+    })
+
+    return parts.join("\n")
+}
+
+class ParserError implements ParseError {
+  #args: CreateParserErrorArgs
   #formatted: string | undefined
-  #sql: string
 
-  constructor(
-    sql: string,
-    partial: Pick<ParseError, "message" | "span" | "hints">,
-  ) {
-    this.message = partial.message
-    this.span = partial.span
-    this.hints = partial.hints
-    this.#sql = sql
+  constructor(args: CreateParserErrorArgs) {
+    this.#args = args
+  }
+
+  get message(): string {
+    return this.#args.message
+  }
+
+  get span(): Span {
+    return this.#args.span
+  }
+
+  get hints(): readonly { message: string, span: Span | undefined }[] | undefined {
+    return this.#args.hints
   }
 
   format(): string {
-    if (this.#formatted) return this.#formatted
-    const codeBlock = renderCodeBlock(this.#sql, this.span)
-    const indentedCodeBlock = this.codeBlock.replace(/^/gm, "  ")
-    const parts: string[] = [
-      `${this.canonical} at line ${this.line}, col ${this.col}`,
-      "",
-      indentedCodeBlock,
-    ]
-    if (this.hint) parts.push("", this.hint)
-    if (this.expected.length > 0) {
-      parts.push(`expected: ${formatExpectedList(this.expected)}`)
-    }
-    return parts.join("\n")
+    return this.#formatted ??= formatParseError(this.#args)
   }
 
   toString(): string {
-    return this.getMessage()
+    return this.format()
   }
+}
+
+export function createParserError(args: CreateParserErrorArgs): ParserError {
+  return new ParserError(args)
 }
 
 export interface EnhanceParseErrorOptions {
@@ -330,7 +343,11 @@ export interface RenderCodeBlockOptions {
   contextBefore?: number
   /** Number of source lines to show after the error line. Default 1. */
   contextAfter?: number
+  /** Indentation to apply to the code block. */
+  indent?: string
 }
+
+const CODE_BLOCK_SEPARATOR = '│ '
 
 /**
  * Render a Roc-style source snippet for a half-open range `[start, end)`:
@@ -343,13 +360,17 @@ export interface RenderCodeBlockOptions {
  * sits on the first line of the range; multi-line spans are clipped to
  * end-of-line.  An empty range (`start === end`) renders as a single `^`.
  */
-export function renderCodeBlock(
+export function renderCodeBlock(args: {
   sql: string,
   span: Span,
-  opts: RenderCodeBlockOptions = {},
-): string {
-  const contextBefore = Math.max(0, opts.contextBefore ?? 1)
-  const contextAfter = Math.max(0, opts.contextAfter ?? 1)
+  contextBefore?: number,
+  contextAfter?: number,
+  indent?: string,
+}): string {
+  const { sql, span, } = args
+  const contextBefore = Math.max(0, args.contextBefore ?? 1)
+  const contextAfter = Math.max(0, args.contextAfter ?? 1)
+  const indent = args.indent ?? ""
 
   const start = Math.max(0, Math.min(span.offset, sql.length))
   const end = Math.max(start, Math.min(span.offset + span.length, sql.length))
@@ -366,14 +387,14 @@ export function renderCodeBlock(
   const out: string[] = []
   for (let ln = firstLine; ln <= lastLine; ln++) {
     const text = lines[ln - 1] ?? ""
-    out.push(`${String(ln).padStart(gutterWidth, " ")}│ ${text}`)
+    out.push(`${indent}${String(ln).padStart(gutterWidth, " ")}${CODE_BLOCK_SEPARATOR}${text}`)
   }
 
   const firstLineText = lines[startLoc.line - 1] ?? ""
   const underlineEndCol = endLoc.line === startLoc.line ? endLoc.col : firstLineText.length + 1
   const caretCount = Math.max(1, underlineEndCol - startLoc.col)
-  const pad = " ".repeat(gutterWidth) + "│ " + " ".repeat(startLoc.col - 1)
-  out.push(pad + "^".repeat(caretCount))
+  const pad = " ".repeat(gutterWidth) + CODE_BLOCK_SEPARATOR + " ".repeat(startLoc.col - 1)
+  out.push(indent + pad + "^".repeat(caretCount))
 
   return out.join("\n")
 }
