@@ -196,17 +196,12 @@ generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.
 # ---------------------------------------------------------------------------
 # Per-version TS wrapper.  Codegened from scripts/emit-version-modules.ts.
 # Depends on the prod dumps so the wrapper's JSON imports resolve.
-# One invocation of the script emits both index.ts and stable-keys.ts, but
-# keep the targets split so GNU Make 3.81 can still parse this file.
 # ---------------------------------------------------------------------------
 VERSION_INDEX_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts)
-VERSION_STABLE_KEYS_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/stable-keys.ts)
 
-# Static pattern rules — `%` is constrained to GEN_VERSIONS so the
+# Static pattern rule — `%` is constrained to GEN_VERSIONS so the
 # pattern can't accidentally match `generated/template/index.ts` (a
-# checked-in source file that's an INPUT to these rules).  GNU Make 3.81
-# lacks grouped targets (`&:`), so the recipe is duplicated; the second
-# invocation is a no-op because both outputs were written the first time.
+# checked-in source file that's an INPUT to this rule).
 $(VERSION_INDEX_TS): generated/%/index.ts: \
     scripts/emit-version-modules.ts \
     generated/template/index.ts \
@@ -214,24 +209,9 @@ $(VERSION_INDEX_TS): generated/%/index.ts: \
     generated/%/keywords.prod.json
 	bun scripts/emit-version-modules.ts version \
 	  $* \
-	  generated/$*/parser.prod.json \
 	  generated/template/index.ts \
-	  generated/$*/index.ts \
-	  generated/$*/stable-keys.ts
-	bun run fmt generated/$*/index.ts generated/$*/stable-keys.ts
-
-$(VERSION_STABLE_KEYS_TS): generated/%/stable-keys.ts: \
-    scripts/emit-version-modules.ts \
-    generated/template/index.ts \
-    generated/%/parser.prod.json \
-    generated/%/keywords.prod.json
-	bun scripts/emit-version-modules.ts version \
-	  $* \
-	  generated/$*/parser.prod.json \
-	  generated/template/index.ts \
-	  generated/$*/index.ts \
-	  generated/$*/stable-keys.ts
-	bun run fmt generated/$*/index.ts generated/$*/stable-keys.ts
+	  generated/$*/index.ts
+	bun run fmt generated/$*/index.ts
 
 # ---------------------------------------------------------------------------
 # The cross-version `current` re-export.  Sourced from
