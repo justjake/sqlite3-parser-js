@@ -43,17 +43,14 @@
 //
 %syntax_error {
   if( yymajor===0 /* TK_EOF */ ){
-    state.errors.push({ message: "incomplete input", span: yyminor.span });
+    state.errors.push(mkAstParseError("incomplete input", yyminor.span));
   }else{
-    state.errors.push({
-      message: `near "${yyminor.text}": syntax error`,
-      span: yyminor.span,
-    });
+    state.errors.push(mkAstParseError(`near "${yyminor.text}": syntax error`, yyminor.span));
   }
 }
 
 %stack_overflow {
-  state.errors.push({ message: "parser stack overflow", span: { offset: 0, length: 0, line: 0, col: 0 } });
+  state.errors.push(mkAstParseError("parser stack overflow", { offset: 0, length: 0, line: 0, col: 0 }));
 }
 
 // The name of the generated procedure that implements the parser is as follows:
@@ -175,11 +172,11 @@ table_option(A) ::= WITHOUT nm(X). {
   if( X.name.toLowerCase()==="rowid" ){
     A = 0x00000080 /* TabFlags.WithoutRowid */;
   }else{
-    state.errors.push({
-      message: `unknown table option: ${X.name}`,
-      span: X.span,
-      hints: [{ message: "expected WITHOUT ROWID", span: undefined }],
-    });
+    state.errors.push(mkAstParseError(
+      `unknown table option: ${X.name}`,
+      X.span,
+      { message: "expected WITHOUT ROWID", span: undefined },
+    ));
     A = 0;
   }
 }
@@ -187,14 +184,11 @@ table_option(A) ::= nm(X). {
   if( X.name.toLowerCase()==="strict" ){
     A = 0x00010000 /* TabFlags.Strict */;
   }else{
-    state.errors.push({
-      message: `unknown table option: ${X.name}`,
-      span: X.span,
-      hints: [{
-        message: "expected STRICT or WITHOUT ROWID",
-        span: undefined,
-      }],
-    });
+    state.errors.push(mkAstParseError(
+      `unknown table option: ${X.name}`,
+      X.span,
+      { message: "expected STRICT or WITHOUT ROWID", span: undefined },
+    ));
     A = 0;
   }
 }
@@ -1089,16 +1083,16 @@ trigger_cmd_list(A) ::= trigger_cmd(X) SEMI.                     { A = [X];  }
 //
 tridxby ::= .
 tridxby ::= INDEXED BY nm. {
-  state.errors.push({
-    message: "the INDEXED BY clause is not allowed on UPDATE or DELETE statements within triggers",
-    span: nodeSpan(),
-  });
+  state.errors.push(mkAstParseError(
+    "the INDEXED BY clause is not allowed on UPDATE or DELETE statements within triggers",
+    nodeSpan(),
+  ));
 }
 tridxby ::= NOT INDEXED. {
-  state.errors.push({
-    message: "the NOT INDEXED clause is not allowed on UPDATE or DELETE statements within triggers",
-    span: nodeSpan(),
-  });
+  state.errors.push(mkAstParseError(
+    "the NOT INDEXED clause is not allowed on UPDATE or DELETE statements within triggers",
+    nodeSpan(),
+  ));
 }
 
 %type trigger_cmd {TriggerCmd}
@@ -1109,10 +1103,10 @@ trigger_cmd(A) ::= UPDATE orconf(R) xfullname(X) tridxby SET setlist(Y) from(F) 
 // INSERT
 trigger_cmd(A) ::= insert_cmd(R) INTO xfullname(X) idlist_opt(F) select(S) upsert(U). {
   if( U.returning ){
-    state.errors.push({
-      message: "cannot use RETURNING in a trigger",
-      span: U.returningSpan ?? nodeSpan(),
-    });
+    state.errors.push(mkAstParseError(
+      "cannot use RETURNING in a trigger",
+      U.returningSpan ?? nodeSpan(),
+    ));
   }
   A = {
     kind: "InsertTriggerCmd",
@@ -1396,14 +1390,14 @@ term(A) ::= QNUMBER(X). {
   // placement surfaces as a parse error.
   const dq = sqlite3DequoteNumber(X.text, { digitSeparator: state.digitSeparator });
   if( dq.error ){
-    state.errors.push({
-      message: dq.error,
-      span: X.span,
-      hints: [{
+    state.errors.push(mkAstParseError(
+      dq.error,
+      X.span,
+      {
         message: "digit separators must sit between two digits (e.g. 1_000, 0xDE_AD)",
         span: undefined,
-      }],
-    });
+      },
+    ));
   }
   A = { kind: "LiteralExpr", literal: { kind: "NumericLiteral", value: dq.text, span: X.span }, span: nodeSpan() };
 }
