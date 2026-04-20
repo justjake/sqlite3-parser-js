@@ -16,6 +16,7 @@
 
 import type { ParserDefs, SymbolId } from "./lempar.ts"
 import type { TokenNode } from "./parser.ts"
+import { Span } from "./tokenize.ts";
 
 // ---------------------------------------------------------------------------
 // Public types.
@@ -23,77 +24,48 @@ import type { TokenNode } from "./parser.ts"
 
 /** A single parse error. */
 export interface ParseError {
+  /** Error message. */
+  readonly message: string
   /** The offending token. */
-  readonly token: TokenNode
-  /**
-   * SQLite-style canonical summary, e.g. `near "FROM": syntax error`,
-   * `incomplete input`, or `unrecognized token: "'oops"`.
-   */
-  readonly canonical: string
-  /** Short human-readable hint for the likely cause. */
-  readonly hint: string
-  /** 1-based line of the failing token (or end of input). */
-  readonly line: number
-  /** 1-based column. */
-  readonly col: number
-  /** Half-open source range `[start, end)` of the failing token. */
-  readonly range: readonly [number, number]
-  /** A visual representation of the code block containing the error. */
-  readonly codeBlock: string
-  /**
-   * Display names of terminals that would have been accepted at the
-   * failure point.  Empty when the grammar state is not available
-   * (e.g. tokenizer-level failures).
-   */
-  readonly expected: readonly string[]
-  /**
-   * Get a fully formatted error message combining all the error details with a
-   * rendered code block.
-   */
-  getMessage(): string
+  readonly span: Span
+  /** Additional information about the error, optionally pointing to another location. */
+  readonly hints: readonly {
+    readonly message: string
+    readonly span: Span | undefined
+  }[]
+  /** Format all erorr details with a code block. */
+  format(): string
+  /** Alias of {@link format} */
+  toString(): string
 }
 
-export class ParseErrorImpl implements ParseError {
-  readonly token: TokenNode
-  readonly canonical: string
-  readonly hint: string
-  readonly expected: readonly string[]
+export class ParserError implements ParseError {
+  /** Error message. */
+  readonly message: string
+  /** The offending token. */
+  readonly span: Span
+  /** Additional information about the error, optionally pointing to another location. */
+  readonly hints: readonly {
+    readonly message: string
+    readonly span: Span | undefined
+  }[]
 
-  #range: readonly [number, number] | undefined
-  #codeBlock: string | undefined
+  #formatted: string | undefined
   #sql: string
 
   constructor(
-    args: Pick<ParseError, "token" | "canonical" | "hint" | "expected"> & {
-      sql: string
-      range?: readonly [number, number]
-    },
+    sql: string,
+    partial: Pick<ParseError, "message" | "span" | "hints">,
   ) {
-    this.token = args.token
-    this.canonical = args.canonical
-    this.hint = args.hint
-    this.expected = args.expected
-    this.#sql = args.sql
-    if (args.range) this.#range = args.range
+    this.message = partial.message
+    this.span = partial.span
+    this.hints = partial.hints
+    this.#sql = sql
   }
 
-  get line(): number {
-    return this.token.line
-  }
-
-  get col(): number {
-    return this.token.col
-  }
-
-  get range(): readonly [number, number] {
-    return (this.#range ??= tokenRange(this.#sql, this.token))
-  }
-
-  get codeBlock(): string {
-    return (this.#codeBlock ??= renderCodeBlock(this.#sql, this.range))
-  }
-
-  getMessage(): string {
+  format(): string {
+    if (this.#formatted) return this.#formatted
+    const codeBlock = renderCodeBlock(this.#sql, this.span)
     const indentedCodeBlock = this.codeBlock.replace(/^/gm, "  ")
     const parts: string[] = [
       `${this.canonical} at line ${this.line}, col ${this.col}`,
@@ -339,10 +311,10 @@ function tokenRange(sql: string, token: TokenNode): [number, number] {
 // Location.
 // ---------------------------------------------------------------------------
 
-export function lineColAt(sql: string, offset: number): { line: number; col: number } {
-  let line = 1
-  let col = 1
-  for (let i = 0; i < offset; i++) {
+export function lineColAt(sql: string, offset: number, startAt: Span | undefined): { line: number; col: number } {
+  let line = startAt?.line ?? 1
+  let col = startAt?.col ?? 1
+  for (let i = startAt?.offset ?? 0; i < offset; i++) {
     if (sql.charCodeAt(i) === 10) {
       line++
       col = 1
@@ -355,7 +327,9 @@ export function lineColAt(sql: string, offset: number): { line: number; col: num
 
 export interface RenderCodeBlockOptions {
   /** Number of source lines to show before the error line. Default 1. */
-  readonly contextBefore?: number
+  contextBefore?: number
+  /** Number of source lines to show after the error line. Default 1. */
+  contextAfter?: number
 }
 
 /**
@@ -371,18 +345,22 @@ export interface RenderCodeBlockOptions {
  */
 export function renderCodeBlock(
   sql: string,
-  range: readonly [number, number],
+  span: Span,
   opts: RenderCodeBlockOptions = {},
 ): string {
   const contextBefore = Math.max(0, opts.contextBefore ?? 1)
-  const start = Math.max(0, Math.min(range[0], sql.length))
-  const end = Math.max(start, Math.min(range[1], sql.length))
+  const contextAfter = Math.max(0, opts.contextAfter ?? 1)
 
-  const startLoc = lineColAt(sql, start)
-  const endLoc = lineColAt(sql, end)
+  const start = Math.max(0, Math.min(span.offset, sql.length))
+  const end = Math.max(start, Math.min(span.offset + span.length, sql.length))
+  const sqlLines = sql.split("\n")
+
+  const startLoc = span.offset === start ? span: lineColAt(sql, start, undefined)
+  const endLoc = lineColAt(sql, end, span)
+
   const firstLine = Math.max(1, startLoc.line - contextBefore)
-  const lastLine = startLoc.line
-  const gutterWidth = String(lastLine).length
+  const lastLine = Math.min(sqlLines.length, endLoc.line + contextAfter)
+  const gutterWidth = Math.max(2, String(lastLine).length)
 
   const lines = sql.split("\n")
   const out: string[] = []

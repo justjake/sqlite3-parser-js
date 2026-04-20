@@ -48,7 +48,8 @@ import type {
   With,
   Cmd,
 } from "./nodes.ts"
-import type { AstParseError, ParseState, Span, Token } from "./parseState.ts"
+import type { Span, Token } from "../tokenize.ts"
+import type { AstParseError, ParseState } from "./parseState.ts"
 
 // ---- Error constructors ----------------------------------------------
 

@@ -111,7 +111,8 @@ import type {
   WindowDef,
   With,
 } from "../../src/ast/nodes.ts"
-import type { AstParseError, ParseState, Span, Token } from "../../src/ast/parseState.ts"
+import type { Span, Token } from "../../src/tokenize.ts"
+import type { AstParseError, ParseState } from "../../src/ast/parseState.ts"
 import type { FromClauseMut } from "../../src/ast/parseActions.ts"
 import {
   mkName,

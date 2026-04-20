@@ -12,7 +12,8 @@
 // (`import { parse } from 'sqlite3-parser'`) in real code.  This CLI
 // is pinned to whatever `vendor/manifest.json` marks as `current`.
 
-import { parse, formatCst, withOptions, type ParseError } from "../generated/current.ts"
+import { parse, formatCst, withOptions } from "../generated/current.ts"
+import type { ParseError } from "../src/enhanceError.ts"
 
 interface CliOptions {
   pretty: boolean

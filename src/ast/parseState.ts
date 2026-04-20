@@ -10,8 +10,6 @@
 import type { Span, Token } from "../tokenize.ts"
 import type { Cmd, ExplainKind, Name, Stmt } from "./nodes.ts"
 
-export type { Span, Token }
-
 /**
  * One semantic diagnostic produced by an AST-building parser action.
  *
