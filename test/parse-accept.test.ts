@@ -1,5 +1,5 @@
 // Parser acceptance suite — broad coverage that each major statement
-// shape reaches `status: "accepted"` with the expected top-level
+// shape reaches `status: "ok"` with the expected top-level
 // structure.  Complements `parse-errors.test.ts` (error paths) and
 // `printer.test.ts` (exact AST shapes for a few canonical queries).
 //
@@ -16,13 +16,13 @@ import type { AstNode, CmdList } from "../src/ast/nodes.ts"
 
 function accepted(sql: string): CmdList {
   const r = parse(sql)
-  if (r.status !== "accepted") {
+  if (r.status !== "ok") {
     throw new Error(
       `expected parse success for ${JSON.stringify(sql)}, got: ` +
         r.errors.map((e) => e.message).join("; "),
     )
   }
-  return r.ast
+  return r.root
 }
 
 /** The single top-level `type` of the Nth command in a CmdList. */

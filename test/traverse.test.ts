@@ -11,13 +11,13 @@ import type { AstNode } from "../src/ast/nodes.ts"
 
 function ast(sql: string): AstNode {
   const r = parse(sql)
-  if (r.status !== "accepted") {
+  if (r.status !== "ok") {
     throw new Error(
       `expected parse success for ${JSON.stringify(sql)}, got: ` +
         r.errors.map((e) => e.message).join("; "),
     )
   }
-  return r.ast
+  return r.root
 }
 
 /** Record an `enter:Type` / `leave:Type` trace — useful for order assertions. */

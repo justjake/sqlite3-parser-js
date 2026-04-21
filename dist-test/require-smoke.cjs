@@ -7,20 +7,20 @@
   const tokenNames = Array.from(mod.tokenize("SELECT 1_000"), (token) => mod.tokenName(token.type))
   const traverseKinds = []
 
-  if (result.status !== "accepted") {
-    throw new Error(`expected accepted parse result, got ${result.status}`)
+  if (result.status !== "ok") {
+    throw new Error(`expected ok parse result, got ${result.status}`)
   }
 
-  traversePkg.traverse(result.ast, {
+  traversePkg.traverse(result.root, {
     enter(node) {
-      traverseKinds.push(node.kind)
+      traverseKinds.push(node.type)
     },
   })
 
   process.stdout.write(
     JSON.stringify({
       status: result.status,
-      astKind: result.ast.kind,
+      astKind: result.root.type,
       version: pkg.SQLITE_VERSION,
       withOptions: typeof pkg.withOptions === "function",
       createEngine: typeof pkg.createEngine === "function",

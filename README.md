@@ -13,8 +13,8 @@ Parse SQLite query syntax.
 import { parse } from "sqlite3-parser"
 
 const result = parse("SELECT id, name FROM users WHERE active = 1")
-if (result.status === "accepted") {
-  const cmd = result.ast.cmds[0] // CmdList → first top-level command
+if (result.status === "ok") {
+  const cmd = result.root.cmds[0] // CmdList → first top-level command
   // cmd.type === "SelectStmt", walk from here
 }
 ```
@@ -23,15 +23,29 @@ if (result.status === "accepted") {
 
 ```ts
 type ParseResult =
-  | { status: "accepted"; ast: CmdList }
-  | { status: "errored"; errors: readonly ParseError[] }
+  | { status: "ok"; root: CmdList; errors?: undefined }
+  | { status: "error"; errors: readonly ParseError[] }
 ```
+
+For "give me exactly one statement" use cases (e.g. a `prepare_v2`-style call site, or walking a multi-statement script a statement at a time), reach for `parseStatement`:
+
+```ts
+import { parseStatement } from "sqlite3-parser"
+
+const r = parseStatement("SELECT 1; SELECT 2", { allowTrailing: true })
+if (r.status === "ok") {
+  r.root // Stmt
+  r.tail // 10 — source.slice(tail) is what's left to parse
+}
+```
+
+By default `parseStatement` rejects trailing content (second statements, garbage tokens) and returns `{status: "error"}`; pass `allowTrailing: true` to stop at the first statement and report the tail offset instead.
 
 Errors come back as structured diagnostics. Call `err.format()` for a ready-to-print block with source code and carets, or read the fields directly:
 
 ```ts
 const result = parse("SELECT FROM users")
-if (result.status === "errored") {
+if (result.status === "error") {
   for (const err of result.errors) {
     console.error(err.format())
     // — or access fields:
@@ -58,10 +72,10 @@ if (result.status === "errored") {
 import { parse } from "sqlite3-parser"
 import { traverse } from "sqlite3-parser/traverse"
 
-const { ast } = parse("SELECT a, b FROM t")
+const { root } = parse("SELECT a, b FROM t")
 const tables: string[] = []
 
-traverse(ast, {
+traverse(root, {
   // All args optional.
   enter(node, parent) {
     // Runs before `nodes` handler on every node.

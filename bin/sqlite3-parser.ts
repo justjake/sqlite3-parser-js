@@ -76,10 +76,10 @@ const result =
     ? withOptions({ digitSeparator: cli.digitSeparator }).parse(sql)
     : parse(sql)
 
-if (result.status === "errored") {
+if (result.status === "error") {
   for (const err of result.errors) console.error(err.format())
   process.exit(1)
 }
 
-if (cli.pretty) console.log(toSexpr(result.ast))
-else console.log(JSON.stringify(result.ast, null, 2))
+if (cli.pretty) console.log(toSexpr(result.root))
+else console.log(JSON.stringify(result.root, null, 2))

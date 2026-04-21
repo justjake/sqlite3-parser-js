@@ -85,7 +85,7 @@ export const tokenize = parser.tokenize
 
 export function parseAccepted(sql: string) {
   const result = parse(sql)
-  if (result.status !== "accepted") {
+  if (result.status !== "ok") {
     throw new Error(`expected parse success, got: ${formatErrors(result.errors)}`)
   }
   return result
@@ -93,7 +93,7 @@ export function parseAccepted(sql: string) {
 
 export function parseErrored(sql: string) {
   const result = parse(sql)
-  if (result.status !== "errored") {
+  if (result.status !== "error") {
     throw new Error("expected parse errors, but parse succeeded")
   }
   return result.errors

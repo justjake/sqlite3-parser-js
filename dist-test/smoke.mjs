@@ -7,8 +7,8 @@ test("main entrypoint parses SQL", async () => {
   const pkg = await import("sqlite3-parser")
   const result = pkg.parse("SELECT 1")
 
-  assert.equal(result.status, "accepted")
-  assert.equal(result.ast.kind, "CmdList")
+  assert.equal(result.status, "ok")
+  assert.equal(result.root.type, "CmdList")
   assert.match(pkg.SQLITE_VERSION, /^\d+\.\d+\.\d+$/)
   assert.equal(typeof pkg.withOptions, "function")
   assert.equal(typeof pkg.createEngine, "function")
@@ -22,8 +22,8 @@ test("versioned subpath import works", async () => {
   const pinned = await import(`sqlite3-parser/sqlite-${main.SQLITE_VERSION}`)
   const result = pinned.parse("SELECT 1")
 
-  assert.equal(result.status, "accepted")
-  assert.equal(result.ast.kind, "CmdList")
+  assert.equal(result.status, "ok")
+  assert.equal(result.root.type, "CmdList")
   assert.equal(pinned.SQLITE_VERSION, main.SQLITE_VERSION)
 })
 
@@ -33,7 +33,7 @@ test("main entrypoint can be imported from commonjs", () => {
   })
   const result = JSON.parse(output)
 
-  assert.equal(result.status, "accepted")
+  assert.equal(result.status, "ok")
   assert.equal(result.astKind, "CmdList")
   assert.match(result.version, /^\d+\.\d+\.\d+$/)
   assert.equal(result.withOptions, true)
@@ -70,7 +70,7 @@ test("traverse subpath import works", async () => {
   const traversePkg = await import("sqlite3-parser/traverse")
   const result = pkg.parse("SELECT 1")
 
-  assert.equal(result.status, "accepted")
+  assert.equal(result.status, "ok")
   assert.equal(typeof traversePkg.traverse, "function")
   assert.equal(typeof traversePkg.VisitorKeys, "object")
   assert.deepEqual(Object.keys(traversePkg.VisitorKeys).slice(0, 3), [
@@ -80,9 +80,9 @@ test("traverse subpath import works", async () => {
   ])
 
   const kinds = []
-  traversePkg.traverse(result.ast, {
+  traversePkg.traverse(result.root, {
     enter(node) {
-      kinds.push(node.kind)
+      kinds.push(node.type)
     },
   })
 
@@ -109,7 +109,7 @@ test("parser CLI runs under node", () => {
     encoding: "utf8",
   })
 
-  assert.match(output, /"kind": "CmdList"/)
+  assert.match(output, /"type": "CmdList"/)
 })
 
 test("tokenizer CLI runs under node", () => {

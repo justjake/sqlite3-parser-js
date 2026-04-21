@@ -13,8 +13,8 @@ const mod = parserModuleForGrammar(
 
 function errored(sql: string) {
   const result = mod.parse(sql)
-  expect(result.status).toBe("errored")
-  if (result.status !== "errored")
+  expect(result.status).toBe("error")
+  if (result.status !== "error")
     throw new Error(`expected errored result for ${JSON.stringify(sql)}`)
   return result
 }

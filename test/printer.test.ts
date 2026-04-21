@@ -13,13 +13,13 @@ import type { AstNode } from "../src/ast/nodes.ts"
 /** Parse `sql`, fail the test if the parser didn't accept, return the AST. */
 function ast(sql: string): AstNode {
   const r = parse(sql)
-  if (r.status !== "accepted") {
+  if (r.status !== "ok") {
     throw new Error(
       `expected parse success for ${JSON.stringify(sql)}, got: ` +
         r.errors.map((e) => e.message).join("; "),
     )
   }
-  return r.ast
+  return r.root
 }
 
 describe("toSexpr — shapes", () => {
