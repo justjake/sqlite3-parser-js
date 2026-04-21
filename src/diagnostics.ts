@@ -2,20 +2,29 @@ import type { ParserDefs, TokenId } from "./lempar.ts"
 import type { KeywordDefs, Span, Token } from "./tokenize.ts"
 
 export interface DiagnosticHint {
+  /** Hint message */
   readonly message: string
+  /** Optional: the source location the hint is referring to */
   readonly span?: Span
 }
 
 export interface Diagnostic {
+  /** Error message */
   readonly message: string
+  /** Location of the error */
   readonly span: Span
+  /** Optional: the token that caused the error */
   readonly token?: Token
+  /** Optional: additional hints about the error (eg, solutions)  */
   readonly hints?: readonly DiagnosticHint[]
 }
 
 export interface ParseDiagnostic extends Diagnostic {
+  /** Optional: the filename used in error messages, if provided at parse time */
   readonly filename?: string
+  /** Format the diagnostic as a string with source code citations rendered as code blocks */
   format(): string
+  /** Alias of {@link format} */
   toString(): string
 }
 

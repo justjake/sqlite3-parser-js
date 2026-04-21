@@ -2,32 +2,71 @@
 
 Parse SQLite query syntax.
 
-- **Fast**: 1.5x-200x faster than other SQL parsers See [benchmarks](#benchmarks).
+- **Fast**: 1.5x-200x faster than other JavasScript SQL parsers, see [benchmarks](#benchmarks).
 - **Light**: Pure JavaScript, no WebAssembly overhead. Ships ~32 KB gzipped and runs unchanged in Node, Bun, and the browser.
 - **Faithful**: The parser based on [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html) to emit [TypeScript code](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 - **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups with a pointer at the opener, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
 
 ## Usage
 
+Parse SQL script with multiple statements, or return an error:
+
 ```ts
 import { parse } from "sqlite3-parser"
 
-const result = parse("SELECT id, name FROM users WHERE active = 1")
+const result = parse(`
+  INSERT INTO users VALUES (1, 'Douglas');
+  SELECT id, name FROM users WHERE active = 1
+`)
+
+// result is a union of ParseOk and ParseErr
+// type ParseOk = { status: "ok"; root: CmdList; ... }
+// type ParseErr = { status: "error"; errors: readonly ParseDiagnostic[]; ... }
 if (result.status === "ok") {
-  const cmd = result.root.cmds[0] // CmdList → first top-level command
-  // cmd.type === "SelectStmt", walk from here
+  // Root is a CmdListNode containing all top-level statements
+  const { cmds } = result.root
+  console.log(cmds)         // 2
+  console.log(cmds[0].type) // InsertStmt
+  console.log(cmds[1].type) // SelectStmt
 }
 ```
 
-`ParseResult` is a discriminated union:
+Parse single statement at a time, or return an error:
 
 ```ts
-type ParseResult =
-  | { status: "ok"; root: CmdList; errors?: undefined }
-  | { status: "error"; errors: readonly ParseError[] }
+import { parseStmt } from "sqlite3-parser"
+
+const result = parseStmt("SELECT id, name FROM users WHERE active = 1")
+if (result.status === "ok") {
+  // Root is a StmtNode containing the first top-level statement
+  console.log(result.root.type) // SelectStmt
+}
+
+// By default, parseStmt rejects trailing content (second statements, garbage tokens)
+const result2 = parseStmt("SELECT id, name FROM users WHERE active = 1; SELECT 1")
+if (result2.status === "error") {
+  console.error(result2.errors.join("\n"))
+}
+
+// Use `allowTrailing: true` to incrementally parse a multi-statement script
+function* parseEach(sql: string) {
+  while (sql) {
+    const result = parseStmt(sql, { allowTrailing: true })
+    yield result
+    if (result.status === "error") { return }
+    sql = sql.slice(result.tail)
+  }
+}
 ```
 
-For "give me exactly one statement" use cases (e.g. a `prepare_v2`-style call site, or walking a multi-statement script a statement at a time), reach for `parseStmt`:
+Parse or throw an error:
+
+```ts
+import { parseOrThrow, parseStmtOrThrow } from "sqlite3-parser"
+
+const { root: cmds } = parseOrThrow("SELECT id, name FROM users WHERE active = 1; SELECT 1")
+const { root: stmt } = parseStmtOrThrow("SELECT id, name FROM users WHERE active = 1")
+```
 
 ```ts
 import { parseStmt } from "sqlite3-parser"
@@ -39,21 +78,52 @@ if (r.status === "ok") {
 }
 ```
 
-By default `parseStmt` rejects trailing content (second statements, garbage tokens) and returns `{status: "error"}`; pass `allowTrailing: true` to stop at the first statement and report the tail offset instead.
+### Errors
 
-Errors come back as structured diagnostics. Call `err.format()` for a ready-to-print block with source code and carets, or read the fields directly:
+Parse failures are modeled as "diagnostics". These are not sub-classes of `Error`, so constructing them is cheap since no stack trace is captured.
+
+
+```ts
+export type ParseDiagnostic = {
+  /** Error message */
+  readonly message: string
+  /** Location of the error */
+  readonly span: Span
+  /** Optional: the token that caused the error */
+  readonly token?: Token
+  /** Optional: additional hints about the error (eg, solutions)  */
+  readonly hints?: readonly DiagnosticHint[]
+  /** Optional: the filename used in error messages, if provided at parse time */
+  readonly filename?: string
+  /** Format the diagnostic as a string with source code citations rendered as code blocks */
+  format(): string
+  /** Alias of {@link format} */
+  toString(): string
+}
+
+export interface DiagnosticHint {
+  /** Hint message */
+  readonly message: string
+  /** Optional: the source location the hint is referring to */
+  readonly span?: Span
+}
+```
+
+`parse` and `parseStmt` return an array of structured diagnostics when `status === "error"`. Because diagnostics implement `toString`, you can use `errors.join("\n")` to get a ready-to-print block with source code and carets.
 
 ```ts
 const result = parse("SELECT FROM users")
 if (result.status === "error") {
   for (const err of result.errors) {
-    console.error(err.format())
-    // — or access fields:
+    // access fields:
     //   err.message    → "near \"FROM\": syntax error"
     //   err.span       → { offset, length, line, col }
     //   err.token      → the offending Token, when available
     //   err.hints      → readonly { message, span? }[]
   }
+
+  // Same as result.errors.map(e => e.format()).join("\n")
+  console.error(result.errors.join("\n"))
 }
 // near "FROM": syntax error
 //
@@ -62,6 +132,30 @@ if (result.status === "error") {
 //     │        ^^^^
 //
 //   hint: expected a result expression before FROM
+```
+
+`parseOrThrow` and `parseStmtOrThrow` throw a `Sqlite3ParserDiagnosticError` with the diagnostics formatted as the error message.
+
+```ts
+import { parseOrThrow, Sqlite3ParserDiagnosticError } from "sqlite3-parser"
+try {
+  parseOrThrow("SELECT FROM users")
+} catch (e) {
+  if (e instanceof Sqlite3ParserDiagnosticError) {
+    console.error(e.errors.length) // 1
+    console.error(e.errors[0].message) // "near \"FROM\": syntax error"
+    console.error(e.message)
+    // near "FROM": syntax error
+    //
+    // At 1:7:
+    //    1│ SELECT FROM users
+    //     │        ^^^^
+    //
+    //   hint: expected a result expression before FROM
+  }
+
+  throw e
+}
 ```
 
 ### Traversing the AST

@@ -32,7 +32,7 @@ export class Sqlite3ParserError extends Error {
 /** Error thrown when `parse(sql, { throw: true })` returns one or more diagnostics. */
 export class Sqlite3ParserDiagnosticError extends Sqlite3ParserError {
   /** Individual diagnostics that contributed to this error. */
-  declare readonly diagnostics: readonly ParseDiagnostic[]
+  declare readonly errors: readonly ParseDiagnostic[]
 
   constructor(diagnostics: readonly ParseDiagnostic[]) {
     let message = ""
@@ -47,6 +47,6 @@ export class Sqlite3ParserDiagnosticError extends Sqlite3ParserError {
         message = `${diagnostics.length} diagnostics:\n${diagnostics.map((d) => d.format()).join("\n")}`
     }
     super(message)
-    this.diagnostics = diagnostics
+    this.errors = diagnostics
   }
 }

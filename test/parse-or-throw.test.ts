@@ -47,7 +47,7 @@ describe("parseOrThrow", () => {
     expect(caught).toBeInstanceOf(Sqlite3ParserDiagnosticError)
     expect(caught).toBeInstanceOf(Sqlite3ParserError)
     const err = caught as Sqlite3ParserDiagnosticError
-    expect(err.diagnostics).toEqual(parsed.errors)
+    expect(err.errors).toEqual(parsed.errors)
     // Single-diagnostic constructor path: message is the formatted diagnostic.
     expect(err.message).toBe(parsed.errors[0]!.format())
   })
@@ -60,7 +60,7 @@ describe("parseOrThrow", () => {
       caught = e
     }
     const err = caught as Sqlite3ParserDiagnosticError
-    expect(err.diagnostics[0]!.filename).toBe("query.sql")
+    expect(err.errors[0]!.filename).toBe("query.sql")
   })
 })
 
@@ -92,7 +92,7 @@ describe("parseStmtOrThrow", () => {
     }
     expect(caught).toBeInstanceOf(Sqlite3ParserDiagnosticError)
     const err = caught as Sqlite3ParserDiagnosticError
-    expect(err.diagnostics[0]!.message).toBe("no SQL statement in input")
+    expect(err.errors[0]!.message).toBe("no SQL statement in input")
   })
 
   test("thrown error carries the same diagnostics as parseStmt would return", () => {
@@ -108,6 +108,6 @@ describe("parseStmtOrThrow", () => {
       caught = e
     }
     const err = caught as Sqlite3ParserDiagnosticError
-    expect(err.diagnostics).toEqual(parsed.errors)
+    expect(err.errors).toEqual(parsed.errors)
   })
 })
