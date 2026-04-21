@@ -1,11 +1,10 @@
 # sqlite3-parser
 
 Parse SQLite query syntax.
-Surprisingly fast, hopefully correct SQLite SQL parser.
 
-- **Fast**: N.NNx faster than liteparser WASM (bridging overhead), N.NNx faster than sqlite-parser, N.NNx faster than @appland/sql-parser. See [benchmarks](#benchmarks).
+- **Fast**: 1.5x-200x faster than other SQL parsers  See [benchmarks](#benchmarks).
 - **Light**: Pure JavaScript, no WebAssembly overhead. Ships ~22 KB gzipped and runs unchanged in Node, Bun, and the browser.
-- **Faithful**: The parser is generated from [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html).
+- **Faithful**: The parser based on [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html) to emit [TypeScript code](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 - **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups with a pointer at the opener, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
 
 ## Usage
@@ -100,12 +99,24 @@ The type `AstNodeMap` maps every `type` discriminator string to its interface. `
 
 ## Benchmarks
 
-Results below are averages from `bun run bench` and `bun run bench:compare` on one machine:
+tl;dr:
+
+```text
+    ~1.5x faster than liteparser (wasm)
+    ~5x   faster than @guanmingchiu/sqlparser-ts (wasm)
+   ~10x   faster than node-sql-parser
+  ~100x   faster than pgsql-ast-parser
+  ~200x   faster than sqlite-parser
+  ~250x   faster than @appland/sql-parser
+```
+
+Results are averages from `bun run bench` and `bun run bench:compare` on one machine:
 
 - CPU: Apple M4 Max
 - Runtime: Bun 1.3.11 (`arm64-darwin`)
 
 These are point-in-time measurements from this repository. They are not guarantees and should be treated as approximate.
+Benchmarks are parse-only. The compared parsers do not produce the same AST shape.
 
 ### Cases
 
@@ -118,28 +129,10 @@ These are point-in-time measurements from this repository. They are not guarante
 | `deep` | Nested expressions with a subquery. |
 | `broken` | Invalid input with a trailing comma before `FROM`; used for the syntax-error path. |
 
-### Internal
-
-`bun run bench`
-
-| Case | Tokenize avg | Parse avg |
-| ---- | ------------ | --------- |
-| `tiny` | `728.72 ns` | `1.86 µs` |
-| `small` | `1.90 µs` | `4.20 µs` |
-| `medium` | `9.66 µs` | `24.75 µs` |
-| `large` | `19.82 µs` | `66.89 µs` |
-
-Error-path benchmark from the same run:
-
-| Case | Operation | Avg |
-| ---- | --------- | --- |
-| `broken` | `parse only` | `1.61 µs` |
-
 ### Comparison
 
 `bun run bench:compare`
 
-This is parse-only. The compared parsers do not produce the same AST shape. The `liteparser` numbers include JavaScript/WebAssembly marshalling.
 
 | Case | Ours | `liteparser (wasm)` | `sqlite-parser` | `@appland/sql-parser` |
 | ---- | ---- | ------------------- | --------------- | --------------------- |
