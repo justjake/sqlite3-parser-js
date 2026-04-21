@@ -97,7 +97,7 @@ export function parserModuleForGrammar(
   const { reduce, createState } = parserDefs
   const tk = tokenizerModuleForGrammar(parserDefs, keywordDefs, options)
   const createEngine = engineModuleForGrammar(parserDefs)
-  const syntax = bindSyntaxDiagnostics(parserDefs, keywordDefs)
+  const buildSyntaxError = bindSyntaxDiagnostics(parserDefs, keywordDefs)
 
   const { COMMENT, ILLEGAL, SEMI, SPACE } = tk.tokens
   const EOF = 0 as TokenId
@@ -210,7 +210,7 @@ export function parserModuleForGrammar(
     // in case that ever changes. Engine input values are always Tokens.
     for (const e of session.errors) {
       diagnostics.push(
-        syntax.unexpected({
+        buildSyntaxError({
           token: e.minor as Token,
           state: e.stateno,
           tokens: tokenStream,

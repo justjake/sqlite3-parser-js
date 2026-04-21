@@ -176,22 +176,11 @@ function illegalTokenHint(text: string): string {
   return "the tokenizer could not classify this input"
 }
 
-export interface UnexpectedParseErrorOptions {
-  /** The failing token as the engine saw it (may be synthetic). */
+interface UnexpectedSyntaxErrorOptions {
   readonly token: Token
-  /** Parser state number at the time of failure. */
   readonly state: number
-  /**
-   * The parser-visible token stream in chronological order, including any
-   * synthetic SEMI/EOF at the tail.
-   */
   readonly tokens: readonly Token[]
-  /** 0-based index of `token` within `tokens`. */
   readonly tokenIndex: number
-}
-
-export interface SyntaxDiagnostics {
-  unexpected(opts: UnexpectedParseErrorOptions): Diagnostic
 }
 
 const enum TokenFlag {
@@ -205,28 +194,29 @@ const enum TokenFlag {
   FallbackToId = 1 << 7,
 }
 
-interface BoundTokens {
-  readonly ID: TokenId
-  readonly STRING: TokenId
-  readonly ILLEGAL: TokenId
-  readonly SPACE: TokenId
-  readonly COMMENT: TokenId
-  readonly COMMA: TokenId
-  readonly SEMI: TokenId
-  readonly LP: TokenId
-  readonly RP: TokenId
-  readonly CASE: TokenId
-  readonly END: TokenId
-  readonly FROM: TokenId
-  readonly FILTER: TokenId
-  readonly OVER: TokenId
-}
+const REQUIRED_TOKEN_NAMES = [
+  "ID",
+  "STRING",
+  "ILLEGAL",
+  "SPACE",
+  "COMMENT",
+  "COMMA",
+  "SEMI",
+  "LP",
+  "RP",
+  "CASE",
+  "END",
+  "FROM",
+  "FILTER",
+  "OVER",
+] as const
+
+type BoundTokens = Readonly<Record<(typeof REQUIRED_TOKEN_NAMES)[number], TokenId>>
 
 interface SyntaxMeta {
   readonly defs: SyntaxParserDefs
   readonly tok: BoundTokens
   readonly displayById: readonly (string | undefined)[]
-  readonly expectedDisplayById: readonly (string | undefined)[]
   readonly flagsById: Uint16Array
 }
 
@@ -319,20 +309,12 @@ const TOKEN_SPECS: Readonly<Record<string, TokenSpec>> = {
   JOIN_KW: { display: "join operator" },
 }
 
-export function bindSyntaxDiagnostics(
-  defs: SyntaxParserDefs,
-  keywordDefs: KeywordDefs,
-): SyntaxDiagnostics {
+export function bindSyntaxDiagnostics(defs: SyntaxParserDefs, keywordDefs: KeywordDefs) {
   const meta = bindSyntaxMeta(defs, keywordDefs)
-  return {
-    unexpected(opts: UnexpectedParseErrorOptions): Diagnostic {
-      return buildUnexpectedDiagnostic(meta, opts)
-    },
-  }
+  return (opts: UnexpectedSyntaxErrorOptions): Diagnostic => buildUnexpectedDiagnostic(meta, opts)
 }
 
-/** SQLite-style short message: `near "FROM": syntax error` / `incomplete input`. */
-export function canonicalParseMessage(token: Token): string {
+function canonicalParseMessage(token: Token): string {
   return token.text.length > 0 ? `near "${token.text}": syntax error` : "incomplete input"
 }
 
@@ -340,7 +322,6 @@ function bindSyntaxMeta(defs: SyntaxParserDefs, keywordDefs: KeywordDefs): Synta
   const tokenCount = defs.constants.YYNTOKEN
   const tokenCode = new Map<string, TokenId>()
   const displayById: Array<string | undefined> = new Array(tokenCount)
-  const expectedDisplayById: Array<string | undefined> = new Array(tokenCount)
   const flagsById = new Uint16Array(tokenCount)
 
   for (let i = 0; i < tokenCount; i++) {
@@ -352,22 +333,7 @@ function bindSyntaxMeta(defs: SyntaxParserDefs, keywordDefs: KeywordDefs): Synta
     flagsById[i] = spec?.flags ?? 0
   }
 
-  const tok: BoundTokens = {
-    ID: requireTokenId(tokenCode, "ID"),
-    STRING: requireTokenId(tokenCode, "STRING"),
-    ILLEGAL: requireTokenId(tokenCode, "ILLEGAL"),
-    SPACE: requireTokenId(tokenCode, "SPACE"),
-    COMMENT: requireTokenId(tokenCode, "COMMENT"),
-    COMMA: requireTokenId(tokenCode, "COMMA"),
-    SEMI: requireTokenId(tokenCode, "SEMI"),
-    LP: requireTokenId(tokenCode, "LP"),
-    RP: requireTokenId(tokenCode, "RP"),
-    CASE: requireTokenId(tokenCode, "CASE"),
-    END: requireTokenId(tokenCode, "END"),
-    FROM: requireTokenId(tokenCode, "FROM"),
-    FILTER: requireTokenId(tokenCode, "FILTER"),
-    OVER: requireTokenId(tokenCode, "OVER"),
-  }
+  const tok = bindTokens(tokenCode)
 
   const yyFallback = defs.tables.yyFallback ?? []
   for (let i = 0; i < tokenCount; i++) {
@@ -384,20 +350,12 @@ function bindSyntaxMeta(defs: SyntaxParserDefs, keywordDefs: KeywordDefs): Synta
     flagsById[id] |= TokenFlag.KeywordLike
   }
 
-  for (let i = 0; i < tokenCount; i++) {
-    if ((flagsById[i] & TokenFlag.Hidden) !== 0) continue
-    expectedDisplayById[i] =
-      (flagsById[i] & TokenFlag.FallbackToId) !== 0
-        ? (displayById[tok.ID] ?? symbolName(defs, tok.ID))
-        : (displayById[i] ?? symbolName(defs, i as TokenId))
-  }
-
-  return { defs, tok, displayById, expectedDisplayById, flagsById }
+  return { defs, tok, displayById, flagsById }
 }
 
 function buildUnexpectedDiagnostic(
   meta: SyntaxMeta,
-  opts: UnexpectedParseErrorOptions,
+  opts: UnexpectedSyntaxErrorOptions,
 ): Diagnostic {
   const { token, state, tokens, tokenIndex } = opts
   const canonical = canonicalParseMessage(token)
@@ -437,6 +395,12 @@ function requireTokenId(tokenCode: ReadonlyMap<string, TokenId>, name: string): 
   return id
 }
 
+function bindTokens(tokenCode: ReadonlyMap<string, TokenId>): BoundTokens {
+  return Object.fromEntries(
+    REQUIRED_TOKEN_NAMES.map((name) => [name, requireTokenId(tokenCode, name)]),
+  ) as BoundTokens
+}
+
 function collectExpected(meta: SyntaxMeta, state: number): readonly TokenId[] {
   const tokenIds = meta.defs.tables.yy_expected?.[state] ?? []
   const expected: TokenId[] = []
@@ -474,7 +438,9 @@ function expectedHasRole(meta: SyntaxMeta, expected: readonly TokenId[], role: T
 }
 
 function expectedLabel(meta: SyntaxMeta, tokenId: TokenId): string | null {
-  return meta.expectedDisplayById[tokenId] ?? null
+  if (isHiddenExpected(meta, tokenId)) return null
+  if (fallsBackToIdentifier(meta, tokenId)) return tokenLabel(meta, meta.tok.ID)
+  return tokenLabel(meta, tokenId)
 }
 
 function compareExpectedLabels(left: string, right: string): number {
