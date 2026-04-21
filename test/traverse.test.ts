@@ -193,7 +193,7 @@ describe("traverse — nodes (per-type handlers)", () => {
           events.push(`id-handler:${node.name}`)
         },
         Name(node) {
-          events.push(`name-handler:${node.name}`)
+          events.push(`name-handler:${node.text}`)
         },
       },
     })

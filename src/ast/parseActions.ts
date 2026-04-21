@@ -129,7 +129,7 @@ function extractSpan(minor: unknown): Span | undefined {
  */
 export const mkName = (tok: Token): Name => ({
   type: "Name",
-  name: sqlite3Dequote(tok.text),
+  text: sqlite3Dequote(tok.text),
   span: tok.span,
 })
 
@@ -420,7 +420,7 @@ export const mkFunctionCallStar = (
 export const qnSingle = (n: Name, span: Span): QualifiedName => ({
   type: "QualifiedName",
   dbName: undefined,
-  name: n,
+  objName: n,
   alias: undefined,
   span,
 })
@@ -428,7 +428,7 @@ export const qnSingle = (n: Name, span: Span): QualifiedName => ({
 export const qnFull = (db: Name, n: Name, span: Span): QualifiedName => ({
   type: "QualifiedName",
   dbName: db,
-  name: n,
+  objName: n,
   alias: undefined,
   span,
 })
@@ -436,7 +436,7 @@ export const qnFull = (db: Name, n: Name, span: Span): QualifiedName => ({
 export const qnAlias = (n: Name, a: Name, span: Span): QualifiedName => ({
   type: "QualifiedName",
   dbName: undefined,
-  name: n,
+  objName: n,
   alias: a,
   span,
 })
@@ -444,7 +444,7 @@ export const qnAlias = (n: Name, a: Name, span: Span): QualifiedName => ({
 export const qnXfull = (db: Name, n: Name, a: Name, span: Span): QualifiedName => ({
   type: "QualifiedName",
   dbName: db,
-  name: n,
+  objName: n,
   alias: a,
   span,
 })
@@ -492,9 +492,9 @@ export function joinOperatorFrom(
   }
   for (const n of [n1, n2]) {
     if (n === undefined) continue
-    const extra = joinTypeFromKeyword(n.name)
+    const extra = joinTypeFromKeyword(n.text)
     if (extra === undefined) {
-      state.errors.push({ message: `unknown join type: ${n.name}`, span: n.span })
+      state.errors.push({ message: `unknown join type: ${n.text}`, span: n.span })
       continue
     }
     jt |= extra
@@ -505,7 +505,7 @@ export function joinOperatorFrom(
   const OUTER = 0x20
   if ((jt & (INNER | OUTER)) === (INNER | OUTER) || (jt & (OUTER | LEFT | RIGHT)) === OUTER) {
     state.errors.push({
-      message: `unknown join type: ${kw.text} ${n1?.name ?? ""} ${n2?.name ?? ""}`.trimEnd(),
+      message: `unknown join type: ${kw.text} ${n1?.text ?? ""} ${n2?.text ?? ""}`.trimEnd(),
       span: kw.span,
     })
   }
@@ -723,11 +723,11 @@ export function addColumn(
   columns: ColumnDefinition[],
   cd: ColumnDefinition,
 ): void {
-  const duplicateOf = columns.find((c) => c.colName.name === cd.colName.name)
+  const duplicateOf = columns.find((c) => c.colName.text === cd.colName.text)
   if (duplicateOf) {
     state.errors.push(
       mkDuplicateDiagnostic(
-        `duplicate column name: ${cd.colName.name}`,
+        `duplicate column name: ${cd.colName.text}`,
         cd.colName.span,
         duplicateOf.colName.span,
       ),
@@ -755,11 +755,11 @@ export function mkColumnsAndConstraints(
 
 /** Append a CTE, rejecting duplicate names. */
 export function addCte(state: ParseState, ctes: CommonTableExpr[], cte: CommonTableExpr): void {
-  const duplicateOf = ctes.find((c) => c.tblName.name === cte.tblName.name)
+  const duplicateOf = ctes.find((c) => c.tblName.text === cte.tblName.text)
   if (duplicateOf) {
     state.errors.push(
       mkDuplicateDiagnostic(
-        `duplicate WITH table name: ${cte.tblName.name}`,
+        `duplicate WITH table name: ${cte.tblName.text}`,
         cte.tblName.span,
         duplicateOf.tblName.span,
       ),

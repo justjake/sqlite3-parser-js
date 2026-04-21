@@ -49,8 +49,8 @@ export type ParseResult =
   | { status: "ok"; root: CmdList; errors?: undefined; tokens?: Token[] }
   | { status: "error"; errors: readonly ParseError[]; tokens?: Token[] }
 
-/** Result of {@link ParserModule.parseStatement}. */
-export type ParseStatementResult =
+/** Result of {@link ParserModule.parseStmt}. */
+export type ParseStmtResult =
   | {
       status: "ok"
       /** The first top-level statement parsed from the input. */
@@ -62,7 +62,7 @@ export type ParseStatementResult =
        * of input without a trailing `;`.  Analogous to SQLite's
        * `sqlite3_prepare_v2` `pzTail` out-parameter: callers that want
        * to walk a multi-statement script pass `source.slice(tail)`
-       * back through `parseStatement` until `tail === source.length`.
+       * back through `parseStmt` until `tail === source.length`.
        */
       tail: number
       errors?: undefined
@@ -87,10 +87,10 @@ export type ParseOptions = TokenizeOptions & {
   emitTokens?: boolean
 }
 
-/** Options for {@link ParserModule.parseStatement}. */
-export type ParseStatementOptions = ParseOptions & {
+/** Options for {@link ParserModule.parseStmt}. */
+export type ParseStmtOptions = ParseOptions & {
   /**
-   * By default, `parseStatement` returns `{status: "error"}` if the
+   * By default, `parseStmt` returns `{status: "error"}` if the
    * first statement is followed by any non-trivia content (a second
    * statement, garbage tokens, …) — it's strict about consuming the
    * whole input.  Set `allowTrailing: true` to ignore trailing content
@@ -114,7 +114,7 @@ export interface ParserModule {
    * statement is meaningful; callers walking a multi-statement script
    * loop on `source.slice(tail)` until `tail === source.length`.
    */
-  parseStatement(source: string, opts?: ParseStatementOptions): ParseStatementResult
+  parseStmt(source: string, opts?: ParseStmtOptions): ParseStmtResult
   /** Tokenize a SQL string into a stream of tokens. */
   tokenize(source: string, opts?: TokenizeOptions): TokenIterator
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
@@ -155,7 +155,7 @@ export function parserModuleForGrammar(
   const EOF = 0 as TokenId
 
   // -------------------------------------------------------------------------
-  // parse / parseStatement — public entry points.
+  // parse / parseStmt — public entry points.
   //
   // Both are thin wrappers over `runCore`, which tokenises the input,
   // feeds it to the engine as a lazy iterable of `{major, value}`
@@ -387,10 +387,10 @@ export function parserModuleForGrammar(
     return { status: "ok", root: finalizeCmdList(outcome.state), tokens: outcome.tokens }
   }
 
-  function parseStatement(
+  function parseStmt(
     sql: string,
-    opts: ParseStatementOptions = {},
-  ): ParseStatementResult {
+    opts: ParseStmtOptions = {},
+  ): ParseStmtResult {
     const { allowTrailing = false, ...rest } = opts
     const outcome = runCore(sql, rest, {
       firstStatement: true,
@@ -402,7 +402,7 @@ export function parserModuleForGrammar(
     const root = outcome.state.cmds[0]
     if (!root) {
       // Grammar accepts a program consisting only of bare `;`
-      // separators (or nothing at all).  `parseStatement`'s contract is
+      // separators (or nothing at all).  `parseStmt`'s contract is
       // "give me one statement", so treat that as a parse error rather
       // than an awkward optional root.
       return {
@@ -426,7 +426,7 @@ export function parserModuleForGrammar(
   // syntax highlighting / diagnostics without running a full parse.
   return {
     parse,
-    parseStatement,
+    parseStmt,
     tokenize: tk.tokenize,
     tokenName: tk.tokenName,
     createEngine,

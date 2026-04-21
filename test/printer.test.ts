@@ -36,7 +36,7 @@ describe("toSexpr — shapes", () => {
         (FromClause
           (TableSelectTable
             (QualifiedName
-              (Name :name "t"))))
+              (Name :text "t"))))
         (BinaryExpr :op "Equals"
           (Id :name "b")
           (NumericLiteral :value "2"))))))`,
@@ -78,7 +78,7 @@ describe("toSexpr — shapes", () => {
         (FromClause
           (TableSelectTable
             (QualifiedName
-              (Name :name "t")))))
+              (Name :text "t")))))
       (CompoundSelect :operator "Union"
         (SelectFrom
           (ExprResultColumn
@@ -86,7 +86,7 @@ describe("toSexpr — shapes", () => {
           (FromClause
             (TableSelectTable
               (QualifiedName
-                (Name :name "u"))))))
+                (Name :text "u"))))))
       (SortedColumn
         (NumericLiteral :value "1"))
       (Limit
@@ -101,7 +101,7 @@ describe("toSexpr — shapes", () => {
     (Select
       (With :recursive false
         (CommonTableExpr :materialized "Any"
-          (Name :name "cte")
+          (Name :text "cte")
           (Select
             (SelectFrom
               (ExprResultColumn
@@ -111,7 +111,7 @@ describe("toSexpr — shapes", () => {
         (FromClause
           (TableSelectTable
             (QualifiedName
-              (Name :name "cte"))))))))`,
+              (Name :text "cte"))))))))`,
     )
   })
 
@@ -138,14 +138,14 @@ describe("toSexpr — shapes", () => {
       (SelectFrom
         (ExprResultColumn
           (QualifiedExpr
-            (Name :name "main")
-            (Name :name "tbl")
-            (Name :name "col")))
+            (Name :text "main")
+            (Name :text "tbl")
+            (Name :text "col")))
         (FromClause
           (TableSelectTable
             (QualifiedName
-              (Name :name "main")
-              (Name :name "tbl"))))))))`,
+              (Name :text "main")
+              (Name :text "tbl"))))))))`,
     )
   })
 
@@ -166,7 +166,7 @@ describe("toSexpr — shapes", () => {
         (FromClause
           (TableSelectTable
             (QualifiedName
-              (Name :name "t"))))))))`,
+              (Name :text "t"))))))))`,
     )
   })
 
@@ -175,10 +175,10 @@ describe("toSexpr — shapes", () => {
       `(CmdList
   (DropTableStmt :ifExists false
     (QualifiedName
-      (Name :name "t")))
+      (Name :text "t")))
   (DropIndexStmt :ifExists false
     (QualifiedName
-      (Name :name "idx"))))`,
+      (Name :text "idx"))))`,
     )
   })
 

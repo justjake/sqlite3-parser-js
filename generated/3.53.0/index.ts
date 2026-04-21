@@ -54,7 +54,7 @@ export const parse: ParserModule["parse"] = mod.parse
  * Parse exactly one top-level SQL statement from a string, returning
  * it alongside a `tail` offset past its terminating `;`.
  */
-export const parseStatement: ParserModule["parseStatement"] = mod.parseStatement
+export const parseStmt: ParserModule["parseStmt"] = mod.parseStmt
 
 /**
  * Tokenize a SQL string into a stream of tokens.

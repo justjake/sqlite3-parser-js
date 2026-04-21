@@ -120,7 +120,7 @@ cmdx      ::= cmd.           { /* statement is complete; state.stmt has been ass
 
 ///////////////////// Begin and end transactions. ////////////////////////////
 //
-cmd ::= BEGIN transtype(Y) trans_opt(X). { state.stmt = { type: "BeginStmt",    tx: Y, name: X, span: nodeSpan() }; }
+cmd ::= BEGIN transtype(Y) trans_opt(X). { state.stmt = { type: "BeginStmt",    tx: Y, txName: X, span: nodeSpan() }; }
 %type trans_opt {Name | undefined}
 trans_opt(A) ::= .                  { A = undefined; }
 trans_opt(A) ::= TRANSACTION.       { A = undefined; }
@@ -130,13 +130,13 @@ transtype(A) ::= .              { A = undefined; }
 transtype(A) ::= DEFERRED.      { A = "Deferred"; }
 transtype(A) ::= IMMEDIATE.     { A = "Immediate"; }
 transtype(A) ::= EXCLUSIVE.     { A = "Exclusive"; }
-cmd ::= COMMIT|END trans_opt(X).           { state.stmt = { type: "CommitStmt",   name: X, span: nodeSpan() }; }
+cmd ::= COMMIT|END trans_opt(X).           { state.stmt = { type: "CommitStmt",   txName: X, span: nodeSpan() }; }
 cmd ::= ROLLBACK trans_opt(X).             { state.stmt = { type: "RollbackStmt", txName: X, savepointName: undefined, span: nodeSpan() }; }
 
 savepoint_opt ::= SAVEPOINT.
 savepoint_opt ::= .
-cmd ::= SAVEPOINT nm(X).                            { state.stmt = { type: "SavepointStmt", name: X, span: nodeSpan() }; }
-cmd ::= RELEASE savepoint_opt nm(X).                { state.stmt = { type: "ReleaseStmt",   name: X, span: nodeSpan() }; }
+cmd ::= SAVEPOINT nm(X).                            { state.stmt = { type: "SavepointStmt", savepointName: X, span: nodeSpan() }; }
+cmd ::= RELEASE savepoint_opt nm(X).                { state.stmt = { type: "ReleaseStmt",   savepointName: X, span: nodeSpan() }; }
 cmd ::= ROLLBACK trans_opt(Y) TO savepoint_opt nm(X). {
   state.stmt = { type: "RollbackStmt", txName: Y, savepointName: X, span: nodeSpan() };
 }
@@ -170,11 +170,11 @@ table_option_set(A) ::= .                                        { A = 0; }
 table_option_set(A) ::= table_option(A).
 table_option_set(A) ::= table_option_set(X) COMMA table_option(Y). { A = X | Y; }
 table_option(A) ::= WITHOUT nm(X). {
-  if( X.name.toLowerCase()==="rowid" ){
+  if( X.text.toLowerCase()==="rowid" ){
     A = 0x00000080 /* TabFlags.WithoutRowid */;
   }else{
     state.errors.push(mkDiagnostic(
-      `unknown table option: ${X.name}`,
+      `unknown table option: ${X.text}`,
       X.span,
       { message: "expected WITHOUT ROWID", span: undefined },
     ));
@@ -182,11 +182,11 @@ table_option(A) ::= WITHOUT nm(X). {
   }
 }
 table_option(A) ::= nm(X). {
-  if( X.name.toLowerCase()==="strict" ){
+  if( X.text.toLowerCase()==="strict" ){
     A = 0x00010000 /* TabFlags.Strict */;
   }else{
     state.errors.push(mkDiagnostic(
-      `unknown table option: ${X.name}`,
+      `unknown table option: ${X.text}`,
       X.span,
       { message: "expected STRICT or WITHOUT ROWID", span: undefined },
     ));
@@ -596,10 +596,10 @@ from(A) ::= FROM seltablist(X).    { A = freezeFrom(X, nodeSpan()); }
 stl_prefix(A) ::= seltablist(A) joinop(Y).    { A.pendingOp = Y; }
 stl_prefix(A) ::= .                           { A = emptyFromClause(); }
 seltablist(A) ::= stl_prefix(A) fullname(Y) as(Z) indexed_opt(I) on_using(N). {
-  fromClausePush(state, A, { type: "TableSelectTable", name: Y, alias: Z, indexed: I, span: nodeSpan() }, N);
+  fromClausePush(state, A, { type: "TableSelectTable", tblName: Y, alias: Z, indexed: I, span: nodeSpan() }, N);
 }
 seltablist(A) ::= stl_prefix(A) fullname(Y) LP exprlist(E) RP as(Z) on_using(N). {
-  fromClausePush(state, A, { type: "TableCallSelectTable", name: Y, args: E, alias: Z, span: nodeSpan() }, N);
+  fromClausePush(state, A, { type: "TableCallSelectTable", tblName: Y, args: E, alias: Z, span: nodeSpan() }, N);
 }
 %ifndef SQLITE_OMIT_SUBQUERY
 seltablist(A) ::= stl_prefix(A) LP select(S) RP as(Z) on_using(N). {
@@ -642,7 +642,7 @@ on_using(N) ::= .                 [OR] { N = undefined; }
 //
 %type indexed_opt {Indexed | undefined}
 indexed_opt(A) ::= .                  { A = undefined; }
-indexed_opt(A) ::= INDEXED BY nm(X).  { A = { type: "IndexedByIndexed", name: X, span: nodeSpan() }; }
+indexed_opt(A) ::= INDEXED BY nm(X).  { A = { type: "IndexedByIndexed", idxName: X, span: nodeSpan() }; }
 indexed_opt(A) ::= NOT INDEXED.       { A = { type: "NotIndexedIndexed", span: nodeSpan() }; }
 
 %type orderby_opt {SortedColumn[] | undefined}
@@ -804,10 +804,10 @@ insert_cmd(A) ::= REPLACE.            { A = "Replace"; }
 idlist_opt(A) ::= .                   { A = undefined; }
 idlist_opt(A) ::= LP idlist(X) RP.    { A = X;    }
 idlist(A) ::= idlist(A) COMMA nm(Y).  {
-  const duplicateOf = A.find(n => n.name===Y.name);
+  const duplicateOf = A.find(n => n.text===Y.text);
   if( duplicateOf ){
     state.errors.push(mkDuplicateDiagnostic(
-      `column "${Y.name}" specified more than once`,
+      `column "${Y.text}" specified more than once`,
       Y.span,
       duplicateOf.span,
     ));
@@ -1012,8 +1012,8 @@ cmd ::= DROP INDEX ifexists(E) fullname(X). {
 //
 %if !SQLITE_OMIT_VACUUM && !SQLITE_OMIT_ATTACH
 %type vinto {Expr | undefined}
-cmd ::= VACUUM vinto(Y).                { state.stmt = { type: "VacuumStmt", name: undefined, into: Y, span: nodeSpan() }; }
-cmd ::= VACUUM nm(X) vinto(Y).          { state.stmt = { type: "VacuumStmt", name: X,    into: Y, span: nodeSpan() }; }
+cmd ::= VACUUM vinto(Y).                { state.stmt = { type: "VacuumStmt", dbName: undefined, into: Y, span: nodeSpan() }; }
+cmd ::= VACUUM nm(X) vinto(Y).          { state.stmt = { type: "VacuumStmt", dbName: X,    into: Y, span: nodeSpan() }; }
 vinto(A) ::= INTO expr(X).              { A = X;    }
 vinto(A) ::= .                          { A = undefined; }
 %endif

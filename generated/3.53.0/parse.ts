@@ -1914,7 +1914,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // cmd ::= BEGIN transtype(Y) trans_opt(X)
       const Y = popped[1].minor as TransactionType | undefined
       const X = popped[2].minor as Name | undefined
-      state.stmt = { type: "BeginStmt", tx: Y, name: X, span: nodeSpan() }
+      state.stmt = { type: "BeginStmt", tx: Y, txName: X, span: nodeSpan() }
       return undefined
     }
     case 6: // trans_opt(A) ::=
@@ -1958,7 +1958,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 13: {
       // cmd ::= ? trans_opt(X)
       const X = popped[1].minor as Name | undefined
-      state.stmt = { type: "CommitStmt", name: X, span: nodeSpan() }
+      state.stmt = { type: "CommitStmt", txName: X, span: nodeSpan() }
       return undefined
     }
     case 14: {
@@ -1970,13 +1970,13 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 15: {
       // cmd ::= SAVEPOINT nm(X)
       const X = popped[1].minor as Name
-      state.stmt = { type: "SavepointStmt", name: X, span: nodeSpan() }
+      state.stmt = { type: "SavepointStmt", savepointName: X, span: nodeSpan() }
       return undefined
     }
     case 16: {
       // cmd ::= RELEASE savepoint_opt nm(X)
       const X = popped[2].minor as Name
-      state.stmt = { type: "ReleaseStmt", name: X, span: nodeSpan() }
+      state.stmt = { type: "ReleaseStmt", savepointName: X, span: nodeSpan() }
       return undefined
     }
     case 17: {
@@ -2060,11 +2060,11 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as Name
       let A: TabFlags | undefined
 
-      if (X.name.toLowerCase() === "rowid") {
+      if (X.text.toLowerCase() === "rowid") {
         A = 0x00000080 /* TabFlags.WithoutRowid */
       } else {
         state.errors.push(
-          mkDiagnostic(`unknown table option: ${X.name}`, X.span, {
+          mkDiagnostic(`unknown table option: ${X.text}`, X.span, {
             message: "expected WITHOUT ROWID",
             span: undefined,
           }),
@@ -2078,11 +2078,11 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[0].minor as Name
       let A: TabFlags | undefined
 
-      if (X.name.toLowerCase() === "strict") {
+      if (X.text.toLowerCase() === "strict") {
         A = 0x00010000 /* TabFlags.Strict */
       } else {
         state.errors.push(
-          mkDiagnostic(`unknown table option: ${X.name}`, X.span, {
+          mkDiagnostic(`unknown table option: ${X.text}`, X.span, {
             message: "expected STRICT or WITHOUT ROWID",
             span: undefined,
           }),
@@ -3057,7 +3057,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       fromClausePush(
         state,
         A,
-        { type: "TableSelectTable", name: Y, alias: Z, indexed: I, span: nodeSpan() },
+        { type: "TableSelectTable", tblName: Y, alias: Z, indexed: I, span: nodeSpan() },
         N,
       )
       return A
@@ -3073,7 +3073,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       fromClausePush(
         state,
         A,
-        { type: "TableCallSelectTable", name: Y, args: E, alias: Z, span: nodeSpan() },
+        { type: "TableCallSelectTable", tblName: Y, args: E, alias: Z, span: nodeSpan() },
         N,
       )
       return A
@@ -3221,7 +3221,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // indexed_opt(A) ::= INDEXED BY nm(X)
       const X = popped[2].minor as Name
       let A: Indexed | undefined
-      A = { type: "IndexedByIndexed", name: X, span: nodeSpan() }
+      A = { type: "IndexedByIndexed", idxName: X, span: nodeSpan() }
       return A
     }
     case 152: {
@@ -3710,11 +3710,11 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[2].minor as Name
       let A: Name[] = popped[0].minor as Name[]
 
-      const duplicateOf = A.find((n) => n.name === Y.name)
+      const duplicateOf = A.find((n) => n.text === Y.text)
       if (duplicateOf) {
         state.errors.push(
           mkDuplicateDiagnostic(
-            `column "${Y.name}" specified more than once`,
+            `column "${Y.text}" specified more than once`,
             Y.span,
             duplicateOf.span,
           ),
@@ -4323,14 +4323,14 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 275: {
       // cmd ::= VACUUM vinto(Y)
       const Y = popped[1].minor as Expr | undefined
-      state.stmt = { type: "VacuumStmt", name: undefined, into: Y, span: nodeSpan() }
+      state.stmt = { type: "VacuumStmt", dbName: undefined, into: Y, span: nodeSpan() }
       return undefined
     }
     case 276: {
       // cmd ::= VACUUM nm(X) vinto(Y)
       const X = popped[1].minor as Name
       const Y = popped[2].minor as Expr | undefined
-      state.stmt = { type: "VacuumStmt", name: X, into: Y, span: nodeSpan() }
+      state.stmt = { type: "VacuumStmt", dbName: X, into: Y, span: nodeSpan() }
       return undefined
     }
     case 277: {

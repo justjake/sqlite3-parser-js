@@ -89,7 +89,7 @@ export interface AttachStmt {
 export interface BeginStmt {
   readonly type: "BeginStmt"
   readonly tx: TransactionType | undefined
-  readonly name: Name | undefined
+  readonly txName: Name | undefined
   readonly span: Span
 }
 
@@ -100,7 +100,7 @@ export interface BeginStmt {
  */
 export interface CommitStmt {
   readonly type: "CommitStmt"
-  readonly name: Name | undefined
+  readonly txName: Name | undefined
   readonly span: Span
 }
 
@@ -319,7 +319,7 @@ export interface ReindexStmt {
  */
 export interface ReleaseStmt {
   readonly type: "ReleaseStmt"
-  readonly name: Name
+  readonly savepointName: Name
   readonly span: Span
 }
 
@@ -342,7 +342,7 @@ export interface RollbackStmt {
  */
 export interface SavepointStmt {
   readonly type: "SavepointStmt"
-  readonly name: Name
+  readonly savepointName: Name
   readonly span: Span
 }
 
@@ -392,7 +392,7 @@ export interface UpdateStmt {
  */
 export interface VacuumStmt {
   readonly type: "VacuumStmt"
-  readonly name: Name | undefined
+  readonly dbName: Name | undefined
   readonly into: Expr | undefined
   readonly span: Span
 }
@@ -1047,7 +1047,7 @@ export interface Id {
  */
 export interface Name {
   readonly type: "Name"
-  readonly name: string
+  readonly text: string
   readonly span: Span
 }
 
@@ -1059,7 +1059,7 @@ export interface Name {
 export interface QualifiedName {
   readonly type: "QualifiedName"
   readonly dbName: Name | undefined
-  readonly name: Name
+  readonly objName: Name
   readonly alias: Name | undefined
   readonly span: Span
 }
@@ -1785,7 +1785,7 @@ export interface ElidedAs {
 
 export interface TableSelectTable {
   readonly type: "TableSelectTable"
-  readonly name: QualifiedName
+  readonly tblName: QualifiedName
   readonly alias: As | undefined
   readonly indexed: Indexed | undefined
   readonly span: Span
@@ -1793,7 +1793,7 @@ export interface TableSelectTable {
 
 export interface TableCallSelectTable {
   readonly type: "TableCallSelectTable"
-  readonly name: QualifiedName
+  readonly tblName: QualifiedName
   readonly args: readonly Expr[] | undefined
   readonly alias: As | undefined
   readonly span: Span
@@ -1902,7 +1902,7 @@ export interface AsSelectCreateTableBody {
 
 export interface IndexedByIndexed {
   readonly type: "IndexedByIndexed"
-  readonly name: Name
+  readonly idxName: Name
   readonly span: Span
 }
 

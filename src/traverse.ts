@@ -70,6 +70,9 @@ const ValueKeys = ["value"] as const
 const ValuesKeys = ["values"] as const
 const ObjNameKeys = ["objName"] as const
 const SizeKeys = ["size"] as const
+const TxNameKeys = ["txName"] as const
+const SavepointNameKeys = ["savepointName"] as const
+const IdxNameKeys = ["idxName"] as const
 
 export const VisitorKeys: VisitorKeyMap = {
   // Top-level.
@@ -79,8 +82,8 @@ export const VisitorKeys: VisitorKeyMap = {
   AlterTableStmt: ["tblName", "body"],
   AnalyzeStmt: ObjNameKeys,
   AttachStmt: ["expr", "dbName", "key"],
-  BeginStmt: NameKeys,
-  CommitStmt: NameKeys,
+  BeginStmt: TxNameKeys,
+  CommitStmt: TxNameKeys,
   CreateIndexStmt: ["idxName", "tblName", "columns", "whereClause"],
   CreateTableStmt: ["tblName", "body"],
   CreateTriggerStmt: ["triggerName", "event", "tblName", "whenClause", "commands"],
@@ -96,9 +99,9 @@ export const VisitorKeys: VisitorKeyMap = {
   InsertStmt: ["with", "tblName", "columns", "body", "returning"],
   PragmaStmt: ["name", "body"],
   ReindexStmt: ObjNameKeys,
-  ReleaseStmt: NameKeys,
+  ReleaseStmt: SavepointNameKeys,
   RollbackStmt: ["txName", "savepointName"],
-  SavepointStmt: NameKeys,
+  SavepointStmt: SavepointNameKeys,
   SelectStmt: ["body"],
   UpdateStmt: [
     "with",
@@ -111,7 +114,7 @@ export const VisitorKeys: VisitorKeyMap = {
     "orderBy",
     "limit",
   ],
-  VacuumStmt: ["name", "into"],
+  VacuumStmt: ["dbName", "into"],
 
   // Expressions.
   BetweenExpr: ["lhs", "start", "end"],
@@ -148,8 +151,8 @@ export const VisitorKeys: VisitorKeyMap = {
   TableStarResultColumn: ["table"],
   AsAs: NameKeys,
   ElidedAs: NameKeys,
-  TableSelectTable: ["name", "alias", "indexed"],
-  TableCallSelectTable: ["name", "args", "alias"],
+  TableSelectTable: ["tblName", "alias", "indexed"],
+  TableCallSelectTable: ["tblName", "args", "alias"],
   SelectSelectTable: ["select", "alias"],
   SubSelectTable: ["from", "alias"],
   OnJoinConstraint: ExprKeys,
@@ -158,7 +161,7 @@ export const VisitorKeys: VisitorKeyMap = {
   WithinGroupFunctionCallOrder: ExprKeys,
 
   // Identifiers.
-  QualifiedName: ["dbName", "name", "alias"],
+  QualifiedName: ["dbName", "objName", "alias"],
 
   // CREATE TABLE — columns and constraints.
   ColumnDefinition: ["colName", "colType", "constraints"],
@@ -189,7 +192,7 @@ export const VisitorKeys: VisitorKeyMap = {
 
   // Indexing, sorting, limit.
   IndexedColumn: ["colName", "collationName"],
-  IndexedByIndexed: NameKeys,
+  IndexedByIndexed: IdxNameKeys,
   SortedColumn: ExprKeys,
   Limit: ["expr", "offset"],
 

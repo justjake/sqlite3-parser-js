@@ -27,19 +27,19 @@ type ParseResult =
   | { status: "error"; errors: readonly ParseError[] }
 ```
 
-For "give me exactly one statement" use cases (e.g. a `prepare_v2`-style call site, or walking a multi-statement script a statement at a time), reach for `parseStatement`:
+For "give me exactly one statement" use cases (e.g. a `prepare_v2`-style call site, or walking a multi-statement script a statement at a time), reach for `parseStmt`:
 
 ```ts
-import { parseStatement } from "sqlite3-parser"
+import { parseStmt } from "sqlite3-parser"
 
-const r = parseStatement("SELECT 1; SELECT 2", { allowTrailing: true })
+const r = parseStmt("SELECT 1; SELECT 2", { allowTrailing: true })
 if (r.status === "ok") {
   r.root // Stmt
   r.tail // 10 — source.slice(tail) is what's left to parse
 }
 ```
 
-By default `parseStatement` rejects trailing content (second statements, garbage tokens) and returns `{status: "error"}`; pass `allowTrailing: true` to stop at the first statement and report the tail offset instead.
+By default `parseStmt` rejects trailing content (second statements, garbage tokens) and returns `{status: "error"}`; pass `allowTrailing: true` to stop at the first statement and report the tail offset instead.
 
 Errors come back as structured diagnostics. Call `err.format()` for a ready-to-print block with source code and carets, or read the fields directly:
 
@@ -83,8 +83,8 @@ traverse(root, {
   nodes: {
     // Runs before visiting children.
     TableSelectTable(node, _parent) {
-      // QualifiedName.name → Name.name
-      tables.push(node.name.name.name)
+      // TableSelectTable.tblName → QualifiedName.objName → Name.text
+      tables.push(node.tblName.objName.text)
       // From any handler:
       //   return "skip" to stop descending into the current node
       //   return "break" to halt the whole walk
