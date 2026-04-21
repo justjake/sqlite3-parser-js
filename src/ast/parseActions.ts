@@ -36,7 +36,6 @@ import type {
   QualifiedName,
   ResultColumn,
   Select,
-  SelectBody,
   SelectTable,
   SortedColumn,
   Stmt,
@@ -590,6 +589,16 @@ export function fromClausePush(
 
 // ---- SELECT / VALUES helpers -----------------------------------------
 
+/**
+ * Parser-internal pairing used between the `selectnowith` reduction
+ * and the outer `select` rule: the primary `OneSelect` plus any
+ * compound continuations.  Not an AST node — no `kind`, no `span`.
+ */
+export type SelectBody = {
+  readonly select: OneSelect
+  readonly compounds: readonly CompoundSelect[] | undefined
+}
+
 export function mkSelect(
   withClause: With | undefined,
   body: SelectBody,
@@ -597,7 +606,15 @@ export function mkSelect(
   limit: Limit | undefined,
   span: Span,
 ): Select {
-  return { with: withClause, body, orderBy, limit, kind: "Select", span }
+  return {
+    kind: "Select",
+    with: withClause,
+    select: body.select,
+    compounds: body.compounds,
+    orderBy,
+    limit,
+    span,
+  }
 }
 
 export function pushCompound(body: SelectBody, cs: CompoundSelect): void {

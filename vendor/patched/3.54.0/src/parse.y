@@ -70,14 +70,14 @@ import type {
   LikeOperator, Limit, Literal, Materialized, Name, NamedColumnConstraint,
   NamedTableConstraint, NullsOrder, OneSelect, Operator, Over, PragmaBody,
   QualifiedName, RefAct, RefArg, ResolveType, ResultColumn, Select,
-  SelectBody, SelectTable, SetAssignment, SortOrder, SortedColumn, Stmt,
+  SelectTable, SetAssignment, SortOrder, SortedColumn, Stmt,
   TabFlags, TableConstraint, TransactionType, TriggerCmd, TriggerEvent,
   TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,
   ValuesRow, WhenThen, Window, WindowDef, With,
 } from "../../../src/ast/nodes.ts";
 import type { Span, Token } from "../../../src/tokenize.ts";
 import type { ParseState } from "../../../src/ast/parseState.ts";
-import type { FromClauseMut } from "../../../src/ast/parseActions.ts";
+import type { FromClauseMut, SelectBody } from "../../../src/ast/parseActions.ts";
 import {
   mkName, mkId, mkVariableExpr,
   literalFromCtimeKw, mkNullLiteral, mkStringLiteral, mkBlobLiteral,
@@ -515,7 +515,7 @@ select(A) ::= selectnowith(X) orderby_opt(Z) limit_opt(L). {
   A = mkSelect(undefined, X, Z, L, nodeSpan());
 }
 
-selectnowith(A) ::= oneselect(X). { A = { kind: "SelectBody", select: X, compounds: undefined, span: nodeSpan() }; }
+selectnowith(A) ::= oneselect(X). { A = { select: X, compounds: undefined }; }
 %ifndef SQLITE_OMIT_COMPOUND_SELECT
 selectnowith(A) ::= selectnowith(A) multiselect_op(Y) oneselect(Z). {
   pushCompound(A, { kind: "CompoundSelect", operator: Y, select: Z, span: nodeSpan() });

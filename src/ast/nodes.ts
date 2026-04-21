@@ -347,6 +347,14 @@ export interface SavepointStmt {
 }
 
 /**
+ * A `SELECT` appearing at top-level statement position.  Purely a
+ * positional marker — all structural content lives on the inner
+ * {@link Select} node.  Inline uses of `SELECT` (subqueries, CTEs,
+ * `CREATE VIEW`, `INSERT … SELECT`, etc.) reference `Select` directly
+ * and never go through `SelectStmt`, so the `Stmt` union stays
+ * disjoint from `Select`'s inline roles.  Analogous to ESTree's
+ * `ExpressionStatement`.
+ *
  * ```sql
  * SELECT * FROM tbl
  * ```
@@ -906,23 +914,21 @@ export type UnaryOperator = "BitwiseNot" | "Negative" | "Not" | "Positive"
 // ---------------------------------------------------------------------------
 
 /**
- * `SELECT` statement.
+ * `SELECT` statement.  Holds both the compound structure — primary
+ * arm (`select`) plus any `UNION` / `EXCEPT` / ... continuations in
+ * `compounds` — and the "outer envelope" clauses (`WITH`, `ORDER BY`,
+ * `LIMIT`) that apply to the whole compound result.  Per-arm clauses
+ * (`WHERE`, `GROUP BY`, `HAVING`, etc.) live on `OneSelect`.
+ *
  * https://sqlite.org/lang_select.html
  */
 export interface Select {
   readonly kind: "Select"
   readonly with: With | undefined
-  readonly body: SelectBody
-  readonly orderBy: readonly SortedColumn[] | undefined
-  readonly limit: Limit | undefined
-  readonly span: Span
-}
-
-/** `SELECT` body: one SELECT plus any compound continuations. */
-export interface SelectBody {
-  readonly kind: "SelectBody"
   readonly select: OneSelect
   readonly compounds: readonly CompoundSelect[] | undefined
+  readonly orderBy: readonly SortedColumn[] | undefined
+  readonly limit: Limit | undefined
   readonly span: Span
 }
 
@@ -2121,7 +2127,6 @@ export interface AstNodeMap {
 
   // SELECT
   Select: Select
-  SelectBody: SelectBody
   CompoundSelect: CompoundSelect
   FromClause: FromClause
   JoinedSelectTable: JoinedSelectTable

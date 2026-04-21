@@ -87,7 +87,6 @@ import type {
   ResolveType,
   ResultColumn,
   Select,
-  SelectBody,
   SelectTable,
   SetAssignment,
   SortOrder,
@@ -113,7 +112,7 @@ import type {
 } from "../../src/ast/nodes.ts"
 import type { Span, Token } from "../../src/tokenize.ts"
 import type { ParseState } from "../../src/ast/parseState.ts"
-import type { FromClauseMut } from "../../src/ast/parseActions.ts"
+import type { FromClauseMut, SelectBody } from "../../src/ast/parseActions.ts"
 import {
   mkName,
   mkId,
@@ -2861,7 +2860,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // selectnowith(A) ::= oneselect(X)
       const X = popped[0].minor as OneSelect
       let A: SelectBody | undefined
-      A = { kind: "SelectBody", select: X, compounds: undefined, span: nodeSpan() }
+      A = { select: X, compounds: undefined }
       return A
     }
     case 106: {

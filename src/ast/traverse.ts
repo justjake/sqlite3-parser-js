@@ -138,8 +138,7 @@ export const VisitorKeys: VisitorKeyMap = {
   UnaryExpr: ExprKeys,
 
   // SELECT.
-  Select: ["with", "body", "orderBy", "limit"],
-  SelectBody: ["select", "compounds"],
+  Select: ["with", "select", "compounds", "orderBy", "limit"],
   CompoundSelect: SelectKeys,
   FromClause: ["select", "joins"],
   JoinedSelectTable: ["operator", "table", "constraint"],
