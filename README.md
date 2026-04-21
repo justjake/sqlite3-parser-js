@@ -25,10 +25,12 @@ const result = parse(`
 if (result.status === "ok") {
   // Root is a CmdListNode containing all top-level statements
   const { cmds } = result.root
-  console.log(cmds.length) // 2
-  console.log(cmds[0].type) // InsertStmt
-  console.log(cmds[1].type) // SelectStmt
-} else { throw "expected ok" }
+  console.log(cmds.length) // -> 2
+  console.log(cmds[0].type) // -> InsertStmt
+  console.log(cmds[1].type) // -> SelectStmt
+} else {
+  throw "expected ok"
+}
 ```
 
 Parse single statement at a time, or return an error:
@@ -39,7 +41,7 @@ import { parseStmt } from "sqlite3-parser"
 const result = parseStmt("SELECT id, name FROM users WHERE active = 1")
 if (result.status === "ok") {
   // Root is a StmtNode containing the first top-level statement
-  console.log(result.root.type) // SelectStmt
+  console.log(result.root.type) // -> SelectStmt
 }
 
 // By default, parseStmt rejects trailing content (second statements, garbage tokens)
@@ -79,7 +81,9 @@ const r = parseStmt("SELECT 1; SELECT 2", { allowTrailing: true })
 if (r.status === "ok") {
   console.log(r.root.type) // SelectStmt
   console.log(r.tail) // 10 — source.slice(tail) is what's left to parse
-} else { throw "expected ok" }
+} else {
+  throw "expected ok"
+}
 ```
 
 ### Errors
@@ -87,7 +91,7 @@ if (r.status === "ok") {
 Parse failures are modeled as "diagnostics". These are not sub-classes of `Error`, so constructing them is cheap since no stack trace is captured.
 
 ```ts
-export type ParseDiagnostic = {
+type ParseDiagnostic = {
   /** Error message */
   readonly message: string
   /** Location of the error */
@@ -104,7 +108,7 @@ export type ParseDiagnostic = {
   toString(): string
 }
 
-export interface DiagnosticHint {
+interface DiagnosticHint {
   /** Hint message */
   readonly message: string
   /** Optional: the source location the hint is referring to */
@@ -134,7 +138,9 @@ if (result.status === "error") {
   //     │        ^^^^
   //
   //   hint: expected a result expression before FROM
-} else { throw "expected error" }
+} else {
+  throw "expected error"
+}
 ```
 
 `parseOrThrow` and `parseStmtOrThrow` throw a `Sqlite3ParserDiagnosticError` with the diagnostics formatted as the error message.
@@ -155,19 +161,20 @@ try {
     //     │        ^^^^
     //
     //   hint: expected a result expression before FROM
-  } else { throw e }
+  } else {
+    throw e
+  }
 }
 ```
 
 ### Traversing the AST
 
-`sqlite3-parser/traverse` exposes an ESTree-style walker. A depth-first walk fires `enter` on every node, recurses into child slots in their surface-syntax order, then fires `leave`:
+`traverse` exposes an ESTree-style walker. A depth-first walk fires `enter` on every node, recurses into child slots in their surface-syntax order, then fires `leave`:
 
 ```ts
-import { parse } from "sqlite3-parser"
-import { traverse } from "sqlite3-parser/traverse"
+import { parseOrThrow, traverse } from "sqlite3-parser"
 
-const { root } = parse("SELECT a, b FROM t")
+const { root } = parseOrThrow("SELECT a, b FROM t")
 const tables: string[] = []
 
 traverse(root, {
@@ -192,7 +199,7 @@ traverse(root, {
   },
   keys: {
     // Override traversal order & keys for a specific node type.
-    SelectStmt: ["with", "select", "compounds"],
+    Select: ["with", "select", "compounds"],
   },
 })
 

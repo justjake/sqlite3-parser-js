@@ -42,7 +42,8 @@ GEN_VERSIONS := $(notdir $(patsubst %/,%,$(wildcard vendor/patched/*/)))
 # (index.ts → parse.ts → parser.dev.json → build/lemon-<ver>).
 GEN_TARGETS := \
   $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts) \
-  generated/current.ts
+  generated/current.ts \
+  test/readme.generated.test.ts
 
 help:
 	@printf '%s\n' \
@@ -215,6 +216,16 @@ generated/current.ts: \
 
 .PHONY: current
 current: generated/current.ts
+
+# ---------------------------------------------------------------------------
+# Generated test that exercises README.md's code blocks (see
+# scripts/md-to-test.ts).  Rebuilt whenever the README or the generator
+# changes so CI's `git diff --exit-code` catches drift between the
+# documented examples and their executable form.
+# ---------------------------------------------------------------------------
+test/readme.generated.test.ts: scripts/md-to-test.ts README.md
+	bun scripts/md-to-test.ts README.md > $@
+	bun run fmt $@
 
 # ---------------------------------------------------------------------------
 # AST layer helpers.  The AST code itself is version-agnostic (see
