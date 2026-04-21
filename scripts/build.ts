@@ -22,9 +22,8 @@
 //   │       │                      `KEYWORDS_DUMP` named exports.
 //   │       └── index.d.ts         types
 //   ├── src/
-//   │   ├── ast/traverse.js        public helper entry for `/traverse`
-//   │   ├── ast/traverse.d.ts      types
-//   │   └── *.d.ts                 other source declarations
+//   │   └── *.d.ts                 source declarations (types only —
+//   │                              runtime JS lives in shared chunks)
 //   └── chunk-*.js                 shared chunks (bun's splitting)
 //
 // NO JSON FILES SHIP with the package.  The prod dumps are inlined
@@ -65,7 +64,6 @@ import { runScript } from "./utils.ts"
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
 const GENERATED = join(ROOT, "generated")
 const BIN = join(ROOT, "bin")
-const SRC = join(ROOT, "src")
 const DIST = join(ROOT, "dist")
 
 /**
@@ -73,7 +71,6 @@ const DIST = join(ROOT, "dist")
  * Paths are relative to BIN; outputs land at dist/bin/<name>.js.
  */
 const BIN_ENTRIES = ["sqlite3-parser.ts", "sqlite3-tokenizer.ts"]
-const SRC_ENTRIES = ["ast/traverse.ts"]
 
 function log(msg: string): void {
   console.log(`[build] ${msg}`)
@@ -114,7 +111,6 @@ async function buildJs(versions: string[]): Promise<void> {
   const entries = [
     join(GENERATED, "current.ts"),
     ...versions.map((v) => join(GENERATED, v, "index.ts")),
-    ...SRC_ENTRIES.map((f) => join(SRC, f)),
     ...BIN_ENTRIES.map((f) => join(BIN, f)),
   ]
   log(`bundling ${entries.length} entrypoint(s) with bun…`)

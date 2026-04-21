@@ -65,22 +65,21 @@ test("withOptions exposes a specialized parser module", async () => {
   )
 })
 
-test("traverse subpath import works", async () => {
+test("traverse is re-exported from the main entry", async () => {
   const pkg = await import("sqlite3-parser")
-  const traversePkg = await import("sqlite3-parser/traverse")
   const result = pkg.parse("SELECT 1")
 
   assert.equal(result.status, "ok")
-  assert.equal(typeof traversePkg.traverse, "function")
-  assert.equal(typeof traversePkg.VisitorKeys, "object")
-  assert.deepEqual(Object.keys(traversePkg.VisitorKeys).slice(0, 3), [
+  assert.equal(typeof pkg.traverse, "function")
+  assert.equal(typeof pkg.VisitorKeys, "object")
+  assert.deepEqual(Object.keys(pkg.VisitorKeys).slice(0, 3), [
     "CmdList",
     "AlterTableStmt",
     "AnalyzeStmt",
   ])
 
   const kinds = []
-  traversePkg.traverse(result.root, {
+  pkg.traverse(result.root, {
     enter(node) {
       kinds.push(node.type)
     },

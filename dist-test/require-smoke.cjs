@@ -1,7 +1,6 @@
 "use strict"
 ;(async () => {
   const pkg = await import("sqlite3-parser")
-  const traversePkg = await import("sqlite3-parser/traverse")
   const result = pkg.parse("SELECT 1")
   const mod = pkg.withOptions({ digitSeparator: "_" })
   const tokenNames = Array.from(mod.tokenize("SELECT 1_000"), (token) => mod.tokenName(token.type))
@@ -11,7 +10,7 @@
     throw new Error(`expected ok parse result, got ${result.status}`)
   }
 
-  traversePkg.traverse(result.root, {
+  pkg.traverse(result.root, {
     enter(node) {
       traverseKinds.push(node.type)
     },

@@ -31,10 +31,6 @@
       "types": "./dist/generated/current.d.ts",
       "default": "./dist/generated/current.js"
     },
-    "./traverse": {
-      "types": "./dist/src/ast/traverse.d.ts",
-      "default": "./dist/src/ast/traverse.js"
-    },
     "./sqlite-*": {
       "types": "./dist/generated/*/index.d.ts",
       "default": "./dist/generated/*/index.js"
