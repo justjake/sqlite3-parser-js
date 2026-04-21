@@ -1914,7 +1914,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // cmd ::= BEGIN transtype(Y) trans_opt(X)
       const Y = popped[1].minor as TransactionType | undefined
       const X = popped[2].minor as Name | undefined
-      state.stmt = { kind: "BeginStmt", tx: Y, name: X, span: nodeSpan() }
+      state.stmt = { type: "BeginStmt", tx: Y, name: X, span: nodeSpan() }
       return undefined
     }
     case 6: // trans_opt(A) ::=
@@ -1958,25 +1958,25 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 13: {
       // cmd ::= ? trans_opt(X)
       const X = popped[1].minor as Name | undefined
-      state.stmt = { kind: "CommitStmt", name: X, span: nodeSpan() }
+      state.stmt = { type: "CommitStmt", name: X, span: nodeSpan() }
       return undefined
     }
     case 14: {
       // cmd ::= ROLLBACK trans_opt(X)
       const X = popped[1].minor as Name | undefined
-      state.stmt = { kind: "RollbackStmt", txName: X, savepointName: undefined, span: nodeSpan() }
+      state.stmt = { type: "RollbackStmt", txName: X, savepointName: undefined, span: nodeSpan() }
       return undefined
     }
     case 15: {
       // cmd ::= SAVEPOINT nm(X)
       const X = popped[1].minor as Name
-      state.stmt = { kind: "SavepointStmt", name: X, span: nodeSpan() }
+      state.stmt = { type: "SavepointStmt", name: X, span: nodeSpan() }
       return undefined
     }
     case 16: {
       // cmd ::= RELEASE savepoint_opt nm(X)
       const X = popped[2].minor as Name
-      state.stmt = { kind: "ReleaseStmt", name: X, span: nodeSpan() }
+      state.stmt = { type: "ReleaseStmt", name: X, span: nodeSpan() }
       return undefined
     }
     case 17: {
@@ -1984,7 +1984,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[1].minor as Name | undefined
       const X = popped[4].minor as Name
 
-      state.stmt = { kind: "RollbackStmt", txName: Y, savepointName: X, span: nodeSpan() }
+      state.stmt = { type: "RollbackStmt", txName: Y, savepointName: X, span: nodeSpan() }
       return undefined
     }
     case 18: {
@@ -1995,7 +1995,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[5].minor as CreateTableBody
 
       state.stmt = {
-        kind: "CreateTableStmt",
+        type: "CreateTableStmt",
         temporary: T,
         ifNotExists: E,
         tblName: Y,
@@ -2038,7 +2038,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const S = popped[1].minor as Select
       let A: CreateTableBody | undefined
 
-      A = { kind: "AsSelectCreateTableBody", select: S, span: nodeSpan() }
+      A = { type: "AsSelectCreateTableBody", select: S, span: nodeSpan() }
       return A
     }
     case 25: {
@@ -2138,7 +2138,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // typetoken(A) ::= typename(X)
       const X = popped[0].minor as string
       let A: Type | undefined
-      A = { kind: "Type", name: X, size: undefined, span: nodeSpan() }
+      A = { type: "Type", name: X, size: undefined, span: nodeSpan() }
       return A
     }
     case 36: {
@@ -2148,9 +2148,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Type | undefined
 
       A = {
-        kind: "Type",
+        type: "Type",
         name: X,
-        size: { kind: "MaxSizeTypeSize", size: Y, span: nodeSpan() },
+        size: { type: "MaxSizeTypeSize", size: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return A
@@ -2163,9 +2163,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Type | undefined
 
       A = {
-        kind: "Type",
+        type: "Type",
         name: X,
-        size: { kind: "TypeSizeTypeSize", size1: Y, size2: Z, span: nodeSpan() },
+        size: { type: "TypeSizeTypeSize", size1: Y, size2: Z, span: nodeSpan() },
         span: nodeSpan(),
       }
       return A
@@ -2214,9 +2214,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
-        constraint: { kind: "DefaultColumnConstraint", expr: X, span: nodeSpan() },
+        constraint: { type: "DefaultColumnConstraint", expr: X, span: nodeSpan() },
         span: nodeSpan(),
       }
       state.constraintName = undefined
@@ -2228,10 +2228,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "DefaultColumnConstraint",
+          type: "DefaultColumnConstraint",
           expr: mkParenthesized(X, nodeSpan()),
           span: nodeSpan(),
         },
@@ -2246,10 +2246,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "DefaultColumnConstraint",
+          type: "DefaultColumnConstraint",
           expr: mkUnary("Positive", X, nodeSpan()),
           span: nodeSpan(),
         },
@@ -2264,10 +2264,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "DefaultColumnConstraint",
+          type: "DefaultColumnConstraint",
           expr: mkUnary("Negative", X, nodeSpan()),
           span: nodeSpan(),
         },
@@ -2282,9 +2282,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
-        constraint: { kind: "DefaultColumnConstraint", expr: mkId(X), span: nodeSpan() },
+        constraint: { type: "DefaultColumnConstraint", expr: mkId(X), span: nodeSpan() },
         span: nodeSpan(),
       }
       state.constraintName = undefined
@@ -2296,10 +2296,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "NotNullColumnConstraint",
+          type: "NotNullColumnConstraint",
           nullable: true,
           conflictClause: R,
           span: nodeSpan(),
@@ -2315,10 +2315,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "NotNullColumnConstraint",
+          type: "NotNullColumnConstraint",
           nullable: false,
           conflictClause: R,
           span: nodeSpan(),
@@ -2336,10 +2336,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "PrimaryKeyColumnConstraint",
+          type: "PrimaryKeyColumnConstraint",
           order: Z,
           conflictClause: R,
           autoIncrement: I,
@@ -2356,9 +2356,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
-        constraint: { kind: "UniqueColumnConstraint", conflictClause: R, span: nodeSpan() },
+        constraint: { type: "UniqueColumnConstraint", conflictClause: R, span: nodeSpan() },
         span: nodeSpan(),
       }
       state.constraintName = undefined
@@ -2370,9 +2370,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
-        constraint: { kind: "CheckColumnConstraint", expr: X, span: nodeSpan() },
+        constraint: { type: "CheckColumnConstraint", expr: X, span: nodeSpan() },
         span: nodeSpan(),
       }
       state.constraintName = undefined
@@ -2386,11 +2386,11 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "ForeignKeyColumnConstraint",
-          clause: { kind: "ForeignKeyClause", tblName: T, columns: TA, args: R, span: nodeSpan() },
+          type: "ForeignKeyColumnConstraint",
+          clause: { type: "ForeignKeyClause", tblName: T, columns: TA, args: R, span: nodeSpan() },
           deferClause: undefined,
           span: nodeSpan(),
         },
@@ -2405,9 +2405,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: undefined,
-        constraint: { kind: "DeferColumnConstraint", clause: D, span: nodeSpan() },
+        constraint: { type: "DeferColumnConstraint", clause: D, span: nodeSpan() },
         span: nodeSpan(),
       }
       return A
@@ -2418,9 +2418,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
-        constraint: { kind: "CollateColumnConstraint", collationName: mkName(C), span: nodeSpan() },
+        constraint: { type: "CollateColumnConstraint", collationName: mkName(C), span: nodeSpan() },
         span: nodeSpan(),
       }
       state.constraintName = undefined
@@ -2432,7 +2432,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: X,
         span: nodeSpan(),
@@ -2446,7 +2446,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedColumnConstraint | undefined
 
       A = {
-        kind: "NamedColumnConstraint",
+        type: "NamedColumnConstraint",
         name: state.constraintName,
         constraint: X,
         span: nodeSpan(),
@@ -2458,7 +2458,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // generated(X) ::= LP expr(E) RP
       const E = popped[1].minor as Expr
       let X: ColumnConstraint | undefined
-      X = { kind: "GeneratedColumnConstraint", expr: E, typ: undefined, span: nodeSpan() }
+      X = { type: "GeneratedColumnConstraint", expr: E, typ: undefined, span: nodeSpan() }
       return X
     }
     case 59: {
@@ -2466,7 +2466,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const E = popped[1].minor as Expr
       const TYPE = popped[3].minor as Token
       let X: ColumnConstraint | undefined
-      X = { kind: "GeneratedColumnConstraint", expr: E, typ: mkId(TYPE), span: nodeSpan() }
+      X = { type: "GeneratedColumnConstraint", expr: E, typ: mkId(TYPE), span: nodeSpan() }
       return X
     }
     case 60: {
@@ -2498,28 +2498,28 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // refarg(A) ::= MATCH nm(X)
       const X = popped[1].minor as Name
       let A: RefArg | undefined
-      A = { kind: "MatchRefArg", name: X, span: nodeSpan() }
+      A = { type: "MatchRefArg", name: X, span: nodeSpan() }
       return A
     }
     case 65: {
       // refarg(A) ::= ON INSERT refact(X)
       const X = popped[2].minor as RefAct
       let A: RefArg | undefined
-      A = { kind: "OnInsertRefArg", action: X, span: nodeSpan() }
+      A = { type: "OnInsertRefArg", action: X, span: nodeSpan() }
       return A
     }
     case 66: {
       // refarg(A) ::= ON DELETE refact(X)
       const X = popped[2].minor as RefAct
       let A: RefArg | undefined
-      A = { kind: "OnDeleteRefArg", action: X, span: nodeSpan() }
+      A = { type: "OnDeleteRefArg", action: X, span: nodeSpan() }
       return A
     }
     case 67: {
       // refarg(A) ::= ON UPDATE refact(X)
       const X = popped[2].minor as RefAct
       let A: RefArg | undefined
-      A = { kind: "OnUpdateRefArg", action: X, span: nodeSpan() }
+      A = { type: "OnUpdateRefArg", action: X, span: nodeSpan() }
       return A
     }
     case 68: {
@@ -2557,7 +2557,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[2].minor as InitDeferredPred | undefined
       let A: DeferSubclause | undefined
 
-      A = { kind: "DeferSubclause", deferrable: false, initDeferred: X, span: nodeSpan() }
+      A = { type: "DeferSubclause", deferrable: false, initDeferred: X, span: nodeSpan() }
       return A
     }
     case 74: {
@@ -2565,7 +2565,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as InitDeferredPred | undefined
       let A: DeferSubclause | undefined
 
-      A = { kind: "DeferSubclause", deferrable: true, initDeferred: X, span: nodeSpan() }
+      A = { type: "DeferSubclause", deferrable: true, initDeferred: X, span: nodeSpan() }
       return A
     }
     case 75: {
@@ -2637,10 +2637,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedTableConstraint | undefined
 
       A = {
-        kind: "NamedTableConstraint",
+        type: "NamedTableConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "PrimaryKeyTableConstraint",
+          type: "PrimaryKeyTableConstraint",
           columns: X,
           autoIncrement: I,
           conflictClause: R,
@@ -2658,10 +2658,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedTableConstraint | undefined
 
       A = {
-        kind: "NamedTableConstraint",
+        type: "NamedTableConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "UniqueTableConstraint",
+          type: "UniqueTableConstraint",
           columns: X,
           conflictClause: R,
           span: nodeSpan(),
@@ -2678,9 +2678,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedTableConstraint | undefined
 
       A = {
-        kind: "NamedTableConstraint",
+        type: "NamedTableConstraint",
         name: state.constraintName,
-        constraint: { kind: "CheckTableConstraint", expr: E, conflictClause: R, span: nodeSpan() },
+        constraint: { type: "CheckTableConstraint", expr: E, conflictClause: R, span: nodeSpan() },
         span: nodeSpan(),
       }
       state.constraintName = undefined
@@ -2696,12 +2696,12 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: NamedTableConstraint | undefined
 
       A = {
-        kind: "NamedTableConstraint",
+        type: "NamedTableConstraint",
         name: state.constraintName,
         constraint: {
-          kind: "ForeignKeyTableConstraint",
+          type: "ForeignKeyTableConstraint",
           columns: FA,
-          clause: { kind: "ForeignKeyClause", tblName: T, columns: TA, args: R, span: nodeSpan() },
+          clause: { type: "ForeignKeyClause", tblName: T, columns: TA, args: R, span: nodeSpan() },
           deferClause: D,
           span: nodeSpan(),
         },
@@ -2766,7 +2766,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const E = popped[2].minor as boolean
       const X = popped[3].minor as QualifiedName
 
-      state.stmt = { kind: "DropTableStmt", ifExists: E, tblName: X, span: nodeSpan() }
+      state.stmt = { type: "DropTableStmt", ifExists: E, tblName: X, span: nodeSpan() }
       return undefined
     }
     case 97: {
@@ -2790,7 +2790,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const S = popped[7].minor as Select
 
       state.stmt = {
-        kind: "CreateViewStmt",
+        type: "CreateViewStmt",
         temporary: T,
         ifNotExists: E,
         viewName: Y,
@@ -2805,13 +2805,13 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const E = popped[2].minor as boolean
       const X = popped[3].minor as QualifiedName
 
-      state.stmt = { kind: "DropViewStmt", ifExists: E, viewName: X, span: nodeSpan() }
+      state.stmt = { type: "DropViewStmt", ifExists: E, viewName: X, span: nodeSpan() }
       return undefined
     }
     case 101: {
       // cmd ::= select(X)
       const X = popped[0].minor as Select
-      state.stmt = { kind: "SelectStmt", body: X, span: nodeSpan() }
+      state.stmt = { type: "SelectStmt", body: X, span: nodeSpan() }
       return undefined
     }
     case 102: {
@@ -2823,7 +2823,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Select | undefined
 
       A = mkSelect(
-        { kind: "With", recursive: false, ctes: W, span: nodeSpan() },
+        { type: "With", recursive: false, ctes: W, span: nodeSpan() },
         X,
         Z,
         L,
@@ -2840,7 +2840,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Select | undefined
 
       A = mkSelect(
-        { kind: "With", recursive: true, ctes: W, span: nodeSpan() },
+        { type: "With", recursive: true, ctes: W, span: nodeSpan() },
         X,
         Z,
         L,
@@ -2871,7 +2871,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[2].minor as OneSelect
       let A: SelectBody = popped[0].minor as SelectBody
 
-      pushCompound(A, { kind: "CompoundSelect", operator: Y, select: Z, span: nodeSpan() })
+      pushCompound(A, { type: "CompoundSelect", operator: Y, select: Z, span: nodeSpan() })
       return A
     }
     case 107: {
@@ -2929,7 +2929,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // oneselect(A) ::= values(X)
       const X = popped[0].minor as ValuesRow[]
       let A: OneSelect | undefined
-      A = { kind: "SelectValues", values: X, span: nodeSpan() }
+      A = { type: "SelectValues", values: X, span: nodeSpan() }
       return A
     }
     case 114: {
@@ -2937,14 +2937,14 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[2].minor as Expr[]
       let A: ValuesRow[] | undefined
 
-      A = [{ kind: "ValuesRow", values: X, span: nodeSpan() }]
+      A = [{ type: "ValuesRow", values: X, span: nodeSpan() }]
       return A
     }
     case 115: {
       // oneselect(A) ::= mvalues(X)
       const X = popped[0].minor as ValuesRow[]
       let A: OneSelect | undefined
-      A = { kind: "SelectValues", values: X, span: nodeSpan() }
+      A = { type: "SelectValues", values: X, span: nodeSpan() }
       return A
     }
     case 116: // mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP
@@ -2984,34 +2984,34 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as Expr
       const Y = popped[2].minor as As | undefined
       let A: ResultColumn[] = popped[0].minor as ResultColumn[]
-      A.push({ kind: "ExprResultColumn", expr: X, alias: Y, span: nodeSpan() })
+      A.push({ type: "ExprResultColumn", expr: X, alias: Y, span: nodeSpan() })
       return A
     }
     case 123: {
       // selcollist(A) ::= sclp(A) STAR
       let A: ResultColumn[] = popped[0].minor as ResultColumn[]
-      A.push({ kind: "StarResultColumn", span: nodeSpan() })
+      A.push({ type: "StarResultColumn", span: nodeSpan() })
       return A
     }
     case 124: {
       // selcollist(A) ::= sclp(A) nm(X) DOT STAR
       const X = popped[1].minor as Name
       let A: ResultColumn[] = popped[0].minor as ResultColumn[]
-      A.push({ kind: "TableStarResultColumn", table: X, span: nodeSpan() })
+      A.push({ type: "TableStarResultColumn", table: X, span: nodeSpan() })
       return A
     }
     case 125: {
       // as(X) ::= AS nm(Y)
       const Y = popped[1].minor as Name
       let X: As | undefined
-      X = { kind: "AsAs", name: Y, span: nodeSpan() }
+      X = { type: "AsAs", name: Y, span: nodeSpan() }
       return X
     }
     case 126: {
       // as(X) ::= ?(Y)
       const Y = popped[0].minor as Token
       let X: As | undefined
-      X = { kind: "ElidedAs", name: mkName(Y), span: nodeSpan() }
+      X = { type: "ElidedAs", name: mkName(Y), span: nodeSpan() }
       return X
     }
     case 127: {
@@ -3057,7 +3057,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       fromClausePush(
         state,
         A,
-        { kind: "TableSelectTable", name: Y, alias: Z, indexed: I, span: nodeSpan() },
+        { type: "TableSelectTable", name: Y, alias: Z, indexed: I, span: nodeSpan() },
         N,
       )
       return A
@@ -3073,7 +3073,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       fromClausePush(
         state,
         A,
-        { kind: "TableCallSelectTable", name: Y, args: E, alias: Z, span: nodeSpan() },
+        { type: "TableCallSelectTable", name: Y, args: E, alias: Z, span: nodeSpan() },
         N,
       )
       return A
@@ -3088,7 +3088,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       fromClausePush(
         state,
         A,
-        { kind: "SelectSelectTable", select: S, alias: Z, span: nodeSpan() },
+        { type: "SelectSelectTable", select: S, alias: Z, span: nodeSpan() },
         N,
       )
       return A
@@ -3103,7 +3103,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       fromClausePush(
         state,
         A,
-        { kind: "SubSelectTable", from: freezeFrom(F, nodeSpan()), alias: Z, span: nodeSpan() },
+        { type: "SubSelectTable", from: freezeFrom(F, nodeSpan()), alias: Z, span: nodeSpan() },
         N,
       )
       return A
@@ -3158,13 +3158,13 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 142: {
       // joinop(X) ::= COMMA
       let X: JoinOperator | undefined
-      X = { kind: "CommaJoinOperator", span: nodeSpan() }
+      X = { type: "CommaJoinOperator", span: nodeSpan() }
       return X
     }
     case 143: {
       // joinop(X) ::= JOIN
       let X: JoinOperator | undefined
-      X = { kind: "TypedJoinJoinOperator", joinType: undefined, span: nodeSpan() }
+      X = { type: "TypedJoinJoinOperator", joinType: undefined, span: nodeSpan() }
       return X
     }
     case 144: {
@@ -3195,14 +3195,14 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // on_using(N) ::= ON expr(E)
       const E = popped[1].minor as Expr
       let N: JoinConstraint | undefined
-      N = { kind: "OnJoinConstraint", expr: E, span: nodeSpan() }
+      N = { type: "OnJoinConstraint", expr: E, span: nodeSpan() }
       return N
     }
     case 148: {
       // on_using(N) ::= USING LP idlist(L) RP
       const L = popped[2].minor as Name[]
       let N: JoinConstraint | undefined
-      N = { kind: "UsingJoinConstraint", columns: L, span: nodeSpan() }
+      N = { type: "UsingJoinConstraint", columns: L, span: nodeSpan() }
       return N
     }
     case 149: {
@@ -3221,13 +3221,13 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // indexed_opt(A) ::= INDEXED BY nm(X)
       const X = popped[2].minor as Name
       let A: Indexed | undefined
-      A = { kind: "IndexedByIndexed", name: X, span: nodeSpan() }
+      A = { type: "IndexedByIndexed", name: X, span: nodeSpan() }
       return A
     }
     case 152: {
       // indexed_opt(A) ::= NOT INDEXED
       let A: Indexed | undefined
-      A = { kind: "NotIndexedIndexed", span: nodeSpan() }
+      A = { type: "NotIndexedIndexed", span: nodeSpan() }
       return A
     }
     case 153: {
@@ -3250,7 +3250,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[4].minor as NullsOrder | undefined
       let A: SortedColumn[] = popped[0].minor as SortedColumn[]
 
-      A.push({ kind: "SortedColumn", expr: Y, order: Z, nulls: X, span: nodeSpan() })
+      A.push({ type: "SortedColumn", expr: Y, order: Z, nulls: X, span: nodeSpan() })
       return A
     }
     case 156: {
@@ -3260,7 +3260,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[2].minor as NullsOrder | undefined
       let A: SortedColumn[] | undefined
 
-      A = [{ kind: "SortedColumn", expr: Y, order: Z, nulls: X, span: nodeSpan() }]
+      A = [{ type: "SortedColumn", expr: Y, order: Z, nulls: X, span: nodeSpan() }]
       return A
     }
     case 157: {
@@ -3335,7 +3335,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // limit_opt(A) ::= LIMIT expr(X)
       const X = popped[1].minor as Expr
       let A: Limit | undefined
-      A = { kind: "Limit", expr: X, offset: undefined, span: nodeSpan() }
+      A = { type: "Limit", expr: X, offset: undefined, span: nodeSpan() }
       return A
     }
     case 169: {
@@ -3343,7 +3343,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as Expr
       const Y = popped[3].minor as Expr
       let A: Limit | undefined
-      A = { kind: "Limit", expr: X, offset: Y, span: nodeSpan() }
+      A = { type: "Limit", expr: X, offset: Y, span: nodeSpan() }
       return A
     }
     case 170: {
@@ -3351,7 +3351,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as Expr
       const Y = popped[3].minor as Expr
       let A: Limit | undefined
-      A = { kind: "Limit", expr: Y, offset: X, span: nodeSpan() }
+      A = { type: "Limit", expr: Y, offset: X, span: nodeSpan() }
       return A
     }
     case 171: {
@@ -3366,7 +3366,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       }
 
       state.stmt = {
-        kind: "DeleteStmt",
+        type: "DeleteStmt",
         with: C,
         tblName: X,
         indexed: I,
@@ -3434,7 +3434,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       }
 
       state.stmt = {
-        kind: "UpdateStmt",
+        type: "UpdateStmt",
         with: C,
         orConflict: R,
         tblName: X,
@@ -3454,7 +3454,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[2].minor as Name
       const Y = popped[4].minor as Expr
       let A: SetAssignment[] = popped[0].minor as SetAssignment[]
-      A.push({ kind: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() })
+      A.push({ type: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() })
       return A
     }
     case 180: {
@@ -3462,7 +3462,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[3].minor as Name[]
       const Y = popped[6].minor as Expr
       let A: SetAssignment[] = popped[0].minor as SetAssignment[]
-      A.push({ kind: "SetAssignment", colNames: X, expr: Y, span: nodeSpan() })
+      A.push({ type: "SetAssignment", colNames: X, expr: Y, span: nodeSpan() })
       return A
     }
     case 181: {
@@ -3470,7 +3470,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[0].minor as Name
       const Y = popped[2].minor as Expr
       let A: SetAssignment[] | undefined
-      A = [{ kind: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() }]
+      A = [{ type: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() }]
       return A
     }
     case 182: {
@@ -3478,7 +3478,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as Name[]
       const Y = popped[4].minor as Expr
       let A: SetAssignment[] | undefined
-      A = [{ kind: "SetAssignment", colNames: X, expr: Y, span: nodeSpan() }]
+      A = [{ type: "SetAssignment", colNames: X, expr: Y, span: nodeSpan() }]
       return A
     }
     case 183: {
@@ -3496,12 +3496,12 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       }
 
       state.stmt = {
-        kind: "InsertStmt",
+        type: "InsertStmt",
         with: W,
         orConflict: R,
         tblName: X,
         columns: F,
-        body: { kind: "SelectInsertBody", select: S, upsert: U.upsert, span: nodeSpan() },
+        body: { type: "SelectInsertBody", select: S, upsert: U.upsert, span: nodeSpan() },
         returning: U.returning,
         span: nodeSpan(),
       }
@@ -3516,12 +3516,12 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[7].minor as { columns: ResultColumn[] | undefined; span: Span | undefined }
 
       state.stmt = {
-        kind: "InsertStmt",
+        type: "InsertStmt",
         with: W,
         orConflict: R,
         tblName: X,
         columns: F,
-        body: { kind: "DefaultValuesInsertBody", span: nodeSpan() },
+        body: { type: "DefaultValuesInsertBody", span: nodeSpan() },
         returning: Y.columns,
         span: nodeSpan(),
       }
@@ -3572,9 +3572,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const idx = mkUpsertIndex(state, T, TW, nodeSpan())
       A = {
         upsert: {
-          kind: "Upsert",
+          type: "Upsert",
           index: idx,
-          doClause: { kind: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() },
+          doClause: { type: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() },
           next: N.upsert,
           span: nodeSpan(),
         },
@@ -3604,9 +3604,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const idx = mkUpsertIndex(state, T, TW, nodeSpan())
       A = {
         upsert: {
-          kind: "Upsert",
+          type: "Upsert",
           index: idx,
-          doClause: { kind: "NothingUpsertDo", span: nodeSpan() },
+          doClause: { type: "NothingUpsertDo", span: nodeSpan() },
           next: N.upsert,
           span: nodeSpan(),
         },
@@ -3628,9 +3628,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
 
       A = {
         upsert: {
-          kind: "Upsert",
+          type: "Upsert",
           index: undefined,
-          doClause: { kind: "NothingUpsertDo", span: nodeSpan() },
+          doClause: { type: "NothingUpsertDo", span: nodeSpan() },
           next: undefined,
           span: nodeSpan(),
         },
@@ -3654,9 +3654,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
 
       A = {
         upsert: {
-          kind: "Upsert",
+          type: "Upsert",
           index: undefined,
-          doClause: { kind: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() },
+          doClause: { type: "SetUpsertDo", sets: Z, whereClause: W, span: nodeSpan() },
           next: undefined,
           span: nodeSpan(),
         },
@@ -3750,7 +3750,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[0].minor as Name
       const Y = popped[2].minor as Name
       let A: Expr | undefined
-      A = { kind: "QualifiedExpr", schema: undefined, table: X, column: Y, span: nodeSpan() }
+      A = { type: "QualifiedExpr", schema: undefined, table: X, column: Y, span: nodeSpan() }
       return A
     }
     case 202: {
@@ -3760,7 +3760,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[4].minor as Name
       let A: Expr | undefined
 
-      A = { kind: "QualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() }
+      A = { type: "QualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() }
       return A
     }
     case 203: {
@@ -3837,7 +3837,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
         X,
         D,
         Y,
-        { kind: "SortListFunctionCallOrder", columns: O, span: nodeSpan() },
+        { type: "SortListFunctionCallOrder", columns: O, span: nodeSpan() },
         undefined,
         nodeSpan(),
       )
@@ -3863,7 +3863,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
         X,
         D,
         Y,
-        { kind: "WithinGroupFunctionCallOrder", expr: E, span: nodeSpan() },
+        { type: "WithinGroupFunctionCallOrder", expr: E, span: nodeSpan() },
         undefined,
         nodeSpan(),
       )
@@ -3894,7 +3894,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
         X,
         D,
         Y,
-        { kind: "SortListFunctionCallOrder", columns: O, span: nodeSpan() },
+        { type: "SortListFunctionCallOrder", columns: O, span: nodeSpan() },
         Z,
         nodeSpan(),
       )
@@ -3922,7 +3922,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
         X,
         D,
         Y,
-        { kind: "WithinGroupFunctionCallOrder", expr: E, span: nodeSpan() },
+        { type: "WithinGroupFunctionCallOrder", expr: E, span: nodeSpan() },
         Z,
         nodeSpan(),
       )
@@ -3941,7 +3941,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[3].minor as Expr
       let A: Expr | undefined
 
-      A = { kind: "ParenthesizedExpr", exprs: [...X, Y], span: nodeSpan() }
+      A = { type: "ParenthesizedExpr", exprs: [...X, Y], span: nodeSpan() }
       return A
     }
     case 220: // expr(A) ::= expr(X) AND(OP) expr(Y)
@@ -4007,7 +4007,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // expr(A) ::= expr(X) NOT NULL
       const X = popped[0].minor as Expr
       let A: Expr | undefined
-      A = { kind: "NotNullExpr", expr: X, span: nodeSpan() }
+      A = { type: "NotNullExpr", expr: X, span: nodeSpan() }
       return A
     }
     case 234: {
@@ -4146,7 +4146,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[3].minor as Expr | undefined
       let A: Expr | undefined
 
-      A = { kind: "CaseExpr", base: X, whenThenPairs: Y, elseExpr: Z, span: nodeSpan() }
+      A = { type: "CaseExpr", base: X, whenThenPairs: Y, elseExpr: Z, span: nodeSpan() }
       return A
     }
     case 253: {
@@ -4155,7 +4155,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[4].minor as Expr
       let A: WhenThen[] = popped[0].minor as WhenThen[]
 
-      A.push({ kind: "WhenThen", when: Y, then: Z, span: nodeSpan() })
+      A.push({ type: "WhenThen", when: Y, then: Z, span: nodeSpan() })
       return A
     }
     case 254: {
@@ -4164,7 +4164,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[3].minor as Expr
       let A: WhenThen[] | undefined
 
-      A = [{ kind: "WhenThen", when: Y, then: Z, span: nodeSpan() }]
+      A = [{ type: "WhenThen", when: Y, then: Z, span: nodeSpan() }]
       return A
     }
     case 255: {
@@ -4243,7 +4243,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const W = popped[10].minor as Expr | undefined
 
       state.stmt = {
-        kind: "CreateIndexStmt",
+        type: "CreateIndexStmt",
         unique: U,
         ifNotExists: NE,
         idxName: X,
@@ -4286,7 +4286,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[4].minor as SortOrder | undefined
       let A: IndexedColumn[] = popped[0].minor as IndexedColumn[]
 
-      A.push({ kind: "IndexedColumn", colName: Y, collationName: C, order: Z, span: nodeSpan() })
+      A.push({ type: "IndexedColumn", colName: Y, collationName: C, order: Z, span: nodeSpan() })
       return A
     }
     case 271: {
@@ -4296,7 +4296,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[2].minor as SortOrder | undefined
       let A: IndexedColumn[] | undefined
 
-      A = [{ kind: "IndexedColumn", colName: Y, collationName: C, order: Z, span: nodeSpan() }]
+      A = [{ type: "IndexedColumn", colName: Y, collationName: C, order: Z, span: nodeSpan() }]
       return A
     }
     case 272: {
@@ -4317,20 +4317,20 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const E = popped[2].minor as boolean
       const X = popped[3].minor as QualifiedName
 
-      state.stmt = { kind: "DropIndexStmt", ifExists: E, idxName: X, span: nodeSpan() }
+      state.stmt = { type: "DropIndexStmt", ifExists: E, idxName: X, span: nodeSpan() }
       return undefined
     }
     case 275: {
       // cmd ::= VACUUM vinto(Y)
       const Y = popped[1].minor as Expr | undefined
-      state.stmt = { kind: "VacuumStmt", name: undefined, into: Y, span: nodeSpan() }
+      state.stmt = { type: "VacuumStmt", name: undefined, into: Y, span: nodeSpan() }
       return undefined
     }
     case 276: {
       // cmd ::= VACUUM nm(X) vinto(Y)
       const X = popped[1].minor as Name
       const Y = popped[2].minor as Expr | undefined
-      state.stmt = { kind: "VacuumStmt", name: X, into: Y, span: nodeSpan() }
+      state.stmt = { type: "VacuumStmt", name: X, into: Y, span: nodeSpan() }
       return undefined
     }
     case 277: {
@@ -4349,7 +4349,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 279: {
       // cmd ::= PRAGMA fullname(X)
       const X = popped[1].minor as QualifiedName
-      state.stmt = { kind: "PragmaStmt", name: X, body: undefined, span: nodeSpan() }
+      state.stmt = { type: "PragmaStmt", name: X, body: undefined, span: nodeSpan() }
       return undefined
     }
     case 280: {
@@ -4357,9 +4357,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as QualifiedName
       const Y = popped[3].minor as Expr
       state.stmt = {
-        kind: "PragmaStmt",
+        type: "PragmaStmt",
         name: X,
-        body: { kind: "EqualsPragmaBody", value: Y, span: nodeSpan() },
+        body: { type: "EqualsPragmaBody", value: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4369,9 +4369,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as QualifiedName
       const Y = popped[3].minor as Expr
       state.stmt = {
-        kind: "PragmaStmt",
+        type: "PragmaStmt",
         name: X,
-        body: { kind: "CallPragmaBody", value: Y, span: nodeSpan() },
+        body: { type: "CallPragmaBody", value: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4381,9 +4381,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as QualifiedName
       const Y = popped[3].minor as Expr
       state.stmt = {
-        kind: "PragmaStmt",
+        type: "PragmaStmt",
         name: X,
-        body: { kind: "EqualsPragmaBody", value: Y, span: nodeSpan() },
+        body: { type: "EqualsPragmaBody", value: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4393,9 +4393,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[1].minor as QualifiedName
       const Y = popped[3].minor as Expr
       state.stmt = {
-        kind: "PragmaStmt",
+        type: "PragmaStmt",
         name: X,
-        body: { kind: "CallPragmaBody", value: Y, span: nodeSpan() },
+        body: { type: "CallPragmaBody", value: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4404,7 +4404,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // nmnum(A) ::= nm(X)
       const X = popped[0].minor as Name
       let A: Expr | undefined
-      A = { kind: "NameExpr", name: X, span: nodeSpan() }
+      A = { type: "NameExpr", name: X, span: nodeSpan() }
       return A
     }
     case 285: // nmnum(A) ::= ON(X)
@@ -4452,7 +4452,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const S = popped[12].minor as TriggerCmd[]
 
       state.stmt = {
-        kind: "CreateTriggerStmt",
+        type: "CreateTriggerStmt",
         temporary: T,
         ifNotExists: NOERR,
         triggerName: B,
@@ -4493,26 +4493,26 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 296: {
       // trigger_event(A) ::= DELETE
       let A: TriggerEvent | undefined
-      A = { kind: "DeleteTriggerEvent", span: nodeSpan() }
+      A = { type: "DeleteTriggerEvent", span: nodeSpan() }
       return A
     }
     case 297: {
       // trigger_event(A) ::= INSERT
       let A: TriggerEvent | undefined
-      A = { kind: "InsertTriggerEvent", span: nodeSpan() }
+      A = { type: "InsertTriggerEvent", span: nodeSpan() }
       return A
     }
     case 298: {
       // trigger_event(A) ::= UPDATE
       let A: TriggerEvent | undefined
-      A = { kind: "UpdateTriggerEvent", span: nodeSpan() }
+      A = { type: "UpdateTriggerEvent", span: nodeSpan() }
       return A
     }
     case 299: {
       // trigger_event(A) ::= UPDATE OF idlist(X)
       const X = popped[2].minor as Name[]
       let A: TriggerEvent | undefined
-      A = { kind: "UpdateOfTriggerEvent", columns: X, span: nodeSpan() }
+      A = { type: "UpdateOfTriggerEvent", columns: X, span: nodeSpan() }
       return A
     }
     case 300: {
@@ -4586,7 +4586,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: TriggerCmd | undefined
 
       A = {
-        kind: "UpdateTriggerCmd",
+        type: "UpdateTriggerCmd",
         orConflict: R,
         tblName: X,
         sets: Y,
@@ -4616,7 +4616,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
         )
       }
       A = {
-        kind: "InsertTriggerCmd",
+        type: "InsertTriggerCmd",
         orConflict: R,
         tblName: X,
         colNames: F,
@@ -4632,21 +4632,21 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[4].minor as Expr | undefined
       let A: TriggerCmd | undefined
 
-      A = { kind: "DeleteTriggerCmd", tblName: X, whereClause: Y, span: nodeSpan() }
+      A = { type: "DeleteTriggerCmd", tblName: X, whereClause: Y, span: nodeSpan() }
       return A
     }
     case 311: {
       // trigger_cmd(A) ::= select(X)
       const X = popped[0].minor as Select
       let A: TriggerCmd | undefined
-      A = { kind: "SelectTriggerCmd", select: X, span: nodeSpan() }
+      A = { type: "SelectTriggerCmd", select: X, span: nodeSpan() }
       return A
     }
     case 312: {
       // expr(A) ::= RAISE LP IGNORE RP
       let A: Expr | undefined
 
-      A = { kind: "RaiseExpr", resolve: "Ignore", message: undefined, span: nodeSpan() }
+      A = { type: "RaiseExpr", resolve: "Ignore", message: undefined, span: nodeSpan() }
       return A
     }
     case 313: {
@@ -4655,7 +4655,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[4].minor as Expr
       let A: Expr | undefined
 
-      A = { kind: "RaiseExpr", resolve: T, message: Z, span: nodeSpan() }
+      A = { type: "RaiseExpr", resolve: T, message: Z, span: nodeSpan() }
       return A
     }
     case 314: {
@@ -4681,7 +4681,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const NOERR = popped[2].minor as boolean
       const X = popped[3].minor as QualifiedName
 
-      state.stmt = { kind: "DropTriggerStmt", ifExists: NOERR, triggerName: X, span: nodeSpan() }
+      state.stmt = { type: "DropTriggerStmt", ifExists: NOERR, triggerName: X, span: nodeSpan() }
       return undefined
     }
     case 318: {
@@ -4690,14 +4690,14 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const D = popped[4].minor as Expr
       const K = popped[5].minor as Expr | undefined
 
-      state.stmt = { kind: "AttachStmt", expr: F, dbName: D, key: K, span: nodeSpan() }
+      state.stmt = { type: "AttachStmt", expr: F, dbName: D, key: K, span: nodeSpan() }
       return undefined
     }
     case 319: {
       // cmd ::= DETACH database_kw_opt expr(D)
       const D = popped[2].minor as Expr
 
-      state.stmt = { kind: "DetachStmt", expr: D, span: nodeSpan() }
+      state.stmt = { type: "DetachStmt", expr: D, span: nodeSpan() }
       return undefined
     }
     case 320: {
@@ -4715,24 +4715,24 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     }
     case 322: {
       // cmd ::= REINDEX
-      state.stmt = { kind: "ReindexStmt", objName: undefined, span: nodeSpan() }
+      state.stmt = { type: "ReindexStmt", objName: undefined, span: nodeSpan() }
       return undefined
     }
     case 323: {
       // cmd ::= REINDEX fullname(X)
       const X = popped[1].minor as QualifiedName
-      state.stmt = { kind: "ReindexStmt", objName: X, span: nodeSpan() }
+      state.stmt = { type: "ReindexStmt", objName: X, span: nodeSpan() }
       return undefined
     }
     case 324: {
       // cmd ::= ANALYZE
-      state.stmt = { kind: "AnalyzeStmt", objName: undefined, span: nodeSpan() }
+      state.stmt = { type: "AnalyzeStmt", objName: undefined, span: nodeSpan() }
       return undefined
     }
     case 325: {
       // cmd ::= ANALYZE fullname(X)
       const X = popped[1].minor as QualifiedName
-      state.stmt = { kind: "AnalyzeStmt", objName: X, span: nodeSpan() }
+      state.stmt = { type: "AnalyzeStmt", objName: X, span: nodeSpan() }
       return undefined
     }
     case 326: {
@@ -4741,9 +4741,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[5].minor as Name
 
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
-        body: { kind: "RenameToAlterTableBody", name: Z, span: nodeSpan() },
+        body: { type: "RenameToAlterTableBody", name: Z, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4757,9 +4757,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
 
       const cd = mkColumnDefinition(Y, Z, C, nodeSpan())
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
-        body: { kind: "AddColumnAlterTableBody", column: cd, span: nodeSpan() },
+        body: { type: "AddColumnAlterTableBody", column: cd, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4770,9 +4770,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[5].minor as Name
 
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
-        body: { kind: "DropColumnAlterTableBody", column: Y, span: nodeSpan() },
+        body: { type: "DropColumnAlterTableBody", column: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4784,9 +4784,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[7].minor as Name
 
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
-        body: { kind: "RenameColumnAlterTableBody", old: Y, new: Z, span: nodeSpan() },
+        body: { type: "RenameColumnAlterTableBody", old: Y, new: Z, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4797,9 +4797,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[5].minor as Name
 
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
-        body: { kind: "DropConstraintAlterTableBody", name: Y, span: nodeSpan() },
+        body: { type: "DropConstraintAlterTableBody", name: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4810,9 +4810,9 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Y = popped[5].minor as Name
 
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
-        body: { kind: "DropColumnNotNullAlterTableBody", column: Y, span: nodeSpan() },
+        body: { type: "DropColumnNotNullAlterTableBody", column: Y, span: nodeSpan() },
         span: nodeSpan(),
       }
       return undefined
@@ -4824,10 +4824,10 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const R = popped[9].minor as ResolveType | undefined
 
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
         body: {
-          kind: "SetColumnNotNullAlterTableBody",
+          type: "SetColumnNotNullAlterTableBody",
           column: Y,
           onConflict: R,
           span: nodeSpan(),
@@ -4844,17 +4844,17 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const R = popped[10].minor as ResolveType | undefined
 
       const constraint: TableConstraint = {
-        kind: "CheckTableConstraint",
+        type: "CheckTableConstraint",
         expr: E,
         conflictClause: R,
         span: nodeSpan(),
       }
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
         body: {
-          kind: "AddConstraintAlterTableBody",
-          constraint: { kind: "NamedTableConstraint", name: Z, constraint, span: nodeSpan() },
+          type: "AddConstraintAlterTableBody",
+          constraint: { type: "NamedTableConstraint", name: Z, constraint, span: nodeSpan() },
           span: nodeSpan(),
         },
         span: nodeSpan(),
@@ -4868,18 +4868,18 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const R = popped[8].minor as ResolveType | undefined
 
       const constraint: TableConstraint = {
-        kind: "CheckTableConstraint",
+        type: "CheckTableConstraint",
         expr: E,
         conflictClause: R,
         span: nodeSpan(),
       }
       state.stmt = {
-        kind: "AlterTableStmt",
+        type: "AlterTableStmt",
         tblName: X,
         body: {
-          kind: "AddConstraintAlterTableBody",
+          type: "AddConstraintAlterTableBody",
           constraint: {
-            kind: "NamedTableConstraint",
+            type: "NamedTableConstraint",
             name: undefined,
             constraint,
             span: nodeSpan(),
@@ -4904,7 +4904,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
         state.vtabArgs.push(state.vtabArgCurrent)
         state.vtabArgCurrent = ""
       }
-      if (X.kind === "CreateVirtualTableStmt") {
+      if (X.type === "CreateVirtualTableStmt") {
         state.stmt = { ...X, args: state.vtabArgs.slice(), span: nodeSpan() }
       } else {
         state.stmt = X
@@ -4920,7 +4920,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Stmt | undefined
 
       A = {
-        kind: "CreateVirtualTableStmt",
+        type: "CreateVirtualTableStmt",
         ifNotExists: E,
         tblName: X,
         moduleName: Z,
@@ -4964,14 +4964,14 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // with(A) ::= WITH wqlist(W)
       const W = popped[1].minor as CommonTableExpr[]
       let A: With | undefined
-      A = { kind: "With", recursive: false, ctes: W, span: nodeSpan() }
+      A = { type: "With", recursive: false, ctes: W, span: nodeSpan() }
       return A
     }
     case 344: {
       // with(A) ::= WITH RECURSIVE wqlist(W)
       const W = popped[2].minor as CommonTableExpr[]
       let A: With | undefined
-      A = { kind: "With", recursive: true, ctes: W, span: nodeSpan() }
+      A = { type: "With", recursive: true, ctes: W, span: nodeSpan() }
       return A
     }
     case 345: {
@@ -5001,7 +5001,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: CommonTableExpr | undefined
 
       A = {
-        kind: "CommonTableExpr",
+        type: "CommonTableExpr",
         tblName: X,
         columns: Y,
         materialized: M,
@@ -5043,7 +5043,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[0].minor as Name
       const Y = popped[3].minor as Window
       let A: WindowDef | undefined
-      A = { kind: "WindowDef", name: X, window: Y, span: nodeSpan() }
+      A = { type: "WindowDef", name: X, window: Y, span: nodeSpan() }
       return A
     }
     case 354: {
@@ -5054,7 +5054,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Window | undefined
 
       A = {
-        kind: "Window",
+        type: "Window",
         base: undefined,
         partitionBy: X,
         orderBy: Y,
@@ -5071,7 +5071,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[5].minor as FrameClause | undefined
       let A: Window | undefined
 
-      A = { kind: "Window", base: W, partitionBy: X, orderBy: Y, frameClause: Z, span: nodeSpan() }
+      A = { type: "Window", base: W, partitionBy: X, orderBy: Y, frameClause: Z, span: nodeSpan() }
       return A
     }
     case 356: {
@@ -5081,7 +5081,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Window | undefined
 
       A = {
-        kind: "Window",
+        type: "Window",
         base: undefined,
         partitionBy: undefined,
         orderBy: Y,
@@ -5098,7 +5098,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Window | undefined
 
       A = {
-        kind: "Window",
+        type: "Window",
         base: W,
         partitionBy: undefined,
         orderBy: Y,
@@ -5113,7 +5113,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Window | undefined
 
       A = {
-        kind: "Window",
+        type: "Window",
         base: undefined,
         partitionBy: undefined,
         orderBy: undefined,
@@ -5129,7 +5129,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       let A: Window | undefined
 
       A = {
-        kind: "Window",
+        type: "Window",
         base: W,
         partitionBy: undefined,
         orderBy: undefined,
@@ -5151,7 +5151,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[2].minor as FrameExclude | undefined
       let A: FrameClause | undefined
 
-      A = { kind: "FrameClause", mode: X, start: Y, end: undefined, exclude: Z, span: nodeSpan() }
+      A = { type: "FrameClause", mode: X, start: Y, end: undefined, exclude: Z, span: nodeSpan() }
       return A
     }
     case 362: {
@@ -5162,7 +5162,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const W = popped[5].minor as FrameExclude | undefined
       let A: FrameClause | undefined
 
-      A = { kind: "FrameClause", mode: X, start: Y, end: Z, exclude: W, span: nodeSpan() }
+      A = { type: "FrameClause", mode: X, start: Y, end: Z, exclude: W, span: nodeSpan() }
       return A
     }
     case 363: {
@@ -5193,7 +5193,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 367: {
       // frame_bound_s(A) ::= UNBOUNDED PRECEDING
       let A: FrameBound | undefined
-      A = { kind: "UnboundedPrecedingFrameBound", span: nodeSpan() }
+      A = { type: "UnboundedPrecedingFrameBound", span: nodeSpan() }
       return A
     }
     case 368: {
@@ -5206,27 +5206,27 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 369: {
       // frame_bound_e(A) ::= UNBOUNDED FOLLOWING
       let A: FrameBound | undefined
-      A = { kind: "UnboundedFollowingFrameBound", span: nodeSpan() }
+      A = { type: "UnboundedFollowingFrameBound", span: nodeSpan() }
       return A
     }
     case 370: {
       // frame_bound(A) ::= expr(X) PRECEDING
       const X = popped[0].minor as Expr
       let A: FrameBound | undefined
-      A = { kind: "PrecedingFrameBound", expr: X, span: nodeSpan() }
+      A = { type: "PrecedingFrameBound", expr: X, span: nodeSpan() }
       return A
     }
     case 371: {
       // frame_bound(A) ::= CURRENT ROW
       let A: FrameBound | undefined
-      A = { kind: "CurrentRowFrameBound", span: nodeSpan() }
+      A = { type: "CurrentRowFrameBound", span: nodeSpan() }
       return A
     }
     case 372: {
       // frame_bound(A) ::= expr(X) FOLLOWING
       const X = popped[0].minor as Expr
       let A: FrameBound | undefined
-      A = { kind: "FollowingFrameBound", expr: X, span: nodeSpan() }
+      A = { type: "FollowingFrameBound", expr: X, span: nodeSpan() }
       return A
     }
     case 373: {
@@ -5278,35 +5278,35 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const F = popped[0].minor as Expr
       const O = popped[1].minor as Over
       let A: FunctionTail | undefined
-      A = { kind: "FunctionTail", filterClause: F, overClause: O, span: nodeSpan() }
+      A = { type: "FunctionTail", filterClause: F, overClause: O, span: nodeSpan() }
       return A
     }
     case 381: {
       // filter_over(A) ::= over_clause(O)
       const O = popped[0].minor as Over
       let A: FunctionTail | undefined
-      A = { kind: "FunctionTail", filterClause: undefined, overClause: O, span: nodeSpan() }
+      A = { type: "FunctionTail", filterClause: undefined, overClause: O, span: nodeSpan() }
       return A
     }
     case 382: {
       // filter_over(A) ::= filter_clause(F)
       const F = popped[0].minor as Expr
       let A: FunctionTail | undefined
-      A = { kind: "FunctionTail", filterClause: F, overClause: undefined, span: nodeSpan() }
+      A = { type: "FunctionTail", filterClause: F, overClause: undefined, span: nodeSpan() }
       return A
     }
     case 383: {
       // over_clause(A) ::= OVER LP window(Z) RP
       const Z = popped[2].minor as Window
       let A: Over | undefined
-      A = { kind: "WindowOver", window: Z, span: nodeSpan() }
+      A = { type: "WindowOver", window: Z, span: nodeSpan() }
       return A
     }
     case 384: {
       // over_clause(A) ::= OVER nm(Z)
       const Z = popped[1].minor as Name
       let A: Over | undefined
-      A = { kind: "NameOver", name: Z, span: nodeSpan() }
+      A = { type: "NameOver", name: Z, span: nodeSpan() }
       return A
     }
     case 385: {
@@ -5334,7 +5334,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
           }),
         )
       }
-      A = { kind: "NumericLiteral", value: dq.text, span: X.span }
+      A = { type: "NumericLiteral", value: dq.text, span: X.span }
       return A
     }
     case 387: // input ::= cmdlist

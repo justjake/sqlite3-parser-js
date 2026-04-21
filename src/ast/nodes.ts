@@ -1,7 +1,7 @@
 // AST node shapes for SQLite's SQL grammar.
 //
 // Each Rust-style enum with payload-bearing variants appears as a
-// discriminated union tagged by `kind`.  Payload-free enums collapse
+// discriminated union tagged by `type`.  Payload-free enums collapse
 // to bare string-literal unions.  Each Rust-style struct appears as
 // an interface.  Bitflag types are `number` aliases with a companion
 // const object holding the bit masks.  `Option<T>` maps to `T | undefined`.
@@ -36,7 +36,7 @@ import type { Span } from "../tokenize.ts"
 
 /** A series of SQL statements separated by `;`. */
 export interface CmdList {
-  readonly kind: "CmdList"
+  readonly type: "CmdList"
   readonly cmds: readonly Stmt[]
   readonly span: Span
 }
@@ -51,7 +51,7 @@ export interface CmdList {
  * ```
  */
 export interface AlterTableStmt {
-  readonly kind: "AlterTableStmt"
+  readonly type: "AlterTableStmt"
   readonly tblName: QualifiedName
   readonly body: AlterTableBody
   readonly span: Span
@@ -63,7 +63,7 @@ export interface AlterTableStmt {
  * ```
  */
 export interface AnalyzeStmt {
-  readonly kind: "AnalyzeStmt"
+  readonly type: "AnalyzeStmt"
   readonly objName: QualifiedName | undefined
   readonly span: Span
 }
@@ -74,7 +74,7 @@ export interface AnalyzeStmt {
  * ```
  */
 export interface AttachStmt {
-  readonly kind: "AttachStmt"
+  readonly type: "AttachStmt"
   readonly expr: Expr
   readonly dbName: Expr
   readonly key: Expr | undefined
@@ -87,7 +87,7 @@ export interface AttachStmt {
  * ```
  */
 export interface BeginStmt {
-  readonly kind: "BeginStmt"
+  readonly type: "BeginStmt"
   readonly tx: TransactionType | undefined
   readonly name: Name | undefined
   readonly span: Span
@@ -99,7 +99,7 @@ export interface BeginStmt {
  * ```
  */
 export interface CommitStmt {
-  readonly kind: "CommitStmt"
+  readonly type: "CommitStmt"
   readonly name: Name | undefined
   readonly span: Span
 }
@@ -110,7 +110,7 @@ export interface CommitStmt {
  * ```
  */
 export interface CreateIndexStmt {
-  readonly kind: "CreateIndexStmt"
+  readonly type: "CreateIndexStmt"
   readonly unique: boolean
   readonly ifNotExists: boolean
   readonly idxName: QualifiedName
@@ -126,7 +126,7 @@ export interface CreateIndexStmt {
  * ```
  */
 export interface CreateTableStmt {
-  readonly kind: "CreateTableStmt"
+  readonly type: "CreateTableStmt"
   readonly temporary: boolean
   readonly ifNotExists: boolean
   readonly tblName: QualifiedName
@@ -140,7 +140,7 @@ export interface CreateTableStmt {
  * ```
  */
 export interface CreateTriggerStmt {
-  readonly kind: "CreateTriggerStmt"
+  readonly type: "CreateTriggerStmt"
   readonly temporary: boolean
   readonly ifNotExists: boolean
   readonly triggerName: QualifiedName
@@ -159,7 +159,7 @@ export interface CreateTriggerStmt {
  * ```
  */
 export interface CreateViewStmt {
-  readonly kind: "CreateViewStmt"
+  readonly type: "CreateViewStmt"
   readonly temporary: boolean
   readonly ifNotExists: boolean
   readonly viewName: QualifiedName
@@ -174,7 +174,7 @@ export interface CreateViewStmt {
  * ```
  */
 export interface CreateVirtualTableStmt {
-  readonly kind: "CreateVirtualTableStmt"
+  readonly type: "CreateVirtualTableStmt"
   readonly ifNotExists: boolean
   readonly tblName: QualifiedName
   readonly moduleName: Name
@@ -188,7 +188,7 @@ export interface CreateVirtualTableStmt {
  * ```
  */
 export interface DeleteStmt {
-  readonly kind: "DeleteStmt"
+  readonly type: "DeleteStmt"
   readonly with: With | undefined
   readonly tblName: QualifiedName
   readonly indexed: Indexed | undefined
@@ -205,7 +205,7 @@ export interface DeleteStmt {
  * ```
  */
 export interface DetachStmt {
-  readonly kind: "DetachStmt"
+  readonly type: "DetachStmt"
   readonly expr: Expr
   readonly span: Span
 }
@@ -216,7 +216,7 @@ export interface DetachStmt {
  * ```
  */
 export interface DropIndexStmt {
-  readonly kind: "DropIndexStmt"
+  readonly type: "DropIndexStmt"
   readonly ifExists: boolean
   readonly idxName: QualifiedName
   readonly span: Span
@@ -228,7 +228,7 @@ export interface DropIndexStmt {
  * ```
  */
 export interface DropTableStmt {
-  readonly kind: "DropTableStmt"
+  readonly type: "DropTableStmt"
   readonly ifExists: boolean
   readonly tblName: QualifiedName
   readonly span: Span
@@ -240,7 +240,7 @@ export interface DropTableStmt {
  * ```
  */
 export interface DropTriggerStmt {
-  readonly kind: "DropTriggerStmt"
+  readonly type: "DropTriggerStmt"
   readonly ifExists: boolean
   readonly triggerName: QualifiedName
   readonly span: Span
@@ -252,7 +252,7 @@ export interface DropTriggerStmt {
  * ```
  */
 export interface DropViewStmt {
-  readonly kind: "DropViewStmt"
+  readonly type: "DropViewStmt"
   readonly ifExists: boolean
   readonly viewName: QualifiedName
   readonly span: Span
@@ -267,7 +267,7 @@ export interface DropViewStmt {
  * ```
  */
 export interface ExplainStmt {
-  readonly kind: "ExplainStmt"
+  readonly type: "ExplainStmt"
   readonly queryPlan: boolean
   readonly stmt: Stmt
   readonly span: Span
@@ -279,7 +279,7 @@ export interface ExplainStmt {
  * ```
  */
 export interface InsertStmt {
-  readonly kind: "InsertStmt"
+  readonly type: "InsertStmt"
   readonly with: With | undefined
   readonly orConflict: ResolveType | undefined
   readonly tblName: QualifiedName
@@ -295,7 +295,7 @@ export interface InsertStmt {
  * ```
  */
 export interface PragmaStmt {
-  readonly kind: "PragmaStmt"
+  readonly type: "PragmaStmt"
   readonly name: QualifiedName
   readonly body: PragmaBody | undefined
   readonly span: Span
@@ -307,7 +307,7 @@ export interface PragmaStmt {
  * ```
  */
 export interface ReindexStmt {
-  readonly kind: "ReindexStmt"
+  readonly type: "ReindexStmt"
   readonly objName: QualifiedName | undefined
   readonly span: Span
 }
@@ -318,7 +318,7 @@ export interface ReindexStmt {
  * ```
  */
 export interface ReleaseStmt {
-  readonly kind: "ReleaseStmt"
+  readonly type: "ReleaseStmt"
   readonly name: Name
   readonly span: Span
 }
@@ -329,7 +329,7 @@ export interface ReleaseStmt {
  * ```
  */
 export interface RollbackStmt {
-  readonly kind: "RollbackStmt"
+  readonly type: "RollbackStmt"
   readonly txName: Name | undefined
   readonly savepointName: Name | undefined
   readonly span: Span
@@ -341,7 +341,7 @@ export interface RollbackStmt {
  * ```
  */
 export interface SavepointStmt {
-  readonly kind: "SavepointStmt"
+  readonly type: "SavepointStmt"
   readonly name: Name
   readonly span: Span
 }
@@ -360,7 +360,7 @@ export interface SavepointStmt {
  * ```
  */
 export interface SelectStmt {
-  readonly kind: "SelectStmt"
+  readonly type: "SelectStmt"
   readonly body: Select
   readonly span: Span
 }
@@ -371,7 +371,7 @@ export interface SelectStmt {
  * ```
  */
 export interface UpdateStmt {
-  readonly kind: "UpdateStmt"
+  readonly type: "UpdateStmt"
   readonly with: With | undefined
   readonly orConflict: ResolveType | undefined
   readonly tblName: QualifiedName
@@ -391,7 +391,7 @@ export interface UpdateStmt {
  * ```
  */
 export interface VacuumStmt {
-  readonly kind: "VacuumStmt"
+  readonly type: "VacuumStmt"
   readonly name: Name | undefined
   readonly into: Expr | undefined
   readonly span: Span
@@ -440,7 +440,7 @@ export type Stmt =
  * ```
  */
 export interface BetweenExpr {
-  readonly kind: "BetweenExpr"
+  readonly type: "BetweenExpr"
   readonly lhs: Expr
   readonly not: boolean
   readonly start: Expr
@@ -455,7 +455,7 @@ export interface BetweenExpr {
  * ```
  */
 export interface BinaryExpr {
-  readonly kind: "BinaryExpr"
+  readonly type: "BinaryExpr"
   readonly left: Expr
   readonly op: Operator
   readonly right: Expr
@@ -469,7 +469,7 @@ export interface BinaryExpr {
  * ```
  */
 export interface CaseExpr {
-  readonly kind: "CaseExpr"
+  readonly type: "CaseExpr"
   readonly base: Expr | undefined
   readonly whenThenPairs: readonly WhenThen[]
   readonly elseExpr: Expr | undefined
@@ -483,7 +483,7 @@ export interface CaseExpr {
  * ```
  */
 export interface WhenThen {
-  readonly kind: "WhenThen"
+  readonly type: "WhenThen"
   readonly when: Expr
   readonly then: Expr
   readonly span: Span
@@ -496,7 +496,7 @@ export interface WhenThen {
  * ```
  */
 export interface CastExpr {
-  readonly kind: "CastExpr"
+  readonly type: "CastExpr"
   readonly expr: Expr
   readonly typeName: Type | undefined
   readonly span: Span
@@ -509,7 +509,7 @@ export interface CastExpr {
  * ```
  */
 export interface CollateExpr {
-  readonly kind: "CollateExpr"
+  readonly type: "CollateExpr"
   readonly expr: Expr
   readonly collation: string
   readonly span: Span
@@ -522,7 +522,7 @@ export interface CollateExpr {
  * ```
  */
 export interface ExistsExpr {
-  readonly kind: "ExistsExpr"
+  readonly type: "ExistsExpr"
   readonly select: Select
   readonly span: Span
 }
@@ -534,7 +534,7 @@ export interface ExistsExpr {
  * ```
  */
 export interface FunctionCallExpr {
-  readonly kind: "FunctionCallExpr"
+  readonly type: "FunctionCallExpr"
   readonly name: Id
   readonly distinctness: Distinctness | undefined
   readonly args: readonly Expr[] | undefined
@@ -550,7 +550,7 @@ export interface FunctionCallExpr {
  * ```
  */
 export interface FunctionCallStarExpr {
-  readonly kind: "FunctionCallStarExpr"
+  readonly type: "FunctionCallStarExpr"
   readonly name: Id
   readonly filterOver: FunctionTail | undefined
   readonly span: Span
@@ -563,7 +563,7 @@ export interface FunctionCallStarExpr {
  * ```
  */
 export interface InListExpr {
-  readonly kind: "InListExpr"
+  readonly type: "InListExpr"
   readonly lhs: Expr
   readonly not: boolean
   readonly rhs: readonly Expr[] | undefined
@@ -577,7 +577,7 @@ export interface InListExpr {
  * ```
  */
 export interface InSelectExpr {
-  readonly kind: "InSelectExpr"
+  readonly type: "InSelectExpr"
   readonly lhs: Expr
   readonly not: boolean
   readonly rhs: Select
@@ -591,7 +591,7 @@ export interface InSelectExpr {
  * ```
  */
 export interface InTableExpr {
-  readonly kind: "InTableExpr"
+  readonly type: "InTableExpr"
   readonly lhs: Expr
   readonly not: boolean
   readonly rhs: QualifiedName
@@ -606,7 +606,7 @@ export interface InTableExpr {
  * ```
  */
 export interface IsNullExpr {
-  readonly kind: "IsNullExpr"
+  readonly type: "IsNullExpr"
   readonly expr: Expr
   readonly span: Span
 }
@@ -618,7 +618,7 @@ export interface IsNullExpr {
  * ```
  */
 export interface LikeExpr {
-  readonly kind: "LikeExpr"
+  readonly type: "LikeExpr"
   readonly lhs: Expr
   readonly not: boolean
   readonly op: LikeOperator
@@ -634,7 +634,7 @@ export interface LikeExpr {
  * ```
  */
 export interface NameExpr {
-  readonly kind: "NameExpr"
+  readonly type: "NameExpr"
   readonly name: Name
   readonly span: Span
 }
@@ -646,7 +646,7 @@ export interface NameExpr {
  * ```
  */
 export interface NotNullExpr {
-  readonly kind: "NotNullExpr"
+  readonly type: "NotNullExpr"
   readonly expr: Expr
   readonly span: Span
 }
@@ -658,7 +658,7 @@ export interface NotNullExpr {
  * ```
  */
 export interface ParenthesizedExpr {
-  readonly kind: "ParenthesizedExpr"
+  readonly type: "ParenthesizedExpr"
   readonly exprs: readonly Expr[]
   readonly span: Span
 }
@@ -675,7 +675,7 @@ export interface ParenthesizedExpr {
  * form; the two-part `table.column` form leaves it `undefined`.
  */
 export interface QualifiedExpr {
-  readonly kind: "QualifiedExpr"
+  readonly type: "QualifiedExpr"
   readonly schema: Name | undefined
   readonly table: Name
   readonly column: Name
@@ -689,7 +689,7 @@ export interface QualifiedExpr {
  * ```
  */
 export interface RaiseExpr {
-  readonly kind: "RaiseExpr"
+  readonly type: "RaiseExpr"
   readonly resolve: ResolveType
   readonly message: Expr | undefined
   readonly span: Span
@@ -702,7 +702,7 @@ export interface RaiseExpr {
  * ```
  */
 export interface SubqueryExpr {
-  readonly kind: "SubqueryExpr"
+  readonly type: "SubqueryExpr"
   readonly select: Select
   readonly span: Span
 }
@@ -714,7 +714,7 @@ export interface SubqueryExpr {
  * ```
  */
 export interface UnaryExpr {
-  readonly kind: "UnaryExpr"
+  readonly type: "UnaryExpr"
   readonly op: UnaryOperator
   readonly expr: Expr
   readonly span: Span
@@ -727,7 +727,7 @@ export interface UnaryExpr {
  * ```
  */
 export interface VariableExpr {
-  readonly kind: "VariableExpr"
+  readonly type: "VariableExpr"
   readonly name: string
   readonly span: Span
 }
@@ -775,7 +775,7 @@ export type FunctionCallOrder = SortListFunctionCallOrder | WithinGroupFunctionC
  * ```
  */
 export interface NumericLiteral {
-  readonly kind: "NumericLiteral"
+  readonly type: "NumericLiteral"
   readonly value: string
   readonly span: Span
 }
@@ -787,7 +787,7 @@ export interface NumericLiteral {
  * ```
  */
 export interface StringLiteral {
-  readonly kind: "StringLiteral"
+  readonly type: "StringLiteral"
   readonly value: string
   readonly span: Span
 }
@@ -799,7 +799,7 @@ export interface StringLiteral {
  * ```
  */
 export interface BlobLiteral {
-  readonly kind: "BlobLiteral"
+  readonly type: "BlobLiteral"
   readonly bytes: Uint8Array
   readonly span: Span
 }
@@ -811,7 +811,7 @@ export interface BlobLiteral {
  * ```
  */
 export interface KeywordLiteral {
-  readonly kind: "KeywordLiteral"
+  readonly type: "KeywordLiteral"
   readonly value: string
   readonly span: Span
 }
@@ -823,7 +823,7 @@ export interface KeywordLiteral {
  * ```
  */
 export interface NullLiteral {
-  readonly kind: "NullLiteral"
+  readonly type: "NullLiteral"
   readonly span: Span
 }
 
@@ -834,7 +834,7 @@ export interface NullLiteral {
  * ```
  */
 export interface CurrentDateLiteral {
-  readonly kind: "CurrentDateLiteral"
+  readonly type: "CurrentDateLiteral"
   readonly span: Span
 }
 
@@ -845,7 +845,7 @@ export interface CurrentDateLiteral {
  * ```
  */
 export interface CurrentTimeLiteral {
-  readonly kind: "CurrentTimeLiteral"
+  readonly type: "CurrentTimeLiteral"
   readonly span: Span
 }
 
@@ -856,7 +856,7 @@ export interface CurrentTimeLiteral {
  * ```
  */
 export interface CurrentTimestampLiteral {
-  readonly kind: "CurrentTimestampLiteral"
+  readonly type: "CurrentTimestampLiteral"
   readonly span: Span
 }
 
@@ -923,7 +923,7 @@ export type UnaryOperator = "BitwiseNot" | "Negative" | "Not" | "Positive"
  * https://sqlite.org/lang_select.html
  */
 export interface Select {
-  readonly kind: "Select"
+  readonly type: "Select"
   readonly with: With | undefined
   readonly select: OneSelect
   readonly compounds: readonly CompoundSelect[] | undefined
@@ -934,7 +934,7 @@ export interface Select {
 
 /** One compound arm (`UNION`/`EXCEPT`/etc.) trailing the primary SELECT. */
 export interface CompoundSelect {
-  readonly kind: "CompoundSelect"
+  readonly type: "CompoundSelect"
   readonly operator: CompoundOperator
   readonly select: OneSelect
   readonly span: Span
@@ -954,7 +954,7 @@ export type OneSelect = SelectFrom | SelectValues
  * https://sqlite.org/syntax/join-clause.html
  */
 export interface FromClause {
-  readonly kind: "FromClause"
+  readonly type: "FromClause"
   readonly select: SelectTable | undefined
   readonly joins: readonly JoinedSelectTable[] | undefined
   readonly span: Span
@@ -974,7 +974,7 @@ export type As = AsAs | ElidedAs
 
 /** One `JOIN`ed source in a `FROM` clause. */
 export interface JoinedSelectTable {
-  readonly kind: "JoinedSelectTable"
+  readonly type: "JoinedSelectTable"
   readonly operator: JoinOperator
   readonly table: SelectTable
   readonly constraint: JoinConstraint | undefined
@@ -1034,7 +1034,7 @@ export type JoinConstraint = OnJoinConstraint | UsingJoinConstraint
  * underlying source buffer.
  */
 export interface Id {
-  readonly kind: "Id"
+  readonly type: "Id"
   readonly name: string
   readonly span: Span
 }
@@ -1046,7 +1046,7 @@ export interface Id {
  * comparison for callers that need it.
  */
 export interface Name {
-  readonly kind: "Name"
+  readonly type: "Name"
   readonly name: string
   readonly span: Span
 }
@@ -1057,7 +1057,7 @@ export interface Name {
  * `fullname` uses `{dbName?, name}`, `xfullname` additionally allows an alias.
  */
 export interface QualifiedName {
-  readonly kind: "QualifiedName"
+  readonly type: "QualifiedName"
   readonly dbName: Name | undefined
   readonly name: Name
   readonly alias: Name | undefined
@@ -1149,7 +1149,7 @@ export const ColFlags = {
  * https://sqlite.org/syntax/column-def.html
  */
 export interface ColumnDefinition {
-  readonly kind: "ColumnDefinition"
+  readonly type: "ColumnDefinition"
   readonly colName: Name
   readonly colType: Type | undefined
   readonly constraints: readonly NamedColumnConstraint[]
@@ -1159,7 +1159,7 @@ export interface ColumnDefinition {
 
 /** Column-level constraint with optional name. */
 export interface NamedColumnConstraint {
-  readonly kind: "NamedColumnConstraint"
+  readonly type: "NamedColumnConstraint"
   readonly name: Name | undefined
   readonly constraint: ColumnConstraint
   readonly span: Span
@@ -1176,7 +1176,7 @@ export interface NamedColumnConstraint {
  * ```
  */
 export interface PrimaryKeyColumnConstraint {
-  readonly kind: "PrimaryKeyColumnConstraint"
+  readonly type: "PrimaryKeyColumnConstraint"
   readonly order: SortOrder | undefined
   readonly conflictClause: ResolveType | undefined
   readonly autoIncrement: boolean
@@ -1190,7 +1190,7 @@ export interface PrimaryKeyColumnConstraint {
  * ```
  */
 export interface NotNullColumnConstraint {
-  readonly kind: "NotNullColumnConstraint"
+  readonly type: "NotNullColumnConstraint"
   readonly nullable: boolean
   readonly conflictClause: ResolveType | undefined
   readonly span: Span
@@ -1203,7 +1203,7 @@ export interface NotNullColumnConstraint {
  * ```
  */
 export interface UniqueColumnConstraint {
-  readonly kind: "UniqueColumnConstraint"
+  readonly type: "UniqueColumnConstraint"
   readonly conflictClause: ResolveType | undefined
   readonly span: Span
 }
@@ -1215,7 +1215,7 @@ export interface UniqueColumnConstraint {
  * ```
  */
 export interface CheckColumnConstraint {
-  readonly kind: "CheckColumnConstraint"
+  readonly type: "CheckColumnConstraint"
   readonly expr: Expr
   readonly span: Span
 }
@@ -1227,7 +1227,7 @@ export interface CheckColumnConstraint {
  * ```
  */
 export interface DefaultColumnConstraint {
-  readonly kind: "DefaultColumnConstraint"
+  readonly type: "DefaultColumnConstraint"
   readonly expr: Expr
   readonly span: Span
 }
@@ -1239,7 +1239,7 @@ export interface DefaultColumnConstraint {
  * ```
  */
 export interface DeferColumnConstraint {
-  readonly kind: "DeferColumnConstraint"
+  readonly type: "DeferColumnConstraint"
   readonly clause: DeferSubclause
   readonly span: Span
 }
@@ -1251,7 +1251,7 @@ export interface DeferColumnConstraint {
  * ```
  */
 export interface CollateColumnConstraint {
-  readonly kind: "CollateColumnConstraint"
+  readonly type: "CollateColumnConstraint"
   readonly collationName: Name
   readonly span: Span
 }
@@ -1263,7 +1263,7 @@ export interface CollateColumnConstraint {
  * ```
  */
 export interface ForeignKeyColumnConstraint {
-  readonly kind: "ForeignKeyColumnConstraint"
+  readonly type: "ForeignKeyColumnConstraint"
   readonly clause: ForeignKeyClause
   readonly deferClause: DeferSubclause | undefined
   readonly span: Span
@@ -1276,7 +1276,7 @@ export interface ForeignKeyColumnConstraint {
  * ```
  */
 export interface GeneratedColumnConstraint {
-  readonly kind: "GeneratedColumnConstraint"
+  readonly type: "GeneratedColumnConstraint"
   readonly expr: Expr
   readonly typ: Id | undefined
   readonly span: Span
@@ -1299,7 +1299,7 @@ export type ColumnConstraint =
 
 /** Table-level constraint with optional name. */
 export interface NamedTableConstraint {
-  readonly kind: "NamedTableConstraint"
+  readonly type: "NamedTableConstraint"
   readonly name: Name | undefined
   readonly constraint: TableConstraint
   readonly span: Span
@@ -1316,7 +1316,7 @@ export interface NamedTableConstraint {
  * ```
  */
 export interface PrimaryKeyTableConstraint {
-  readonly kind: "PrimaryKeyTableConstraint"
+  readonly type: "PrimaryKeyTableConstraint"
   readonly columns: readonly SortedColumn[]
   readonly autoIncrement: boolean
   readonly conflictClause: ResolveType | undefined
@@ -1330,7 +1330,7 @@ export interface PrimaryKeyTableConstraint {
  * ```
  */
 export interface UniqueTableConstraint {
-  readonly kind: "UniqueTableConstraint"
+  readonly type: "UniqueTableConstraint"
   readonly columns: readonly SortedColumn[]
   readonly conflictClause: ResolveType | undefined
   readonly span: Span
@@ -1343,7 +1343,7 @@ export interface UniqueTableConstraint {
  * ```
  */
 export interface CheckTableConstraint {
-  readonly kind: "CheckTableConstraint"
+  readonly type: "CheckTableConstraint"
   readonly expr: Expr
   readonly conflictClause: ResolveType | undefined
   readonly span: Span
@@ -1356,7 +1356,7 @@ export interface CheckTableConstraint {
  * ```
  */
 export interface ForeignKeyTableConstraint {
-  readonly kind: "ForeignKeyTableConstraint"
+  readonly type: "ForeignKeyTableConstraint"
   readonly columns: readonly IndexedColumn[]
   readonly clause: ForeignKeyClause
   readonly deferClause: DeferSubclause | undefined
@@ -1388,7 +1388,7 @@ export type NullsOrder = "First" | "Last"
  * https://sqlite.org/syntax/indexed-column.html
  */
 export interface IndexedColumn {
-  readonly kind: "IndexedColumn"
+  readonly type: "IndexedColumn"
   readonly colName: Name
   readonly collationName: Name | undefined
   readonly order: SortOrder | undefined
@@ -1400,7 +1400,7 @@ export type Indexed = IndexedByIndexed | NotIndexedIndexed
 
 /** One entry in an `ORDER BY`/`PRIMARY KEY`/`UNIQUE` column list. */
 export interface SortedColumn {
-  readonly kind: "SortedColumn"
+  readonly type: "SortedColumn"
   readonly expr: Expr
   readonly order: SortOrder | undefined
   readonly nulls: NullsOrder | undefined
@@ -1409,7 +1409,7 @@ export interface SortedColumn {
 
 /** `LIMIT` clause, with optional `OFFSET`. */
 export interface Limit {
-  readonly kind: "Limit"
+  readonly type: "Limit"
   readonly expr: Expr
   readonly offset: Expr | undefined
   readonly span: Span
@@ -1424,7 +1424,7 @@ export interface Limit {
  * https://sqlite.org/syntax/foreign-key-clause.html
  */
 export interface ForeignKeyClause {
-  readonly kind: "ForeignKeyClause"
+  readonly type: "ForeignKeyClause"
   readonly tblName: Name
   readonly columns: readonly IndexedColumn[] | undefined
   readonly args: readonly RefArg[]
@@ -1439,7 +1439,7 @@ export type RefAct = "SetNull" | "SetDefault" | "Cascade" | "Restrict" | "NoActi
 
 /** Foreign-key deferrability subclause. */
 export interface DeferSubclause {
-  readonly kind: "DeferSubclause"
+  readonly type: "DeferSubclause"
   readonly deferrable: boolean
   readonly initDeferred: InitDeferredPred | undefined
   readonly span: Span
@@ -1463,7 +1463,7 @@ export type InsertBody = SelectInsertBody | DefaultValuesInsertBody
  * `colNames` has length 1 for `col = expr`, >1 for `(a,b) = expr`.
  */
 export interface SetAssignment {
-  readonly kind: "SetAssignment"
+  readonly type: "SetAssignment"
   readonly colNames: DistinctNames
   readonly expr: Expr
   readonly span: Span
@@ -1500,7 +1500,7 @@ export type TriggerEvent =
  * ```
  */
 export interface UpdateTriggerCmd {
-  readonly kind: "UpdateTriggerCmd"
+  readonly type: "UpdateTriggerCmd"
   readonly orConflict: ResolveType | undefined
   readonly tblName: QualifiedName
   readonly sets: readonly SetAssignment[]
@@ -1516,7 +1516,7 @@ export interface UpdateTriggerCmd {
  * ```
  */
 export interface InsertTriggerCmd {
-  readonly kind: "InsertTriggerCmd"
+  readonly type: "InsertTriggerCmd"
   readonly orConflict: ResolveType | undefined
   readonly tblName: QualifiedName
   readonly colNames: DistinctNames | undefined
@@ -1532,7 +1532,7 @@ export interface InsertTriggerCmd {
  * ```
  */
 export interface DeleteTriggerCmd {
-  readonly kind: "DeleteTriggerCmd"
+  readonly type: "DeleteTriggerCmd"
   readonly tblName: QualifiedName
   readonly whereClause: Expr | undefined
   readonly span: Span
@@ -1545,7 +1545,7 @@ export interface DeleteTriggerCmd {
  * ```
  */
 export interface SelectTriggerCmd {
-  readonly kind: "SelectTriggerCmd"
+  readonly type: "SelectTriggerCmd"
   readonly select: Select
   readonly span: Span
 }
@@ -1572,7 +1572,7 @@ export type ResolveType = "Rollback" | "Abort" | "Fail" | "Ignore" | "Replace"
  * https://sqlite.org/lang_with.html
  */
 export interface With {
-  readonly kind: "With"
+  readonly type: "With"
   readonly recursive: boolean
   readonly ctes: readonly CommonTableExpr[]
   readonly span: Span
@@ -1586,7 +1586,7 @@ export type Materialized = "Any" | "Yes" | "No"
  * https://sqlite.org/syntax/common-table-expression.html
  */
 export interface CommonTableExpr {
-  readonly kind: "CommonTableExpr"
+  readonly type: "CommonTableExpr"
   readonly tblName: Name
   readonly columns: readonly IndexedColumn[] | undefined
   readonly materialized: Materialized
@@ -1603,7 +1603,7 @@ export interface CommonTableExpr {
  * https://sqlite.org/syntax/type-name.html
  */
 export interface Type {
-  readonly kind: "Type"
+  readonly type: "Type"
   readonly name: string
   readonly size: TypeSize | undefined
   readonly span: Span
@@ -1628,7 +1628,7 @@ export type TransactionType = "Deferred" | "Immediate" | "Exclusive"
  * https://sqlite.org/lang_upsert.html
  */
 export interface Upsert {
-  readonly kind: "Upsert"
+  readonly type: "Upsert"
   readonly index: UpsertIndex | undefined
   readonly doClause: UpsertDo
   readonly next: Upsert | undefined
@@ -1637,7 +1637,7 @@ export interface Upsert {
 
 /** Conflict targets on an upsert. */
 export interface UpsertIndex {
-  readonly kind: "UpsertIndex"
+  readonly type: "UpsertIndex"
   readonly targets: readonly SortedColumn[]
   readonly whereClause: Expr | undefined
   readonly span: Span
@@ -1652,7 +1652,7 @@ export type UpsertDo = SetUpsertDo | NothingUpsertDo
 
 /** `FILTER` and/or `OVER` trailing a function call. */
 export interface FunctionTail {
-  readonly kind: "FunctionTail"
+  readonly type: "FunctionTail"
   readonly filterClause: Expr | undefined
   readonly overClause: Over | undefined
   readonly span: Span
@@ -1663,7 +1663,7 @@ export type Over = WindowOver | NameOver
 
 /** One named window in a `WINDOW` clause. */
 export interface WindowDef {
-  readonly kind: "WindowDef"
+  readonly type: "WindowDef"
   readonly name: Name
   readonly window: Window
   readonly span: Span
@@ -1674,7 +1674,7 @@ export interface WindowDef {
  * https://sqlite.org/syntax/window-defn.html
  */
 export interface Window {
-  readonly kind: "Window"
+  readonly type: "Window"
   readonly base: Name | undefined
   readonly partitionBy: readonly Expr[] | undefined
   readonly orderBy: readonly SortedColumn[] | undefined
@@ -1687,7 +1687,7 @@ export interface Window {
  * https://sqlite.org/syntax/frame-spec.html
  */
 export interface FrameClause {
-  readonly kind: "FrameClause"
+  readonly type: "FrameClause"
   readonly mode: FrameMode
   readonly start: FrameBound
   readonly end: FrameBound | undefined
@@ -1712,19 +1712,19 @@ export type FrameExclude = "NoOthers" | "CurrentRow" | "Group" | "Ties"
 // ---- Inline union variant interfaces (generated) ----
 
 export interface SortListFunctionCallOrder {
-  readonly kind: "SortListFunctionCallOrder"
+  readonly type: "SortListFunctionCallOrder"
   readonly columns: readonly SortedColumn[]
   readonly span: Span
 }
 
 export interface WithinGroupFunctionCallOrder {
-  readonly kind: "WithinGroupFunctionCallOrder"
+  readonly type: "WithinGroupFunctionCallOrder"
   readonly expr: Expr
   readonly span: Span
 }
 
 export interface SelectFrom {
-  readonly kind: "SelectFrom"
+  readonly type: "SelectFrom"
   readonly distinctness: Distinctness | undefined
   readonly columns: readonly ResultColumn[]
   readonly from: FromClause | undefined
@@ -1736,7 +1736,7 @@ export interface SelectFrom {
 }
 
 export interface SelectValues {
-  readonly kind: "SelectValues"
+  readonly type: "SelectValues"
   readonly values: readonly ValuesRow[]
   readonly span: Span
 }
@@ -1748,43 +1748,43 @@ export interface SelectValues {
  * ```
  */
 export interface ValuesRow {
-  readonly kind: "ValuesRow"
+  readonly type: "ValuesRow"
   readonly values: readonly Expr[]
   readonly span: Span
 }
 
 export interface ExprResultColumn {
-  readonly kind: "ExprResultColumn"
+  readonly type: "ExprResultColumn"
   readonly expr: Expr
   readonly alias: As | undefined
   readonly span: Span
 }
 
 export interface StarResultColumn {
-  readonly kind: "StarResultColumn"
+  readonly type: "StarResultColumn"
   readonly span: Span
 }
 
 export interface TableStarResultColumn {
-  readonly kind: "TableStarResultColumn"
+  readonly type: "TableStarResultColumn"
   readonly table: Name
   readonly span: Span
 }
 
 export interface AsAs {
-  readonly kind: "AsAs"
+  readonly type: "AsAs"
   readonly name: Name
   readonly span: Span
 }
 
 export interface ElidedAs {
-  readonly kind: "ElidedAs"
+  readonly type: "ElidedAs"
   readonly name: Name
   readonly span: Span
 }
 
 export interface TableSelectTable {
-  readonly kind: "TableSelectTable"
+  readonly type: "TableSelectTable"
   readonly name: QualifiedName
   readonly alias: As | undefined
   readonly indexed: Indexed | undefined
@@ -1792,7 +1792,7 @@ export interface TableSelectTable {
 }
 
 export interface TableCallSelectTable {
-  readonly kind: "TableCallSelectTable"
+  readonly type: "TableCallSelectTable"
   readonly name: QualifiedName
   readonly args: readonly Expr[] | undefined
   readonly alias: As | undefined
@@ -1800,94 +1800,94 @@ export interface TableCallSelectTable {
 }
 
 export interface SelectSelectTable {
-  readonly kind: "SelectSelectTable"
+  readonly type: "SelectSelectTable"
   readonly select: Select
   readonly alias: As | undefined
   readonly span: Span
 }
 
 export interface SubSelectTable {
-  readonly kind: "SubSelectTable"
+  readonly type: "SubSelectTable"
   readonly from: FromClause
   readonly alias: As | undefined
   readonly span: Span
 }
 
 export interface CommaJoinOperator {
-  readonly kind: "CommaJoinOperator"
+  readonly type: "CommaJoinOperator"
   readonly span: Span
 }
 
 export interface TypedJoinJoinOperator {
-  readonly kind: "TypedJoinJoinOperator"
+  readonly type: "TypedJoinJoinOperator"
   readonly joinType: JoinType | undefined
   readonly span: Span
 }
 
 export interface OnJoinConstraint {
-  readonly kind: "OnJoinConstraint"
+  readonly type: "OnJoinConstraint"
   readonly expr: Expr
   readonly span: Span
 }
 
 export interface UsingJoinConstraint {
-  readonly kind: "UsingJoinConstraint"
+  readonly type: "UsingJoinConstraint"
   readonly columns: DistinctNames
   readonly span: Span
 }
 
 export interface RenameToAlterTableBody {
-  readonly kind: "RenameToAlterTableBody"
+  readonly type: "RenameToAlterTableBody"
   readonly name: Name
   readonly span: Span
 }
 
 export interface AddColumnAlterTableBody {
-  readonly kind: "AddColumnAlterTableBody"
+  readonly type: "AddColumnAlterTableBody"
   readonly column: ColumnDefinition
   readonly span: Span
 }
 
 export interface DropColumnNotNullAlterTableBody {
-  readonly kind: "DropColumnNotNullAlterTableBody"
+  readonly type: "DropColumnNotNullAlterTableBody"
   readonly column: Name
   readonly span: Span
 }
 
 export interface SetColumnNotNullAlterTableBody {
-  readonly kind: "SetColumnNotNullAlterTableBody"
+  readonly type: "SetColumnNotNullAlterTableBody"
   readonly column: Name
   readonly onConflict: ResolveType | undefined
   readonly span: Span
 }
 
 export interface RenameColumnAlterTableBody {
-  readonly kind: "RenameColumnAlterTableBody"
+  readonly type: "RenameColumnAlterTableBody"
   readonly old: Name
   readonly new: Name
   readonly span: Span
 }
 
 export interface DropColumnAlterTableBody {
-  readonly kind: "DropColumnAlterTableBody"
+  readonly type: "DropColumnAlterTableBody"
   readonly column: Name
   readonly span: Span
 }
 
 export interface AddConstraintAlterTableBody {
-  readonly kind: "AddConstraintAlterTableBody"
+  readonly type: "AddConstraintAlterTableBody"
   readonly constraint: NamedTableConstraint
   readonly span: Span
 }
 
 export interface DropConstraintAlterTableBody {
-  readonly kind: "DropConstraintAlterTableBody"
+  readonly type: "DropConstraintAlterTableBody"
   readonly name: Name
   readonly span: Span
 }
 
 export interface ColumnsAndConstraintsCreateTableBody {
-  readonly kind: "ColumnsAndConstraintsCreateTableBody"
+  readonly type: "ColumnsAndConstraintsCreateTableBody"
   readonly columns: readonly ColumnDefinition[]
   readonly constraints: readonly NamedTableConstraint[] | undefined
   readonly flags: TabFlags
@@ -1895,167 +1895,167 @@ export interface ColumnsAndConstraintsCreateTableBody {
 }
 
 export interface AsSelectCreateTableBody {
-  readonly kind: "AsSelectCreateTableBody"
+  readonly type: "AsSelectCreateTableBody"
   readonly select: Select
   readonly span: Span
 }
 
 export interface IndexedByIndexed {
-  readonly kind: "IndexedByIndexed"
+  readonly type: "IndexedByIndexed"
   readonly name: Name
   readonly span: Span
 }
 
 export interface NotIndexedIndexed {
-  readonly kind: "NotIndexedIndexed"
+  readonly type: "NotIndexedIndexed"
   readonly span: Span
 }
 
 export interface OnDeleteRefArg {
-  readonly kind: "OnDeleteRefArg"
+  readonly type: "OnDeleteRefArg"
   readonly action: RefAct
   readonly span: Span
 }
 
 export interface OnInsertRefArg {
-  readonly kind: "OnInsertRefArg"
+  readonly type: "OnInsertRefArg"
   readonly action: RefAct
   readonly span: Span
 }
 
 export interface OnUpdateRefArg {
-  readonly kind: "OnUpdateRefArg"
+  readonly type: "OnUpdateRefArg"
   readonly action: RefAct
   readonly span: Span
 }
 
 export interface MatchRefArg {
-  readonly kind: "MatchRefArg"
+  readonly type: "MatchRefArg"
   readonly name: Name
   readonly span: Span
 }
 
 export interface SelectInsertBody {
-  readonly kind: "SelectInsertBody"
+  readonly type: "SelectInsertBody"
   readonly select: Select
   readonly upsert: Upsert | undefined
   readonly span: Span
 }
 
 export interface DefaultValuesInsertBody {
-  readonly kind: "DefaultValuesInsertBody"
+  readonly type: "DefaultValuesInsertBody"
   readonly span: Span
 }
 
 export interface EqualsPragmaBody {
-  readonly kind: "EqualsPragmaBody"
+  readonly type: "EqualsPragmaBody"
   readonly value: PragmaValue
   readonly span: Span
 }
 
 export interface CallPragmaBody {
-  readonly kind: "CallPragmaBody"
+  readonly type: "CallPragmaBody"
   readonly value: PragmaValue
   readonly span: Span
 }
 
 export interface DeleteTriggerEvent {
-  readonly kind: "DeleteTriggerEvent"
+  readonly type: "DeleteTriggerEvent"
   readonly span: Span
 }
 
 export interface InsertTriggerEvent {
-  readonly kind: "InsertTriggerEvent"
+  readonly type: "InsertTriggerEvent"
   readonly span: Span
 }
 
 export interface UpdateTriggerEvent {
-  readonly kind: "UpdateTriggerEvent"
+  readonly type: "UpdateTriggerEvent"
   readonly span: Span
 }
 
 export interface UpdateOfTriggerEvent {
-  readonly kind: "UpdateOfTriggerEvent"
+  readonly type: "UpdateOfTriggerEvent"
   readonly columns: DistinctNames
   readonly span: Span
 }
 
 export interface MaxSizeTypeSize {
-  readonly kind: "MaxSizeTypeSize"
+  readonly type: "MaxSizeTypeSize"
   readonly size: Expr
   readonly span: Span
 }
 
 export interface TypeSizeTypeSize {
-  readonly kind: "TypeSizeTypeSize"
+  readonly type: "TypeSizeTypeSize"
   readonly size1: Expr
   readonly size2: Expr
   readonly span: Span
 }
 
 export interface SetUpsertDo {
-  readonly kind: "SetUpsertDo"
+  readonly type: "SetUpsertDo"
   readonly sets: readonly SetAssignment[]
   readonly whereClause: Expr | undefined
   readonly span: Span
 }
 
 export interface NothingUpsertDo {
-  readonly kind: "NothingUpsertDo"
+  readonly type: "NothingUpsertDo"
   readonly span: Span
 }
 
 export interface WindowOver {
-  readonly kind: "WindowOver"
+  readonly type: "WindowOver"
   readonly window: Window
   readonly span: Span
 }
 
 export interface NameOver {
-  readonly kind: "NameOver"
+  readonly type: "NameOver"
   readonly name: Name
   readonly span: Span
 }
 
 export interface CurrentRowFrameBound {
-  readonly kind: "CurrentRowFrameBound"
+  readonly type: "CurrentRowFrameBound"
   readonly span: Span
 }
 
 export interface FollowingFrameBound {
-  readonly kind: "FollowingFrameBound"
+  readonly type: "FollowingFrameBound"
   readonly expr: Expr
   readonly span: Span
 }
 
 export interface PrecedingFrameBound {
-  readonly kind: "PrecedingFrameBound"
+  readonly type: "PrecedingFrameBound"
   readonly expr: Expr
   readonly span: Span
 }
 
 export interface UnboundedFollowingFrameBound {
-  readonly kind: "UnboundedFollowingFrameBound"
+  readonly type: "UnboundedFollowingFrameBound"
   readonly span: Span
 }
 
 export interface UnboundedPrecedingFrameBound {
-  readonly kind: "UnboundedPrecedingFrameBound"
+  readonly type: "UnboundedPrecedingFrameBound"
   readonly span: Span
 }
 
 // ---------------------------------------------------------------------------
 // Universal node index.
 //
-// `AstNodeMap` maps each `kind` discriminator string to its concrete
+// `AstNodeMap` maps each `type` discriminator string to its concrete
 // interface.  It is the canonical source — `AstNode` is derived from it.
 // Generic tree walkers, visitors, and JSON serializers can key off
-// `AstNodeMap[kind]` to recover per-kind payload types without
+// `AstNodeMap[type]` to recover per-type payload types without
 // restating the union by hand.
 // ---------------------------------------------------------------------------
 
 /**
- * Map of all AST node shapes, keyed by their `kind` discriminator.
+ * Map of all AST node shapes, keyed by their `type` discriminator.
  *
  * Advanced users may inject new node shapes using TypeScript declaration merging.
  */
@@ -2251,9 +2251,9 @@ export type AstNode = AstNodeMap[keyof AstNodeMap]
 // ---------------------------------------------------------------------------
 // Type-level invariant check for AstNodeMap.
 //
-// Verifies that every `AstNodeMap[K]["kind"]` equals `K`.  Catches two
+// Verifies that every `AstNodeMap[K]["type"]` equals `K`.  Catches two
 // failure modes:
-//   1. A node's `kind` is renamed but its `AstNodeMap` entry isn't updated
+//   1. A node's `type` is renamed but its `AstNodeMap` entry isn't updated
 //      (stale key).
 //   2. A new `AstNodeMap` entry's key is typo'd or points at the wrong node.
 // ---------------------------------------------------------------------------
@@ -2261,13 +2261,13 @@ export type AstNode = AstNodeMap[keyof AstNodeMap]
 /** `true` per well-formed entry; otherwise a descriptive error string. */
 type _AstNodeMapKeyCheck = {
   [K in keyof AstNodeMap]: K extends string
-    ? AstNodeMap[K] extends { readonly kind: infer T extends string }
+    ? AstNodeMap[K] extends { readonly type: infer T extends string }
       ? K extends T
         ? T extends K
           ? true
-          : `AstNodeMap["${K}"] error: node "kind" is wider than the map key`
-        : `AstNodeMap["${K}"] error: node "kind" is "${T}", not "${K}"`
-      : `AstNodeMap["${K}"] error: node has no string-literal "kind" field`
+          : `AstNodeMap["${K}"] error: node "type" is wider than the map key`
+        : `AstNodeMap["${K}"] error: node "type" is "${T}", not "${K}"`
+      : `AstNodeMap["${K}"] error: node has no string-literal "type" field`
     : never
 }
 
@@ -2275,7 +2275,7 @@ type _AstNodeMapKeyCheck = {
 type _AssertTrue<T extends true> = T
 
 /**
- * Compile-time assertion: every `AstNodeMap` key matches its node's `kind`.
+ * Compile-time assertion: every `AstNodeMap` key matches its node's `type`.
  * A failure here means `_AstNodeMapKeyCheck[keyof AstNodeMap]` contains
  * something other than `true` — see that type to find the bad entry.
  */

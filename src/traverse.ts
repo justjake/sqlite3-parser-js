@@ -3,9 +3,8 @@
 // Shape and semantics follow the ESTree family (`estraverse`,
 // `eslint-visitor-keys`) so that downstream code — and eventually
 // `typescript-eslint`-style lint rules — can drive traversal through
-// a familiar `VisitorKeys` map plus enter/leave callbacks.  The one
-// notable divergence today is that our node discriminator is named
-// `kind`, not `type`; renaming is a follow-on when the AST stabilises.
+// a familiar `VisitorKeys` map plus enter/leave callbacks.  Node
+// discriminator is `type: string`, matching ESTree.
 
 import type { AstNode, AstNodeMap } from "./ast/nodes.ts"
 
@@ -40,8 +39,8 @@ type ParentNodeMap = {
 export type ParentNode = ParentNodeMap[keyof ParentNodeMap]
 
 /**
- * Per-kind list of property names to descend into, in visit order.
- * Leaf kinds (no child-bearing property) are absent — lookups on them
+ * Per-type list of property names to descend into, in visit order.
+ * Leaf types (no child-bearing property) are absent — lookups on them
  * fall through to "no children" at runtime.
  */
 type VisitorKeyMap = {
@@ -58,7 +57,7 @@ type VisitorKeyMap = {
 // `<Prop>Keys` constants hoist the most repeated key arrays so the
 // identical shape is reused rather than rewritten per entry.  Their
 // element type stays literal (via `as const`) so each assignment
-// site still type-checks against the per-kind `ChildNodeProperties`.
+// site still type-checks against the per-type `ChildNodeProperties`.
 // ---------------------------------------------------------------------------
 
 const StmtKeys = ["stmt"] as const
@@ -243,7 +242,7 @@ export const VisitorKeys: VisitorKeyMap = {
 /**
  * Control signal returned from a visitor callback.
  *   - `"break"` halts the entire walk.
- *   - `"skip"` (from `enter` or a per-kind handler) skips the current
+ *   - `"skip"` (from `enter` or a per-type handler) skips the current
  *     node's children; `leave` is still called.
  *   - `"continue"` (or returning nothing) proceeds normally.
  */
@@ -259,7 +258,7 @@ export interface Visitor {
   enter?: VisitorFn
   /** Called on every node after its children have been visited. */
   leave?: VisitorFn
-  /** Per-kind enter-style callbacks.  Fire after `enter` on matching nodes. */
+  /** Per-type enter-style callbacks.  Fire after `enter` on matching nodes. */
   nodes?: {
     [K in keyof AstNodeMap]?: VisitorFn<AstNodeMap[K], ParentNode>
   }
@@ -269,8 +268,8 @@ export interface Visitor {
 
 /**
  * Depth-first walk the AST rooted at `node`, dispatching to `visitor`.
- * Traversal order for each kind is `visitor.keys?.[kind]` if present,
- * otherwise `VisitorKeys[kind]`, otherwise (leaves) no children.
+ * Traversal order for each type is `visitor.keys?.[type]` if present,
+ * otherwise `VisitorKeys[type]`, otherwise (leaves) no children.
  */
 export function traverse(root: AstNode, visitor: Visitor): void {
   const overrideKeys = visitor.keys
@@ -289,7 +288,7 @@ export function traverse(root: AstNode, visitor: Visitor): void {
     }
 
     if (!skipChildren) {
-      const handler = visitor.nodes?.[node.kind] as VisitorFn | undefined
+      const handler = visitor.nodes?.[node.type] as VisitorFn | undefined
       if (handler) {
         const r = handler(node, parent)
         if (r === "break") return false
@@ -298,8 +297,8 @@ export function traverse(root: AstNode, visitor: Visitor): void {
     }
 
     if (!skipChildren) {
-      const nodeKeys = (overrideKeys?.[node.kind as keyof VisitorKeyMap] ??
-        VisitorKeys[node.kind as keyof VisitorKeyMap]) as readonly string[] | undefined
+      const nodeKeys = (overrideKeys?.[node.type as keyof VisitorKeyMap] ??
+        VisitorKeys[node.type as keyof VisitorKeyMap]) as readonly string[] | undefined
       if (nodeKeys) {
         const record = node as unknown as Record<string, unknown>
         const parentNode = node as ParentNode

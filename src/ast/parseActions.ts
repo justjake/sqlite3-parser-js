@@ -128,14 +128,14 @@ function extractSpan(minor: unknown): Span | undefined {
  * the raw source range for error messages.
  */
 export const mkName = (tok: Token): Name => ({
-  kind: "Name",
+  type: "Name",
   name: sqlite3Dequote(tok.text) as string,
   span: tok.span,
 })
 
 /** Build an {@link Id}.  Same dequoting contract as {@link mkName}. */
 export const mkId = (tok: Token): Id => ({
-  kind: "Id",
+  type: "Id",
   name: sqlite3Dequote(tok.text) as string,
   span: tok.span,
 })
@@ -144,39 +144,39 @@ export const mkId = (tok: Token): Id => ({
 export function literalFromCtimeKw(tok: Token): Literal {
   const span = tok.span
   const t = tok.text.toUpperCase()
-  if (t === "CURRENT_DATE") return { kind: "CurrentDateLiteral", span }
-  if (t === "CURRENT_TIME") return { kind: "CurrentTimeLiteral", span }
-  if (t === "CURRENT_TIMESTAMP") return { kind: "CurrentTimestampLiteral", span }
+  if (t === "CURRENT_DATE") return { type: "CurrentDateLiteral", span }
+  if (t === "CURRENT_TIME") return { type: "CurrentTimeLiteral", span }
+  if (t === "CURRENT_TIMESTAMP") return { type: "CurrentTimestampLiteral", span }
   throw new Error(`unreachable CTIME_KW: ${tok.text}`)
 }
 
 /** `NULL` literal. */
-export const mkNullLiteral = (tok: Token): Literal => ({ kind: "NullLiteral", span: tok.span })
+export const mkNullLiteral = (tok: Token): Literal => ({ type: "NullLiteral", span: tok.span })
 
 /** String literal: dequote `'…'` / escape `''` pairs. */
 export const mkStringLiteral = (tok: Token): Literal => ({
-  kind: "StringLiteral",
+  type: "StringLiteral",
   value: sqlite3Dequote(tok.text) as string,
   span: tok.span,
 })
 
 /** Blob literal: decode `x'…'` / `X'…'` hex to bytes. */
 export const mkBlobLiteral = (tok: Token): Literal => ({
-  kind: "BlobLiteral",
+  type: "BlobLiteral",
   bytes: sqlite3HexToBlob(tok.text),
   span: tok.span,
 })
 
 /** Numeric literal produced by `INTEGER` / `FLOAT` — stored as raw text. */
 export const mkNumericLiteral = (tok: Token): Literal => ({
-  kind: "NumericLiteral",
+  type: "NumericLiteral",
   value: tok.text,
   span: tok.span,
 })
 
 /** Keyword literal for PRAGMA arguments like `ON` / `DELETE` / `DEFAULT`. */
 export const mkKeywordLiteral = (tok: Token): Literal => ({
-  kind: "KeywordLiteral",
+  type: "KeywordLiteral",
   value: tok.text,
   span: tok.span,
 })
@@ -275,33 +275,33 @@ export const ptrOperatorFromToken = (tok: Token): Operator =>
 // tokens popped for the current reduction.
 
 export const mkParenthesized = (e: Expr, span: Span): Expr => ({
-  kind: "ParenthesizedExpr",
+  type: "ParenthesizedExpr",
   exprs: [e],
   span,
 })
 
 export const mkVariableExpr = (t: Token): Expr => ({
-  kind: "VariableExpr",
+  type: "VariableExpr",
   name: t.text,
   span: t.span,
 })
 
 export const mkCollate = (e: Expr, c: Token, span: Span): Expr => ({
-  kind: "CollateExpr",
+  type: "CollateExpr",
   expr: e,
   collation: sqlite3Dequote(c.text) as string,
   span,
 })
 
 export const mkCast = (e: Expr, typeName: Type | undefined, span: Span): Expr => ({
-  kind: "CastExpr",
+  type: "CastExpr",
   expr: e,
   typeName,
   span,
 })
 
 export const mkBinary = (l: Expr, op: Operator, r: Expr, span: Span): Expr => ({
-  kind: "BinaryExpr",
+  type: "BinaryExpr",
   left: l,
   op,
   right: r,
@@ -309,14 +309,14 @@ export const mkBinary = (l: Expr, op: Operator, r: Expr, span: Span): Expr => ({
 })
 
 export const mkUnary = (op: UnaryOperator, e: Expr, span: Span): Expr => ({
-  kind: "UnaryExpr",
+  type: "UnaryExpr",
   op,
   expr: e,
   span,
 })
 
 export const mkBetween = (l: Expr, not: boolean, s: Expr, e: Expr, span: Span): Expr => ({
-  kind: "BetweenExpr",
+  type: "BetweenExpr",
   lhs: l,
   not,
   start: s,
@@ -329,10 +329,10 @@ export const mkInList = (
   not: boolean,
   r: readonly Expr[] | undefined,
   span: Span,
-): Expr => ({ kind: "InListExpr", lhs: l, not, rhs: r, span })
+): Expr => ({ type: "InListExpr", lhs: l, not, rhs: r, span })
 
 export const mkInSelect = (l: Expr, not: boolean, s: Select, span: Span): Expr => ({
-  kind: "InSelectExpr",
+  type: "InSelectExpr",
   lhs: l,
   not,
   rhs: s,
@@ -345,16 +345,16 @@ export const mkInTable = (
   n: QualifiedName,
   args: readonly Expr[] | undefined,
   span: Span,
-): Expr => ({ kind: "InTableExpr", lhs: l, not, rhs: n, args, span })
+): Expr => ({ type: "InTableExpr", lhs: l, not, rhs: n, args, span })
 
 export const mkSubquery = (s: Select, span: Span): Expr => ({
-  kind: "SubqueryExpr",
+  type: "SubqueryExpr",
   select: s,
   span,
 })
 
 export const mkExistsExpr = (s: Select, span: Span): Expr => ({
-  kind: "ExistsExpr",
+  type: "ExistsExpr",
   select: s,
   span,
 })
@@ -366,8 +366,8 @@ export function mkNotNullExpr(
   tokens: Record<string, number>,
   span: Span,
 ): Expr {
-  if (tokType === tokens.ISNULL) return { kind: "IsNullExpr", expr, span }
-  if (tokType === tokens.NOTNULL) return { kind: "NotNullExpr", expr, span }
+  if (tokType === tokens.ISNULL) return { type: "IsNullExpr", expr, span }
+  if (tokType === tokens.NOTNULL) return { type: "NotNullExpr", expr, span }
   throw new Error(`unreachable NULL-test token: ${tokType}`)
 }
 
@@ -379,7 +379,7 @@ export function mkLikeExpr(
   escape: Expr | undefined,
   span: Span,
 ): Expr {
-  return { kind: "LikeExpr", lhs, not, op, rhs, escape, span }
+  return { type: "LikeExpr", lhs, not, op, rhs, escape, span }
 }
 
 /** Build a `FunctionCall` expression.  Validates DISTINCT argument count. */
@@ -399,7 +399,7 @@ export function mkFunctionCall(
     })
   }
   return {
-    kind: "FunctionCallExpr",
+    type: "FunctionCallExpr",
     name: mkId(nameTok),
     distinctness,
     args,
@@ -413,12 +413,12 @@ export const mkFunctionCallStar = (
   nameTok: Token,
   filterOver: FunctionTail | undefined,
   span: Span,
-): Expr => ({ kind: "FunctionCallStarExpr", name: mkId(nameTok), filterOver, span })
+): Expr => ({ type: "FunctionCallStarExpr", name: mkId(nameTok), filterOver, span })
 
 // ---- QualifiedName constructors --------------------------------------
 
 export const qnSingle = (n: Name, span: Span): QualifiedName => ({
-  kind: "QualifiedName",
+  type: "QualifiedName",
   dbName: undefined,
   name: n,
   alias: undefined,
@@ -426,7 +426,7 @@ export const qnSingle = (n: Name, span: Span): QualifiedName => ({
 })
 
 export const qnFull = (db: Name, n: Name, span: Span): QualifiedName => ({
-  kind: "QualifiedName",
+  type: "QualifiedName",
   dbName: db,
   name: n,
   alias: undefined,
@@ -434,7 +434,7 @@ export const qnFull = (db: Name, n: Name, span: Span): QualifiedName => ({
 })
 
 export const qnAlias = (n: Name, a: Name, span: Span): QualifiedName => ({
-  kind: "QualifiedName",
+  type: "QualifiedName",
   dbName: undefined,
   name: n,
   alias: a,
@@ -442,7 +442,7 @@ export const qnAlias = (n: Name, a: Name, span: Span): QualifiedName => ({
 })
 
 export const qnXfull = (db: Name, n: Name, a: Name, span: Span): QualifiedName => ({
-  kind: "QualifiedName",
+  type: "QualifiedName",
   dbName: db,
   name: n,
   alias: a,
@@ -488,7 +488,7 @@ export function joinOperatorFrom(
       message: `unknown join type: ${kw.text}`,
       span: kw.span,
     })
-    return { kind: "TypedJoinJoinOperator", joinType: undefined, span }
+    return { type: "TypedJoinJoinOperator", joinType: undefined, span }
   }
   for (const n of [n1, n2]) {
     if (n === undefined) continue
@@ -509,7 +509,7 @@ export function joinOperatorFrom(
       span: kw.span,
     })
   }
-  return { kind: "TypedJoinJoinOperator", joinType: jt, span }
+  return { type: "TypedJoinJoinOperator", joinType: jt, span }
 }
 
 // ---- FROM-clause accumulation ----------------------------------------
@@ -537,12 +537,12 @@ export const emptyFromClause = (): FromClauseMut => ({
 /** Freeze a {@link FromClauseMut} into an immutable {@link FromClause}. */
 export function freezeFrom(m: FromClauseMut, span: Span): FromClause {
   return {
-    kind: "FromClause",
+    type: "FromClause",
     select: m.select,
     joins:
       m.joins.length > 0
         ? m.joins.map((j) => ({
-            kind: "JoinedSelectTable",
+            type: "JoinedSelectTable",
             operator: j.operator,
             table: j.table,
             constraint: j.constraint,
@@ -568,7 +568,7 @@ export function fromClausePush(
   from.pendingOp = undefined
   if (op) {
     const isNatural =
-      op.kind === "TypedJoinJoinOperator" && op.joinType !== undefined && (op.joinType & 0x04) !== 0
+      op.type === "TypedJoinJoinOperator" && op.joinType !== undefined && (op.joinType & 0x04) !== 0
     if (isNatural && jc) {
       state.errors.push({
         message: "a NATURAL join may not have an ON or USING clause",
@@ -592,7 +592,7 @@ export function fromClausePush(
 /**
  * Parser-internal pairing used between the `selectnowith` reduction
  * and the outer `select` rule: the primary `OneSelect` plus any
- * compound continuations.  Not an AST node — no `kind`, no `span`.
+ * compound continuations.  Not an AST node — no `type`, no `span`.
  */
 export type SelectBody = {
   readonly select: OneSelect
@@ -607,7 +607,7 @@ export function mkSelect(
   span: Span,
 ): Select {
   return {
-    kind: "Select",
+    type: "Select",
     with: withClause,
     select: body.select,
     compounds: body.compounds,
@@ -639,13 +639,13 @@ export function mkOneSelect(
 ): OneSelect {
   const offendingStar =
     from === undefined
-      ? columns.find((c) => c.kind === "StarResultColumn" || c.kind === "TableStarResultColumn")
+      ? columns.find((c) => c.type === "StarResultColumn" || c.type === "TableStarResultColumn")
       : undefined
   if (offendingStar) {
     state.errors.push({ message: "no tables specified", span: offendingStar.span })
   }
   return {
-    kind: "SelectFrom",
+    type: "SelectFrom",
     distinctness,
     columns,
     from,
@@ -679,7 +679,7 @@ export function valuesPush(
         : mkDiagnostic("all VALUES must have the same number of terms", span),
     )
   }
-  values.push({ kind: "ValuesRow", values: row, span })
+  values.push({ type: "ValuesRow", values: row, span })
 }
 
 // ---- Column / constraint helpers -------------------------------------
@@ -694,7 +694,7 @@ export function mkColumnDefinition(
   let flags = 0 /* ColFlags.None */
   for (const nc of constraints) {
     const c = nc.constraint
-    switch (c.kind) {
+    switch (c.type) {
       case "CollateColumnConstraint":
         flags |= 0x0200 // HASCOLL
         break
@@ -714,7 +714,7 @@ export function mkColumnDefinition(
     }
   }
   if (colType && colType.name.length > 0) flags |= 0x0004 // HASTYPE
-  return { kind: "ColumnDefinition", colName, colType, constraints, flags, span }
+  return { type: "ColumnDefinition", colName, colType, constraints, flags, span }
 }
 
 /** Append a column, rejecting duplicate names. */
@@ -748,7 +748,7 @@ export function mkColumnsAndConstraints(
   for (const c of columns) {
     if ((c.flags & 0x0001) !== 0) flags |= 0x00000004 // HasPrimaryKey
   }
-  return { kind: "ColumnsAndConstraintsCreateTableBody", columns, constraints, flags, span }
+  return { type: "ColumnsAndConstraintsCreateTableBody", columns, constraints, flags, span }
 }
 
 // ---- CTE helpers -----------------------------------------------------
@@ -786,7 +786,7 @@ export function mkUpsertIndex(
       })
     }
   }
-  return { kind: "UpsertIndex", targets, whereClause, span }
+  return { type: "UpsertIndex", targets, whereClause, span }
 }
 
 // ---- Finalization ----------------------------------------------------
@@ -808,7 +808,7 @@ export function flushCmd(state: ParseState): void {
     state.explain === undefined
       ? stmt
       : {
-          kind: "ExplainStmt",
+          type: "ExplainStmt",
           queryPlan: state.explain === "QueryPlan",
           stmt,
           span: stmt.span,
@@ -836,5 +836,5 @@ export function finalizeCmdList(state: ParseState): CmdList {
           col: first.col,
         }
       : { offset: 0, length: 0, line: 1, col: 1 }
-  return { kind: "CmdList", cmds, span }
+  return { type: "CmdList", cmds, span }
 }

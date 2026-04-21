@@ -3238,7 +3238,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"BeginStmt\",    tx: yymsp[-1].minor.yy603, name: yymsp[0].minor.yy292, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"BeginStmt\",    tx: yymsp[-1].minor.yy603, name: yymsp[0].minor.yy292, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3394,7 +3394,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"CommitStmt\",   name: yymsp[0].minor.yy292, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"CommitStmt\",   name: yymsp[0].minor.yy292, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3414,7 +3414,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"RollbackStmt\", txName: yymsp[0].minor.yy292, savepointName: undefined, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"RollbackStmt\", txName: yymsp[0].minor.yy292, savepointName: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3434,7 +3434,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"SavepointStmt\", name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"SavepointStmt\", name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3455,7 +3455,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"ReleaseStmt\",   name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"ReleaseStmt\",   name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3478,7 +3478,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"RollbackStmt\", txName: yymsp[-3].minor.yy292, savepointName: yymsp[0].minor.yy206, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"RollbackStmt\", txName: yymsp[-3].minor.yy292, savepointName: yymsp[0].minor.yy206, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3502,7 +3502,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"CreateTableStmt\", temporary: yymsp[-4].minor.yy329, ifNotExists: yymsp[-2].minor.yy329, tblName: yymsp[-1].minor.yy458, body: yymsp[0].minor.yy131, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"CreateTableStmt\", temporary: yymsp[-4].minor.yy329, ifNotExists: yymsp[-2].minor.yy329, tblName: yymsp[-1].minor.yy458, body: yymsp[0].minor.yy131, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3624,7 +3624,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy131 = { kind: \"AsSelectCreateTableBody\", select: yymsp[0].minor.yy21, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-1].minor.yy131 = { type: \"AsSelectCreateTableBody\", select: yymsp[0].minor.yy21, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -3850,7 +3850,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy577 = { kind: \"Type\", name: yymsp[0].minor.yy576, size: undefined, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy577 = { type: \"Type\", name: yymsp[0].minor.yy576, size: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy577 = yylhsminor.yy577;\n"
     },
@@ -3873,7 +3873,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy577 = { kind: \"Type\", name: yymsp[-3].minor.yy576, size: { kind: \"MaxSizeTypeSize\", size: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy577 = { type: \"Type\", name: yymsp[-3].minor.yy576, size: { type: \"MaxSizeTypeSize\", size: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-3].minor.yy577 = yylhsminor.yy577;\n"
     },
@@ -3898,7 +3898,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy577 = { kind: \"Type\", name: yymsp[-5].minor.yy576, size: { kind: \"TypeSizeTypeSize\", size1: yymsp[-3].minor.yy560, size2: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy577 = { type: \"Type\", name: yymsp[-5].minor.yy576, size: { type: \"TypeSizeTypeSize\", size1: yymsp[-3].minor.yy560, size2: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-5].minor.yy577 = yylhsminor.yy577;\n"
     },
@@ -4034,7 +4034,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"DefaultColumnConstraint\", expr: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-1].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"DefaultColumnConstraint\", expr: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4057,7 +4057,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"DefaultColumnConstraint\", expr: mkParenthesized(yymsp[-1].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-3].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"DefaultColumnConstraint\", expr: mkParenthesized(yymsp[-1].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4080,7 +4080,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-2].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"DefaultColumnConstraint\", expr: mkUnary(\"Positive\", yymsp[0].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-2].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"DefaultColumnConstraint\", expr: mkUnary(\"Positive\", yymsp[0].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4103,7 +4103,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-2].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"DefaultColumnConstraint\", expr: mkUnary(\"Negative\", yymsp[0].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-2].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"DefaultColumnConstraint\", expr: mkUnary(\"Negative\", yymsp[0].minor.yy560, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4131,7 +4131,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"DefaultColumnConstraint\", expr: mkId(yymsp[0].minor.yy0), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-1].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"DefaultColumnConstraint\", expr: mkId(yymsp[0].minor.yy0), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4152,7 +4152,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"NotNullColumnConstraint\", nullable: true,  conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-1].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"NotNullColumnConstraint\", nullable: true,  conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4175,7 +4175,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-2].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"NotNullColumnConstraint\", nullable: false, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-2].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"NotNullColumnConstraint\", nullable: false, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4199,7 +4199,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"PrimaryKeyColumnConstraint\", order: yymsp[-2].minor.yy133, conflictClause: yymsp[-1].minor.yy613, autoIncrement: yymsp[0].minor.yy329, span: nodeSpan() }, span: nodeSpan()\n  };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-4].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"PrimaryKeyColumnConstraint\", order: yymsp[-2].minor.yy133, conflictClause: yymsp[-1].minor.yy613, autoIncrement: yymsp[0].minor.yy329, span: nodeSpan() }, span: nodeSpan()\n  };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4220,7 +4220,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"UniqueColumnConstraint\", conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-1].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"UniqueColumnConstraint\", conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4243,7 +4243,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"CheckColumnConstraint\", expr: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-3].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"CheckColumnConstraint\", expr: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4266,7 +4266,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"ForeignKeyColumnConstraint\",\n      clause: { kind: \"ForeignKeyClause\", tblName: yymsp[-2].minor.yy206, columns: yymsp[-1].minor.yy166, args: yymsp[0].minor.yy580, span: nodeSpan() },\n      deferClause: undefined, span: nodeSpan()\n    }, span: nodeSpan()\n  };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-3].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"ForeignKeyColumnConstraint\",\n      clause: { type: \"ForeignKeyClause\", tblName: yymsp[-2].minor.yy206, columns: yymsp[-1].minor.yy166, args: yymsp[0].minor.yy580, span: nodeSpan() },\n      deferClause: undefined, span: nodeSpan()\n    }, span: nodeSpan()\n  };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4284,7 +4284,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy31 = { kind: \"NamedColumnConstraint\", name: undefined, constraint: { kind: \"DeferColumnConstraint\", clause: yymsp[0].minor.yy314, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy31 = { type: \"NamedColumnConstraint\", name: undefined, constraint: { type: \"DeferColumnConstraint\", clause: yymsp[0].minor.yy314, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy31 = yylhsminor.yy31;\n"
     },
@@ -4313,7 +4313,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: { kind: \"CollateColumnConstraint\", collationName: mkName(yymsp[0].minor.yy0), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-1].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: { type: \"CollateColumnConstraint\", collationName: mkName(yymsp[0].minor.yy0), span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4336,7 +4336,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: yymsp[0].minor.yy456, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-3].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: yymsp[0].minor.yy456, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4357,7 +4357,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy31 = { kind: \"NamedColumnConstraint\", name: state.constraintName, constraint: yymsp[0].minor.yy456, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-1].minor.yy31 = { type: \"NamedColumnConstraint\", name: state.constraintName, constraint: yymsp[0].minor.yy456, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4379,7 +4379,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy456 = { kind: \"GeneratedColumnConstraint\", expr: yymsp[-1].minor.yy560, typ: undefined, span: nodeSpan() }; ",
+      "actionC": " yymsp[-2].minor.yy456 = { type: \"GeneratedColumnConstraint\", expr: yymsp[-1].minor.yy560, typ: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4402,7 +4402,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-3].minor.yy456 = { kind: \"GeneratedColumnConstraint\", expr: yymsp[-2].minor.yy560, typ: mkId(yymsp[0].minor.yy0), span: nodeSpan() }; ",
+      "actionC": " yymsp[-3].minor.yy456 = { type: \"GeneratedColumnConstraint\", expr: yymsp[-2].minor.yy560, typ: mkId(yymsp[0].minor.yy0), span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4499,7 +4499,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy296 = { kind: \"MatchRefArg\",    name: yymsp[0].minor.yy206, span: nodeSpan() };   ",
+      "actionC": " yymsp[-1].minor.yy296 = { type: \"MatchRefArg\",    name: yymsp[0].minor.yy206, span: nodeSpan() };   ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4522,7 +4522,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy296 = { kind: \"OnInsertRefArg\", action: yymsp[0].minor.yy142, span: nodeSpan() }; ",
+      "actionC": " yymsp[-2].minor.yy296 = { type: \"OnInsertRefArg\", action: yymsp[0].minor.yy142, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4545,7 +4545,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy296 = { kind: \"OnDeleteRefArg\", action: yymsp[0].minor.yy142, span: nodeSpan() }; ",
+      "actionC": " yymsp[-2].minor.yy296 = { type: \"OnDeleteRefArg\", action: yymsp[0].minor.yy142, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4568,7 +4568,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy296 = { kind: \"OnUpdateRefArg\", action: yymsp[0].minor.yy142, span: nodeSpan() }; ",
+      "actionC": " yymsp[-2].minor.yy296 = { type: \"OnUpdateRefArg\", action: yymsp[0].minor.yy142, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4690,7 +4690,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-2].minor.yy314 = { kind: \"DeferSubclause\", deferrable: false, initDeferred: yymsp[0].minor.yy575, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-2].minor.yy314 = { type: \"DeferSubclause\", deferrable: false, initDeferred: yymsp[0].minor.yy575, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4711,7 +4711,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-1].minor.yy314 = { kind: \"DeferSubclause\", deferrable: true,  initDeferred: yymsp[0].minor.yy575, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-1].minor.yy314 = { type: \"DeferSubclause\", deferrable: true,  initDeferred: yymsp[0].minor.yy575, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4914,7 +4914,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-6].minor.yy77 = { kind: \"NamedTableConstraint\", name: state.constraintName, constraint: { kind: \"PrimaryKeyTableConstraint\", columns: yymsp[-3].minor.yy408, autoIncrement: yymsp[-2].minor.yy329, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-6].minor.yy77 = { type: \"NamedTableConstraint\", name: state.constraintName, constraint: { type: \"PrimaryKeyTableConstraint\", columns: yymsp[-3].minor.yy408, autoIncrement: yymsp[-2].minor.yy329, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4938,7 +4938,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy77 = { kind: \"NamedTableConstraint\", name: state.constraintName, constraint: { kind: \"UniqueTableConstraint\", columns: yymsp[-2].minor.yy408, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-4].minor.yy77 = { type: \"NamedTableConstraint\", name: state.constraintName, constraint: { type: \"UniqueTableConstraint\", columns: yymsp[-2].minor.yy408, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4962,7 +4962,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy77 = { kind: \"NamedTableConstraint\", name: state.constraintName, constraint: { kind: \"CheckTableConstraint\", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-4].minor.yy77 = { type: \"NamedTableConstraint\", name: state.constraintName, constraint: { type: \"CheckTableConstraint\", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -4991,7 +4991,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-9].minor.yy77 = { kind: \"NamedTableConstraint\", name: state.constraintName, constraint: { kind: \"ForeignKeyTableConstraint\",\n      columns: yymsp[-6].minor.yy300,\n      clause: { kind: \"ForeignKeyClause\", tblName: yymsp[-3].minor.yy206, columns: yymsp[-2].minor.yy166, args: yymsp[-1].minor.yy580, span: nodeSpan() },\n      deferClause: yymsp[0].minor.yy248, span: nodeSpan()\n    }, span: nodeSpan()\n  };\n  state.constraintName = undefined;\n",
+      "actionC": "\n  yymsp[-9].minor.yy77 = { type: \"NamedTableConstraint\", name: state.constraintName, constraint: { type: \"ForeignKeyTableConstraint\",\n      columns: yymsp[-6].minor.yy300,\n      clause: { type: \"ForeignKeyClause\", tblName: yymsp[-3].minor.yy206, columns: yymsp[-2].minor.yy166, args: yymsp[-1].minor.yy580, span: nodeSpan() },\n      deferClause: yymsp[0].minor.yy248, span: nodeSpan()\n    }, span: nodeSpan()\n  };\n  state.constraintName = undefined;\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5166,7 +5166,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"DropTableStmt\", ifExists: yymsp[-1].minor.yy329, tblName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"DropTableStmt\", ifExists: yymsp[-1].minor.yy329, tblName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5231,7 +5231,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"CreateViewStmt\", temporary: yymsp[-6].minor.yy329, ifNotExists: yymsp[-4].minor.yy329, viewName: yymsp[-3].minor.yy458, columns: yymsp[-2].minor.yy166, select: yymsp[0].minor.yy21, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"CreateViewStmt\", temporary: yymsp[-6].minor.yy329, ifNotExists: yymsp[-4].minor.yy329, viewName: yymsp[-3].minor.yy458, columns: yymsp[-2].minor.yy166, select: yymsp[0].minor.yy21, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5253,7 +5253,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"DropViewStmt\", ifExists: yymsp[-1].minor.yy329, viewName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"DropViewStmt\", ifExists: yymsp[-1].minor.yy329, viewName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5270,7 +5270,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"SelectStmt\", body: yymsp[0].minor.yy21, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"SelectStmt\", body: yymsp[0].minor.yy21, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5294,7 +5294,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy21 = mkSelect({ kind: \"With\", recursive: false, ctes: yymsp[-3].minor.yy121, span: nodeSpan() }, yymsp[-2].minor.yy3, yymsp[-1].minor.yy326, yymsp[0].minor.yy238, nodeSpan());\n",
+      "actionC": "\n  yymsp[-4].minor.yy21 = mkSelect({ type: \"With\", recursive: false, ctes: yymsp[-3].minor.yy121, span: nodeSpan() }, yymsp[-2].minor.yy3, yymsp[-1].minor.yy326, yymsp[0].minor.yy238, nodeSpan());\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5319,7 +5319,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-5].minor.yy21 = mkSelect({ kind: \"With\", recursive: true,  ctes: yymsp[-3].minor.yy121, span: nodeSpan() }, yymsp[-2].minor.yy3, yymsp[-1].minor.yy326, yymsp[0].minor.yy238, nodeSpan());\n",
+      "actionC": "\n  yymsp[-5].minor.yy21 = mkSelect({ type: \"With\", recursive: true,  ctes: yymsp[-3].minor.yy121, span: nodeSpan() }, yymsp[-2].minor.yy3, yymsp[-1].minor.yy326, yymsp[0].minor.yy238, nodeSpan());\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5381,7 +5381,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  pushCompound(yymsp[-2].minor.yy3, { kind: \"CompoundSelect\", operator: yymsp[-1].minor.yy198, select: yymsp[0].minor.yy32, span: nodeSpan() });\n",
+      "actionC": "\n  pushCompound(yymsp[-2].minor.yy3, { type: \"CompoundSelect\", operator: yymsp[-1].minor.yy198, select: yymsp[0].minor.yy32, span: nodeSpan() });\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5527,7 +5527,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy32 = { kind: \"SelectValues\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy32 = { type: \"SelectValues\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy32 = yylhsminor.yy32;\n"
     },
@@ -5550,7 +5550,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy81 = [{ kind: \"ValuesRow\", values: yymsp[-1].minor.yy540, span: nodeSpan() }];\n",
+      "actionC": "\n  yymsp[-3].minor.yy81 = [{ type: \"ValuesRow\", values: yymsp[-1].minor.yy540, span: nodeSpan() }];\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5568,7 +5568,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy32 = { kind: \"SelectValues\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy32 = { type: \"SelectValues\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy32 = yylhsminor.yy32;\n"
     },
@@ -5710,7 +5710,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy518.push({ kind: \"ExprResultColumn\", expr: yymsp[-1].minor.yy560, alias: yymsp[0].minor.yy384, span: nodeSpan() }); ",
+      "actionC": " yymsp[-2].minor.yy518.push({ type: \"ExprResultColumn\", expr: yymsp[-1].minor.yy560, alias: yymsp[0].minor.yy384, span: nodeSpan() }); ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5732,7 +5732,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy518.push({ kind: \"StarResultColumn\", span: nodeSpan() }); ",
+      "actionC": " yymsp[-1].minor.yy518.push({ type: \"StarResultColumn\", span: nodeSpan() }); ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5756,7 +5756,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-3].minor.yy518.push({ kind: \"TableStarResultColumn\", table: yymsp[-2].minor.yy206, span: nodeSpan() }); ",
+      "actionC": " yymsp[-3].minor.yy518.push({ type: \"TableStarResultColumn\", table: yymsp[-2].minor.yy206, span: nodeSpan() }); ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5777,7 +5777,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy384 = { kind: \"AsAs\",     name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy384 = { type: \"AsAs\",     name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5804,7 +5804,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy384 = { kind: \"ElidedAs\", name: mkName(yymsp[0].minor.yy0), span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy384 = { type: \"ElidedAs\", name: mkName(yymsp[0].minor.yy0), span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy384 = yylhsminor.yy384;\n"
     },
@@ -5924,7 +5924,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  fromClausePush(state, yymsp[-4].minor.yy84, { kind: \"TableSelectTable\", name: yymsp[-3].minor.yy458, alias: yymsp[-2].minor.yy384, indexed: yymsp[-1].minor.yy492, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
+      "actionC": "\n  fromClausePush(state, yymsp[-4].minor.yy84, { type: \"TableSelectTable\", name: yymsp[-3].minor.yy458, alias: yymsp[-2].minor.yy384, indexed: yymsp[-1].minor.yy492, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5950,7 +5950,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  fromClausePush(state, yymsp[-6].minor.yy84, { kind: \"TableCallSelectTable\", name: yymsp[-5].minor.yy458, args: yymsp[-3].minor.yy246, alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
+      "actionC": "\n  fromClausePush(state, yymsp[-6].minor.yy84, { type: \"TableCallSelectTable\", name: yymsp[-5].minor.yy458, args: yymsp[-3].minor.yy246, alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5975,7 +5975,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  fromClausePush(state, yymsp[-5].minor.yy84, { kind: \"SelectSelectTable\", select: yymsp[-3].minor.yy21, alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
+      "actionC": "\n  fromClausePush(state, yymsp[-5].minor.yy84, { type: \"SelectSelectTable\", select: yymsp[-3].minor.yy21, alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6000,7 +6000,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  fromClausePush(state, yymsp[-5].minor.yy84, { kind: \"SubSelectTable\", from: freezeFrom(yymsp[-3].minor.yy84, nodeSpan()), alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
+      "actionC": "\n  fromClausePush(state, yymsp[-5].minor.yy84, { type: \"SubSelectTable\", from: freezeFrom(yymsp[-3].minor.yy84, nodeSpan()), alias: yymsp[-1].minor.yy384, span: nodeSpan() }, yymsp[0].minor.yy256);\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6144,7 +6144,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[0].minor.yy345 = { kind: \"CommaJoinOperator\", span: nodeSpan()                  }; ",
+      "actionC": " yymsp[0].minor.yy345 = { type: \"CommaJoinOperator\", span: nodeSpan()                  }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6162,7 +6162,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[0].minor.yy345 = { kind: \"TypedJoinJoinOperator\", joinType: undefined, span: nodeSpan() }; ",
+      "actionC": " yymsp[0].minor.yy345 = { type: \"TypedJoinJoinOperator\", joinType: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6250,7 +6250,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy256 = { kind: \"OnJoinConstraint\",    expr: yymsp[0].minor.yy560, span: nodeSpan() };    ",
+      "actionC": " yymsp[-1].minor.yy256 = { type: \"OnJoinConstraint\",    expr: yymsp[0].minor.yy560, span: nodeSpan() };    ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6273,7 +6273,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-3].minor.yy256 = { kind: \"UsingJoinConstraint\", columns: yymsp[-1].minor.yy342, span: nodeSpan() }; ",
+      "actionC": " yymsp[-3].minor.yy256 = { type: \"UsingJoinConstraint\", columns: yymsp[-1].minor.yy342, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6332,7 +6332,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy492 = { kind: \"IndexedByIndexed\", name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
+      "actionC": " yymsp[-2].minor.yy492 = { type: \"IndexedByIndexed\", name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6354,7 +6354,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy492 = { kind: \"NotIndexedIndexed\", span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy492 = { type: \"NotIndexedIndexed\", span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6418,7 +6418,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy408.push({ kind: \"SortedColumn\", expr: yymsp[-2].minor.yy560, order: yymsp[-1].minor.yy133, nulls: yymsp[0].minor.yy122, span: nodeSpan() });\n",
+      "actionC": "\n  yymsp[-4].minor.yy408.push({ type: \"SortedColumn\", expr: yymsp[-2].minor.yy560, order: yymsp[-1].minor.yy133, nulls: yymsp[0].minor.yy122, span: nodeSpan() });\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6440,7 +6440,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy408 = [{ kind: \"SortedColumn\", expr: yymsp[-2].minor.yy560, order: yymsp[-1].minor.yy133, nulls: yymsp[0].minor.yy122, span: nodeSpan() }];\n",
+      "actionC": "\n  yylhsminor.yy408 = [{ type: \"SortedColumn\", expr: yymsp[-2].minor.yy560, order: yymsp[-1].minor.yy133, nulls: yymsp[0].minor.yy122, span: nodeSpan() }];\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-2].minor.yy408 = yylhsminor.yy408;\n"
     },
@@ -6672,7 +6672,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy238 = { kind: \"Limit\", expr: yymsp[0].minor.yy560, offset: undefined, span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy238 = { type: \"Limit\", expr: yymsp[0].minor.yy560, offset: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6695,7 +6695,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-3].minor.yy238 = { kind: \"Limit\", expr: yymsp[-2].minor.yy560, offset: yymsp[0].minor.yy560, span: nodeSpan()    }; ",
+      "actionC": " yymsp[-3].minor.yy238 = { type: \"Limit\", expr: yymsp[-2].minor.yy560, offset: yymsp[0].minor.yy560, span: nodeSpan()    }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6718,7 +6718,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-3].minor.yy238 = { kind: \"Limit\", expr: yymsp[0].minor.yy560, offset: yymsp[-2].minor.yy560, span: nodeSpan()    }; ",
+      "actionC": " yymsp[-3].minor.yy238 = { type: \"Limit\", expr: yymsp[0].minor.yy560, offset: yymsp[-2].minor.yy560, span: nodeSpan()    }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6742,7 +6742,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = {\n    kind: \"DeleteStmt\",\n    with: yymsp[-5].minor.yy187, tblName: yymsp[-2].minor.yy458, indexed: yymsp[-1].minor.yy492,\n    whereClause: yymsp[0].minor.yy240.where, returning: yymsp[0].minor.yy240.returning,\n    orderBy: undefined, limit: undefined, span: nodeSpan()\n  };\n",
+      "actionC": "\n  state.stmt = {\n    type: \"DeleteStmt\",\n    with: yymsp[-5].minor.yy187, tblName: yymsp[-2].minor.yy458, indexed: yymsp[-1].minor.yy492,\n    whereClause: yymsp[0].minor.yy240.where, returning: yymsp[0].minor.yy240.returning,\n    orderBy: undefined, limit: undefined, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6891,7 +6891,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = {\n    kind: \"UpdateStmt\",\n    with: yymsp[-8].minor.yy187, orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-5].minor.yy458, indexed: yymsp[-4].minor.yy492, sets: yymsp[-2].minor.yy418, from: yymsp[-1].minor.yy561,\n    whereClause: yymsp[0].minor.yy240.where, returning: yymsp[0].minor.yy240.returning, orderBy: undefined, limit: undefined, span: nodeSpan()\n  };\n",
+      "actionC": "\n  state.stmt = {\n    type: \"UpdateStmt\",\n    with: yymsp[-8].minor.yy187, orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-5].minor.yy458, indexed: yymsp[-4].minor.yy492, sets: yymsp[-2].minor.yy418, from: yymsp[-1].minor.yy561,\n    whereClause: yymsp[0].minor.yy240.where, returning: yymsp[0].minor.yy240.returning, orderBy: undefined, limit: undefined, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6916,7 +6916,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-4].minor.yy418.push({ kind: \"SetAssignment\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
+      "actionC": " yymsp[-4].minor.yy418.push({ type: \"SetAssignment\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6943,7 +6943,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-6].minor.yy418.push({ kind: \"SetAssignment\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
+      "actionC": " yymsp[-6].minor.yy418.push({ type: \"SetAssignment\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6966,7 +6966,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy418 = [{ kind: \"SetAssignment\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
+      "actionC": " yylhsminor.yy418 = [{ type: \"SetAssignment\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-2].minor.yy418 = yylhsminor.yy418;\n"
     },
@@ -6991,7 +6991,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-4].minor.yy418 = [{ kind: \"SetAssignment\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
+      "actionC": " yymsp[-4].minor.yy418 = [{ type: \"SetAssignment\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -7016,7 +7016,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = {\n    kind: \"InsertStmt\",\n    with: yymsp[-6].minor.yy187, orConflict: yymsp[-5].minor.yy613, tblName: yymsp[-3].minor.yy458, columns: yymsp[-2].minor.yy529,\n    body: { kind: \"SelectInsertBody\", select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy542.upsert, span: nodeSpan() },\n    returning: yymsp[0].minor.yy542.returning, span: nodeSpan()\n  };\n",
+      "actionC": "\n  state.stmt = {\n    type: \"InsertStmt\",\n    with: yymsp[-6].minor.yy187, orConflict: yymsp[-5].minor.yy613, tblName: yymsp[-3].minor.yy458, columns: yymsp[-2].minor.yy529,\n    body: { type: \"SelectInsertBody\", select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy542.upsert, span: nodeSpan() },\n    returning: yymsp[0].minor.yy542.returning, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -7042,7 +7042,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = {\n    kind: \"InsertStmt\",\n    with: yymsp[-7].minor.yy187, orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-4].minor.yy458, columns: yymsp[-3].minor.yy529,\n    body: { kind: \"DefaultValuesInsertBody\", span: nodeSpan() },\n    returning: yymsp[0].minor.yy599.columns, span: nodeSpan()\n  };\n",
+      "actionC": "\n  state.stmt = {\n    type: \"InsertStmt\",\n    with: yymsp[-7].minor.yy187, orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-4].minor.yy458, columns: yymsp[-3].minor.yy529,\n    body: { type: \"DefaultValuesInsertBody\", span: nodeSpan() },\n    returning: yymsp[0].minor.yy599.columns, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -7113,7 +7113,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  const idx = mkUpsertIndex(state, yymsp[-8].minor.yy408, yymsp[-6].minor.yy102, nodeSpan());\n  yymsp[-11].minor.yy542 = {\n    upsert: { kind: \"Upsert\", index: idx, doClause: { kind: \"SetUpsertDo\", sets: yymsp[-2].minor.yy418, whereClause: yymsp[-1].minor.yy102, span: nodeSpan() }, next: yymsp[0].minor.yy542.upsert, span: nodeSpan() },\n    returning: yymsp[0].minor.yy542.returning, returningSpan: yymsp[0].minor.yy542.returningSpan, span: nodeSpan()\n  };\n",
+      "actionC": "\n  const idx = mkUpsertIndex(state, yymsp[-8].minor.yy408, yymsp[-6].minor.yy102, nodeSpan());\n  yymsp[-11].minor.yy542 = {\n    upsert: { type: \"Upsert\", index: idx, doClause: { type: \"SetUpsertDo\", sets: yymsp[-2].minor.yy418, whereClause: yymsp[-1].minor.yy102, span: nodeSpan() }, next: yymsp[0].minor.yy542.upsert, span: nodeSpan() },\n    returning: yymsp[0].minor.yy542.returning, returningSpan: yymsp[0].minor.yy542.returningSpan, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -7142,7 +7142,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  const idx = mkUpsertIndex(state, yymsp[-5].minor.yy408, yymsp[-3].minor.yy102, nodeSpan());\n  yymsp[-8].minor.yy542 = {\n    upsert: { kind: \"Upsert\", index: idx, doClause: { kind: \"NothingUpsertDo\", span: nodeSpan() }, next: yymsp[0].minor.yy542.upsert, span: nodeSpan() },\n    returning: yymsp[0].minor.yy542.returning, returningSpan: yymsp[0].minor.yy542.returningSpan, span: nodeSpan()\n  };\n",
+      "actionC": "\n  const idx = mkUpsertIndex(state, yymsp[-5].minor.yy408, yymsp[-3].minor.yy102, nodeSpan());\n  yymsp[-8].minor.yy542 = {\n    upsert: { type: \"Upsert\", index: idx, doClause: { type: \"NothingUpsertDo\", span: nodeSpan() }, next: yymsp[0].minor.yy542.upsert, span: nodeSpan() },\n    returning: yymsp[0].minor.yy542.returning, returningSpan: yymsp[0].minor.yy542.returningSpan, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -7167,7 +7167,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy542 = { upsert: { kind: \"Upsert\", index: undefined, doClause: { kind: \"NothingUpsertDo\", span: nodeSpan() }, next: undefined, span: nodeSpan() }, returning: yymsp[0].minor.yy599.columns, returningSpan: yymsp[0].minor.yy599.span, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-4].minor.yy542 = { upsert: { type: \"Upsert\", index: undefined, doClause: { type: \"NothingUpsertDo\", span: nodeSpan() }, next: undefined, span: nodeSpan() }, returning: yymsp[0].minor.yy599.columns, returningSpan: yymsp[0].minor.yy599.span, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -7195,7 +7195,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-7].minor.yy542 = {\n    upsert: { kind: \"Upsert\", index: undefined, doClause: { kind: \"SetUpsertDo\", sets: yymsp[-2].minor.yy418, whereClause: yymsp[-1].minor.yy102, span: nodeSpan() }, next: undefined, span: nodeSpan() },\n    returning: yymsp[0].minor.yy599.columns, returningSpan: yymsp[0].minor.yy599.span, span: nodeSpan()\n  };\n",
+      "actionC": "\n  yymsp[-7].minor.yy542 = {\n    upsert: { type: \"Upsert\", index: undefined, doClause: { type: \"SetUpsertDo\", sets: yymsp[-2].minor.yy418, whereClause: yymsp[-1].minor.yy102, span: nodeSpan() }, next: undefined, span: nodeSpan() },\n    returning: yymsp[0].minor.yy599.columns, returningSpan: yymsp[0].minor.yy599.span, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -7425,7 +7425,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy560 = { kind: \"QualifiedExpr\", schema: undefined, table: yymsp[-2].minor.yy206, column: yymsp[0].minor.yy206, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy560 = { type: \"QualifiedExpr\", schema: undefined, table: yymsp[-2].minor.yy206, column: yymsp[0].minor.yy206, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-2].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -7449,7 +7449,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy560 = { kind: \"QualifiedExpr\", schema: yymsp[-4].minor.yy206, table: yymsp[-2].minor.yy206, column: yymsp[0].minor.yy206, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy560 = { type: \"QualifiedExpr\", schema: yymsp[-4].minor.yy206, table: yymsp[-2].minor.yy206, column: yymsp[0].minor.yy206, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-4].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -7670,7 +7670,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-7].minor.yy0, yymsp[-5].minor.yy450, yymsp[-4].minor.yy246, { kind: \"SortListFunctionCallOrder\", columns: yymsp[-1].minor.yy408, span: nodeSpan() }, undefined, nodeSpan());\n",
+      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-7].minor.yy0, yymsp[-5].minor.yy450, yymsp[-4].minor.yy246, { type: \"SortListFunctionCallOrder\", columns: yymsp[-1].minor.yy408, span: nodeSpan() }, undefined, nodeSpan());\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-7].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -7741,7 +7741,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-11].minor.yy0, yymsp[-9].minor.yy450, yymsp[-8].minor.yy246, { kind: \"WithinGroupFunctionCallOrder\", expr: yymsp[-1].minor.yy560, span: nodeSpan() }, undefined, nodeSpan());\n",
+      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-11].minor.yy0, yymsp[-9].minor.yy450, yymsp[-8].minor.yy246, { type: \"WithinGroupFunctionCallOrder\", expr: yymsp[-1].minor.yy560, span: nodeSpan() }, undefined, nodeSpan());\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-11].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -7810,7 +7810,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-8].minor.yy0, yymsp[-6].minor.yy450, yymsp[-5].minor.yy246, { kind: \"SortListFunctionCallOrder\", columns: yymsp[-2].minor.yy408, span: nodeSpan() }, yymsp[0].minor.yy53, nodeSpan());\n",
+      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-8].minor.yy0, yymsp[-6].minor.yy450, yymsp[-5].minor.yy246, { type: \"SortListFunctionCallOrder\", columns: yymsp[-2].minor.yy408, span: nodeSpan() }, yymsp[0].minor.yy53, nodeSpan());\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-8].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -7883,7 +7883,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-12].minor.yy0, yymsp[-10].minor.yy450, yymsp[-9].minor.yy246, { kind: \"WithinGroupFunctionCallOrder\", expr: yymsp[-2].minor.yy560, span: nodeSpan() }, yymsp[0].minor.yy53, nodeSpan());\n",
+      "actionC": "\n  yylhsminor.yy560 = mkFunctionCall(state, yymsp[-12].minor.yy0, yymsp[-10].minor.yy450, yymsp[-9].minor.yy246, { type: \"WithinGroupFunctionCallOrder\", expr: yymsp[-2].minor.yy560, span: nodeSpan() }, yymsp[0].minor.yy53, nodeSpan());\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-12].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -7925,7 +7925,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy560 = { kind: \"ParenthesizedExpr\", exprs: [...yymsp[-3].minor.yy540, yymsp[-1].minor.yy560], span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-4].minor.yy560 = { type: \"ParenthesizedExpr\", exprs: [...yymsp[-3].minor.yy540, yymsp[-1].minor.yy560], span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -8306,7 +8306,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy560 = { kind: \"NotNullExpr\", expr: yymsp[-2].minor.yy560, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy560 = { type: \"NotNullExpr\", expr: yymsp[-2].minor.yy560, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-2].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -8750,7 +8750,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy560 = { kind: \"CaseExpr\", base: yymsp[-3].minor.yy102, whenThenPairs: yymsp[-2].minor.yy410, elseExpr: yymsp[-1].minor.yy102, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-4].minor.yy560 = { type: \"CaseExpr\", base: yymsp[-3].minor.yy102, whenThenPairs: yymsp[-2].minor.yy410, elseExpr: yymsp[-1].minor.yy102, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -8774,7 +8774,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy410.push({ kind: \"WhenThen\", when: yymsp[-2].minor.yy560, then: yymsp[0].minor.yy560, span: nodeSpan() });\n",
+      "actionC": "\n  yymsp[-4].minor.yy410.push({ type: \"WhenThen\", when: yymsp[-2].minor.yy560, then: yymsp[0].minor.yy560, span: nodeSpan() });\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -8797,7 +8797,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy410 = [{ kind: \"WhenThen\", when: yymsp[-2].minor.yy560, then: yymsp[0].minor.yy560, span: nodeSpan() }];\n",
+      "actionC": "\n  yymsp[-3].minor.yy410 = [{ type: \"WhenThen\", when: yymsp[-2].minor.yy560, then: yymsp[0].minor.yy560, span: nodeSpan() }];\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9018,7 +9018,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = {\n    kind: \"CreateIndexStmt\",\n    unique: yymsp[-9].minor.yy329, ifNotExists: yymsp[-7].minor.yy329, idxName: yymsp[-6].minor.yy458, tblName: yymsp[-4].minor.yy206, columns: yymsp[-2].minor.yy408, whereClause: yymsp[0].minor.yy102, span: nodeSpan()\n  };\n",
+      "actionC": "\n  state.stmt = {\n    type: \"CreateIndexStmt\",\n    unique: yymsp[-9].minor.yy329, ifNotExists: yymsp[-7].minor.yy329, idxName: yymsp[-6].minor.yy458, tblName: yymsp[-4].minor.yy206, columns: yymsp[-2].minor.yy408, whereClause: yymsp[0].minor.yy102, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9118,7 +9118,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy300.push({ kind: \"IndexedColumn\", colName: yymsp[-2].minor.yy206, collationName: yymsp[-1].minor.yy292, order: yymsp[0].minor.yy133, span: nodeSpan() });\n",
+      "actionC": "\n  yymsp[-4].minor.yy300.push({ type: \"IndexedColumn\", colName: yymsp[-2].minor.yy206, collationName: yymsp[-1].minor.yy292, order: yymsp[0].minor.yy133, span: nodeSpan() });\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9140,7 +9140,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy300 = [{ kind: \"IndexedColumn\", colName: yymsp[-2].minor.yy206, collationName: yymsp[-1].minor.yy292, order: yymsp[0].minor.yy133, span: nodeSpan() }];\n",
+      "actionC": "\n  yylhsminor.yy300 = [{ type: \"IndexedColumn\", colName: yymsp[-2].minor.yy206, collationName: yymsp[-1].minor.yy292, order: yymsp[0].minor.yy133, span: nodeSpan() }];\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-2].minor.yy300 = yylhsminor.yy300;\n"
     },
@@ -9209,7 +9209,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"DropIndexStmt\", ifExists: yymsp[-1].minor.yy329, idxName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"DropIndexStmt\", ifExists: yymsp[-1].minor.yy329, idxName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9229,7 +9229,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"VacuumStmt\", name: undefined, into: yymsp[0].minor.yy102, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"VacuumStmt\", name: undefined, into: yymsp[0].minor.yy102, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9250,7 +9250,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"VacuumStmt\", name: yymsp[-1].minor.yy206,    into: yymsp[0].minor.yy102, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"VacuumStmt\", name: yymsp[-1].minor.yy206,    into: yymsp[0].minor.yy102, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9309,7 +9309,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"PragmaStmt\", name: yymsp[0].minor.yy458, body: undefined, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"PragmaStmt\", name: yymsp[0].minor.yy458, body: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9332,7 +9332,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"PragmaStmt\", name: yymsp[-2].minor.yy458, body: { kind: \"EqualsPragmaBody\", value: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"PragmaStmt\", name: yymsp[-2].minor.yy458, body: { type: \"EqualsPragmaBody\", value: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9355,7 +9355,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"PragmaStmt\", name: yymsp[-3].minor.yy458, body: { kind: \"CallPragmaBody\",   value: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"PragmaStmt\", name: yymsp[-3].minor.yy458, body: { type: \"CallPragmaBody\",   value: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9378,7 +9378,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"PragmaStmt\", name: yymsp[-2].minor.yy458, body: { kind: \"EqualsPragmaBody\", value: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"PragmaStmt\", name: yymsp[-2].minor.yy458, body: { type: \"EqualsPragmaBody\", value: yymsp[0].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9401,7 +9401,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"PragmaStmt\", name: yymsp[-3].minor.yy458, body: { kind: \"CallPragmaBody\",   value: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"PragmaStmt\", name: yymsp[-3].minor.yy458, body: { type: \"CallPragmaBody\",   value: yymsp[-1].minor.yy560, span: nodeSpan() }, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9419,7 +9419,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy560 = { kind: \"NameExpr\", name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy560 = { type: \"NameExpr\", name: yymsp[0].minor.yy206, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy560 = yylhsminor.yy560;\n"
     },
@@ -9592,7 +9592,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = {\n    kind: \"CreateTriggerStmt\",\n    temporary: yymsp[-12].minor.yy329, ifNotExists: yymsp[-10].minor.yy329, triggerName: yymsp[-9].minor.yy458, time: yymsp[-8].minor.yy402, event: yymsp[-7].minor.yy243, tblName: yymsp[-5].minor.yy458,\n    forEachRow: yymsp[-4].minor.yy329, whenClause: yymsp[-3].minor.yy102, commands: yymsp[-1].minor.yy481, span: nodeSpan()\n  };\n",
+      "actionC": "\n  state.stmt = {\n    type: \"CreateTriggerStmt\",\n    temporary: yymsp[-12].minor.yy329, ifNotExists: yymsp[-10].minor.yy329, triggerName: yymsp[-9].minor.yy458, time: yymsp[-8].minor.yy402, event: yymsp[-7].minor.yy243, tblName: yymsp[-5].minor.yy458,\n    forEachRow: yymsp[-4].minor.yy329, whenClause: yymsp[-3].minor.yy102, commands: yymsp[-1].minor.yy481, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9685,7 +9685,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[0].minor.yy243 = { kind: \"DeleteTriggerEvent\", span: nodeSpan() }; ",
+      "actionC": " yymsp[0].minor.yy243 = { type: \"DeleteTriggerEvent\", span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9703,7 +9703,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[0].minor.yy243 = { kind: \"InsertTriggerEvent\", span: nodeSpan() }; ",
+      "actionC": " yymsp[0].minor.yy243 = { type: \"InsertTriggerEvent\", span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9721,7 +9721,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[0].minor.yy243 = { kind: \"UpdateTriggerEvent\", span: nodeSpan() }; ",
+      "actionC": " yymsp[0].minor.yy243 = { type: \"UpdateTriggerEvent\", span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9743,7 +9743,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy243 = { kind: \"UpdateOfTriggerEvent\", columns: yymsp[0].minor.yy342, span: nodeSpan() }; ",
+      "actionC": " yymsp[-2].minor.yy243 = { type: \"UpdateOfTriggerEvent\", columns: yymsp[0].minor.yy342, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9934,7 +9934,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-7].minor.yy65 = { kind: \"UpdateTriggerCmd\", orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-5].minor.yy458, sets: yymsp[-2].minor.yy418, from: yymsp[-1].minor.yy561, whereClause: yymsp[0].minor.yy102, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-7].minor.yy65 = { type: \"UpdateTriggerCmd\", orConflict: yymsp[-6].minor.yy613, tblName: yymsp[-5].minor.yy458, sets: yymsp[-2].minor.yy418, from: yymsp[-1].minor.yy561, whereClause: yymsp[0].minor.yy102, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -9959,7 +9959,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  if( yymsp[0].minor.yy542.returning ){\n    state.errors.push(mkDiagnostic(\n      \"cannot use RETURNING in a trigger\",\n      yymsp[0].minor.yy542.returningSpan ?? nodeSpan(),\n    ));\n  }\n  yylhsminor.yy65 = {\n    kind: \"InsertTriggerCmd\",\n    orConflict: yymsp[-5].minor.yy613, tblName: yymsp[-3].minor.yy458, colNames: yymsp[-2].minor.yy529, select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy542.upsert, span: nodeSpan()\n  };\n",
+      "actionC": "\n  if( yymsp[0].minor.yy542.returning ){\n    state.errors.push(mkDiagnostic(\n      \"cannot use RETURNING in a trigger\",\n      yymsp[0].minor.yy542.returningSpan ?? nodeSpan(),\n    ));\n  }\n  yylhsminor.yy65 = {\n    type: \"InsertTriggerCmd\",\n    orConflict: yymsp[-5].minor.yy613, tblName: yymsp[-3].minor.yy458, colNames: yymsp[-2].minor.yy529, select: yymsp[-1].minor.yy21, upsert: yymsp[0].minor.yy542.upsert, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-5].minor.yy65 = yylhsminor.yy65;\n"
     },
@@ -9983,7 +9983,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy65 = { kind: \"DeleteTriggerCmd\", tblName: yymsp[-2].minor.yy458, whereClause: yymsp[0].minor.yy102, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-4].minor.yy65 = { type: \"DeleteTriggerCmd\", tblName: yymsp[-2].minor.yy458, whereClause: yymsp[0].minor.yy102, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10001,7 +10001,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy65 = { kind: \"SelectTriggerCmd\", select: yymsp[0].minor.yy21, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy65 = { type: \"SelectTriggerCmd\", select: yymsp[0].minor.yy21, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy65 = yylhsminor.yy65;\n"
     },
@@ -10024,7 +10024,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy560 = { kind: \"RaiseExpr\", resolve: \"Ignore\", message: undefined, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-3].minor.yy560 = { type: \"RaiseExpr\", resolve: \"Ignore\", message: undefined, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10049,7 +10049,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-5].minor.yy560 = { kind: \"RaiseExpr\", resolve: yymsp[-3].minor.yy115, message: yymsp[-1].minor.yy560, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-5].minor.yy560 = { type: \"RaiseExpr\", resolve: yymsp[-3].minor.yy115, message: yymsp[-1].minor.yy560, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10125,7 +10125,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"DropTriggerStmt\", ifExists: yymsp[-1].minor.yy329, triggerName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"DropTriggerStmt\", ifExists: yymsp[-1].minor.yy329, triggerName: yymsp[0].minor.yy458, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10149,7 +10149,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"AttachStmt\", expr: yymsp[-3].minor.yy560, dbName: yymsp[-1].minor.yy560, key: yymsp[0].minor.yy102, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"AttachStmt\", expr: yymsp[-3].minor.yy560, dbName: yymsp[-1].minor.yy560, key: yymsp[0].minor.yy102, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10170,7 +10170,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"DetachStmt\", expr: yymsp[0].minor.yy560, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"DetachStmt\", expr: yymsp[0].minor.yy560, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10226,7 +10226,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"ReindexStmt\", objName: undefined, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"ReindexStmt\", objName: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10246,7 +10246,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"ReindexStmt\", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; ",
+      "actionC": " state.stmt = { type: \"ReindexStmt\", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10263,7 +10263,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"AnalyzeStmt\", objName: undefined, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { type: \"AnalyzeStmt\", objName: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10283,7 +10283,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"AnalyzeStmt\", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; ",
+      "actionC": " state.stmt = { type: \"AnalyzeStmt\", objName: yymsp[0].minor.yy458, span: nodeSpan()    }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10307,7 +10307,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"AlterTableStmt\", tblName: yymsp[-3].minor.yy458, body: { kind: \"RenameToAlterTableBody\", name: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"AlterTableStmt\", tblName: yymsp[-3].minor.yy458, body: { type: \"RenameToAlterTableBody\", name: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10333,7 +10333,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  const cd = mkColumnDefinition(yymsp[-2].minor.yy206, yymsp[-1].minor.yy577, yymsp[0].minor.yy513, nodeSpan());\n  state.stmt = { kind: \"AlterTableStmt\", tblName: yymsp[-5].minor.yy458, body: { kind: \"AddColumnAlterTableBody\", column: cd, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  const cd = mkColumnDefinition(yymsp[-2].minor.yy206, yymsp[-1].minor.yy577, yymsp[0].minor.yy513, nodeSpan());\n  state.stmt = { type: \"AlterTableStmt\", tblName: yymsp[-5].minor.yy458, body: { type: \"AddColumnAlterTableBody\", column: cd, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10357,7 +10357,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"AlterTableStmt\", tblName: yymsp[-3].minor.yy458, body: { kind: \"DropColumnAlterTableBody\", column: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"AlterTableStmt\", tblName: yymsp[-3].minor.yy458, body: { type: \"DropColumnAlterTableBody\", column: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10383,7 +10383,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"AlterTableStmt\", tblName: yymsp[-5].minor.yy458, body: { kind: \"RenameColumnAlterTableBody\", old: yymsp[-2].minor.yy206, new: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"AlterTableStmt\", tblName: yymsp[-5].minor.yy458, body: { type: \"RenameColumnAlterTableBody\", old: yymsp[-2].minor.yy206, new: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10407,7 +10407,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"AlterTableStmt\", tblName: yymsp[-3].minor.yy458, body: { kind: \"DropConstraintAlterTableBody\", name: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"AlterTableStmt\", tblName: yymsp[-3].minor.yy458, body: { type: \"DropConstraintAlterTableBody\", name: yymsp[0].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10435,7 +10435,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"AlterTableStmt\", tblName: yymsp[-6].minor.yy458, body: { kind: \"DropColumnNotNullAlterTableBody\", column: yymsp[-3].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"AlterTableStmt\", tblName: yymsp[-6].minor.yy458, body: { type: \"DropColumnNotNullAlterTableBody\", column: yymsp[-3].minor.yy206, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10464,7 +10464,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  state.stmt = { kind: \"AlterTableStmt\", tblName: yymsp[-7].minor.yy458, body: { kind: \"SetColumnNotNullAlterTableBody\", column: yymsp[-4].minor.yy206, onConflict: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n",
+      "actionC": "\n  state.stmt = { type: \"AlterTableStmt\", tblName: yymsp[-7].minor.yy458, body: { type: \"SetColumnNotNullAlterTableBody\", column: yymsp[-4].minor.yy206, onConflict: yymsp[0].minor.yy613, span: nodeSpan() }, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10493,7 +10493,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  const constraint: TableConstraint = { kind: \"CheckTableConstraint\", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() };\n  state.stmt = {\n    kind: \"AlterTableStmt\", tblName: yymsp[-8].minor.yy458,\n    body: { kind: \"AddConstraintAlterTableBody\", constraint: { kind: \"NamedTableConstraint\", name: yymsp[-5].minor.yy206, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()\n  };\n",
+      "actionC": "\n  const constraint: TableConstraint = { type: \"CheckTableConstraint\", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() };\n  state.stmt = {\n    type: \"AlterTableStmt\", tblName: yymsp[-8].minor.yy458,\n    body: { type: \"AddConstraintAlterTableBody\", constraint: { type: \"NamedTableConstraint\", name: yymsp[-5].minor.yy206, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10520,7 +10520,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  const constraint: TableConstraint = { kind: \"CheckTableConstraint\", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() };\n  state.stmt = {\n    kind: \"AlterTableStmt\", tblName: yymsp[-6].minor.yy458,\n    body: { kind: \"AddConstraintAlterTableBody\", constraint: { kind: \"NamedTableConstraint\", name: undefined, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()\n  };\n",
+      "actionC": "\n  const constraint: TableConstraint = { type: \"CheckTableConstraint\", expr: yymsp[-2].minor.yy560, conflictClause: yymsp[0].minor.yy613, span: nodeSpan() };\n  state.stmt = {\n    type: \"AlterTableStmt\", tblName: yymsp[-6].minor.yy458,\n    body: { type: \"AddConstraintAlterTableBody\", constraint: { type: \"NamedTableConstraint\", name: undefined, constraint, span: nodeSpan() }, span: nodeSpan() }, span: nodeSpan()\n  };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10559,7 +10559,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  if( state.vtabArgCurrent.length>0 ){\n    state.vtabArgs.push(state.vtabArgCurrent);\n    state.vtabArgCurrent = \"\";\n  }\n  if( yymsp[-3].minor.yy417.kind===\"CreateVirtualTableStmt\" ){\n    state.stmt = { ...yymsp[-3].minor.yy417, args: state.vtabArgs.slice(), span: nodeSpan() };\n  }else{\n    state.stmt = yymsp[-3].minor.yy417;\n  }\n  state.vtabArgs = [];\n",
+      "actionC": "\n  if( state.vtabArgCurrent.length>0 ){\n    state.vtabArgs.push(state.vtabArgCurrent);\n    state.vtabArgCurrent = \"\";\n  }\n  if( yymsp[-3].minor.yy417.type===\"CreateVirtualTableStmt\" ){\n    state.stmt = { ...yymsp[-3].minor.yy417, args: state.vtabArgs.slice(), span: nodeSpan() };\n  }else{\n    state.stmt = yymsp[-3].minor.yy417;\n  }\n  state.vtabArgs = [];\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10585,7 +10585,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-6].minor.yy417 = { kind: \"CreateVirtualTableStmt\", ifNotExists: yymsp[-3].minor.yy329, tblName: yymsp[-2].minor.yy458, moduleName: yymsp[0].minor.yy206, args: undefined, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-6].minor.yy417 = { type: \"CreateVirtualTableStmt\", ifNotExists: yymsp[-3].minor.yy329, tblName: yymsp[-2].minor.yy458, moduleName: yymsp[0].minor.yy206, args: undefined, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10696,7 +10696,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy187 = { kind: \"With\", recursive: false, ctes: yymsp[0].minor.yy121, span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy187 = { type: \"With\", recursive: false, ctes: yymsp[0].minor.yy121, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10718,7 +10718,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-2].minor.yy187 = { kind: \"With\", recursive: true,  ctes: yymsp[0].minor.yy121, span: nodeSpan() }; ",
+      "actionC": " yymsp[-2].minor.yy187 = { type: \"With\", recursive: true,  ctes: yymsp[0].minor.yy121, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10805,7 +10805,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy381 = { kind: \"CommonTableExpr\", tblName: yymsp[-5].minor.yy206, columns: yymsp[-4].minor.yy166, materialized: yymsp[-3].minor.yy376, select: yymsp[-1].minor.yy21, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy381 = { type: \"CommonTableExpr\", tblName: yymsp[-5].minor.yy206, columns: yymsp[-4].minor.yy166, materialized: yymsp[-3].minor.yy376, select: yymsp[-1].minor.yy21, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-5].minor.yy381 = yylhsminor.yy381;\n"
     },
@@ -10909,7 +10909,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy80 = { kind: \"WindowDef\", name: yymsp[-4].minor.yy206, window: yymsp[-1].minor.yy101, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy80 = { type: \"WindowDef\", name: yymsp[-4].minor.yy206, window: yymsp[-1].minor.yy101, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-4].minor.yy80 = yylhsminor.yy80;\n"
     },
@@ -10933,7 +10933,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-4].minor.yy101 = { kind: \"Window\", base: undefined, partitionBy: yymsp[-2].minor.yy540,    orderBy: yymsp[-1].minor.yy326,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-4].minor.yy101 = { type: \"Window\", base: undefined, partitionBy: yymsp[-2].minor.yy540,    orderBy: yymsp[-1].minor.yy326,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -10958,7 +10958,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy101 = { kind: \"Window\", base: yymsp[-5].minor.yy206,    partitionBy: yymsp[-2].minor.yy540,    orderBy: yymsp[-1].minor.yy326,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy101 = { type: \"Window\", base: yymsp[-5].minor.yy206,    partitionBy: yymsp[-2].minor.yy540,    orderBy: yymsp[-1].minor.yy326,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-5].minor.yy101 = yylhsminor.yy101;\n"
     },
@@ -10981,7 +10981,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yymsp[-3].minor.yy101 = { kind: \"Window\", base: undefined, partitionBy: undefined, orderBy: yymsp[-1].minor.yy408,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
+      "actionC": "\n  yymsp[-3].minor.yy101 = { type: \"Window\", base: undefined, partitionBy: undefined, orderBy: yymsp[-1].minor.yy408,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -11005,7 +11005,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy101 = { kind: \"Window\", base: yymsp[-4].minor.yy206,    partitionBy: undefined, orderBy: yymsp[-1].minor.yy408,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy101 = { type: \"Window\", base: yymsp[-4].minor.yy206,    partitionBy: undefined, orderBy: yymsp[-1].minor.yy408,    frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-4].minor.yy101 = yylhsminor.yy101;\n"
     },
@@ -11023,7 +11023,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy101 = { kind: \"Window\", base: undefined, partitionBy: undefined, orderBy: undefined, frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy101 = { type: \"Window\", base: undefined, partitionBy: undefined, orderBy: undefined, frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy101 = yylhsminor.yy101;\n"
     },
@@ -11044,7 +11044,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy101 = { kind: \"Window\", base: yymsp[-1].minor.yy206,    partitionBy: undefined, orderBy: undefined, frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy101 = { type: \"Window\", base: yymsp[-1].minor.yy206,    partitionBy: undefined, orderBy: undefined, frameClause: yymsp[0].minor.yy399, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-1].minor.yy101 = yylhsminor.yy101;\n"
     },
@@ -11084,7 +11084,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy399 = { kind: \"FrameClause\", mode: yymsp[-2].minor.yy457, start: yymsp[-1].minor.yy104, end: undefined, exclude: yymsp[0].minor.yy409, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy399 = { type: \"FrameClause\", mode: yymsp[-2].minor.yy457, start: yymsp[-1].minor.yy104, end: undefined, exclude: yymsp[0].minor.yy409, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-2].minor.yy399 = yylhsminor.yy399;\n"
     },
@@ -11110,7 +11110,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  yylhsminor.yy399 = { kind: \"FrameClause\", mode: yymsp[-5].minor.yy457, start: yymsp[-3].minor.yy104, end: yymsp[-1].minor.yy104,    exclude: yymsp[0].minor.yy409, span: nodeSpan() };\n",
+      "actionC": "\n  yylhsminor.yy399 = { type: \"FrameClause\", mode: yymsp[-5].minor.yy457, start: yymsp[-3].minor.yy104, end: yymsp[-1].minor.yy104,    exclude: yymsp[0].minor.yy409, span: nodeSpan() };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-5].minor.yy399 = yylhsminor.yy399;\n"
     },
@@ -11203,7 +11203,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy104 = { kind: \"UnboundedPrecedingFrameBound\", span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy104 = { type: \"UnboundedPrecedingFrameBound\", span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -11242,7 +11242,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy104 = { kind: \"UnboundedFollowingFrameBound\", span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy104 = { type: \"UnboundedFollowingFrameBound\", span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -11263,7 +11263,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy104 = { kind: \"PrecedingFrameBound\",  expr: yymsp[-1].minor.yy560, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy104 = { type: \"PrecedingFrameBound\",  expr: yymsp[-1].minor.yy560, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-1].minor.yy104 = yylhsminor.yy104;\n"
     },
@@ -11284,7 +11284,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy104 = { kind: \"CurrentRowFrameBound\", span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy104 = { type: \"CurrentRowFrameBound\", span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -11305,7 +11305,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy104 = { kind: \"FollowingFrameBound\",  expr: yymsp[-1].minor.yy560, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy104 = { type: \"FollowingFrameBound\",  expr: yymsp[-1].minor.yy560, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-1].minor.yy104 = yylhsminor.yy104;\n"
     },
@@ -11464,7 +11464,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy53 = { kind: \"FunctionTail\", filterClause: yymsp[-1].minor.yy560,    overClause: yymsp[0].minor.yy421, span: nodeSpan()    }; ",
+      "actionC": " yylhsminor.yy53 = { type: \"FunctionTail\", filterClause: yymsp[-1].minor.yy560,    overClause: yymsp[0].minor.yy421, span: nodeSpan()    }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-1].minor.yy53 = yylhsminor.yy53;\n"
     },
@@ -11482,7 +11482,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy53 = { kind: \"FunctionTail\", filterClause: undefined, overClause: yymsp[0].minor.yy421, span: nodeSpan()    }; ",
+      "actionC": " yylhsminor.yy53 = { type: \"FunctionTail\", filterClause: undefined, overClause: yymsp[0].minor.yy421, span: nodeSpan()    }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy53 = yylhsminor.yy53;\n"
     },
@@ -11500,7 +11500,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy53 = { kind: \"FunctionTail\", filterClause: yymsp[0].minor.yy560,    overClause: undefined, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy53 = { type: \"FunctionTail\", filterClause: yymsp[0].minor.yy560,    overClause: undefined, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy53 = yylhsminor.yy53;\n"
     },
@@ -11523,7 +11523,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-3].minor.yy421 = { kind: \"WindowOver\", window: yymsp[-1].minor.yy101, span: nodeSpan() }; ",
+      "actionC": " yymsp[-3].minor.yy421 = { type: \"WindowOver\", window: yymsp[-1].minor.yy101, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -11544,7 +11544,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy421 = { kind: \"NameOver\",   name:   yymsp[0].minor.yy206, span: nodeSpan() }; ",
+      "actionC": " yymsp[-1].minor.yy421 = { type: \"NameOver\",   name:   yymsp[0].minor.yy206, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -11586,7 +11586,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": "\n  // Digit-separator literal.  `sqlite3DequoteNumber` strips the\n  // separator run (`_` by default) and validates that every separator\n  // sits between two digits (or hex digits for `0x…`); mismatched\n  // placement surfaces as a parse error.\n  const dq = sqlite3DequoteNumber(yymsp[0].minor.yy0.text, { digitSeparator: state.digitSeparator });\n  if( dq.error ){\n    state.errors.push(mkDiagnostic(\n      dq.error,\n      yymsp[0].minor.yy0.span,\n      {\n        message: \"digit separators must sit between two digits (e.g. 1_000, 0xDE_AD)\",\n        span: undefined,\n      },\n    ));\n  }\n  yylhsminor.yy560 = { kind: \"NumericLiteral\", value: dq.text, span: yymsp[0].minor.yy0.span };\n",
+      "actionC": "\n  // Digit-separator literal.  `sqlite3DequoteNumber` strips the\n  // separator run (`_` by default) and validates that every separator\n  // sits between two digits (or hex digits for `0x…`); mismatched\n  // placement surfaces as a parse error.\n  const dq = sqlite3DequoteNumber(yymsp[0].minor.yy0.text, { digitSeparator: state.digitSeparator });\n  if( dq.error ){\n    state.errors.push(mkDiagnostic(\n      dq.error,\n      yymsp[0].minor.yy0.span,\n      {\n        message: \"digit separators must sit between two digits (e.g. 1_000, 0xDE_AD)\",\n        span: undefined,\n      },\n    ));\n  }\n  yylhsminor.yy560 = { type: \"NumericLiteral\", value: dq.text, span: yymsp[0].minor.yy0.span };\n",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy560 = yylhsminor.yy560;\n"
     },

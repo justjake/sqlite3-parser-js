@@ -1,6 +1,6 @@
 // Readable s-expression rendering of an AST, composed over `traverse`.
 //
-// Each node becomes `(<Kind> :scalar v :scalar v <child> <child> ...)`,
+// Each node becomes `(<Type> :scalar v :scalar v <child> <child> ...)`,
 // one node per line, indented by depth.  Scalar fields (strings,
 // numbers, booleans, `Uint8Array` for blobs) inline on the opening
 // line; child AST nodes appear positionally in `VisitorKeys` order.
@@ -16,7 +16,7 @@ export interface PrintOptions {
   readonly indent?: string
 }
 
-const META_KEYS = new Set<string>(["kind", "span"])
+const META_KEYS = new Set<string>(["type", "span"])
 
 function formatScalar(value: unknown): string {
   if (typeof value === "string") return JSON.stringify(value)
@@ -38,12 +38,12 @@ export function toSexpr(root: AstNode, opts: PrintOptions = {}): string {
   traverse(root, {
     enter(node) {
       if (parts.length > 0) parts.push("\n", tab.repeat(depth))
-      parts.push("(", node.kind)
+      parts.push("(", node.type)
 
-      const keysForKind = VisitorKeys[node.kind as keyof typeof VisitorKeys] as
+      const keysForType = VisitorKeys[node.type as keyof typeof VisitorKeys] as
         | readonly string[]
         | undefined
-      const childKeys = keysForKind ? new Set<string>(keysForKind) : undefined
+      const childKeys = keysForType ? new Set<string>(keysForType) : undefined
 
       for (const k of Object.keys(node)) {
         if (META_KEYS.has(k)) continue
