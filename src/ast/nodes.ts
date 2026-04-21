@@ -393,7 +393,7 @@ export interface UpdateStmt {
   readonly orConflict: ResolveType | undefined
   readonly tblName: QualifiedName
   readonly indexed: Indexed | undefined
-  readonly sets: readonly Set_[]
+  readonly sets: readonly SetAssignment[]
   readonly from: FromClause | undefined
   readonly whereClause: Expr | undefined
   readonly returning: readonly ResultColumn[] | undefined
@@ -1499,8 +1499,8 @@ export type InsertBody = SelectInsertBody | DefaultValuesInsertBody
  * One `SET` assignment in an UPDATE statement.
  * `colNames` has length 1 for `col = expr`, >1 for `(a,b) = expr`.
  */
-export interface Set_ {
-  readonly kind: "Set_"
+export interface SetAssignment {
+  readonly kind: "SetAssignment"
   readonly colNames: DistinctNames
   readonly expr: Expr
   readonly span: Span
@@ -1540,7 +1540,7 @@ export interface UpdateTriggerCmd {
   readonly kind: "UpdateTriggerCmd"
   readonly orConflict: ResolveType | undefined
   readonly tblName: QualifiedName
-  readonly sets: readonly Set_[]
+  readonly sets: readonly SetAssignment[]
   readonly from: FromClause | undefined
   readonly whereClause: Expr | undefined
   readonly span: Span
@@ -2020,7 +2020,7 @@ export interface TypeSizeTypeSize {
 
 export interface SetUpsertDo {
   readonly kind: "SetUpsertDo"
-  readonly sets: readonly Set_[]
+  readonly sets: readonly SetAssignment[]
   readonly whereClause: Expr | undefined
   readonly span: Span
 }
@@ -2068,3 +2068,248 @@ export interface UnboundedPrecedingFrameBound {
   readonly kind: "UnboundedPrecedingFrameBound"
   readonly span: Span
 }
+
+// ---------------------------------------------------------------------------
+// Universal node index.
+//
+// `AstNodeMap` maps each `kind` discriminator string to its concrete
+// interface.  It is the canonical source — `AstNode` is derived from it.
+// Generic tree walkers, visitors, and JSON serializers can key off
+// `AstNodeMap[kind]` to recover per-kind payload types without
+// restating the union by hand.
+// ---------------------------------------------------------------------------
+
+/**
+ * Map of all AST node shapes, keyed by their `kind` discriminator.
+ * 
+ * Advanced users may inject new node shapes using TypeScript declaration merging.
+ */
+export interface AstNodeMap {
+  // Commands
+  CmdList: CmdList
+  ExplainCmd: ExplainCmd
+  ExplainQueryPlanCmd: ExplainQueryPlanCmd
+  StmtCmd: StmtCmd
+
+  // Statements
+  AlterTableStmt: AlterTableStmt
+  AnalyzeStmt: AnalyzeStmt
+  AttachStmt: AttachStmt
+  BeginStmt: BeginStmt
+  CommitStmt: CommitStmt
+  CreateIndexStmt: CreateIndexStmt
+  CreateTableStmt: CreateTableStmt
+  CreateTriggerStmt: CreateTriggerStmt
+  CreateViewStmt: CreateViewStmt
+  CreateVirtualTableStmt: CreateVirtualTableStmt
+  DeleteStmt: DeleteStmt
+  DetachStmt: DetachStmt
+  DropIndexStmt: DropIndexStmt
+  DropTableStmt: DropTableStmt
+  DropTriggerStmt: DropTriggerStmt
+  DropViewStmt: DropViewStmt
+  InsertStmt: InsertStmt
+  PragmaStmt: PragmaStmt
+  ReindexStmt: ReindexStmt
+  ReleaseStmt: ReleaseStmt
+  RollbackStmt: RollbackStmt
+  SavepointStmt: SavepointStmt
+  SelectStmt: SelectStmt
+  UpdateStmt: UpdateStmt
+  VacuumStmt: VacuumStmt
+
+  // Expressions
+  BetweenExpr: BetweenExpr
+  BinaryExpr: BinaryExpr
+  CaseExpr: CaseExpr
+  CastExpr: CastExpr
+  CollateExpr: CollateExpr
+  DoublyQualifiedExpr: DoublyQualifiedExpr
+  ExistsExpr: ExistsExpr
+  FunctionCallExpr: FunctionCallExpr
+  FunctionCallStarExpr: FunctionCallStarExpr
+  IdExpr: IdExpr
+  InListExpr: InListExpr
+  InSelectExpr: InSelectExpr
+  InTableExpr: InTableExpr
+  IsNullExpr: IsNullExpr
+  LikeExpr: LikeExpr
+  LiteralExpr: LiteralExpr
+  NameExpr: NameExpr
+  NotNullExpr: NotNullExpr
+  ParenthesizedExpr: ParenthesizedExpr
+  QualifiedExpr: QualifiedExpr
+  RaiseExpr: RaiseExpr
+  SubqueryExpr: SubqueryExpr
+  UnaryExpr: UnaryExpr
+  VariableExpr: VariableExpr
+
+  // Literals
+  NumericLiteral: NumericLiteral
+  StringLiteral: StringLiteral
+  BlobLiteral: BlobLiteral
+  KeywordLiteral: KeywordLiteral
+  NullLiteral: NullLiteral
+  CurrentDateLiteral: CurrentDateLiteral
+  CurrentTimeLiteral: CurrentTimeLiteral
+  CurrentTimestampLiteral: CurrentTimestampLiteral
+
+  // SELECT
+  Select: Select
+  SelectBody: SelectBody
+  CompoundSelect: CompoundSelect
+  FromClause: FromClause
+  JoinedSelectTable: JoinedSelectTable
+  SelectOneSelect: SelectOneSelect
+  ValuesOneSelect: ValuesOneSelect
+  ExprResultColumn: ExprResultColumn
+  StarResultColumn: StarResultColumn
+  TableStarResultColumn: TableStarResultColumn
+  AsAs: AsAs
+  ElidedAs: ElidedAs
+  TableSelectTable: TableSelectTable
+  TableCallSelectTable: TableCallSelectTable
+  SelectSelectTable: SelectSelectTable
+  SubSelectTable: SubSelectTable
+  CommaJoinOperator: CommaJoinOperator
+  TypedJoinJoinOperator: TypedJoinJoinOperator
+  OnJoinConstraint: OnJoinConstraint
+  UsingJoinConstraint: UsingJoinConstraint
+  SortListFunctionCallOrder: SortListFunctionCallOrder
+  WithinGroupFunctionCallOrder: WithinGroupFunctionCallOrder
+
+  // Identifiers
+  Id: Id
+  Name: Name
+  QualifiedName: QualifiedName
+
+  // CREATE TABLE — columns and constraints
+  ColumnDefinition: ColumnDefinition
+  NamedColumnConstraint: NamedColumnConstraint
+  PrimaryKeyColumnConstraint: PrimaryKeyColumnConstraint
+  NotNullColumnConstraint: NotNullColumnConstraint
+  UniqueColumnConstraint: UniqueColumnConstraint
+  CheckColumnConstraint: CheckColumnConstraint
+  DefaultColumnConstraint: DefaultColumnConstraint
+  DeferColumnConstraint: DeferColumnConstraint
+  CollateColumnConstraint: CollateColumnConstraint
+  ForeignKeyColumnConstraint: ForeignKeyColumnConstraint
+  GeneratedColumnConstraint: GeneratedColumnConstraint
+  NamedTableConstraint: NamedTableConstraint
+  PrimaryKeyTableConstraint: PrimaryKeyTableConstraint
+  UniqueTableConstraint: UniqueTableConstraint
+  CheckTableConstraint: CheckTableConstraint
+  ForeignKeyTableConstraint: ForeignKeyTableConstraint
+  ColumnsAndConstraintsCreateTableBody: ColumnsAndConstraintsCreateTableBody
+  AsSelectCreateTableBody: AsSelectCreateTableBody
+
+  // ALTER TABLE
+  RenameToAlterTableBody: RenameToAlterTableBody
+  AddColumnAlterTableBody: AddColumnAlterTableBody
+  DropColumnNotNullAlterTableBody: DropColumnNotNullAlterTableBody
+  SetColumnNotNullAlterTableBody: SetColumnNotNullAlterTableBody
+  RenameColumnAlterTableBody: RenameColumnAlterTableBody
+  DropColumnAlterTableBody: DropColumnAlterTableBody
+  AddConstraintAlterTableBody: AddConstraintAlterTableBody
+  DropConstraintAlterTableBody: DropConstraintAlterTableBody
+
+  // Indexing, sorting, limit
+  IndexedColumn: IndexedColumn
+  IndexedByIndexed: IndexedByIndexed
+  NotIndexedIndexed: NotIndexedIndexed
+  SortedColumn: SortedColumn
+  Limit: Limit
+
+  // Foreign keys
+  ForeignKeyClause: ForeignKeyClause
+  DeferSubclause: DeferSubclause
+  OnDeleteRefArg: OnDeleteRefArg
+  OnInsertRefArg: OnInsertRefArg
+  OnUpdateRefArg: OnUpdateRefArg
+  MatchRefArg: MatchRefArg
+
+  // INSERT / UPDATE / PRAGMA
+  SelectInsertBody: SelectInsertBody
+  DefaultValuesInsertBody: DefaultValuesInsertBody
+  SetAssignment: SetAssignment
+  EqualsPragmaBody: EqualsPragmaBody
+  CallPragmaBody: CallPragmaBody
+
+  // Triggers
+  UpdateTriggerCmd: UpdateTriggerCmd
+  InsertTriggerCmd: InsertTriggerCmd
+  DeleteTriggerCmd: DeleteTriggerCmd
+  SelectTriggerCmd: SelectTriggerCmd
+  DeleteTriggerEvent: DeleteTriggerEvent
+  InsertTriggerEvent: InsertTriggerEvent
+  UpdateTriggerEvent: UpdateTriggerEvent
+  UpdateOfTriggerEvent: UpdateOfTriggerEvent
+
+  // WITH / CTE
+  With: With
+  CommonTableExpr: CommonTableExpr
+
+  // Types
+  Type: Type
+  MaxSizeTypeSize: MaxSizeTypeSize
+  TypeSizeTypeSize: TypeSizeTypeSize
+
+  // Upsert
+  Upsert: Upsert
+  UpsertIndex: UpsertIndex
+  SetUpsertDo: SetUpsertDo
+  NothingUpsertDo: NothingUpsertDo
+
+  // Windows
+  FunctionTail: FunctionTail
+  WindowDef: WindowDef
+  Window: Window
+  FrameClause: FrameClause
+  WindowOver: WindowOver
+  NameOver: NameOver
+  CurrentRowFrameBound: CurrentRowFrameBound
+  FollowingFrameBound: FollowingFrameBound
+  PrecedingFrameBound: PrecedingFrameBound
+  UnboundedFollowingFrameBound: UnboundedFollowingFrameBound
+  UnboundedPrecedingFrameBound: UnboundedPrecedingFrameBound
+}
+
+/** Discriminated union of every AST node shape defined in this file. */
+export type AstNode = AstNodeMap[keyof AstNodeMap]
+
+// ---------------------------------------------------------------------------
+// Type-level invariant check for AstNodeMap.
+//
+// Verifies that every `AstNodeMap[K]["kind"]` equals `K`.  Catches two
+// failure modes:
+//   1. A node's `kind` is renamed but its `AstNodeMap` entry isn't updated
+//      (stale key).
+//   2. A new `AstNodeMap` entry's key is typo'd or points at the wrong node.
+// ---------------------------------------------------------------------------
+
+/** `true` per well-formed entry; otherwise a descriptive error string. */
+type _AstNodeMapKeyCheck = {
+  [K in keyof AstNodeMap]: K extends string
+    ? AstNodeMap[K] extends { readonly kind: infer T extends string }
+      ? K extends T
+        ? T extends K
+          ? true
+          : `AstNodeMap["${K}"] error: node "kind" is wider than the map key`
+        : `AstNodeMap["${K}"] error: node "kind" is "${T}", not "${K}"`
+      : `AstNodeMap["${K}"] error: node has no string-literal "kind" field`
+    : never
+}
+
+/** Forces `T` to be exactly `true` at the type level. */
+type _AssertTrue<T extends true> = T
+
+/**
+ * Compile-time assertion: every `AstNodeMap` key matches its node's `kind`.
+ * A failure here means `_AstNodeMapKeyCheck[keyof AstNodeMap]` contains
+ * something other than `true` — see that type to find the bad entry.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type _AstNodeMapWellFormed = _AssertTrue<
+  _AstNodeMapKeyCheck[keyof AstNodeMap] extends true ? true : false
+>
+

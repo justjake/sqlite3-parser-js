@@ -43,7 +43,7 @@
     "YYERRORSYMBOL": -1,
     "YYFALLBACK": 1
   },
-  "preamble": "/*\n** 2001-09-15\n**\n** The author disclaims copyright to this source code.  In place of\n** a legal notice, here is a blessing:\n**\n**    May you do good and not evil.\n**    May you find forgiveness for yourself and forgive others.\n**    May you share freely, never taking more than you give.\n**\n*************************************************************************\n** This is the TypeScript-targeted fork of SQLite's Lemon grammar.\n**\n** The rule shape follows upstream parse.y (3.54.0) and the Rust\n** port at https://github.com/gwenn/lemon-rs; action bodies construct\n** values from src/ast/nodes.ts instead of SQLite's internal IR.\n**\n** The actions assume a future Lemon-to-TypeScript code-generator; the\n** curly-brace bodies are plain TypeScript (no C macros, no pParse\n** plumbing).  Until such a generator exists, this file is the\n** specification for how each reduction should materialize in our AST.\n*/\n#line 62 \"vendor/patched/3.54.0/src/parse.y\"\n\nimport type {\n  AlterTableBody, As, Cmd, ColFlags, ColumnConstraint, ColumnDefinition,\n  CommonTableExpr, CompoundOperator, CompoundSelect, CreateTableBody,\n  DeferSubclause, DistinctNames, Distinctness, Expr, ExplainKind,\n  FrameBound, FrameClause, FrameExclude, FrameMode, FromClause,\n  FunctionCallOrder, FunctionTail, Id, Indexed, IndexedColumn,\n  InitDeferredPred, InsertBody, JoinConstraint, JoinOperator, JoinType,\n  LikeOperator, Limit, Literal, Materialized, Name, NamedColumnConstraint,\n  NamedTableConstraint, NullsOrder, OneSelect, Operator, Over, PragmaBody,\n  QualifiedName, RefAct, RefArg, ResolveType, ResultColumn, Select,\n  SelectBody, SelectTable, Set_, SortOrder, SortedColumn, Stmt,\n  TabFlags, TableConstraint, TransactionType, TriggerCmd, TriggerEvent,\n  TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,\n  Window, WindowDef, With,\n} from \"../../../src/ast/nodes.ts\";\nimport type { Span, Token } from \"../../../src/tokenize.ts\";\nimport type { AstParseError, ParseState } from \"../../../src/ast/parseState.ts\";\nimport type { FromClauseMut } from \"../../../src/ast/parseActions.ts\";\nimport {\n  mkName, mkId, mkIdExpr, mkVariableExpr,\n  literalFromCtimeKw, mkNullLiteral, mkStringLiteral, mkBlobLiteral,\n  mkNumericLiteral, mkKeywordLiteral,\n  likeOperatorFromToken, binaryOperatorFromToken, unaryOperatorFromToken, ptrOperatorFromToken,\n  mkParenthesized, mkCollate, mkCast, mkBinary, mkUnary, mkBetween,\n  mkInList, mkInSelect, mkInTable, mkSubquery, mkExistsExpr,\n  mkNotNullExpr, mkLikeExpr,\n  mkFunctionCall, mkFunctionCallStar,\n  qnSingle, qnFull, qnAlias, qnXfull,\n  joinOperatorFrom, fromClausePush, emptyFromClause, freezeFrom,\n  mkSelect, pushCompound, mkOneSelect, valuesPush,\n  mkColumnDefinition, addColumn, mkColumnsAndConstraints,\n  addCte, mkUpsertIndex, finalizeCmd,\n  spanFromPopped,\n  mkAstParseError, mkDuplicateError,\n} from \"../../../src/ast/parseActions.ts\";\nimport { sqlite3Dequote, sqlite3DequoteNumber } from \"../../../src/util.ts\";\n\n// `tokens` is a TK_* name → numeric code map injected by\n// scripts/emit-ts-parser.ts.  The declaration keeps action bodies\n// typecheckable in isolation; the emitter strips it and replaces it\n// with the real binding.\n// eslint-disable-next-line @typescript-eslint/no-unused-vars\ndeclare const tokens: Record<string, number>;\n",
+  "preamble": "/*\n** 2001-09-15\n**\n** The author disclaims copyright to this source code.  In place of\n** a legal notice, here is a blessing:\n**\n**    May you do good and not evil.\n**    May you find forgiveness for yourself and forgive others.\n**    May you share freely, never taking more than you give.\n**\n*************************************************************************\n** This is the TypeScript-targeted fork of SQLite's Lemon grammar.\n**\n** The rule shape follows upstream parse.y (3.54.0) and the Rust\n** port at https://github.com/gwenn/lemon-rs; action bodies construct\n** values from src/ast/nodes.ts instead of SQLite's internal IR.\n**\n** The actions assume a future Lemon-to-TypeScript code-generator; the\n** curly-brace bodies are plain TypeScript (no C macros, no pParse\n** plumbing).  Until such a generator exists, this file is the\n** specification for how each reduction should materialize in our AST.\n*/\n#line 62 \"vendor/patched/3.54.0/src/parse.y\"\n\nimport type {\n  AlterTableBody, As, Cmd, ColFlags, ColumnConstraint, ColumnDefinition,\n  CommonTableExpr, CompoundOperator, CompoundSelect, CreateTableBody,\n  DeferSubclause, DistinctNames, Distinctness, Expr, ExplainKind,\n  FrameBound, FrameClause, FrameExclude, FrameMode, FromClause,\n  FunctionCallOrder, FunctionTail, Id, Indexed, IndexedColumn,\n  InitDeferredPred, InsertBody, JoinConstraint, JoinOperator, JoinType,\n  LikeOperator, Limit, Literal, Materialized, Name, NamedColumnConstraint,\n  NamedTableConstraint, NullsOrder, OneSelect, Operator, Over, PragmaBody,\n  QualifiedName, RefAct, RefArg, ResolveType, ResultColumn, Select,\n  SelectBody, SelectTable, SetAssignment, SortOrder, SortedColumn, Stmt,\n  TabFlags, TableConstraint, TransactionType, TriggerCmd, TriggerEvent,\n  TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,\n  Window, WindowDef, With,\n} from \"../../../src/ast/nodes.ts\";\nimport type { Span, Token } from \"../../../src/tokenize.ts\";\nimport type { AstParseError, ParseState } from \"../../../src/ast/parseState.ts\";\nimport type { FromClauseMut } from \"../../../src/ast/parseActions.ts\";\nimport {\n  mkName, mkId, mkIdExpr, mkVariableExpr,\n  literalFromCtimeKw, mkNullLiteral, mkStringLiteral, mkBlobLiteral,\n  mkNumericLiteral, mkKeywordLiteral,\n  likeOperatorFromToken, binaryOperatorFromToken, unaryOperatorFromToken, ptrOperatorFromToken,\n  mkParenthesized, mkCollate, mkCast, mkBinary, mkUnary, mkBetween,\n  mkInList, mkInSelect, mkInTable, mkSubquery, mkExistsExpr,\n  mkNotNullExpr, mkLikeExpr,\n  mkFunctionCall, mkFunctionCallStar,\n  qnSingle, qnFull, qnAlias, qnXfull,\n  joinOperatorFrom, fromClausePush, emptyFromClause, freezeFrom,\n  mkSelect, pushCompound, mkOneSelect, valuesPush,\n  mkColumnDefinition, addColumn, mkColumnsAndConstraints,\n  addCte, mkUpsertIndex, finalizeCmd,\n  spanFromPopped,\n  mkAstParseError, mkDuplicateError,\n} from \"../../../src/ast/parseActions.ts\";\nimport { sqlite3Dequote, sqlite3DequoteNumber } from \"../../../src/util.ts\";\n\n// `tokens` is a TK_* name → numeric code map injected by\n// scripts/emit-ts-parser.ts.  The declaration keeps action bodies\n// typecheckable in isolation; the emitter strips it and replaces it\n// with the real binding.\n// eslint-disable-next-line @typescript-eslint/no-unused-vars\ndeclare const tokens: Record<string, number>;\n",
   "syntaxError": "#line 44 \"vendor/patched/3.54.0/src/parse.y\"\n\n  if( yymajor===0 /* TK_EOF */ ){\n    state.errors.push(mkAstParseError(\"incomplete input\", yyminor.span));\n  }else{\n    state.errors.push(mkAstParseError(`near \"${yyminor.text}\": syntax error`, yyminor.span));\n  }\n",
   "stackOverflow": "#line 52 \"vendor/patched/3.54.0/src/parse.y\"\n\n  state.errors.push(mkAstParseError(\"parser stack overflow\", { offset: 0, length: 0, line: 0, col: 0 }));\n",
   "parseFailure": null,
@@ -2666,7 +2666,7 @@
       "name": "setlist",
       "type": "NONTERMINAL",
       "isTerminal": false,
-      "datatype": "Set_[]",
+      "datatype": "SetAssignment[]",
       "dtnum": 4,
       "useCnt": 10,
       "lambda": false
@@ -6875,7 +6875,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-4].minor.yy4.push({ kind: \"Set_\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
+      "actionC": " yymsp[-4].minor.yy4.push({ kind: \"SetAssignment\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6902,7 +6902,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-6].minor.yy4.push({ kind: \"Set_\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
+      "actionC": " yymsp[-6].minor.yy4.push({ kind: \"SetAssignment\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }); ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -6925,7 +6925,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy4 = [{ kind: \"Set_\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
+      "actionC": " yylhsminor.yy4 = [{ kind: \"SetAssignment\", colNames: [yymsp[-2].minor.yy206], expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[-2].minor.yy4 = yylhsminor.yy4;\n"
     },
@@ -6950,7 +6950,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-4].minor.yy4 = [{ kind: \"Set_\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
+      "actionC": " yymsp[-4].minor.yy4 = [{ kind: \"SetAssignment\", colNames: yymsp[-3].minor.yy342,   expr: yymsp[0].minor.yy560, span: nodeSpan() }]; ",
       "codePrefix": null,
       "codeSuffix": null
     },

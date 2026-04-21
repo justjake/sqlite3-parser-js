@@ -91,7 +91,7 @@ import type {
   Select,
   SelectBody,
   SelectTable,
-  Set_,
+  SetAssignment,
   SortOrder,
   SortedColumn,
   Stmt,
@@ -3422,7 +3422,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const R = popped[2].minor as ResolveType | undefined
       const X = popped[3].minor as QualifiedName
       const I = popped[4].minor as Indexed | undefined
-      const Y = popped[6].minor as Set_[]
+      const Y = popped[6].minor as SetAssignment[]
       const F = popped[7].minor as FromClause | undefined
       const W = popped[8].minor as {
         where: Expr | undefined
@@ -3450,32 +3450,32 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // setlist(A) ::= setlist(A) COMMA nm(X) EQ expr(Y)
       const X = popped[2].minor as Name
       const Y = popped[4].minor as Expr
-      let A: Set_[] = popped[0].minor as Set_[]
-      A.push({ kind: "Set_", colNames: [X], expr: Y, span: nodeSpan() })
+      let A: SetAssignment[] = popped[0].minor as SetAssignment[]
+      A.push({ kind: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() })
       return A
     }
     case 178: {
       // setlist(A) ::= setlist(A) COMMA LP idlist(X) RP EQ expr(Y)
       const X = popped[3].minor as Name[]
       const Y = popped[6].minor as Expr
-      let A: Set_[] = popped[0].minor as Set_[]
-      A.push({ kind: "Set_", colNames: X, expr: Y, span: nodeSpan() })
+      let A: SetAssignment[] = popped[0].minor as SetAssignment[]
+      A.push({ kind: "SetAssignment", colNames: X, expr: Y, span: nodeSpan() })
       return A
     }
     case 179: {
       // setlist(A) ::= nm(X) EQ expr(Y)
       const X = popped[0].minor as Name
       const Y = popped[2].minor as Expr
-      let A: Set_[] | undefined
-      A = [{ kind: "Set_", colNames: [X], expr: Y, span: nodeSpan() }]
+      let A: SetAssignment[] | undefined
+      A = [{ kind: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() }]
       return A
     }
     case 180: {
       // setlist(A) ::= LP idlist(X) RP EQ expr(Y)
       const X = popped[1].minor as Name[]
       const Y = popped[4].minor as Expr
-      let A: Set_[] | undefined
-      A = [{ kind: "Set_", colNames: X, expr: Y, span: nodeSpan() }]
+      let A: SetAssignment[] | undefined
+      A = [{ kind: "SetAssignment", colNames: X, expr: Y, span: nodeSpan() }]
       return A
     }
     case 181: {
@@ -3551,7 +3551,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // upsert(A) ::= ON CONFLICT LP sortlist(T) RP where_opt(TW) DO UPDATE SET setlist(Z) where_opt(W) upsert(N)
       const T = popped[3].minor as SortedColumn[]
       const TW = popped[5].minor as Expr | undefined
-      const Z = popped[9].minor as Set_[]
+      const Z = popped[9].minor as SetAssignment[]
       const W = popped[10].minor as Expr | undefined
       const N = popped[11].minor as {
         upsert: Upsert | undefined
@@ -3639,7 +3639,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     }
     case 188: {
       // upsert(A) ::= ON CONFLICT DO UPDATE SET setlist(Z) where_opt(W) returning(R)
-      const Z = popped[5].minor as Set_[]
+      const Z = popped[5].minor as SetAssignment[]
       const W = popped[6].minor as Expr | undefined
       const R = popped[7].minor as { columns: ResultColumn[] | undefined; span: Span | undefined }
       let A: {
@@ -4585,7 +4585,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // trigger_cmd(A) ::= UPDATE orconf(R) xfullname(X) tridxby SET setlist(Y) from(F) where_opt(Z)
       const R = popped[1].minor as ResolveType | undefined
       const X = popped[2].minor as QualifiedName
-      const Y = popped[5].minor as Set_[]
+      const Y = popped[5].minor as SetAssignment[]
       const F = popped[6].minor as FromClause | undefined
       const Z = popped[7].minor as Expr | undefined
       let A: TriggerCmd | undefined

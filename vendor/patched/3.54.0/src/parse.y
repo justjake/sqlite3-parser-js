@@ -70,7 +70,7 @@ import type {
   LikeOperator, Limit, Literal, Materialized, Name, NamedColumnConstraint,
   NamedTableConstraint, NullsOrder, OneSelect, Operator, Over, PragmaBody,
   QualifiedName, RefAct, RefArg, ResolveType, ResultColumn, Select,
-  SelectBody, SelectTable, Set_, SortOrder, SortedColumn, Stmt,
+  SelectBody, SelectTable, SetAssignment, SortOrder, SortedColumn, Stmt,
   TabFlags, TableConstraint, TransactionType, TriggerCmd, TriggerEvent,
   TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,
   Window, WindowDef, With,
@@ -735,11 +735,11 @@ cmd ::= with(C) UPDATE orconf(R) xfullname(X) indexed_opt(I) SET setlist(Y) from
 }
 %endif
 
-%type setlist {Set_[]}
-setlist(A) ::= setlist(A) COMMA nm(X) EQ expr(Y).           { A.push({ kind: "Set_", colNames: [X], expr: Y, span: nodeSpan() }); }
-setlist(A) ::= setlist(A) COMMA LP idlist(X) RP EQ expr(Y). { A.push({ kind: "Set_", colNames: X,   expr: Y, span: nodeSpan() }); }
-setlist(A) ::= nm(X) EQ expr(Y).                            { A = [{ kind: "Set_", colNames: [X], expr: Y, span: nodeSpan() }]; }
-setlist(A) ::= LP idlist(X) RP EQ expr(Y).                  { A = [{ kind: "Set_", colNames: X,   expr: Y, span: nodeSpan() }]; }
+%type setlist {SetAssignment[]}
+setlist(A) ::= setlist(A) COMMA nm(X) EQ expr(Y).           { A.push({ kind: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() }); }
+setlist(A) ::= setlist(A) COMMA LP idlist(X) RP EQ expr(Y). { A.push({ kind: "SetAssignment", colNames: X,   expr: Y, span: nodeSpan() }); }
+setlist(A) ::= nm(X) EQ expr(Y).                            { A = [{ kind: "SetAssignment", colNames: [X], expr: Y, span: nodeSpan() }]; }
+setlist(A) ::= LP idlist(X) RP EQ expr(Y).                  { A = [{ kind: "SetAssignment", colNames: X,   expr: Y, span: nodeSpan() }]; }
 
 ////////////////////////// The INSERT command /////////////////////////////////
 //
