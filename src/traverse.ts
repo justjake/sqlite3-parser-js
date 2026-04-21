@@ -347,6 +347,12 @@ export function traverse(root: AstNode, visitor: Visitor): void {
 export interface PrintOptions {
   /** One level of indentation.  Default `"  "` (two spaces). */
   readonly indent?: string
+  /**
+   * Prepended to every line of output (including the first).  Useful
+   * for embedding a rendered tree inside a larger document — e.g.
+   * `prefix: "// "` to emit a comment block.  Default `""`.
+   */
+  readonly prefix?: string
 }
 
 const PRINTER_META_KEYS = new Set<string>(["type", "span"])
@@ -365,13 +371,14 @@ function formatScalar(value: unknown): string {
 /** Render an AST node as a pretty-printed s-expression string. */
 export function toSexpr(root: AstNode, opts: PrintOptions = {}): string {
   const tab = opts.indent ?? "  "
+  const prefix = opts.prefix ?? ""
   const parts: string[] = []
   let depth = 0
 
   traverse(root, {
     enter(node) {
-      if (parts.length > 0) parts.push("\n", tab.repeat(depth))
-      parts.push("(", node.type)
+      if (parts.length > 0) parts.push("\n")
+      parts.push(prefix, tab.repeat(depth), "(", node.type)
 
       const keysForType = VisitorKeys[node.type as keyof VisitorKeyMap] as
         | readonly string[]
