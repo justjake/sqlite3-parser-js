@@ -1,6 +1,6 @@
 {
   "name": "sqlite3-parser",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
   "homepage": "https://github.com/justjake/sqlite3-parser-js#readme",
   "bugs": {
