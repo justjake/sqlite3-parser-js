@@ -129,7 +129,7 @@ export interface CreateTokenizerOptions {
 }
 
 /** Options for one call to `tokenizer.tokenize(sql, opts?)`. */
-export interface TokenizeOpts {
+export interface TokenizeOptions {
   /** Emit SPACE and COMMENT tokens into the output stream. Default: false. */
   readonly emitTrivia?: boolean
 }
@@ -233,7 +233,7 @@ export interface Tokenizer {
    * (`offset`, `line`, `col`). After exhaustion, that cursor is the
    * tokenizer's final location in the input.
    */
-  tokenize(sql: string, opts?: TokenizeOpts): TokenIterator
+  tokenize(sql: string, opts?: TokenizeOptions): TokenIterator
   /** @internal — exposed for tests. */
   _nextToken(z: string, p: number, outType: [TokenId]): number
   /** @internal — exposed for tests. */
@@ -1076,7 +1076,7 @@ export function tokenizerModuleForGrammar<Ctx, V>(
   // Each consumed character (including trivia) advances `col` by one;
   // each LF (0x0a) bumps `line` and resets `col` to 0.  CR is treated
   // as a regular column — matching lineColAt() in src/errors.ts.
-  function tokenize(sql: string, { emitTrivia = false }: TokenizeOpts = {}): TokenIterator {
+  function tokenize(sql: string, { emitTrivia = false }: TokenizeOptions = {}): TokenIterator {
     const out: [TokenId] = [0 as TokenId]
     let i = 0
     let line = 1

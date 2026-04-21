@@ -6,7 +6,7 @@
 // low-level diagnostics into the public ParseError API.
 
 import {
-  TokenizeOpts,
+  TokenizeOptions,
   tokenizerModuleForGrammar,
   type Token,
   type TokenIterator,
@@ -46,17 +46,24 @@ export interface CreateParserOptions extends CreateTokenizerOptions {
 }
 
 export type ParseResult =
-  | { status: "accepted"; ast: CmdList }
-  | { status: "errored"; errors: readonly ParseError[] }
+  | { status: "accepted"; ast: CmdList; tokens?: Token[] }
+  | { status: "errored"; errors: readonly ParseError[]; tokens?: Token[] }
 
 // ---------------------------------------------------------------------------
 // parserModuleForGrammar — bind the driver to a specific
 // parser.json + keywords.json.
 // ---------------------------------------------------------------------------
 
-export type ParseOpts = TokenizeOpts & {
+export type ParseOptions = TokenizeOptions & {
   /** Annotate any returned errors with this filename. */
   filename?: string
+  /**
+   * When `true`, the returned `ParseResult` carries a `tokens` field —
+   * the chronological stream of non-trivia tokens the parser fed the
+   * engine, including any synthetic SEMI / EOF markers appended at the
+   * tail.  Populated on both `"accepted"` and `"errored"` results.
+   */
+  emitTokens?: boolean
 }
 
 /**
@@ -64,9 +71,9 @@ export type ParseOpts = TokenizeOpts & {
  */
 export interface ParserModule {
   /** Parse a SQL string into an AST. */
-  parse(source: string, opts?: ParseOpts): ParseResult
+  parse(source: string, opts?: ParseOptions): ParseResult
   /** Tokenize a SQL string into a stream of tokens. */
-  tokenize(source: string, opts?: TokenizeOpts): TokenIterator
+  tokenize(source: string, opts?: TokenizeOptions): TokenIterator
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
   tokenName(code: TokenId): string | undefined
   /** Create the underlying LALR state machine engine, used by {@link parse}. */
@@ -111,10 +118,17 @@ export function parserModuleForGrammar(
   // `{major, value}` pairs, and translates the engine's result into a
   // ParseResult with AST and user-facing error messages.
   // -------------------------------------------------------------------------
-  function parse(sql: string, opts: ParseOpts = {}): ParseResult {
-    const { filename, ...tokenizeOpts } = opts
+  function parse(sql: string, opts: ParseOptions = {}): ParseResult {
+    const { filename, emitTokens, ...tokenizeOptions } = opts
     const errorContext = { source: sql, filename }
     const diagnostics: Diagnostic[] = []
+
+    // When `emitTokens` is set, accumulate every non-trivia token seen
+    // during this parse — including any ILLEGAL token that aborted and
+    // the tail-synthetic SEMI/EOF markers — for attachment to the
+    // result.  Left `undefined` when the flag is off so the hot loop
+    // pays only a single predictable branch per token.
+    const tokens: Token[] | undefined = emitTokens ? [] : undefined
 
     // Structurally the same shape as sqlite's tokenize.c:674
     // sqlite3RunParser: get a token, feed it to the parser, repeat
@@ -146,7 +160,7 @@ export function parserModuleForGrammar(
         }),
       )
       diagnostics.push(...state.errors)
-      return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
+      return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics), tokens }
     }
 
     function noteSuccessfulToken(token: Token): void {
@@ -177,7 +191,7 @@ export function parserModuleForGrammar(
     // "second valid stmt past first" (engine would keep running) — in
     // both cases the token's offset is the start of the trailing range.
     let lastMajor: TokenId | undefined
-    const sourceTokens = tk.tokenize(sql, tokenizeOpts)
+    const sourceTokens = tk.tokenize(sql, tokenizeOptions)
     for (const tok of sourceTokens) {
       if (tok.type === SPACE || tok.type === COMMENT) continue
 
@@ -185,11 +199,13 @@ export function parserModuleForGrammar(
         // sqlite's tokenize.c:707 formats it as: unrecognized token.
         // We record it and bail — attempting to recover typically
         // cascades into noise.
+        tokens?.push(tok)
         diagnostics.push(buildIllegalTokenDiagnostic(tok))
         diagnostics.push(...state.errors)
-        return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
+        return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics), tokens }
       }
 
+      tokens?.push(tok)
       session.next(tok.type, tok)
       if (session.phase === "errored") return syntaxErrorResult(tok)
 
@@ -205,7 +221,7 @@ export function parserModuleForGrammar(
           },
         })
         diagnostics.push(...state.errors)
-        return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
+        return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics), tokens }
       }
 
       noteSuccessfulToken(tok)
@@ -233,6 +249,7 @@ export function parserModuleForGrammar(
           span: endSpan,
           synthetic: true,
         }
+        tokens?.push(semiToken)
         session.next(SEMI, semiToken)
         if (session.errors.length > 0) return syntaxErrorResult(semiToken)
       }
@@ -244,6 +261,7 @@ export function parserModuleForGrammar(
           span: endSpan,
           synthetic: true,
         }
+        tokens?.push(eofToken)
         session.next(EOF, eofToken)
         if (session.errors.length > 0) return syntaxErrorResult(eofToken)
       }
@@ -252,10 +270,10 @@ export function parserModuleForGrammar(
     diagnostics.push(...state.errors)
 
     if (diagnostics.length > 0) {
-      return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
+      return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics), tokens }
     }
     if (session.phase === "accepted") {
-      return { status: "accepted", ast: finalizeCmdList(state) }
+      return { status: "accepted", ast: finalizeCmdList(state), tokens }
     } else {
       return {
         status: "errored",
@@ -265,6 +283,7 @@ export function parserModuleForGrammar(
             span: { offset: 0, length: 0, line: 1, col: 0 },
           },
         ]),
+        tokens,
       }
     }
   }
@@ -278,8 +297,8 @@ export function parserModuleForGrammar(
     createEngine,
     reduce,
     createState,
-    withOptions: (newOpts: CreateParserOptions) =>
-      parserModuleForGrammar(parserDefs, keywordDefs, { ...options, ...newOpts }),
+    withOptions: (newOptions: CreateParserOptions) =>
+      parserModuleForGrammar(parserDefs, keywordDefs, { ...options, ...newOptions }),
     parserDefs,
     keywordDefs,
   }

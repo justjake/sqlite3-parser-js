@@ -13,7 +13,7 @@ import {
   type CreateTokenizerOptions,
   type KeywordDefs,
   type Tokenizer,
-  type TokenizeOpts,
+  type TokenizeOptions,
 } from "../src/tokenize.ts"
 /** The parser defs used by every helper in this file.  Tracks `current`. */
 export const parserDefs: typeof _parserDefs = _parserDefs
@@ -44,7 +44,7 @@ export interface LexedToken {
  * (SPACE + COMMENT) suppressed by default. Pass `{emitTrivia: true}` to
  * include them.
  */
-export function lex(sql: string, opts?: TokenizeOpts, t: Tokenizer = tk): LexedToken[] {
+export function lex(sql: string, opts?: TokenizeOptions, t: Tokenizer = tk): LexedToken[] {
   const out: LexedToken[] = []
   for (const tok of t.tokenize(sql, opts)) {
     out.push({
@@ -56,7 +56,7 @@ export function lex(sql: string, opts?: TokenizeOpts, t: Tokenizer = tk): LexedT
 }
 
 /** Shortcut for tests that only care about token names, not their text. */
-export function lexNames(sql: string, opts?: TokenizeOpts, t: Tokenizer = tk): string[] {
+export function lexNames(sql: string, opts?: TokenizeOptions, t: Tokenizer = tk): string[] {
   return lex(sql, opts, t).map((x) => x.name)
 }
 
