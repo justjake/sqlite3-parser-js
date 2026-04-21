@@ -7,7 +7,7 @@ Parse SQLite query syntax.
 - **Faithful**: The parser based on [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html) to emit [TypeScript code](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 - **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups with a pointer at the opener, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
 
-[![npm](https://img.shields.io/npm/v/sqlite3-parser?label=npm&logo=npm)](https://www.npmjs.com/package/sqlite3-parser) | [![CI](https://img.shields.io/github/actions/workflow/status/justjake/sqlite3-parser-js/ci.yml?branch=main&label=CI&logo=github)](https://github.com/justjake/sqlite3-parser-js/actions/workflows/ci.yml?query=branch%3Amain)
+[![npm](https://img.shields.io/npm/v/sqlite3-parser?label=npm&logo=npm)](https://www.npmjs.com/package/sqlite3-parser) [![CI](https://img.shields.io/github/actions/workflow/status/justjake/sqlite3-parser-js/ci.yml?branch=main&label=CI&logo=github)](https://github.com/justjake/sqlite3-parser-js/actions/workflows/ci.yml?query=branch%3Amain)
 
 ## Usage
 
