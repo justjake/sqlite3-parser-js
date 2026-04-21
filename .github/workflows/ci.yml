@@ -119,6 +119,16 @@ jobs:
           package_tarball="$(echo ./build/npm/*.tgz)"
           short_sha="${GITHUB_SHA::7}"
 
+          emit() {
+            {
+              echo "mode=$1"
+              echo "name=${package_name}"
+              echo "version=$2"
+              echo "tarball=$3"
+              echo "url=https://www.npmjs.com/package/${package_name}/v/$2"
+            } >> "$GITHUB_OUTPUT"
+          }
+
           if npm view "${package_name}@${package_version}" version >/dev/null 2>&1; then
             next_version="$(node -e "
               const base = process.argv[1]
@@ -132,20 +142,14 @@ jobs:
             " "$package_version" "$short_sha")"
 
             if npm view "${package_name}@${next_version}" version >/dev/null 2>&1; then
-              echo "mode=skip" >> "$GITHUB_OUTPUT"
-              echo "version=${next_version}" >> "$GITHUB_OUTPUT"
-              echo "tarball=${package_tarball}" >> "$GITHUB_OUTPUT"
+              emit skip "${next_version}" "${package_tarball}"
               echo "Version ${next_version} is already published; skipping publish."
             else
-              echo "mode=next" >> "$GITHUB_OUTPUT"
-              echo "version=${next_version}" >> "$GITHUB_OUTPUT"
-              echo "tarball=${package_tarball}" >> "$GITHUB_OUTPUT"
+              emit next "${next_version}" "${package_tarball}"
               echo "Package version ${package_version} already exists; will publish ${next_version} with dist-tag next."
             fi
           else
-            echo "mode=stable" >> "$GITHUB_OUTPUT"
-            echo "version=${package_version}" >> "$GITHUB_OUTPUT"
-            echo "tarball=${package_tarball}" >> "$GITHUB_OUTPUT"
+            emit stable "${package_version}" "${package_tarball}"
             echo "Package version ${package_version} is new; will publish it to latest."
           fi
 
@@ -184,11 +188,50 @@ jobs:
 
       - name: Publish stable version
         if: steps.publish_plan.outputs.mode == 'stable'
-        run: npm publish "${{ steps.publish_plan.outputs.tarball }}" --tag latest --access public
+        env:
+          PACKAGE_NAME: ${{ steps.publish_plan.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.publish_plan.outputs.version }}
+          PACKAGE_URL: ${{ steps.publish_plan.outputs.url }}
+        run: |
+          npm publish "${{ steps.publish_plan.outputs.tarball }}" --tag latest --access public
+          echo "Published ${PACKAGE_URL}"
+          echo "::notice title=Published ${PACKAGE_NAME}@${PACKAGE_VERSION}::${PACKAGE_URL}"
+          {
+            echo "### Published \`${PACKAGE_NAME}@${PACKAGE_VERSION}\` (tag: latest)"
+            echo ""
+            echo "[${PACKAGE_URL}](${PACKAGE_URL})"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish next version
         if: steps.publish_plan.outputs.mode == 'next'
-        run: npm publish "${{ steps.prepare_next.outputs.tarball }}" --tag next --access public
+        env:
+          PACKAGE_NAME: ${{ steps.publish_plan.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.publish_plan.outputs.version }}
+          PACKAGE_URL: ${{ steps.publish_plan.outputs.url }}
+        run: |
+          npm publish "${{ steps.prepare_next.outputs.tarball }}" --tag next --access public
+          echo "Published ${PACKAGE_URL}"
+          echo "::notice title=Published ${PACKAGE_NAME}@${PACKAGE_VERSION}::${PACKAGE_URL}"
+          {
+            echo "### Published \`${PACKAGE_NAME}@${PACKAGE_VERSION}\` (tag: next)"
+            echo ""
+            echo "[${PACKAGE_URL}](${PACKAGE_URL})"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report skip
+        if: steps.publish_plan.outputs.mode == 'skip'
+        env:
+          PACKAGE_NAME: ${{ steps.publish_plan.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.publish_plan.outputs.version }}
+          PACKAGE_URL: ${{ steps.publish_plan.outputs.url }}
+        run: |
+          echo "Skipped publish: ${PACKAGE_NAME}@${PACKAGE_VERSION} already exists at ${PACKAGE_URL}"
+          echo "::notice title=Skipped publish (already on npm)::${PACKAGE_URL}"
+          {
+            echo "### Skipped publish: \`${PACKAGE_NAME}@${PACKAGE_VERSION}\` already on npm"
+            echo ""
+            echo "[${PACKAGE_URL}](${PACKAGE_URL})"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Create release tag
         if: steps.publish_plan.outputs.mode == 'stable'
