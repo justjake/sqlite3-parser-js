@@ -29,6 +29,6 @@
     "bin/**",
     "build/**",
     "dist/**",
-    "generated/**/lemon"
+    "generated/template/**"
   ]
 }

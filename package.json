@@ -1,6 +1,6 @@
 {
   "name": "sqlite3-parser",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Parse SQLite query syntax. 1.5x-200x faster than other JavaScript SQL parsers.",
   "keywords": [
     "ast",

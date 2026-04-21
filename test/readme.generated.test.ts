@@ -63,7 +63,7 @@ function isAssertionError(value: unknown): boolean {
 }
 
 describe("README.md code blocks", () => {
-  test("README.md:18 (ts)", () => {
+  test("README.md:17 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -100,7 +100,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:42 (ts)", () => {
+  test("README.md:41 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -141,7 +141,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:72 (ts)", () => {
+  test("README.md:71 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -164,31 +164,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:81 (ts)", () => {
-    const { captured: __captured, restore: __restore } = captureConsole()
-    let __threw: unknown
-    try {
-      const r = parseStmt("SELECT 1; SELECT 2", { allowTrailing: true })
-      if (r.status === "ok") {
-        console.log(r.root.type) // SelectStmt
-        console.log(r.tail) // 10 — source.slice(tail) is what's left to parse
-      } else {
-        throw "expected ok"
-      }
-    } catch (e) {
-      if (isAssertionError(e)) throw e
-      __threw = e
-    } finally {
-      __restore()
-    }
-    expect({
-      stdout: __captured.stdout,
-      stderr: __captured.stderr,
-      threw: __threw === undefined ? undefined : summarizeThrown(__threw),
-    }).toMatchSnapshot()
-  })
-
-  test("README.md:97 (ts)", () => {
+  test("README.md:84 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -228,7 +204,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:125 (ts)", () => {
+  test("README.md:112 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -263,7 +239,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:152 (ts)", () => {
+  test("README.md:139 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -296,7 +272,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:178 (ts)", () => {
+  test("README.md:165 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {

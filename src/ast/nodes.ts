@@ -1,28 +1,5 @@
 // AST node shapes for SQLite's SQL grammar.
 //
-// Each Rust-style enum with payload-bearing variants appears as a
-// discriminated union tagged by `type`.  Payload-free enums collapse
-// to bare string-literal unions.  Each Rust-style struct appears as
-// an interface.  Bitflag types are `number` aliases with a companion
-// const object holding the bit masks.  `Option<T>` maps to `T | undefined`.
-//
-// The major unions — `Stmt`, `Expr`, `ColumnConstraint`,
-// `TableConstraint`, `TriggerCmd` — expose every variant as a
-// separately exported interface named `<Variant><UnionName>` (e.g.
-// `AlterTableStmt`, `BetweenExpr`).  `Literal` is a named subset of
-// `Expr` covering the eight literal-producing node kinds
-// (`NumericLiteral`, `StringLiteral`, …).  Downstream narrowing code
-// can reference a variant directly without having to restate its
-// shape in a type predicate.
-//
-// Terminal-producing nodes (`Name`, `Id`, each `Literal` variant,
-// `VariableExpr`) carry a `span: Span` back-pointer so callers
-// can recover source position and the raw (pre-dequote) text of the
-// covering token.  Composite nodes don't yet have spans — that's a
-// separate follow-on.
-//
-// These types mirror the AST published by `sqlite3-parser` (the Rust
-// port of SQLite's Lemon grammar).  See:
 // - https://sqlite.org/syntax/sql-stmt.html
 // - https://sqlite.org/lang_expr.html
 // - https://sqlite.org/syntax/select-stmt.html
