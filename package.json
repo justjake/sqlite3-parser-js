@@ -53,6 +53,7 @@
     "coverage:ast": "bun scripts/ast-coverage.ts",
     "bench": "bun scripts/bench.ts",
     "bench:compare": "make liteparser-wasm && bun scripts/bench-compare.ts",
+    "prof": "bun scripts/prof.ts",
     "dist-test": "bun scripts/dist-test.ts",
     "dist-test:build": "bun scripts/dist-test.ts --build"
   },

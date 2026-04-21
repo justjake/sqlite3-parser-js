@@ -100,6 +100,8 @@ export function parserModuleForGrammar(
   const buildSyntaxError = bindSyntaxDiagnostics(parserDefs, keywordDefs)
 
   const { CASE, COMMENT, END, ILLEGAL, LP, RP, SEMI, SPACE } = tk.tokens
+  const FILTER = requireTokenId(parserDefs, "FILTER")
+  const OVER = requireTokenId(parserDefs, "OVER")
   const EOF = 0 as TokenId
 
   // -------------------------------------------------------------------------
@@ -121,20 +123,49 @@ export function parserModuleForGrammar(
     const state = createState()
     const session = createEngine(reduce, state)
 
-    // Chronological token stream we actually fed the session.
-    // If `emitTrivia` is enabled on the tokenizer we still screen out
-    // SPACE/COMMENT before parser dispatch, so this remains aligned with
-    // the engine's tokenIndex values. Synthetic SEMI/EOF are appended.
-    const tokenStream: Token[] = []
-
     // Open-delimiter stack, maintained in lockstep with the dispatch
     // loop.  Lets `buildSyntaxError` point at the unmatched opener
-    // without rescanning the token stream.  END is shared between
+    // without retaining full token history.  END is shared between
     // CASE/END and (future) BEGIN/END blocks, so we peek the top to
     // decide whether a close matches — a pure close-token lookup would
     // misbehave.  Only the opener Token is retained; the pair is
     // implicit in its type.
     const openers: Token[] = []
+    let previousToken: Token | undefined
+    let sawOverSinceLastFilterOrSemi = false
+
+    function syntaxErrorResult(token: Token): ParseResult {
+      const error = session.errors[session.errors.length - 1]
+      diagnostics.push(
+        buildSyntaxError({
+          token,
+          state: error!.stateno,
+          previousToken,
+          openers,
+          sawOverSinceLastFilterOrSemi,
+        }),
+      )
+      diagnostics.push(...state.errors)
+      return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
+    }
+
+    function noteSuccessfulToken(token: Token): void {
+      const type = token.type
+      if (type === LP || type === CASE) {
+        openers.push(token)
+      } else if (type === RP || type === END) {
+        const top = openers[openers.length - 1]
+        if (top && ((top.type === LP && type === RP) || (top.type === CASE && type === END))) {
+          openers.pop()
+        }
+      }
+
+      if (type === OVER) sawOverSinceLastFilterOrSemi = true
+      else if (type === FILTER || type === SEMI) sawOverSinceLastFilterOrSemi = false
+
+      previousToken = token
+      lastMajor = type
+    }
 
     // `singleStatement` tripwire: the `ecmd ::= cmdx SEMI` reduction
     // that bumps `state.cmds` from 0 to 1 is deferred by LALR lookahead
@@ -159,17 +190,8 @@ export function parserModuleForGrammar(
         return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
       }
 
-      tokenStream.push(tok)
-      const t = tok.type
-      if (t === LP || t === CASE) {
-        openers.push(tok)
-      } else if (t === RP || t === END) {
-        const top = openers[openers.length - 1]
-        if (top && ((top.type === LP && t === RP) || (top.type === CASE && t === END))) {
-          openers.pop()
-        }
-      }
-      session.next(t, tok)
+      session.next(tok.type, tok)
+      if (session.phase === "errored") return syntaxErrorResult(tok)
 
       if (options.singleStatement && state.cmds.length >= 1 && tok.type !== SEMI) {
         diagnostics.push({
@@ -186,8 +208,8 @@ export function parserModuleForGrammar(
         return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
       }
 
+      noteSuccessfulToken(tok)
       if (session.phase !== "running") break
-      lastMajor = tok.type
     } // end parse loop
 
     // EOF tail — mirrors tokenize.c:674 sqlite3RunParser.  If the last
@@ -211,8 +233,8 @@ export function parserModuleForGrammar(
           span: endSpan,
           synthetic: true,
         }
-        tokenStream.push(semiToken)
         session.next(SEMI, semiToken)
+        if (session.errors.length > 0) return syntaxErrorResult(semiToken)
       }
 
       if (session.phase === "running") {
@@ -222,24 +244,9 @@ export function parserModuleForGrammar(
           span: endSpan,
           synthetic: true,
         }
-        tokenStream.push(eofToken)
         session.next(EOF, eofToken)
+        if (session.errors.length > 0) return syntaxErrorResult(eofToken)
       }
-    }
-
-    // Translate each engine error into a grammar-aware diagnostic.
-    // YYNOERRORRECOVERY means the engine records at most one, but loop
-    // in case that ever changes. Engine input values are always Tokens.
-    for (const e of session.errors) {
-      diagnostics.push(
-        buildSyntaxError({
-          token: e.minor as Token,
-          state: e.stateno,
-          tokens: tokenStream,
-          tokenIndex: e.tokenIndex,
-          openers,
-        }),
-      )
     }
 
     diagnostics.push(...state.errors)
@@ -276,4 +283,13 @@ export function parserModuleForGrammar(
     parserDefs,
     keywordDefs,
   }
+}
+
+function requireTokenId(
+  parserDefs: Pick<ParserDefs<unknown, unknown>, "symbols">,
+  name: string,
+): TokenId {
+  const id = parserDefs.symbols.indexOf(name)
+  if (id < 0) throw new Error(`parser.ts: missing terminal token "${name}"`)
+  return id as TokenId
 }

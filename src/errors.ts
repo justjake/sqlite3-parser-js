@@ -179,8 +179,8 @@ function illegalTokenHint(text: string): string {
 interface UnexpectedSyntaxErrorOptions {
   readonly token: Token
   readonly state: number
-  readonly tokens: readonly Token[]
-  readonly tokenIndex: number
+  readonly previousToken: Token | undefined
+  readonly sawOverSinceLastFilterOrSemi: boolean
   /**
    * Stack of currently unmatched opener tokens (LP / CASE), maintained
    * by `parse()` in lockstep with the dispatch loop.  The innermost
@@ -358,10 +358,9 @@ function buildUnexpectedDiagnostic(
   meta: SyntaxMeta,
   opts: UnexpectedSyntaxErrorOptions,
 ): Diagnostic {
-  const { token, state, tokens, tokenIndex, openers } = opts
+  const { token, state, previousToken, sawOverSinceLastFilterOrSemi, openers } = opts
   const canonical = canonicalParseMessage(token)
   const expected = collectExpected(meta, state)
-  const previousToken = previousConcreteToken(tokens, tokenIndex)
   const hints =
     buildHint(meta, {
       token,
@@ -369,8 +368,7 @@ function buildUnexpectedDiagnostic(
       expected,
       previousToken,
       openers,
-      tokens,
-      tokenIndex,
+      sawOverSinceLastFilterOrSemi,
     }) ??
     (expected.length > 0
       ? [{ message: `expected ${formatExpectedList(meta, expected)}` }]
@@ -475,11 +473,10 @@ function buildHint(
     expected: readonly TokenId[]
     previousToken: Token | undefined
     openers: readonly Token[]
-    tokens: readonly Token[]
-    tokenIndex: number
+    sawOverSinceLastFilterOrSemi: boolean
   },
 ): DiagnosticHint[] | undefined {
-  const { token, canonical, expected, previousToken, openers, tokens, tokenIndex } = ctx
+  const { token, canonical, expected, previousToken, openers, sawOverSinceLastFilterOrSemi } = ctx
   const topOpener = openers[openers.length - 1]
 
   const missingTableName = buildMissingTableNameHint(meta, token, previousToken)
@@ -494,7 +491,7 @@ function buildHint(
   const unmatchedClosing = buildUnmatchedClosingHint(meta, token, openers)
   if (unmatchedClosing) return [{ message: unmatchedClosing }]
 
-  const filterOrdering = buildFilterOrderingHint(meta, token, tokens, tokenIndex)
+  const filterOrdering = buildFilterOrderingHint(meta, token, sawOverSinceLastFilterOrSemi)
   if (filterOrdering) return [{ message: filterOrdering }]
 
   const clauseBoundary = buildClauseBoundaryHints(meta, token, topOpener)
@@ -560,18 +557,12 @@ function buildUnmatchedClosingHint(
 function buildFilterOrderingHint(
   meta: SyntaxMeta,
   token: Token,
-  tokens: readonly Token[],
-  tokenIndex: number,
+  sawOverSinceLastFilterOrSemi: boolean,
 ): string | undefined {
   if (token.type !== meta.tok.FILTER) return undefined
-  for (let i = tokenIndex - 1; i >= 0; i--) {
-    const prev = tokens[i]!
-    if (prev.synthetic) continue
-    if (prev.type === meta.tok.SEMI) break
-    if (prev.type === meta.tok.FILTER) break
-    if (prev.type === meta.tok.OVER) return "FILTER clauses must appear before OVER clauses"
-  }
-  return undefined
+  return sawOverSinceLastFilterOrSemi
+    ? "FILTER clauses must appear before OVER clauses"
+    : undefined
 }
 
 function buildClauseBoundaryHints(
@@ -622,15 +613,6 @@ function buildQuotedIdentifierHint(
   if (!expectedAcceptsIdentifier(meta, expected)) return undefined
   if (!looksKeywordToken(meta, token)) return undefined
   return `if you intended ${describeToken(token)} as an identifier here, quote it`
-}
-
-function previousConcreteToken(tokens: readonly Token[], tokenIndex: number): Token | undefined {
-  for (let i = tokenIndex - 1; i >= 0; i--) {
-    const token = tokens[i]!
-    if (token.synthetic || token.type === 0) continue
-    return token
-  }
-  return undefined
 }
 
 function hasFlag(meta: SyntaxMeta, tokenId: TokenId, flag: TokenFlag): boolean {
