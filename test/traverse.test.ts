@@ -99,7 +99,7 @@ describe("traverse — enter/leave ordering", () => {
   })
 })
 
-describe("traverse — enter returning \"skip\"", () => {
+describe('traverse — enter returning "skip"', () => {
   test("prunes children but still fires leave on the pruned node", () => {
     const events: string[] = []
     traverse(ast("SELECT a FROM t"), {
@@ -140,7 +140,7 @@ describe("traverse — enter returning \"skip\"", () => {
   })
 })
 
-describe("traverse — enter returning \"break\"", () => {
+describe('traverse — enter returning "break"', () => {
   test("halts the walk entirely: no further enter/leave events fire", () => {
     const events: string[] = []
     traverse(ast("SELECT a FROM t"), {

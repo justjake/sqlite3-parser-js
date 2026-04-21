@@ -155,7 +155,9 @@ describe("UPDATE and DELETE", () => {
 
   test("DELETE with WITH (CTE)", () => {
     expect(
-      cmdType(accepted("WITH doomed AS (SELECT id FROM t WHERE x < 0) DELETE FROM t WHERE id IN doomed")),
+      cmdType(
+        accepted("WITH doomed AS (SELECT id FROM t WHERE x < 0) DELETE FROM t WHERE id IN doomed"),
+      ),
     ).toBe("DeleteStmt")
   })
 })
@@ -174,16 +176,12 @@ describe("SELECT shapes", () => {
 
   test("INNER / LEFT / CROSS joins with USING and ON", () => {
     const sql =
-      "SELECT * FROM a " +
-      "JOIN b ON a.id = b.aid " +
-      "LEFT JOIN c USING (id) " +
-      "CROSS JOIN d"
+      "SELECT * FROM a " + "JOIN b ON a.id = b.aid " + "LEFT JOIN c USING (id) " + "CROSS JOIN d"
     expect(cmdType(accepted(sql))).toBe("SelectStmt")
   })
 
   test("nested CTE referencing an outer CTE", () => {
-    const sql =
-      "WITH a AS (SELECT 1 AS x), b AS (SELECT x + 1 FROM a) SELECT * FROM b"
+    const sql = "WITH a AS (SELECT 1 AS x), b AS (SELECT x + 1 FROM a) SELECT * FROM b"
     expect(cmdType(accepted(sql))).toBe("SelectStmt")
   })
 
@@ -196,8 +194,7 @@ describe("SELECT shapes", () => {
   })
 
   test("window function with PARTITION BY and ORDER BY", () => {
-    const sql =
-      "SELECT id, row_number() OVER (PARTITION BY g ORDER BY t) AS rn FROM events"
+    const sql = "SELECT id, row_number() OVER (PARTITION BY g ORDER BY t) AS rn FROM events"
     expect(cmdType(accepted(sql))).toBe("SelectStmt")
   })
 
@@ -208,8 +205,7 @@ describe("SELECT shapes", () => {
   })
 
   test("subqueries in SELECT and WHERE", () => {
-    const sql =
-      "SELECT a, (SELECT MAX(b) FROM u) FROM t WHERE a IN (SELECT a FROM u WHERE g = 1)"
+    const sql = "SELECT a, (SELECT MAX(b) FROM u) FROM t WHERE a IN (SELECT a FROM u WHERE g = 1)"
     expect(cmdType(accepted(sql))).toBe("SelectStmt")
   })
 
@@ -273,15 +269,24 @@ describe("expression families accept", () => {
     ["boolean connectives", "SELECT a AND b OR NOT c FROM t"],
     ["BETWEEN", "SELECT a FROM t WHERE x BETWEEN 1 AND 10"],
     ["LIKE ESCAPE", "SELECT a FROM t WHERE x LIKE 'a\\%b' ESCAPE '\\'"],
-    ["IN list / IN subquery / IN table", "SELECT a FROM t WHERE a IN (1,2) OR a IN (SELECT x FROM u) OR a IN u"],
-    ["IS / IS NOT / NULL tests", "SELECT a FROM t WHERE x IS NULL OR y IS NOT NULL OR z ISNULL OR z NOTNULL"],
+    [
+      "IN list / IN subquery / IN table",
+      "SELECT a FROM t WHERE a IN (1,2) OR a IN (SELECT x FROM u) OR a IN u",
+    ],
+    [
+      "IS / IS NOT / NULL tests",
+      "SELECT a FROM t WHERE x IS NULL OR y IS NOT NULL OR z ISNULL OR z NOTNULL",
+    ],
     ["COLLATE", "SELECT a COLLATE NOCASE FROM t"],
     ["CAST", "SELECT CAST(x AS INTEGER) FROM t"],
     ["function call + STAR form", "SELECT count(*), avg(x), group_concat(y, ',') FROM t"],
     ["string concat", "SELECT 'a' || b FROM t"],
     ["JSON PTR operators", "SELECT a -> 'k', a ->> 'k' FROM t"],
     ["bind params", "SELECT ?, ?1, :name, @named, $x FROM t"],
-    ["RAISE in trigger", "CREATE TRIGGER g BEFORE DELETE ON t BEGIN SELECT RAISE(ABORT, 'no'); END"],
+    [
+      "RAISE in trigger",
+      "CREATE TRIGGER g BEFORE DELETE ON t BEGIN SELECT RAISE(ABORT, 'no'); END",
+    ],
   ]
   for (const [label, sql] of cases) {
     test(label, () => {

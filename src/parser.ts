@@ -387,10 +387,7 @@ export function parserModuleForGrammar(
     return { status: "ok", root: finalizeCmdList(outcome.state), tokens: outcome.tokens }
   }
 
-  function parseStmt(
-    sql: string,
-    opts: ParseStmtOptions = {},
-  ): ParseStmtResult {
+  function parseStmt(sql: string, opts: ParseStmtOptions = {}): ParseStmtResult {
     const { allowTrailing = false, ...rest } = opts
     const outcome = runCore(sql, rest, {
       firstStatement: true,
@@ -407,15 +404,12 @@ export function parserModuleForGrammar(
       // than an awkward optional root.
       return {
         status: "error",
-        errors: createParseErrorArray(
-          { source: sql, filename: opts.filename },
-          [
-            {
-              message: "no SQL statement in input",
-              span: { offset: 0, length: 0, line: 1, col: 0 },
-            },
-          ],
-        ),
+        errors: createParseErrorArray({ source: sql, filename: opts.filename }, [
+          {
+            message: "no SQL statement in input",
+            span: { offset: 0, length: 0, line: 1, col: 0 },
+          },
+        ]),
         tokens: outcome.tokens,
       }
     }
