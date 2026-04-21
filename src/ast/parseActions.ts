@@ -147,6 +147,8 @@ export function literalFromCtimeKw(tok: Token): Literal {
   if (t === "CURRENT_DATE") return { type: "CurrentDateLiteral", span }
   if (t === "CURRENT_TIME") return { type: "CurrentTimeLiteral", span }
   if (t === "CURRENT_TIMESTAMP") return { type: "CurrentTimestampLiteral", span }
+  // Should never occur: invariant enforced by the keyword table, which only
+  // emits CTIME_KW for the three `CURRENT_*` spellings above.
   throw new Error(`unreachable CTIME_KW: ${tok.text}`)
 }
 
@@ -193,6 +195,9 @@ export function likeOperatorFromToken(
   if (t === "LIKE") return "Like"
   if (t === "GLOB") return "Glob"
   if (t === "REGEXP") return "Regexp"
+  // Should never occur: invariant enforced by the keyword table, which only
+  // emits LIKE_KW for `LIKE` / `GLOB` / `REGEXP` (MATCH comes in as its own
+  // terminal and is handled above).
   throw new Error(`unreachable LIKE_KW: ${tok.text}`)
 }
 
@@ -240,6 +245,8 @@ export function binaryOperatorFromToken(tokType: number, tokens: Record<string, 
     case tokens.NOT:
       return "IsNot"
     default:
+      // Should never occur: invariant enforced by the grammar, which only
+      // dispatches `binaryOperatorFromToken` for terminals listed above.
       throw new Error(`unreachable binary op token: ${tokType}`)
   }
 }
@@ -259,6 +266,8 @@ export function unaryOperatorFromToken(
     case tokens.PLUS:
       return "Positive"
     default:
+      // Should never occur: invariant enforced by the grammar, which only
+      // dispatches `unaryOperatorFromToken` for terminals listed above.
       throw new Error(`unreachable unary op token: ${tokType}`)
   }
 }
@@ -368,6 +377,8 @@ export function mkNotNullExpr(
 ): Expr {
   if (tokType === tokens.ISNULL) return { type: "IsNullExpr", expr, span }
   if (tokType === tokens.NOTNULL) return { type: "NotNullExpr", expr, span }
+  // Should never occur: invariant enforced by the grammar, which only
+  // dispatches `mkNotNullExpr` for ISNULL / NOTNULL postfix terminals.
   throw new Error(`unreachable NULL-test token: ${tokType}`)
 }
 

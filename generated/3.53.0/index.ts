@@ -31,12 +31,12 @@ export * from "../../src/ast/traverse"
 export {
   type Diagnostic,
   type DiagnosticHint,
-  type ParseError,
+  type ParseDiagnostic as ParseError,
   type ParseErrorContext,
   type RenderCodeBlockOptions,
-  formatParseError,
-  createParseError,
-  createParseErrorArray,
+  formatDiagnostic as formatParseError,
+  createParseDiagnostic as createParseError,
+  createParseDiagnosticArray as createParseErrorArray,
   lineColAt,
   renderCodeBlock,
 } from "../../src/errors"

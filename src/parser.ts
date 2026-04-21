@@ -12,24 +12,25 @@ import {
   type TokenIterator,
   type CreateTokenizerOptions,
   type KeywordDefs,
-} from "./tokenize.ts"
+} from "./tokenize.ts";
 import {
   engineModuleForGrammar,
   type ParserDefs,
   type TokenId,
   LalrReduce,
   CreateLalrEngine,
-} from "./lempar.ts"
+} from "./lempar.ts";
 import {
   bindSyntaxDiagnostics,
   buildIllegalTokenDiagnostic,
-  createParseErrorArray,
+  createParseDiagnosticArray,
+  Sqlite3ParserDiagnosticError,
   type Diagnostic,
-  type ParseError,
-} from "./errors.ts"
-import type { CmdList, Stmt } from "./ast/nodes.ts"
-import { finalizeCmdList } from "./ast/parseActions.ts"
-import type { ParseState } from "./ast/parseState.ts"
+  type ParseDiagnostic,
+} from "./errors.ts";
+import type { CmdList, Stmt } from "./ast/nodes.ts";
+import { finalizeCmdList } from "./ast/parseActions.ts";
+import type { ParseState } from "./ast/parseState.ts";
 
 /** Options for a parser module.  Tokenizer-level options are forwarded verbatim. */
 export interface CreateParserOptions extends CreateTokenizerOptions {
@@ -42,33 +43,49 @@ export interface CreateParserOptions extends CreateTokenizerOptions {
    * end-of-input.  Useful for contexts like `prepare_v2`-style call sites
    * where only one statement is meaningful.  Defaults to `false`.
    */
-  readonly singleStatement?: boolean
+  readonly singleStatement?: boolean;
 }
 
-export type ParseResult =
-  | { status: "ok"; root: CmdList; errors?: undefined; tokens?: Token[] }
-  | { status: "error"; errors: readonly ParseError[]; tokens?: Token[] }
+export type ParseOk = {
+  status: "ok";
+  root: CmdList;
+  errors?: undefined;
+  tokens?: Token[];
+};
+export type ParseErr = {
+  status: "error";
+  errors: readonly ParseDiagnostic[];
+  tokens?: Token[];
+};
+/** Return type of {@link ParserModule.parse} */
+export type ParseResult = ParseOk | ParseErr;
 
-/** Result of {@link ParserModule.parseStmt}. */
-export type ParseStmtResult =
-  | {
-      status: "ok"
-      /** The first top-level statement parsed from the input. */
-      root: Stmt
-      /**
-       * Index into the source string (in JS string units, same as
-       * `source.slice`) past the terminating `;` of the parsed
-       * statement — or `source.length` if the statement ran to the end
-       * of input without a trailing `;`.  Analogous to SQLite's
-       * `sqlite3_prepare_v2` `pzTail` out-parameter: callers that want
-       * to walk a multi-statement script pass `source.slice(tail)`
-       * back through `parseStmt` until `tail === source.length`.
-       */
-      tail: number
-      errors?: undefined
-      tokens?: Token[]
-    }
-  | { status: "error"; errors: readonly ParseError[]; tokens?: Token[] }
+export type ParseStmtOk = {
+  status: "ok";
+
+  /** The first top-level statement parsed from the input. */
+  root: Stmt;
+
+  /**
+   * Index into the source string (in JS string units, same as
+   * `source.slice`) past the terminating `;` of the parsed
+   * statement — or `source.length` if the statement ran to the end
+   * of input without a trailing `;`.  Analogous to SQLite's
+   * `sqlite3_prepare_v2` `pzTail` out-parameter: callers that want
+   * to walk a multi-statement script pass `source.slice(tail)`
+   * back through `parseStmt` until `tail === source.length`.
+   */
+  tail: number;
+  errors?: undefined;
+  tokens?: Token[];
+};
+export type ParseStmtErr = {
+  status: "error";
+  errors: readonly ParseDiagnostic[];
+  tokens?: Token[];
+};
+/** Return type of {@link ParserModule.parseStmt}. */
+export type ParseStmtResult = ParseStmtOk | ParseStmtErr;
 
 // ---------------------------------------------------------------------------
 // parserModuleForGrammar — bind the driver to a specific
@@ -77,15 +94,20 @@ export type ParseStmtResult =
 
 export type ParseOptions = TokenizeOptions & {
   /** Annotate any returned errors with this filename. */
-  filename?: string
+  filename?: string;
   /**
    * When `true`, the returned result carries a `tokens` field — the
    * chronological stream of non-trivia tokens the parser fed the
    * engine, including any synthetic SEMI / EOF markers appended at the
    * tail.  Populated on both `"ok"` and `"error"` results.
    */
-  emitTokens?: boolean
-}
+  emitTokens?: boolean;
+  /**
+   * When `true`, throw a `Sqlite3ParserDiagnosticError` if the parse fails.
+   * Defaults to `false`.
+   */
+  throw?: boolean;
+};
 
 /** Options for {@link ParserModule.parseStmt}. */
 export type ParseStmtOptions = ParseOptions & {
@@ -98,42 +120,54 @@ export type ParseStmtOptions = ParseOptions & {
    * a multi-statement script one statement at a time.  Bare `;`
    * separators are always allowed regardless.
    */
-  allowTrailing?: boolean
-}
+  allowTrailing?: boolean;
+};
 
 /**
  * SQlite3 Parser library.
  */
 export interface ParserModule {
   /** Parse a SQL string into an AST. */
-  parse(source: string, opts?: ParseOptions): ParseResult
+  parse(source: string, opts?: ParseOptions): ParseResult;
+  /** Parse a SQL string into an AST, or throw if parse errors occur. */
+  parseOrThrow(
+    source: string,
+    opts?: ParseOptions,
+  ): { root: CmdList; tokens?: Token[] };
   /**
-   * Parse exactly one top-level SQL statement from `source` and return
-   * it alongside a `tail` offset pointing past its terminating `;`.
-   * Useful for contexts like `prepare_v2` where only the first
-   * statement is meaningful; callers walking a multi-statement script
-   * loop on `source.slice(tail)` until `tail === source.length`.
+   * Parse exactly one top-level SQL statement from `source`.
+   *
+   * If `allowTrailing` is `true`, returns ok and the string index of the first token of the next statement.
+   * If `allowTrailing` is unset or `false`, returns a diagnostic if there are any tokens after the first statement.
    */
-  parseStmt(source: string, opts?: ParseStmtOptions): ParseStmtResult
+  parseStmt(source: string, opts?: ParseStmtOptions): ParseStmtResult;
+  /**
+   * Parse exactly one top-level SQL statement from `source`, see {@link parseStmt} for more details.
+   * Throws if parse errors occur.
+   */
+  parseStmtOrThrow(
+    source: string,
+    opts?: ParseStmtOptions,
+  ): { root: Stmt; tail: number; tokens?: Token[] };
   /** Tokenize a SQL string into a stream of tokens. */
-  tokenize(source: string, opts?: TokenizeOptions): TokenIterator
+  tokenize(source: string, opts?: TokenizeOptions): TokenIterator;
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
-  tokenName(code: TokenId): string | undefined
+  tokenName(code: TokenId): string | undefined;
   /** Create the underlying LALR state machine engine, used by {@link parse}. */
-  createEngine: CreateLalrEngine
+  createEngine: CreateLalrEngine;
   /** Reducer function that evaluates parse rules to build the AST. */
-  reduce: LalrReduce<ParseState, unknown>
+  reduce: LalrReduce<ParseState, unknown>;
   /** Create a new parse state for use with {@link createEngine}.. */
-  createState: () => ParseState
+  createState: () => ParseState;
   /**
    * Create a new parser module with the given options.
    * Parser modules are stateless, you should create one at module scope and reuse it.
    */
-  withOptions(opts: CreateParserOptions): ParserModule
+  withOptions(opts: CreateParserOptions): ParserModule;
   /** LALR parser definition. */
-  parserDefs: ParserDefs<ParseState, unknown>
+  parserDefs: ParserDefs<ParseState, unknown>;
   /** SQLite keywords recognized by the tokenizer. */
-  keywordDefs: KeywordDefs
+  keywordDefs: KeywordDefs;
 }
 
 /**
@@ -144,15 +178,15 @@ export function parserModuleForGrammar(
   keywordDefs: KeywordDefs,
   options: CreateParserOptions,
 ): ParserModule {
-  const { reduce, createState } = parserDefs
-  const tk = tokenizerModuleForGrammar(parserDefs, keywordDefs, options)
-  const createEngine = engineModuleForGrammar(parserDefs)
-  const buildSyntaxError = bindSyntaxDiagnostics(parserDefs, keywordDefs)
+  const { reduce, createState } = parserDefs;
+  const tk = tokenizerModuleForGrammar(parserDefs, keywordDefs, options);
+  const createEngine = engineModuleForGrammar(parserDefs);
+  const buildSyntaxError = bindSyntaxDiagnostics(parserDefs, keywordDefs);
 
-  const { CASE, COMMENT, END, ILLEGAL, LP, RP, SEMI, SPACE } = tk.tokens
-  const FILTER = requireTokenId(parserDefs, "FILTER")
-  const OVER = requireTokenId(parserDefs, "OVER")
-  const EOF = 0 as TokenId
+  const { CASE, COMMENT, END, ILLEGAL, LP, RP, SEMI, SPACE } = tk.tokens;
+  const FILTER = requireTokenId(parserDefs, "FILTER");
+  const OVER = requireTokenId(parserDefs, "OVER");
+  const EOF = 0 as TokenId;
 
   // -------------------------------------------------------------------------
   // parse / parseStmt — public entry points.
@@ -165,47 +199,51 @@ export function parserModuleForGrammar(
 
   type CoreMode = {
     /** Stop after the first statement commits instead of consuming to EOF. */
-    firstStatement: boolean
+    firstStatement: boolean;
     /** Error on any non-trivia content past the first statement. */
-    rejectTrailing: boolean
-  }
+    rejectTrailing: boolean;
+  };
 
   type CoreOutcome =
     | {
-        ok: true
-        state: ParseState
+        ok: true;
+        state: ParseState;
         /**
          * In `firstStatement` mode: offset of the first trailing
          * non-trivia token, or `sql.length` if the input ended without
          * one.  In full mode: `sql.length`.
          */
-        tail: number
-        tokens: Token[] | undefined
+        tail: number;
+        tokens: Token[] | undefined;
       }
     | {
-        ok: false
-        errors: readonly ParseError[]
-        tokens: Token[] | undefined
-      }
+        ok: false;
+        errors: readonly ParseDiagnostic[];
+        tokens: Token[] | undefined;
+      };
 
-  function runCore(sql: string, opts: ParseOptions, mode: CoreMode): CoreOutcome {
-    const { filename, emitTokens, ...tokenizeOptions } = opts
-    const errorContext = { source: sql, filename }
-    const diagnostics: Diagnostic[] = []
+  function runCore(
+    sql: string,
+    opts: ParseOptions,
+    mode: CoreMode,
+  ): CoreOutcome {
+    const { filename, emitTokens, ...tokenizeOptions } = opts;
+    const errorContext = { source: sql, filename };
+    const diagnostics: Diagnostic[] = [];
 
     // When `emitTokens` is set, accumulate every non-trivia token seen
     // during this parse — including any ILLEGAL token that aborted and
     // the tail-synthetic SEMI/EOF markers — for attachment to the
     // result.  Left `undefined` when the flag is off so the hot loop
     // pays only a single predictable branch per token.
-    const tokens: Token[] | undefined = emitTokens ? [] : undefined
+    const tokens: Token[] | undefined = emitTokens ? [] : undefined;
 
     // Structurally the same shape as sqlite's tokenize.c:674
     // sqlite3RunParser: get a token, feed it to the parser, repeat
     // until end-of-input or error; then inject a virtual SEMI (if the
     // last real token wasn't one) and the `$` end marker.
-    const state = createState()
-    const session = createEngine(reduce, state)
+    const state = createState();
+    const session = createEngine(reduce, state);
 
     // Open-delimiter stack, maintained in lockstep with the dispatch
     // loop.  Lets `buildSyntaxError` point at the unmatched opener
@@ -214,12 +252,12 @@ export function parserModuleForGrammar(
     // decide whether a close matches — a pure close-token lookup would
     // misbehave.  Only the opener Token is retained; the pair is
     // implicit in its type.
-    const openers: Token[] = []
-    let previousToken: Token | undefined
-    let sawOverSinceLastFilterOrSemi = false
+    const openers: Token[] = [];
+    let previousToken: Token | undefined;
+    let sawOverSinceLastFilterOrSemi = false;
 
     function syntaxErrorResult(token: Token): CoreOutcome {
-      const error = session.errors[session.errors.length - 1]
+      const error = session.errors[session.errors.length - 1];
       diagnostics.push(
         buildSyntaxError({
           token,
@@ -228,27 +266,36 @@ export function parserModuleForGrammar(
           openers,
           sawOverSinceLastFilterOrSemi,
         }),
-      )
-      diagnostics.push(...state.errors)
-      return { ok: false, errors: createParseErrorArray(errorContext, diagnostics), tokens }
+      );
+      diagnostics.push(...state.errors);
+      return {
+        ok: false,
+        errors: createParseDiagnosticArray(errorContext, diagnostics),
+        tokens,
+      };
     }
 
     function noteSuccessfulToken(token: Token): void {
-      const type = token.type
+      const type = token.type;
       if (type === LP || type === CASE) {
-        openers.push(token)
+        openers.push(token);
       } else if (type === RP || type === END) {
-        const top = openers[openers.length - 1]
-        if (top && ((top.type === LP && type === RP) || (top.type === CASE && type === END))) {
-          openers.pop()
+        const top = openers[openers.length - 1];
+        if (
+          top &&
+          ((top.type === LP && type === RP) ||
+            (top.type === CASE && type === END))
+        ) {
+          openers.pop();
         }
       }
 
-      if (type === OVER) sawOverSinceLastFilterOrSemi = true
-      else if (type === FILTER || type === SEMI) sawOverSinceLastFilterOrSemi = false
+      if (type === OVER) sawOverSinceLastFilterOrSemi = true;
+      else if (type === FILTER || type === SEMI)
+        sawOverSinceLastFilterOrSemi = false;
 
-      previousToken = token
-      lastMajor = type
+      previousToken = token;
+      lastMajor = type;
     }
 
     // Trailing-content tripwire: the `ecmd ::= cmdx SEMI` reduction
@@ -260,24 +307,28 @@ export function parserModuleForGrammar(
     // both "garbage past first stmt" (engine errors on the token) and
     // "second valid stmt past first" (engine would keep running) — in
     // both cases the token's offset is the start of the trailing range.
-    let lastMajor: TokenId | undefined
-    let tail = sql.length
-    const sourceTokens = tk.tokenize(sql, tokenizeOptions)
+    let lastMajor: TokenId | undefined;
+    let tail = sql.length;
+    const sourceTokens = tk.tokenize(sql, tokenizeOptions);
     for (const tok of sourceTokens) {
-      if (tok.type === SPACE || tok.type === COMMENT) continue
+      if (tok.type === SPACE || tok.type === COMMENT) continue;
 
       if (tok.type === ILLEGAL) {
         // sqlite's tokenize.c:707 formats it as: unrecognized token.
         // We record it and bail — attempting to recover typically
         // cascades into noise.
-        tokens?.push(tok)
-        diagnostics.push(buildIllegalTokenDiagnostic(tok))
-        diagnostics.push(...state.errors)
-        return { ok: false, errors: createParseErrorArray(errorContext, diagnostics), tokens }
+        tokens?.push(tok);
+        diagnostics.push(buildIllegalTokenDiagnostic(tok));
+        diagnostics.push(...state.errors);
+        return {
+          ok: false,
+          errors: createParseDiagnosticArray(errorContext, diagnostics),
+          tokens,
+        };
       }
 
-      tokens?.push(tok)
-      session.next(tok.type, tok)
+      tokens?.push(tok);
+      session.next(tok.type, tok);
 
       // `state.cmds` only bumps past 0 once the `ecmd ::= cmdx SEMI`
       // reduction actually fires — which LALR defers until it sees the
@@ -288,7 +339,7 @@ export function parserModuleForGrammar(
       // continuation.  Check this before `session.phase === "errored"`
       // so trailing-garbage produces the targeted "expected end of
       // input" diagnostic instead of a raw shift-error at the token.
-      const isTrailing = state.cmds.length >= 1 && tok.type !== SEMI
+      const isTrailing = state.cmds.length >= 1 && tok.type !== SEMI;
       if (isTrailing && mode.rejectTrailing) {
         diagnostics.push({
           message: "expected end of input after single statement",
@@ -299,22 +350,26 @@ export function parserModuleForGrammar(
             line: tok.span.line,
             col: tok.span.col,
           },
-        })
-        diagnostics.push(...state.errors)
-        return { ok: false, errors: createParseErrorArray(errorContext, diagnostics), tokens }
+        });
+        diagnostics.push(...state.errors);
+        return {
+          ok: false,
+          errors: createParseDiagnosticArray(errorContext, diagnostics),
+          tokens,
+        };
       }
       if (isTrailing && mode.firstStatement) {
         // First statement is committed; the current token is the start
         // of trailing content we're not going to consume.  Report its
         // offset as `tail` and hand back the populated state.
-        tail = tok.span.offset
-        return { ok: true, state, tail, tokens }
+        tail = tok.span.offset;
+        return { ok: true, state, tail, tokens };
       }
 
-      if (session.phase === "errored") return syntaxErrorResult(tok)
+      if (session.phase === "errored") return syntaxErrorResult(tok);
 
-      noteSuccessfulToken(tok)
-      if (session.phase !== "running") break
+      noteSuccessfulToken(tok);
+      if (session.phase !== "running") break;
     } // end parse loop
 
     // EOF tail — mirrors tokenize.c:674 sqlite3RunParser.  If the last
@@ -329,7 +384,7 @@ export function parserModuleForGrammar(
         length: 0,
         line: sourceTokens.line,
         col: sourceTokens.col,
-      }
+      };
 
       if (lastMajor !== SEMI) {
         const semiToken: Token = {
@@ -337,10 +392,10 @@ export function parserModuleForGrammar(
           text: "",
           span: endSpan,
           synthetic: true,
-        }
-        tokens?.push(semiToken)
-        session.next(SEMI, semiToken)
-        if (session.errors.length > 0) return syntaxErrorResult(semiToken)
+        };
+        tokens?.push(semiToken);
+        session.next(SEMI, semiToken);
+        if (session.errors.length > 0) return syntaxErrorResult(semiToken);
       }
 
       if (session.phase === "running") {
@@ -349,54 +404,84 @@ export function parserModuleForGrammar(
           text: "",
           span: endSpan,
           synthetic: true,
-        }
-        tokens?.push(eofToken)
-        session.next(EOF, eofToken)
-        if (session.errors.length > 0) return syntaxErrorResult(eofToken)
+        };
+        tokens?.push(eofToken);
+        session.next(EOF, eofToken);
+        if (session.errors.length > 0) return syntaxErrorResult(eofToken);
       }
     }
 
-    diagnostics.push(...state.errors)
+    diagnostics.push(...state.errors);
 
     if (diagnostics.length > 0) {
-      return { ok: false, errors: createParseErrorArray(errorContext, diagnostics), tokens }
+      return {
+        ok: false,
+        errors: createParseDiagnosticArray(errorContext, diagnostics),
+        tokens,
+      };
     }
     if (session.phase === "accepted") {
-      return { ok: true, state, tail, tokens }
+      return { ok: true, state, tail, tokens };
     }
     return {
       ok: false,
-      errors: createParseErrorArray(errorContext, [
+      errors: createParseDiagnosticArray(errorContext, [
         {
           message: "parse did not accept input",
           span: { offset: 0, length: 0, line: 1, col: 0 },
         },
       ]),
       tokens,
-    }
+    };
   }
 
   function parse(sql: string, opts: ParseOptions = {}): ParseResult {
     const outcome = runCore(sql, opts, {
       firstStatement: false,
       rejectTrailing: Boolean(options.singleStatement),
-    })
+    });
     if (!outcome.ok) {
-      return { status: "error", errors: outcome.errors, tokens: outcome.tokens }
+      return {
+        status: "error",
+        errors: outcome.errors,
+        tokens: outcome.tokens,
+      };
     }
-    return { status: "ok", root: finalizeCmdList(outcome.state), tokens: outcome.tokens }
+    return {
+      status: "ok",
+      root: finalizeCmdList(outcome.state),
+      tokens: outcome.tokens,
+    };
   }
 
-  function parseStmt(sql: string, opts: ParseStmtOptions = {}): ParseStmtResult {
-    const { allowTrailing = false, ...rest } = opts
+  function parseOrThrow(
+    sql: string,
+    opts?: ParseOptions,
+  ): ParseOk {
+    const result = parse(sql, opts);
+    if (result.status === "error") {
+      throw new Sqlite3ParserDiagnosticError(result.errors);
+    }
+    return result;
+  }
+
+  function parseStmt(
+    sql: string,
+    opts: ParseStmtOptions = {},
+  ): ParseStmtResult {
+    const { allowTrailing = false, ...rest } = opts;
     const outcome = runCore(sql, rest, {
       firstStatement: true,
       rejectTrailing: !allowTrailing,
-    })
+    });
     if (!outcome.ok) {
-      return { status: "error", errors: outcome.errors, tokens: outcome.tokens }
+      return {
+        status: "error",
+        errors: outcome.errors,
+        tokens: outcome.tokens,
+      };
     }
-    const root = outcome.state.cmds[0]
+    const root = outcome.state.cmds[0];
     if (!root) {
       // Grammar accepts a program consisting only of bare `;`
       // separators (or nothing at all).  `parseStmt`'s contract is
@@ -404,40 +489,59 @@ export function parserModuleForGrammar(
       // than an awkward optional root.
       return {
         status: "error",
-        errors: createParseErrorArray({ source: sql, filename: opts.filename }, [
-          {
-            message: "no SQL statement in input",
-            span: { offset: 0, length: 0, line: 1, col: 0 },
-          },
-        ]),
+        errors: createParseDiagnosticArray(
+          { source: sql, filename: opts.filename },
+          [
+            {
+              message: "no SQL statement in input",
+              span: { offset: 0, length: 0, line: 1, col: 0 },
+            },
+          ],
+        ),
         tokens: outcome.tokens,
-      }
+      };
     }
-    return { status: "ok", root, tail: outcome.tail, tokens: outcome.tokens }
+    return { status: "ok", root, tail: outcome.tail, tokens: outcome.tokens };
+  }
+
+  function parseStmtOrThrow(
+    sql: string,
+    opts: ParseStmtOptions = {},
+  ): ParseStmtOk {
+    const result = parseStmt(sql, opts);
+    if (result.status === "error") {
+      throw new Sqlite3ParserDiagnosticError(result.errors);
+    }
+    return result;
   }
 
   // Expose the tokenizer too so callers can inspect raw tokens for
   // syntax highlighting / diagnostics without running a full parse.
   return {
     parse,
+    parseOrThrow,
     parseStmt,
+    parseStmtOrThrow,
     tokenize: tk.tokenize,
     tokenName: tk.tokenName,
     createEngine,
     reduce,
     createState,
     withOptions: (newOptions: CreateParserOptions) =>
-      parserModuleForGrammar(parserDefs, keywordDefs, { ...options, ...newOptions }),
+      parserModuleForGrammar(parserDefs, keywordDefs, {
+        ...options,
+        ...newOptions,
+      }),
     parserDefs,
     keywordDefs,
-  }
+  };
 }
 
 function requireTokenId(
   parserDefs: Pick<ParserDefs<unknown, unknown>, "symbols">,
   name: string,
 ): TokenId {
-  const id = parserDefs.symbols.indexOf(name)
-  if (id < 0) throw new Error(`parser.ts: missing terminal token "${name}"`)
-  return id as TokenId
+  const id = parserDefs.symbols.indexOf(name);
+  if (id < 0) throw new Error(`parser.ts: missing terminal token "${name}"`);
+  return id as TokenId;
 }
