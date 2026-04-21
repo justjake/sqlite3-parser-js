@@ -2,11 +2,11 @@
 # Makefile for sqlite3-parser's version-parameterised build graph.
 #
 # The interesting targets are pattern rules over a `<version>` wildcard
-# (e.g. `3.54.0`) — invoke them with the version baked into the path:
+# (e.g. `3.53.0`) — invoke them with the version baked into the path:
 #
-#   make generated/3.54.0/parser.dev.json
-#   make generated/3.54.0/keywords.prod.json
-#   make build/lemon-3.54.0
+#   make generated/3.53.0/parser.dev.json
+#   make generated/3.53.0/keywords.prod.json
+#   make build/lemon-3.53.0
 #
 # The `bun run vendor <ref>` workflow calls this Makefile after it's
 # done the 3-way merge; running Make directly is useful for
@@ -46,7 +46,7 @@ GEN_TARGETS := \
 
 help:
 	@printf '%s\n' \
-	  'Pattern targets (substitute <ver> with a sqlite version like 3.54.0):' \
+	  'Pattern targets (substitute <ver> with a sqlite version like 3.53.0):' \
 	  '' \
 	  '  make generated/<ver>/parse.ts           # emitted runtime parser module' \
 	  '  make generated/<ver>/parser.dev.json    # full parser dump (for debugging / upgrade diff)' \
@@ -223,7 +223,7 @@ current: generated/current.ts
 # ---------------------------------------------------------------------------
 
 # Diff the grammar-shape stable keys between two parser.dev.json dumps.
-#   make diff-ast OLD=3.54.0 NEW=3.55.0
+#   make diff-ast OLD=3.53.0 NEW=3.55.0
 .PHONY: diff-ast
 diff-ast:
 	@test -n "$(OLD)" -a -n "$(NEW)" \
@@ -235,7 +235,7 @@ diff-ast:
 # Report which action-bearing rules were NOT exercised by the test
 # suite.  Expects tests to have written build/test/ast-coverage.json —
 # a JSON array of stable keys.
-#   make ast-coverage VER=3.54.0
+#   make ast-coverage VER=3.53.0
 .PHONY: ast-coverage
 ast-coverage:
 	@test -n "$(VER)" || { echo 'usage: make ast-coverage VER=<ver>'; exit 2; }

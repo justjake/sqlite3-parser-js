@@ -75,11 +75,11 @@ class WrappedParseError implements ParseError {
   }
 }
 
-export function toParseError(ctx: ParseErrorContext, diagnostic: Diagnostic): ParseError {
+export function createParseError(ctx: ParseErrorContext, diagnostic: Diagnostic): ParseError {
   return new WrappedParseError(ctx, diagnostic)
 }
 
-export function toParseErrors(
+export function createParseErrorArray(
   context: ParseErrorContext,
   diagnostics: readonly Diagnostic[],
 ): readonly ParseError[] {

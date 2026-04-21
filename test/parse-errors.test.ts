@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test"
 
 import { parserModuleForGrammar } from "../src/parser.ts"
-import { constants, tables, symbols, reduce, createState } from "../generated/3.54.0/parse.ts"
+import { constants, tables, symbols, reduce, createState } from "../generated/3.53.0/parse.ts"
 import type { KeywordDefs } from "../src/tokenize.ts"
-import keywordDefs from "../generated/3.54.0/keywords.prod.json" with { type: "json" }
+import keywordDefs from "../generated/3.53.0/keywords.prod.json" with { type: "json" }
 
 const mod = parserModuleForGrammar(
   { constants, tables, symbols, reduce, createState },

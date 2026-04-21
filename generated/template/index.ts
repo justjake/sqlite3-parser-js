@@ -22,6 +22,24 @@ export type * from "../../src/lempar"
 export type * from "../../src/errors"
 export type * from "../../src/ast/nodes"
 
+// Explicit public surface from src/errors.ts: types and the runtime
+// helpers for building, formatting, and rendering diagnostics.  Types
+// are already covered by `export type *` above; re-listing them here
+// documents the intended API and keeps a single point of truth for
+// the supported error-handling entry points.
+export {
+  type Diagnostic,
+  type DiagnosticHint,
+  type ParseError,
+  type ParseErrorContext,
+  type RenderCodeBlockOptions,
+  formatParseError,
+  toParseError,
+  toParseErrors,
+  lineColAt,
+  renderCodeBlock,
+} from "../../src/errors"
+
 /** The specific SQLite version this bundle was generated from. */
 export const SQLITE_VERSION = "__VERSION__" as const
 

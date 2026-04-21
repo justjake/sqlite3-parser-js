@@ -1,20 +1,20 @@
 {
   "manifestVersion": 2,
-  "current": "3.54.0",
+  "current": "3.53.0",
   "notes": "Every SQLite release we've ever patched is recorded here and preserved forever under vendor/patched/<version>/.  Our patches to tool/lemon.c and tool/mkkeywordhash.c add a `-J<path>` flag that writes a machine-readable JSON dump of the parser tables / keyword table.  Nothing else is modified.  The JS runtime consumes the *.prod.json files under generated/<version>/; the *.dev.json files are the un-slimmed originals kept for debugging.  See vendor/README.md for the update workflow and scripts/vendor.ts for the `bun run vendor <ref>` entry point.",
   "versions": {
-    "3.54.0": {
+    "3.53.0": {
       "addedAt": "2026-04-18",
-      "upstreamCommit": "8c6a6b85db408ebbea76fb67e4c3a2d5cb656665",
+      "upstreamCommit": "4ebc7fdcf459e8d88eb5b019c2949bda86565528",
       "upstreamUrl": "https://sqlite.org/src/timeline",
       "jsonSchemaVersion": 1,
       "fileHashes": {
-        "patched/3.54.0/tool/lemon.c":         "b4de914b61cbce129eb01399aa50cf2a01ead405401cf0a3a4591be9c69cbe7e",
-        "patched/3.54.0/tool/mkkeywordhash.c": "4c69f550e5f340487b60bf9ad9c420711e03cf30ab714c59adf0dc0db9c94c9a",
-        "upstream/3.54.0/tool/lemon.c":        "4d754e12d4693a12c2ca2e02dd132dd251e6329ff2d8ae5874bf0d0fa58face6",
-        "upstream/3.54.0/tool/mkkeywordhash.c":"099f834d82274c1c4dd1a31fb7f2ad59cf1e71db30f5fd87772d2dfc70c35cae",
-        "upstream/3.54.0/tool/lempar.c":       "72e998c9c61753acd8d3ee8f6b2057269669dae8aa1bb833c01d793f1a341498",
-        "upstream/3.54.0/src/parse.y":         "e91e0e0e308462d250aa98d3707575ec6c0ce0b252251d4414f90908ce4e8510"
+        "patched/3.53.0/tool/lemon.c":         "b4de914b61cbce129eb01399aa50cf2a01ead405401cf0a3a4591be9c69cbe7e",
+        "patched/3.53.0/tool/mkkeywordhash.c": "4c69f550e5f340487b60bf9ad9c420711e03cf30ab714c59adf0dc0db9c94c9a",
+        "upstream/3.53.0/tool/lemon.c":        "4d754e12d4693a12c2ca2e02dd132dd251e6329ff2d8ae5874bf0d0fa58face6",
+        "upstream/3.53.0/tool/mkkeywordhash.c":"099f834d82274c1c4dd1a31fb7f2ad59cf1e71db30f5fd87772d2dfc70c35cae",
+        "upstream/3.53.0/tool/lempar.c":       "4d82ab5091eda68963791599ab8635ad82e5bbb2de33f1ee5217b72c9659915a",
+        "upstream/3.53.0/src/parse.y":         "e91e0e0e308462d250aa98d3707575ec6c0ce0b252251d4414f90908ce4e8510"
       }
     }
   }

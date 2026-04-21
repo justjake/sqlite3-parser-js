@@ -122,7 +122,7 @@ function writeManifest(m: Manifest): void {
   writeFileSync(MANIFEST, JSON.stringify(m, null, 2) + "\n")
 }
 
-/** `compareVersions('3.54.0', '3.55.1')` → -1 */
+/** `compareVersions('3.53.0', '3.55.1')` → -1 */
 function compareVersions(a: string, b: string): number {
   const pa = a.split(".").map((n) => parseInt(n, 10))
   const pb = b.split(".").map((n) => parseInt(n, 10))

@@ -29,7 +29,7 @@
 //
 // NO JSON FILES SHIP with the package.  The prod dumps are inlined
 // into the bundled JS, so a consumer doing
-// `import { PARSER_DUMP } from 'sqlite3-parser/sqlite-3.54.0'` gets
+// `import { PARSER_DUMP } from 'sqlite3-parser/sqlite-3.53.0'` gets
 // the same bytes that would have sat on disk.  The dev dumps (with
 // rule action C source, full symbol metadata, etc.) aren't shipped
 // at all — developers who need them can clone the repo and regenerate
@@ -81,7 +81,7 @@ function log(msg: string): void {
 
 /**
  * List every `generated/<version>/` that looks like a version dir.
- * The version dirs start with a digit (e.g. `3.54.0`); other children
+ * The version dirs start with a digit (e.g. `3.53.0`); other children
  * of generated/ — `current.ts`, `json-schema/` — are not versions.
  */
 function discoverVersions(): string[] {

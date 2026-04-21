@@ -12,7 +12,7 @@
 *************************************************************************
 ** This is the TypeScript-targeted fork of SQLite's Lemon grammar.
 **
-** The rule shape follows upstream parse.y (3.54.0) and the Rust
+** The rule shape follows upstream parse.y (3.53.0) and the Rust
 ** port at https://github.com/gwenn/lemon-rs; action bodies construct
 ** values from src/ast/nodes.ts instead of SQLite's internal IR.
 **

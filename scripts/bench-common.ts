@@ -4,8 +4,8 @@
 // the benchmarks exercise the in-repo parser implementation without
 // depending on the package wrapper layer.
 
-import keywordDefsJson from "../generated/3.54.0/keywords.prod.json" with { type: "json" }
-import * as parserDefs from "../generated/3.54.0/parse.ts"
+import keywordDefsJson from "../generated/3.53.0/keywords.prod.json" with { type: "json" }
+import * as parserDefs from "../generated/3.53.0/parse.ts"
 import { parserModuleForGrammar } from "../src/parser.ts"
 import type { KeywordDefs } from "../src/tokenize.ts"
 

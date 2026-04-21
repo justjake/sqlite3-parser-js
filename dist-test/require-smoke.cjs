@@ -1,5 +1,4 @@
 "use strict"
-
 ;(async () => {
   const pkg = await import("sqlite3-parser")
   const traversePkg = await import("sqlite3-parser/traverse")

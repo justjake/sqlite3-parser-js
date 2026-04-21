@@ -52,7 +52,9 @@
     "diff:ast": "bun scripts/diff-ast.ts",
     "coverage:ast": "bun scripts/ast-coverage.ts",
     "bench": "bun scripts/bench.ts",
-    "bench:compare": "make liteparser-wasm && bun scripts/bench-compare.ts"
+    "bench:compare": "make liteparser-wasm && bun scripts/bench-compare.ts",
+    "dist-test": "bun scripts/dist-test.ts",
+    "dist-test:build": "bun scripts/dist-test.ts --build"
   },
   "devDependencies": {
     "@appland/sql-parser": "^1.5.1",

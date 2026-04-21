@@ -239,7 +239,7 @@ function emitParserDefs(dump: RawDump): string {
   lines.push("")
 
   // Emit each large table as a compact comma-separated array.  Readability
-  // over size here — the file is roughly 50-60KB for 3.54.0, which is
+  // over size here — the file is roughly 50-60KB for 3.53.0, which is
   // fine since it's a build output.
   const packArr = (name: string, ty: string, xs: readonly number[]): string => {
     const chunks: string[] = []

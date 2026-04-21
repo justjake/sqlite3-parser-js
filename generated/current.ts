@@ -4,4 +4,4 @@
 // To depend on a specific version, import from the versioned subpath
 // instead: `sqlite3-parser/sqlite-<version>`.
 
-export * from "./3.54.0/index"
+export * from "./3.53.0/index"
