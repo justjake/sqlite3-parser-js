@@ -102,11 +102,6 @@ export type ParseOptions = TokenizeOptions & {
    * tail.  Populated on both `"ok"` and `"error"` results.
    */
   emitTokens?: boolean
-  /**
-   * When `true`, throw a `Sqlite3ParserDiagnosticError` if the parse fails.
-   * Defaults to `false`.
-   */
-  throw?: boolean
 }
 
 /** Options for {@link ParserModule.parseStmt}. */
@@ -124,7 +119,7 @@ export type ParseStmtOptions = ParseOptions & {
 }
 
 /**
- * SQlite3 Parser library.
+ * SQLite3 Parser library.
  */
 export interface ParserModule {
   /** Parse a SQL string into an AST. */

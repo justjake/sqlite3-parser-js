@@ -29,7 +29,7 @@ export class Sqlite3ParserError extends Error {
   }
 }
 
-/** Error thrown when `parse(sql, { throw: true })` returns one or more diagnostics. */
+/** Error thrown by `parseOrThrow` / `parseStmtOrThrow` when the parse produces one or more diagnostics. */
 export class Sqlite3ParserDiagnosticError extends Sqlite3ParserError {
   /** Individual diagnostics that contributed to this error. */
   declare readonly errors: readonly ParseDiagnostic[]

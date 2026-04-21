@@ -2,7 +2,7 @@
 
 Parse SQLite query syntax.
 
-- **Fast**: 1.5x-200x faster than other JavasScript SQL parsers, see [benchmarks](#benchmarks).
+- **Fast**: 1.5x-200x faster than other JavaScript SQL parsers, see [benchmarks](#benchmarks).
 - **Light**: Pure JavaScript, no WebAssembly overhead. Ships ~32 KB gzipped and runs unchanged in Node, Bun, and the browser.
 - **Faithful**: The parser based on [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html) to emit [TypeScript code](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 - **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups with a pointer at the opener, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
