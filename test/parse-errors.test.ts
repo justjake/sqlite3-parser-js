@@ -65,3 +65,49 @@ describe("lexical diagnostics", () => {
     ])
   })
 })
+
+describe("error spans point at the offending token", () => {
+  test("syntax error span covers the bad token", () => {
+    const sql = "SELECT a, FROM t;"
+    const [error] = errored(sql).errors
+    // `FROM` is the trailing-clause-boundary that trips the diagnostic.
+    expect(error!.span.offset).toBe(sql.indexOf("FROM"))
+    expect(error!.span.length).toBe(4)
+    expect(sql.slice(error!.span.offset, error!.span.offset + error!.span.length)).toBe("FROM")
+  })
+
+  test("unmatched `)` span covers just the paren", () => {
+    const sql = "SELECT )"
+    const [error] = errored(sql).errors
+    expect(error!.span.offset).toBe(sql.indexOf(")"))
+    expect(error!.span.length).toBe(1)
+  })
+
+  test("illegal-token span covers the full unterminated lexeme", () => {
+    const sql = 'SELECT "abc'
+    const [error] = errored(sql).errors
+    const badStart = sql.indexOf('"')
+    expect(error!.span.offset).toBe(badStart)
+    expect(error!.span.length).toBe(sql.length - badStart)
+  })
+
+  test("line/col reflect multi-line input", () => {
+    // A 3-line script where the error token is on line 2.
+    const sql = "SELECT\n  ,\n  x"
+    const [error] = errored(sql).errors
+    expect(error!.span.line).toBe(2)
+    // The comma is at column 2 (0-based), after two spaces of indent.
+    expect(error!.span.col).toBe(2)
+  })
+
+  test("error format() renders the source caret under the bad token", () => {
+    const sql = "SELECT )"
+    const formatted = errored(sql).errors[0]!.format()
+    // Must contain the caret pointer directly under the `)`.
+    const lines = formatted.split("\n")
+    const gutterLine = lines.find((l) => l.includes("SELECT )"))
+    const caretLine = lines.find((l) => /^\s*│\s*\^+\s*$/.test(l))
+    expect(gutterLine).toBeDefined()
+    expect(caretLine).toBeDefined()
+  })
+})

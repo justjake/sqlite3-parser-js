@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
+      - name: Initialise liteparser submodule
+        # scripts/bench-compare.ts statically imports
+        # ../vendor/liteparser/wasm/src/index.ts, so tsc needs those
+        # files on disk.  The other vendored submodules (upstream
+        # SQLite, lemon-rs) aren't referenced by type-checked code.
+        run: git submodule update --init --depth=1 vendor/liteparser
+
       - name: Install mise tools
         uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
         with:

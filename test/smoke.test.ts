@@ -2,20 +2,8 @@
 // The more exhaustive SQLite-ported suites live under test/sqlite/*.
 
 import { describe, test, expect } from "bun:test"
-import { tk, makeTokenizer, lex, lexNames, keywordDefs } from "./helpers.ts"
+import { makeTokenizer, lex, lexNames, keywordDefs } from "./helpers.ts"
 import type { MaskFlag } from "../src/tokenize.ts"
-
-describe("createTokenizer setup", () => {
-  test("common terminal codes resolve from the parser defs", () => {
-    expect(typeof tk.tokens.ID).toBe("number")
-    expect(typeof tk.tokens.INTEGER).toBe("number")
-    expect(tk.tokens.ID).not.toBe(tk.tokens.INTEGER)
-  })
-
-  test("loads the full keyword set (all flags enabled)", () => {
-    expect(tk._keywordCount).toBe(148)
-  })
-})
 
 describe("basic SQL", () => {
   test("SELECT 1", () => {

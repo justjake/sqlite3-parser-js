@@ -208,11 +208,14 @@ describe("toSexpr — options", () => {
     )
   })
 
-  test("zero-width indent produces single-line output", () => {
-    const root = ast("SELECT 1")
-    const s = toSexpr(root, { indent: "" })
-    // Still multi-line — each node starts with \n — just with no indent padding.
-    expect(s.split("\n")).toHaveLength(6)
-    expect(s.startsWith("(CmdList\n(SelectStmt\n")).toBe(true)
+  test("zero-width indent drops indent padding but keeps per-node newlines", () => {
+    expect(toSexpr(ast("SELECT 1"), { indent: "" })).toBe(
+      `(CmdList
+(SelectStmt
+(Select
+(SelectFrom
+(ExprResultColumn
+(NumericLiteral :value "1"))))))`,
+    )
   })
 })
