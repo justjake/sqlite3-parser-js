@@ -20,7 +20,8 @@ import {
   CreateLalrEngine,
 } from "./lempar.ts"
 import { lineColAt, toParseErrors, type Diagnostic, type ParseError } from "./diagnostics.ts"
-import { buildIllegalTokenDiagnostic, enhanceParseError } from "./enhanceError.ts"
+import { bindSyntaxDiagnostics } from "./enhanceError.ts"
+import { buildIllegalTokenDiagnostic } from "./lexicalDiagnostics.ts"
 import type { CmdList } from "./ast/nodes.ts"
 import { finalizeCmdList } from "./ast/parseActions.ts"
 import type { ParseState } from "./ast/parseState.ts"
@@ -75,7 +76,7 @@ export interface ParserModule {
    */
   withOptions(opts: CreateParserOptions): ParserModule
   /** LALR parser definition. */
-  parserDefs: ParserDefs
+  parserDefs: ParserDefs<ParseState, unknown>
   /** SQLite keywords recognized by the tokenizer. */
   keywordDefs: KeywordDefs
 }
@@ -84,13 +85,14 @@ export interface ParserModule {
  * Create a Parser for the grammar specified by `parserDefs` and `keywordDefs`.
  */
 export function parserModuleForGrammar(
-  parserDefs: ParserDefs,
+  parserDefs: ParserDefs<ParseState, unknown>,
   keywordDefs: KeywordDefs,
   options: CreateParserOptions,
 ): ParserModule {
   const { reduce, createState } = parserDefs
   const tk = tokenizerModuleForGrammar(parserDefs, keywordDefs, options)
   const createEngine = engineModuleForGrammar(parserDefs)
+  const syntax = bindSyntaxDiagnostics(parserDefs, keywordDefs)
 
   const { COMMENT, ILLEGAL, SEMI, SPACE } = tk.tokens
   const EOF = 0 as TokenId
@@ -203,10 +205,9 @@ export function parserModuleForGrammar(
     // in case that ever changes. Engine input values are always Tokens.
     for (const e of session.errors) {
       diagnostics.push(
-        enhanceParseError({
+        syntax.unexpected({
           token: e.minor as Token,
           state: e.stateno,
-          defs: parserDefs,
           tokens: tokenStream,
           tokenIndex: e.tokenIndex,
         }),

@@ -73,11 +73,8 @@ const ObjNameKeys = ["objName"] as const
 const SizeKeys = ["size"] as const
 
 export const VisitorKeys: VisitorKeyMap = {
-  // Commands.
+  // Top-level.
   CmdList: ["cmds"],
-  ExplainCmd: StmtKeys,
-  ExplainQueryPlanCmd: StmtKeys,
-  StmtCmd: StmtKeys,
 
   // Statements.
   AlterTableStmt: ["tblName", "body"],
@@ -96,6 +93,7 @@ export const VisitorKeys: VisitorKeyMap = {
   DropTableStmt: ["tblName"],
   DropTriggerStmt: ["triggerName"],
   DropViewStmt: ["viewName"],
+  ExplainStmt: StmtKeys,
   InsertStmt: ["with", "tblName", "columns", "body", "returning"],
   PragmaStmt: ["name", "body"],
   ReindexStmt: ObjNameKeys,
@@ -123,11 +121,9 @@ export const VisitorKeys: VisitorKeyMap = {
   WhenThen: ["when", "then"],
   CastExpr: ["expr", "typeName"],
   CollateExpr: ExprKeys,
-  DoublyQualifiedExpr: ["schema", "table", "column"],
   ExistsExpr: SelectKeys,
   FunctionCallExpr: ["name", "args", "orderBy", "filterOver"],
   FunctionCallStarExpr: ["name", "filterOver"],
-  IdExpr: ["id"],
   InListExpr: ["lhs", "rhs"],
   InSelectExpr: ["lhs", "rhs"],
   InTableExpr: ["lhs", "rhs", "args"],
@@ -136,7 +132,7 @@ export const VisitorKeys: VisitorKeyMap = {
   NameExpr: NameKeys,
   NotNullExpr: ExprKeys,
   ParenthesizedExpr: ["exprs"],
-  QualifiedExpr: ["table", "column"],
+  QualifiedExpr: ["schema", "table", "column"],
   RaiseExpr: ["message"],
   SubqueryExpr: SelectKeys,
   UnaryExpr: ExprKeys,

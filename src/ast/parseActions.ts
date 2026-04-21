@@ -47,7 +47,6 @@ import type {
   ValuesRow,
   WindowDef,
   With,
-  Cmd,
   CmdList,
 } from "./nodes.ts"
 import type { Span, Token } from "../tokenize.ts"
@@ -281,8 +280,6 @@ export const mkParenthesized = (e: Expr, span: Span): Expr => ({
   exprs: [e],
   span,
 })
-
-export const mkIdExpr = (t: Token, span: Span): Expr => ({ kind: "IdExpr", id: mkId(t), span })
 
 export const mkVariableExpr = (t: Token): Expr => ({
   kind: "VariableExpr",
@@ -790,13 +787,15 @@ export function mkUpsertIndex(
 export function flushCmd(state: ParseState): void {
   const stmt = state.stmt
   if (stmt === undefined) return
-  const span = stmt.span
-  const cmd: Cmd =
-    state.explain === "Explain"
-      ? { kind: "ExplainCmd", stmt, span }
-      : state.explain === "QueryPlan"
-        ? { kind: "ExplainQueryPlanCmd", stmt, span }
-        : { kind: "StmtCmd", stmt, span }
+  const cmd: Stmt =
+    state.explain === undefined
+      ? stmt
+      : {
+          kind: "ExplainStmt",
+          queryPlan: state.explain === "QueryPlan",
+          stmt,
+          span: stmt.span,
+        }
   state.cmds.push(cmd)
   state.stmt = undefined
   state.explain = undefined

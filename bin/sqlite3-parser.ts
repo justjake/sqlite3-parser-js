@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 // sqlite3-parser — developer CLI for parsing a SQL string and dumping
-// the CST (or the enhanced error diagnostic) to stdout.  Handy for
+// the AST (or user-facing error diagnostics) to stdout.  Handy for
 // poking at grammar edge cases without writing a throwaway script.
 //
 //   sqlite3-parser "SELECT 1"
@@ -12,8 +12,8 @@
 // (`import { parse } from 'sqlite3-parser'`) in real code.  This CLI
 // is pinned to whatever `vendor/manifest.json` marks as `current`.
 
-import { parse, formatCst, withOptions } from "../generated/current.ts"
-import type { ParseError } from "../src/enhanceError.ts"
+import { parse, withOptions } from "../generated/current.ts"
+import { toSexpr } from "../src/ast/printer.ts"
 
 interface CliOptions {
   pretty: boolean
@@ -24,7 +24,7 @@ interface CliOptions {
 function usage(): string {
   return (
     'usage: sqlite3-parser [--pretty] [--digit-separator <char>] ["<sql>"]\n' +
-    "  --pretty             Print the CST as indented S-expressions instead of JSON.\n" +
+    "  --pretty             Print the AST as indented S-expressions instead of JSON.\n" +
     "  --digit-separator    Single-char separator for numeric literals\n" +
     '                       (default: disabled; pass "_" for sqlite 3.45+ behaviour).\n' +
     "  <sql>                SQL string to parse.  If omitted, read from stdin."
@@ -69,10 +69,6 @@ async function readSql(parts: string[]): Promise<string> {
   process.exit(2)
 }
 
-function formatError(e: ParseError): string {
-  return e.getMessage()
-}
-
 const cli = parseCli(process.argv.slice(2))
 const sql = await readSql(cli.sqlParts)
 const result =
@@ -80,13 +76,10 @@ const result =
     ? withOptions({ digitSeparator: cli.digitSeparator }).parse(sql)
     : parse(sql)
 
-for (const err of result.errors) {
-  console.error(formatError(err))
+if (result.status === "errored") {
+  for (const err of result.errors) console.error(err.format())
+  process.exit(1)
 }
 
-if (result.cst) {
-  if (cli.pretty) console.log(formatCst(result.cst))
-  else console.log(JSON.stringify(result.cst, null, 2))
-}
-
-process.exit(result.errors.length > 0 ? 1 : 0)
+if (cli.pretty) console.log(toSexpr(result.ast))
+else console.log(JSON.stringify(result.ast, null, 2))

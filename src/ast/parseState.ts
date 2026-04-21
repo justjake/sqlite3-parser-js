@@ -5,7 +5,15 @@
 // `src/tokenize.ts`. Shared diagnostics live in `src/diagnostics.ts`.
 
 import type { Diagnostic } from "../diagnostics.ts"
-import type { Cmd, ExplainKind, Name, Stmt } from "./nodes.ts"
+import type { Name, Stmt } from "./nodes.ts"
+
+/**
+ * Explain prefix tracked on {@link ParseState} between the `explain`
+ * reduction and the subsequent `ecmd ::= explain cmdx SEMI` flush.
+ * Consumed by `flushCmd` to decide whether to wrap the pending
+ * statement in an `ExplainStmt`.
+ */
+export type ExplainKind = "Explain" | "QueryPlan"
 
 /**
  * Parser session state.  One instance per parse; threaded through every
@@ -18,8 +26,8 @@ export interface ParseState {
   /**
    * The statement currently being built by the active `cmd ::= …` rule.
    * `flushCmd` reads it (together with `explain`) at each `ecmd ::= … SEMI`
-   * reduction, wraps it into a {@link Cmd}, pushes it onto `cmds`, and
-   * clears this slot for the next statement.
+   * reduction, optionally wraps it in an `ExplainStmt`, pushes it onto
+   * `cmds`, and clears this slot for the next statement.
    */
   stmt: Stmt | undefined
   /**
@@ -28,11 +36,11 @@ export interface ParseState {
    */
   explain: ExplainKind | undefined
   /**
-   * Accumulated, reduced commands in source order.  Each `ecmd ::= cmdx
-   * SEMI` (and its explain-prefixed twin) runs `flushCmd`, which converts
-   * the pending `stmt` into a {@link Cmd} and pushes it here.
+   * Accumulated, reduced statements in source order.  Each `ecmd ::=
+   * cmdx SEMI` (and its explain-prefixed twin) runs `flushCmd`, which
+   * pushes the pending `stmt` (optionally `ExplainStmt`-wrapped) here.
    */
-  cmds: Cmd[]
+  cmds: Stmt[]
   /** Scratch slot holding the current CREATE TABLE constraint name. */
   constraintName: Name | undefined
   /** Accumulated virtual-table module args (one per vtabarg). */
@@ -52,12 +60,12 @@ export interface ParseState {
 
 /**
  * Result returned by the AST parser's `parseTokens` driver.  Combines
- * the parsed {@link Cmd} (or `undefined` if the parse didn't reach
+ * the parsed {@link Stmt} (or `undefined` if the parse didn't reach
  * accept) with both syntactic errors (pushed in by the LalrEngine
  * wrapper) and semantic errors (pushed by reducer actions).
  */
 export interface ParseResult {
-  readonly cmd: Cmd | undefined
+  readonly cmd: Stmt | undefined
   readonly errors: readonly Diagnostic[]
 }
 

@@ -61,9 +61,9 @@
 //
 %include {
 import type {
-  AlterTableBody, As, Cmd, ColFlags, ColumnConstraint, ColumnDefinition,
+  AlterTableBody, As, ColFlags, ColumnConstraint, ColumnDefinition,
   CommonTableExpr, CompoundOperator, CompoundSelect, CreateTableBody,
-  DeferSubclause, DistinctNames, Distinctness, Expr, ExplainKind,
+  DeferSubclause, DistinctNames, Distinctness, Expr,
   FrameBound, FrameClause, FrameExclude, FrameMode, FromClause,
   FunctionCallOrder, FunctionTail, Id, Indexed, IndexedColumn,
   InitDeferredPred, InsertBody, JoinConstraint, JoinOperator, JoinType,
@@ -79,7 +79,7 @@ import type { Span, Token } from "../../../src/tokenize.ts";
 import type { ParseState } from "../../../src/ast/parseState.ts";
 import type { FromClauseMut } from "../../../src/ast/parseActions.ts";
 import {
-  mkName, mkId, mkIdExpr, mkVariableExpr,
+  mkName, mkId, mkVariableExpr,
   literalFromCtimeKw, mkNullLiteral, mkStringLiteral, mkBlobLiteral,
   mkNumericLiteral, mkKeywordLiteral,
   likeOperatorFromToken, binaryOperatorFromToken, unaryOperatorFromToken, ptrOperatorFromToken,
@@ -329,7 +329,7 @@ ccons(A) ::= DEFAULT MINUS term(X). {
   state.constraintName = undefined;
 }
 ccons(A) ::= DEFAULT id(X). {
-  A = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "DefaultColumnConstraint", expr: mkIdExpr(X, nodeSpan()), span: nodeSpan() }, span: nodeSpan() };
+  A = { kind: "NamedColumnConstraint", name: state.constraintName, constraint: { kind: "DefaultColumnConstraint", expr: mkId(X), span: nodeSpan() }, span: nodeSpan() };
   state.constraintName = undefined;
 }
 
@@ -824,10 +824,10 @@ idlist(A) ::= nm(Y).                  { A = [Y]; }
 
 expr(A) ::= term(A).
 expr(A) ::= LP expr(X) RP.        { A = mkParenthesized(X, nodeSpan()); }
-expr(A) ::= idj(X).               { A = mkIdExpr(X, nodeSpan()); }
-expr(A) ::= nm(X) DOT nm(Y).      { A = { kind: "QualifiedExpr",        table: X, column: Y, span: nodeSpan() };               }
+expr(A) ::= idj(X).               { A = mkId(X); }
+expr(A) ::= nm(X) DOT nm(Y).      { A = { kind: "QualifiedExpr", schema: undefined, table: X, column: Y, span: nodeSpan() }; }
 expr(A) ::= nm(X) DOT nm(Y) DOT nm(Z). {
-  A = { kind: "DoublyQualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() };
+  A = { kind: "QualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() };
 }
 term(A) ::= NULL(X).              { A = mkNullLiteral(X); }
 term(A) ::= BLOB(X).              { A = mkBlobLiteral(X); }

@@ -582,8 +582,8 @@ const DEFAULT_DIGIT_SEPARATOR = ""
  * Build a tokenizer bound to a particular sqlite checkout's parser+
  * keyword dumps.  See the `Tokenizer` interface for the returned shape.
  */
-export function tokenizerModuleForGrammar(
-  parserDefs: ParserDefs,
+export function tokenizerModuleForGrammar<Ctx, V>(
+  parserDefs: ParserDefs<Ctx, V>,
   keywordDefs: KeywordDefs,
   opts: CreateTokenizerOptions = {},
 ): Tokenizer {

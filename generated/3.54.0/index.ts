@@ -13,7 +13,7 @@
 
 import { ParserModule, parserModuleForGrammar } from "../../src/parser"
 import type { KeywordDefs } from "../../src/tokenize"
-import * as _parserDefs from "./reduce"
+import * as _parserDefs from "./parse"
 import * as _keywordDefs from "./keywords.prod.json" with { type: "json" }
 
 export type * from "../../src/parser"

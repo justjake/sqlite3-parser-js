@@ -43,7 +43,6 @@ import { makeParseState } from "../../src/ast/parseState.ts"
 import type {
   AlterTableBody,
   As,
-  Cmd,
   ColFlags,
   ColumnConstraint,
   ColumnDefinition,
@@ -55,7 +54,6 @@ import type {
   DistinctNames,
   Distinctness,
   Expr,
-  ExplainKind,
   FrameBound,
   FrameClause,
   FrameExclude,
@@ -119,7 +117,6 @@ import type { FromClauseMut } from "../../src/ast/parseActions.ts"
 import {
   mkName,
   mkId,
-  mkIdExpr,
   mkVariableExpr,
   literalFromCtimeKw,
   mkNullLiteral,
@@ -2286,11 +2283,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       A = {
         kind: "NamedColumnConstraint",
         name: state.constraintName,
-        constraint: {
-          kind: "DefaultColumnConstraint",
-          expr: mkIdExpr(X, nodeSpan()),
-          span: nodeSpan(),
-        },
+        constraint: { kind: "DefaultColumnConstraint", expr: mkId(X), span: nodeSpan() },
         span: nodeSpan(),
       }
       state.constraintName = undefined
@@ -3748,7 +3741,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // expr(A) ::= ?(X)
       const X = popped[0].minor as Token
       let A: Expr | undefined
-      A = mkIdExpr(X, nodeSpan())
+      A = mkId(X)
       return A
     }
     case 201: {
@@ -3756,7 +3749,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const X = popped[0].minor as Name
       const Y = popped[2].minor as Name
       let A: Expr | undefined
-      A = { kind: "QualifiedExpr", table: X, column: Y, span: nodeSpan() }
+      A = { kind: "QualifiedExpr", schema: undefined, table: X, column: Y, span: nodeSpan() }
       return A
     }
     case 202: {
@@ -3766,7 +3759,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       const Z = popped[4].minor as Name
       let A: Expr | undefined
 
-      A = { kind: "DoublyQualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() }
+      A = { kind: "QualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() }
       return A
     }
     case 203: {

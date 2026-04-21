@@ -6,7 +6,7 @@
 // an interface.  Bitflag types are `number` aliases with a companion
 // const object holding the bit masks.  `Option<T>` maps to `T | undefined`.
 //
-// The major unions — `Cmd`, `Stmt`, `Expr`, `ColumnConstraint`,
+// The major unions — `Stmt`, `Expr`, `ColumnConstraint`,
 // `TableConstraint`, `TriggerCmd` — expose every variant as a
 // separately exported interface named `<Variant><UnionName>` (e.g.
 // `AlterTableStmt`, `BetweenExpr`).  `Literal` is a named subset of
@@ -31,56 +31,15 @@
 import type { Span } from "../tokenize.ts"
 
 // ---------------------------------------------------------------------------
-// Top-level: command (EXPLAIN wrapper).
+// Top-level program: a list of statements separated by `;`.
 // ---------------------------------------------------------------------------
 
-/**
- * A series of SQL statement separated by `;`
- */
+/** A series of SQL statements separated by `;`. */
 export interface CmdList {
   readonly kind: "CmdList"
-  readonly cmds: readonly Cmd[]
+  readonly cmds: readonly Stmt[]
   readonly span: Span
 }
-
-/** Kind of EXPLAIN prefix, if any. */
-export type ExplainKind = "Explain" | "QueryPlan"
-
-/**
- * ```sql
- * EXPLAIN SELECT 1
- * ```
- */
-export interface ExplainCmd {
-  readonly kind: "ExplainCmd"
-  readonly stmt: Stmt
-  readonly span: Span
-}
-
-/**
- * ```sql
- * EXPLAIN QUERY PLAN SELECT 1
- * ```
- */
-export interface ExplainQueryPlanCmd {
-  readonly kind: "ExplainQueryPlanCmd"
-  readonly stmt: Stmt
-  readonly span: Span
-}
-
-/**
- * ```sql
- * SELECT 1
- * ```
- */
-export interface StmtCmd {
-  readonly kind: "StmtCmd"
-  readonly stmt: Stmt
-  readonly span: Span
-}
-
-/** A parsed top-level command: an optional EXPLAIN wrapper around a statement. */
-export type Cmd = ExplainCmd | ExplainQueryPlanCmd | StmtCmd
 
 // ---------------------------------------------------------------------------
 // Statements.  https://sqlite.org/syntax/sql-stmt.html
@@ -300,6 +259,21 @@ export interface DropViewStmt {
 }
 
 /**
+ * `EXPLAIN` / `EXPLAIN QUERY PLAN` prefix around a statement.
+ *
+ * ```sql
+ * EXPLAIN SELECT 1
+ * EXPLAIN QUERY PLAN SELECT 1
+ * ```
+ */
+export interface ExplainStmt {
+  readonly kind: "ExplainStmt"
+  readonly queryPlan: boolean
+  readonly stmt: Stmt
+  readonly span: Span
+}
+
+/**
  * ```sql
  * INSERT INTO tbl VALUES (1, 2)
  * ```
@@ -436,6 +410,7 @@ export type Stmt =
   | DropTableStmt
   | DropTriggerStmt
   | DropViewStmt
+  | ExplainStmt
   | InsertStmt
   | PragmaStmt
   | ReindexStmt
@@ -534,20 +509,6 @@ export interface CollateExpr {
 
 /**
  * ```sql
- * SELECT main.tbl.col FROM main.tbl
- *        ^^^^^^^^^^^^
- * ```
- */
-export interface DoublyQualifiedExpr {
-  readonly kind: "DoublyQualifiedExpr"
-  readonly schema: Name
-  readonly table: Name
-  readonly column: Name
-  readonly span: Span
-}
-
-/**
- * ```sql
  * SELECT EXISTS (SELECT 1 FROM t)
  *        ^^^^^^^^^^^^^^^^^^^^^^^^
  * ```
@@ -584,18 +545,6 @@ export interface FunctionCallStarExpr {
   readonly kind: "FunctionCallStarExpr"
   readonly name: Id
   readonly filterOver: FunctionTail | undefined
-  readonly span: Span
-}
-
-/**
- * ```sql
- * SELECT my_col FROM t
- *        ^^^^^^
- * ```
- */
-export interface IdExpr {
-  readonly kind: "IdExpr"
-  readonly id: Id
   readonly span: Span
 }
 
@@ -710,10 +659,16 @@ export interface ParenthesizedExpr {
  * ```sql
  * SELECT tbl.col FROM tbl
  *        ^^^^^^^
+ * SELECT main.tbl.col FROM main.tbl
+ *        ^^^^^^^^^^^^
  * ```
+ *
+ * `schema` is populated only for the three-part `schema.table.column`
+ * form; the two-part `table.column` form leaves it `undefined`.
  */
 export interface QualifiedExpr {
   readonly kind: "QualifiedExpr"
+  readonly schema: Name | undefined
   readonly table: Name
   readonly column: Name
   readonly span: Span
@@ -779,11 +734,10 @@ export type Expr =
   | CaseExpr
   | CastExpr
   | CollateExpr
-  | DoublyQualifiedExpr
   | ExistsExpr
   | FunctionCallExpr
   | FunctionCallStarExpr
-  | IdExpr
+  | Id
   | InListExpr
   | InSelectExpr
   | InTableExpr
@@ -2100,11 +2054,8 @@ export interface UnboundedPrecedingFrameBound {
  * Advanced users may inject new node shapes using TypeScript declaration merging.
  */
 export interface AstNodeMap {
-  // Commands
+  // Top-level
   CmdList: CmdList
-  ExplainCmd: ExplainCmd
-  ExplainQueryPlanCmd: ExplainQueryPlanCmd
-  StmtCmd: StmtCmd
 
   // Statements
   AlterTableStmt: AlterTableStmt
@@ -2123,6 +2074,7 @@ export interface AstNodeMap {
   DropTableStmt: DropTableStmt
   DropTriggerStmt: DropTriggerStmt
   DropViewStmt: DropViewStmt
+  ExplainStmt: ExplainStmt
   InsertStmt: InsertStmt
   PragmaStmt: PragmaStmt
   ReindexStmt: ReindexStmt
@@ -2140,11 +2092,9 @@ export interface AstNodeMap {
   WhenThen: WhenThen
   CastExpr: CastExpr
   CollateExpr: CollateExpr
-  DoublyQualifiedExpr: DoublyQualifiedExpr
   ExistsExpr: ExistsExpr
   FunctionCallExpr: FunctionCallExpr
   FunctionCallStarExpr: FunctionCallStarExpr
-  IdExpr: IdExpr
   InListExpr: InListExpr
   InSelectExpr: InSelectExpr
   InTableExpr: InTableExpr

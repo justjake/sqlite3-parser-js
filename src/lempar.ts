@@ -327,7 +327,7 @@ export interface CreateLalrEngine {
  * object per `engineModuleForGrammar()` call, which is fine because it
  * runs once per grammar at module load.
  */
-export function engineModuleForGrammar(defs: ParserDefs): CreateLalrEngine {
+export function engineModuleForGrammar<Ctx, V>(defs: ParserDefs<Ctx, V>): CreateLalrEngine {
   const K = defs.constants
   const T = defs.tables
   const yyFallback = T.yyFallback ?? []
