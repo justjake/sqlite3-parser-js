@@ -23,7 +23,7 @@ import {
   bindSyntaxDiagnostics,
   buildIllegalTokenDiagnostic,
   lineColAt,
-  toParseErrors,
+  createParseErrorArray,
   type Diagnostic,
   type ParseError,
 } from "./errors.ts"
@@ -155,7 +155,7 @@ export function parserModuleForGrammar(
         // cascades into noise.
         diagnostics.push(buildIllegalTokenDiagnostic(tok))
         diagnostics.push(...state.errors)
-        return { status: "errored", errors: toParseErrors(errorContext, diagnostics) }
+        return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
       }
 
       tokenStream.push(tok)
@@ -182,7 +182,7 @@ export function parserModuleForGrammar(
           },
         })
         diagnostics.push(...state.errors)
-        return { status: "errored", errors: toParseErrors(errorContext, diagnostics) }
+        return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
       }
 
       if (session.phase !== "running") break
@@ -241,14 +241,14 @@ export function parserModuleForGrammar(
     diagnostics.push(...state.errors)
 
     if (diagnostics.length > 0) {
-      return { status: "errored", errors: toParseErrors(errorContext, diagnostics) }
+      return { status: "errored", errors: createParseErrorArray(errorContext, diagnostics) }
     }
     if (session.phase === "accepted") {
       return { status: "accepted", ast: finalizeCmdList(state) }
     } else {
       return {
         status: "errored",
-        errors: toParseErrors(errorContext, [
+        errors: createParseErrorArray(errorContext, [
           {
             message: "parse did not accept input",
             span: { offset: 0, length: 0, line: 1, col: 0 },

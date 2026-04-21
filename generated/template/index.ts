@@ -34,8 +34,8 @@ export {
   type ParseErrorContext,
   type RenderCodeBlockOptions,
   formatParseError,
-  toParseError,
-  toParseErrors,
+  createParseError,
+  createParseErrorArray,
   lineColAt,
   renderCodeBlock,
 } from "../../src/errors"
