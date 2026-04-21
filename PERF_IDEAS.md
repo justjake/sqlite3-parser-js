@@ -51,13 +51,13 @@ slow path on every call).
 
 **Result (same 500µs profile, same inputs, same iteration counts):**
 
-| Input  | Before | After  | Speedup        |
-| ------ | -----: | -----: | -------------- |
-| TINY   | 1687ms |  903ms | **1.87×**      |
-| SMALL  | 2426ms | 1766ms | **1.37×**      |
-| MEDIUM | 3220ms | 2610ms | **1.23×**      |
-| LARGE  | 4100ms | 3436ms | **1.19×**      |
-| DEEP   | 3442ms | 3449ms | ~1.00×         |
+| Input  | Before |  After | Speedup   |
+| ------ | -----: | -----: | --------- |
+| TINY   | 1687ms |  903ms | **1.87×** |
+| SMALL  | 2426ms | 1766ms | **1.37×** |
+| MEDIUM | 3220ms | 2610ms | **1.23×** |
+| LARGE  | 4100ms | 3436ms | **1.19×** |
+| DEEP   | 3442ms | 3449ms | ~1.00×    |
 
 Total profile wall time: **15.09s → 12.35s (−18%)**. `generatorResume`
 (was 28.1% cumulative) and `defineProperties` (was 4.8% self — from the
