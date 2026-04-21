@@ -1,0 +1,91 @@
+// Shared helpers for benchmark scripts.
+//
+// These bind directly to the checked-in generated tables + reducer so
+// the benchmarks exercise the in-repo parser implementation without
+// depending on the package wrapper layer.
+
+import parserDefsJson from "../generated/3.54.0/parser.prod.json" with { type: "json" }
+import keywordDefsJson from "../generated/3.54.0/keywords.prod.json" with { type: "json" }
+import { createState, reduce } from "../generated/3.54.0/parse.ts"
+import { parserModuleForGrammar } from "../src/parser.ts"
+import type { KeywordDefs } from "../src/tokenize.ts"
+
+export const TINY = "SELECT 1;"
+
+export const SMALL =
+  "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT NOT NULL, email TEXT UNIQUE);"
+
+export const MEDIUM = `
+WITH active AS (
+  SELECT u.id, u.name, MAX(o.created_at) AS last_order
+  FROM users u
+  LEFT JOIN orders o ON o.user_id = u.id
+  WHERE o.status IN ('paid', 'shipped')
+  GROUP BY u.id, u.name
+)
+SELECT a.id,
+       a.name,
+       a.last_order,
+       ROW_NUMBER() OVER (ORDER BY a.last_order DESC) AS rn,
+       SUM(o.total) FILTER (WHERE o.status = 'paid') AS paid_total
+FROM active a
+LEFT JOIN orders o ON o.user_id = a.id
+WHERE a.last_order > date('now', '-30 days')
+GROUP BY a.id, a.name, a.last_order
+HAVING paid_total > 0
+ORDER BY a.last_order DESC
+LIMIT 100;
+`.trim()
+
+const LARGE_METRICS = Array.from({ length: 96 }, (_, i) => {
+  const suffix = String(i + 1).padStart(2, "0")
+  const notNull = i % 8 === 0 ? " NOT NULL" : ""
+  return `metric_${suffix} REAL${notNull}`
+}).join(",\n  ")
+
+export const LARGE = `
+CREATE TABLE analytics_events (
+  id INTEGER PRIMARY KEY,
+  account_id INTEGER NOT NULL,
+  event_name TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  payload TEXT,
+  ${LARGE_METRICS}
+);
+`.trim()
+
+// Error-path input: trailing comma before FROM. Exercises the hint
+// heuristics and renderCodeBlock-oriented diagnostics.
+export const BROKEN = "SELECT a,\n       b,\n       FROM t"
+
+const parserDefs = {
+  ...parserDefsJson,
+  symbols: parserDefsJson.symbols.map((symbol) => symbol.name),
+  reduce,
+  createState,
+}
+
+const parser = parserModuleForGrammar(parserDefs as any, keywordDefsJson as KeywordDefs, {})
+
+export const parse = parser.parse
+export const tokenize = parser.tokenize
+
+export function parseAccepted(sql: string) {
+  const result = parse(sql)
+  if (result.status !== "accepted") {
+    throw new Error(`expected parse success, got: ${formatErrors(result.errors)}`)
+  }
+  return result
+}
+
+export function parseErrored(sql: string) {
+  const result = parse(sql)
+  if (result.status !== "errored") {
+    throw new Error("expected parse errors, but parse succeeded")
+  }
+  return result.errors
+}
+
+function formatErrors(errors: readonly { message: string }[]): string {
+  return errors.map((error) => error.message).join("; ") || "unknown parse error"
+}
