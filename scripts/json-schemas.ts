@@ -4,31 +4,32 @@
 // Usage:
 //   bun scripts/json-schemas.ts <schema-name> <output-path>
 //
-// <schema-name> is one of SCHEMA_NAMES (parser.dev / parser.prod /
-// keywords.dev / keywords.prod).  Invoke once per schema.
+// <schema-name> is one of SCHEMA_NAMES (parser.dev / keywords.dev /
+// keywords.prod).  Invoke once per schema.
 //
 // Consumed by:
 //   * scripts/validate-json.ts — validates a defs against its schema.
-//   * scripts/slim-dump.ts     — uses the .prod schemas to slim dev dumps.
+//   * scripts/slim-dump.ts     — uses keywords.prod to slim the dev dump.
 //   * scripts/vendor.ts        — reads JSON_SCHEMA_VERSION for manifest.
 //
-// There are four schemas:
+// There are three schemas:
 //
 //   * parser.dev    — full parser defs emitted by tool/lemon.c -J<file>.
-//   * parser.prod   — slim parser defs (what the JS runtime reads).
+//                     The runtime parser reads from the emitted parse.ts
+//                     module (see scripts/emit-ts-parser.ts), NOT from
+//                     this JSON, so there is no parser.prod counterpart.
 //   * keywords.dev  — full keyword defs emitted by tool/mkkeywordhash.c -J<file>.
-//   * keywords.prod — slim keyword defs.
+//   * keywords.prod — slim keyword defs (what the tokenizer reads at runtime).
 //
-// DESIGN: both .dev schemas are intentionally EXACT and STRICT
+// DESIGN: the .dev schemas are intentionally EXACT and STRICT
 // (`additionalProperties: false` at every level).  They document the
 // complete shape emitted by our patched C tools.  Another project can
 // read these schemas to understand the defs format without reading the
 // C source, and can use them to drive code generation in any language.
 //
-// The .prod schemas are strict subsets of .dev describing just what the
-// JS runtime in src/lempar.ts and src/tokenize.ts needs at runtime;
-// scripts/slim-dump.ts transforms .dev dumps into .prod dumps by
-// walking the prod schema and dropping fields that aren't in it.
+// The keywords.prod schema is a strict subset of keywords.dev describing
+// just what the tokenizer needs at runtime; scripts/slim-dump.ts walks
+// it to slim the dev dump.
 //
 // If the C emitter changes the set of fields, bump JSON_SCHEMA_VERSION
 // and update the schemas here.  scripts/vendor.ts pins every vendored
@@ -41,16 +42,8 @@ import { dirname, join } from "node:path"
 
 import { PACKAGE_JSON, runScript } from "./utils.ts"
 
-// Runtime source-of-truth types.  The *.prod schemas below are locked
-// to these via the `matches<T>()` helper: any drift (schema field
-// added/removed, type widened/narrowed) becomes a TypeScript compile
-// error at the `matches<T>()(...)` call site.
+// Branded id types used in dev-schema field declarations below.
 import type {
-  ParserRhsPos,
-  ParserRule,
-  ParserSymbol,
-  ParserConstants,
-  ParserTables,
   RuleId as BrandedRuleId,
   SymbolId as BrandedSymbolId,
   TokenId as BrandedTokenId,
@@ -307,112 +300,6 @@ const ParserDevSchema = Strict({
 })
 
 // ===========================================================================
-// PARSER PROD SCHEMA — strict subset of .dev that the JS runtime reads.
-// Matches the interfaces declared in src/lempar.ts.  This is what
-// scripts/slim-dump.ts walks to produce *.prod.json from *.dev.json.
-// ===========================================================================
-
-const ParserProdConstants = matches<ParserConstants>()(
-  Strict({
-    YYNSTATE: Type.Integer(),
-    YYNRULE: Type.Integer(),
-    YYNTOKEN: Type.Integer(),
-    YYNSYMBOL: Type.Integer(),
-    YY_MAX_SHIFT: Type.Integer(),
-    YY_MIN_SHIFTREDUCE: Type.Integer(),
-    YY_MAX_SHIFTREDUCE: Type.Integer(),
-    YY_ERROR_ACTION: Type.Integer(),
-    YY_ACCEPT_ACTION: Type.Integer(),
-    YY_NO_ACTION: Type.Integer(),
-    YY_MIN_REDUCE: Type.Integer(),
-    YY_MAX_REDUCE: Type.Integer(),
-    YY_ACTTAB_COUNT: Type.Integer(),
-    YY_SHIFT_COUNT: Type.Integer(),
-    YY_REDUCE_COUNT: Type.Integer(),
-    YYWILDCARD: Type.Integer(),
-    YYFALLBACK: Type.Union([Type.Literal(0), Type.Literal(1)]),
-  }),
-)
-
-const ParserProdTables = matches<ParserTables>()(
-  Strict({
-    yy_action: Type.Array(Type.Integer()),
-    yy_lookahead: Type.Array(SymbolId),
-    yy_shift_ofst: Type.Array(Type.Integer()),
-    yy_reduce_ofst: Type.Array(Type.Integer()),
-    yy_default: Type.Array(Type.Integer()),
-    yyFallback: Type.Optional(Type.Array(TokenId)),
-    // Flat rule-info tables — counterparts of lempar.c:720 / 726.
-    // Derived from the dev `rules[]` by scripts/slim-dump.ts so the
-    // engine's reduce dispatch doesn't need to load full rule objects.
-    yyRuleInfoLhs: Type.Array(SymbolId),
-    yyRuleInfoNRhs: Type.Array(Type.Integer()),
-    // Per-state sorted array of terminal ids the grammar will shift
-    // from that state.  Precomputed by slim-dump.ts; consumed by
-    // src/errors.ts to render "expected: …" lists without
-    // scanning every terminal per error.
-    yy_expected: Type.Optional(Type.Array(Type.Array(TokenId))),
-  }),
-)
-
-// `id` is redundant with the symbol's array index and is stripped from
-// prod dumps.  Callers that need a SymbolId use the array position.
-const ParserProdSymbol = matches<ParserSymbol>()(
-  Strict({
-    name: Type.String(),
-    isTerminal: Type.Boolean(),
-  }),
-)
-
-// The multi-entry element shape lives inline on `ParserRhsPos.multi` in
-// src/lempar.ts; pull it out for the schema match.
-type ParserRhsPosMulti = NonNullable<ParserRhsPos["multi"]>[number]
-
-// The runtime resolves symbol names via the top-level `symbols[]` table
-// (see buildSymbolName in src/ast/dispatch.ts), so rhs positions carry
-// only the numeric ids.  Stripping the redundant names shaves ~18 KB raw
-// / ~1.7 KB gzipped per version from parser.prod.json.
-const ParserProdMultiEntry = matches<ParserRhsPosMulti>()(
-  Strict({
-    symbol: SymbolId,
-  }),
-)
-
-// `pos` is redundant with the RHS position's array index and is
-// stripped from prod dumps.
-const ParserProdRhsPos = matches<ParserRhsPos>()(
-  Strict({
-    symbol: Type.Optional(SymbolId),
-    multi: Type.Optional(Type.Array(ParserProdMultiEntry)),
-  }),
-)
-
-// `id` is redundant with the rule's array index; `nrhs` is redundant
-// with `rhs.length`.  Both stripped from prod dumps.
-const ParserProdRule = matches<ParserRule>()(
-  Strict({
-    lhs: SymbolId,
-    lhsName: Type.String(),
-    rhs: Type.Array(ParserProdRhsPos),
-    doesReduce: Type.Boolean(),
-  }),
-)
-
-// The JSON-serializable subset of `ParserDefs` (minus `reduce` /
-// `createState`, which are code), plus the `rules` table used by the
-// CST emitter / upgrade scripts.  `ParserDefs.symbols` is
-// `readonly string[]` at runtime (the names-only slim emitted by
-// `emit-ts-parser.ts`) but the JSON preserves the richer
-// `{name, isTerminal}` form for external tooling, so we can't
-// `matches<ParserDefs>()` this schema — we just assemble it directly.
-const ParserProdSchema = Strict({
-  constants: ParserProdConstants,
-  tables: ParserProdTables,
-  symbols: Type.Array(ParserProdSymbol),
-  rules: Type.Array(ParserProdRule),
-})
-
-// ===========================================================================
 // KEYWORDS DEV SCHEMA — mirrors tool/mkkeywordhash.c::dump_keywords_json.
 // ===========================================================================
 
@@ -526,7 +413,6 @@ const KeywordsProdSchema = matches<KeywordDefs>()(
 
 export const SCHEMAS = {
   "parser.dev": ParserDevSchema,
-  "parser.prod": ParserProdSchema,
   "keywords.dev": KeywordsDevSchema,
   "keywords.prod": KeywordsProdSchema,
 } as const

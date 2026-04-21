@@ -4,7 +4,7 @@
 # The interesting targets are pattern rules over a `<version>` wildcard
 # (e.g. `3.54.0`) — invoke them with the version baked into the path:
 #
-#   make generated/3.54.0/parser.prod.json
+#   make generated/3.54.0/parser.dev.json
 #   make generated/3.54.0/keywords.prod.json
 #   make build/lemon-3.54.0
 #
@@ -39,7 +39,7 @@ GEN_VERSIONS := $(notdir $(patsubst %/,%,$(wildcard vendor/patched/*/)))
 
 # The umbrella `gen` target only names the per-version `index.ts`
 # outputs + `current.ts`.  Make walks the dependency chain from there
-# (index.ts → parser.prod.json → parser.dev.json → build/lemon-<ver>).
+# (index.ts → parse.ts → parser.dev.json → build/lemon-<ver>).
 GEN_TARGETS := \
   $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts) \
   generated/current.ts
@@ -48,12 +48,11 @@ help:
 	@printf '%s\n' \
 	  'Pattern targets (substitute <ver> with a sqlite version like 3.54.0):' \
 	  '' \
-	  '  make generated/<ver>/parser.prod.json   # slim dump for bundling' \
+	  '  make generated/<ver>/parse.ts           # emitted runtime parser module' \
+	  '  make generated/<ver>/parser.dev.json    # full parser dump (for debugging / upgrade diff)' \
 	  '  make generated/<ver>/keywords.prod.json # slim keyword list' \
-	  '  make generated/<ver>/parser.dev.json    # full dump for debugging' \
 	  '  make generated/<ver>/keywords.dev.json  # full keyword list' \
 	  '  make generated/<ver>/index.ts           # per-version TS wrapper' \
-	  '  make generated/<ver>/parse.ts       # emitted AST-building parser' \
 	  '  make build/lemon-<ver>                  # patched lemon compiled' \
 	  '  make build/mkkeywordhash-<ver>          # patched mkkeywordhash' \
 	  '' \
@@ -110,7 +109,6 @@ JSON_SCHEMA_SOURCES := scripts/json-schemas.ts
 JSON_SCHEMA_DIR := generated/json-schema/v1
 JSON_SCHEMAS := \
   $(JSON_SCHEMA_DIR)/parser.dev.schema.json \
-  $(JSON_SCHEMA_DIR)/parser.prod.schema.json \
   $(JSON_SCHEMA_DIR)/keywords.dev.schema.json \
   $(JSON_SCHEMA_DIR)/keywords.prod.schema.json
 
@@ -175,17 +173,10 @@ generated/%/keywords.dev.json: build/mkkeywordhash-% \
 	bun run fmt $@
 
 # ---------------------------------------------------------------------------
-# Slim the dev dumps down to production variants.  Consumers that
-# bundle these should import the .prod.json paths; callers who want to
-# inspect rule metadata, action C code, etc. should use .dev.json.
+# Slim the keywords dev dump down to the runtime-read subset.  The
+# parser runtime reads its tables / symbols / reduce function from the
+# emitted parse.ts module, so there's no corresponding parser.prod.json.
 # ---------------------------------------------------------------------------
-generated/%/parser.prod.json: generated/%/parser.dev.json scripts/slim-dump.ts \
-    scripts/validate-json.ts \
-    generated/json-schema/v1/parser.prod.schema.json
-	bun scripts/slim-dump.ts $< $@
-	bun scripts/validate-json.ts parser.prod $@
-	bun run fmt $@
-
 generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.ts \
     scripts/validate-json.ts \
     generated/json-schema/v1/keywords.prod.schema.json
@@ -195,7 +186,8 @@ generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.
 
 # ---------------------------------------------------------------------------
 # Per-version TS wrapper.  Codegened from scripts/emit-version-modules.ts.
-# Depends on the prod dumps so the wrapper's JSON imports resolve.
+# Depends on the emitted parse.ts (runtime parser tables) and the slim
+# keywords prod dump so the wrapper's imports resolve.
 # ---------------------------------------------------------------------------
 VERSION_INDEX_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts)
 
@@ -205,7 +197,7 @@ VERSION_INDEX_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts)
 $(VERSION_INDEX_TS): generated/%/index.ts: \
     scripts/emit-version-modules.ts \
     generated/template/index.ts \
-    generated/%/parser.prod.json \
+    generated/%/parse.ts \
     generated/%/keywords.prod.json
 	bun scripts/emit-version-modules.ts version $* generated/template/index.ts > $@
 	bun run fmt $@

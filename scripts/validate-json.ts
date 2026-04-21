@@ -5,7 +5,7 @@
 //
 // Where <schema-name> is one of:
 //
-//   parser.dev, parser.prod, keywords.dev, keywords.prod
+//   parser.dev, keywords.dev, keywords.prod
 //
 // Exits 0 on success and 1 (with a list of validation errors) on
 // failure.  Used by the Makefile as a post-step on every target that

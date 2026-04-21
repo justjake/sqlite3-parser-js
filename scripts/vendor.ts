@@ -396,7 +396,7 @@ async function vendorMain(cli: CliOptions): Promise<void> {
   run(
     "make",
     [
-      `generated/${cli.ref}/parser.prod.json`,
+      `generated/${cli.ref}/parse.ts`,
       `generated/${cli.ref}/keywords.prod.json`,
       `generated/${cli.ref}/index.ts`,
       `generated/current.ts`,

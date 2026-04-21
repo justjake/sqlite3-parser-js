@@ -1,18 +1,20 @@
 #!/usr/bin/env -S bun run
-// Slim a parser.json or keywords.json defs down to only the fields
-// the JS runtime actually reads.  The Makefile wires this in as the
-// transformation `*.dev.json → *.prod.json`:
+// Slim a keywords.json defs down to only the fields the JS runtime
+// actually reads.  The Makefile wires this in as the transformation
+// `keywords.dev.json → keywords.prod.json`:
 //
-//     bun scripts/slim-dump.ts generated/<ver>/parser.dev.json \
-//                              generated/<ver>/parser.prod.json
 //     bun scripts/slim-dump.ts generated/<ver>/keywords.dev.json \
 //                              generated/<ver>/keywords.prod.json
 //
-// The set of kept fields is driven by the `.prod` JSON Schemas exported
-// from scripts/json-schemas.ts (which derive from src/lempar.ts and
-// src/tokenize.ts).  To start preserving a new runtime-read field: add
-// it to the relevant TypeBox type in scripts/json-schemas.ts — this
-// script will pick it up automatically.
+// The set of kept fields is driven by the `keywords.prod` JSON Schema
+// exported from scripts/json-schemas.ts (which derives from
+// src/tokenize.ts).  To start preserving a new runtime-read field:
+// add it to the TypeBox type there — this script picks it up
+// automatically.
+//
+// This file also exports `computeRuleInfo` and `computeYyExpected`,
+// which `scripts/emit-ts-parser.ts` uses to derive runtime tables from
+// the dev-dump `rules[]` / `tables.*` fields.
 
 import { readFileSync, writeFileSync } from "node:fs"
 import { gzipSync } from "node:zlib"
@@ -20,7 +22,7 @@ import { Clean } from "typebox/value"
 
 import { SCHEMAS, type SchemaName } from "./json-schemas.ts"
 import { runScript } from "./utils.ts"
-import type { ParserConstants, ParserDefs, ParserTables, SymbolId } from "../src/lempar.ts"
+import type { ParserConstants, ParserTables, SymbolId } from "../src/lempar.ts"
 
 // ---------------------------------------------------------------------------
 // Expected-terminal table.
@@ -85,12 +87,8 @@ export function computeYyExpected(
 // Detect kind by content shape so callers don't have to pass a flag.
 // ---------------------------------------------------------------------------
 function detectSchemaName(d: Record<string, unknown>): SchemaName {
-  if ("rules" in d && "tables" in d && "symbols" in d) return "parser.prod"
   if ("keywords" in d && "meta" in d) return "keywords.prod"
-  throw new Error(
-    "Unrecognised defs shape: expected either a parser.json (with rules/tables/symbols) " +
-      "or a keywords.json (with keywords/meta).",
-  )
+  throw new Error("Unrecognised defs shape: expected a keywords.json (with keywords/meta).")
 }
 
 // ---------------------------------------------------------------------------
@@ -124,24 +122,7 @@ await runScript(
     const defs = JSON.parse(inBytes.toString("utf8")) as Record<string, unknown>
     const schemaName = detectSchemaName(defs)
     // `Clean` returns `unknown`; the schema controls the resulting shape.
-    // For parser.prod dumps, splice in the computed `yy_expected` table
-    // so runtime diagnostics can render "expected: …" lists in O(|accepted|).
-    let finalized: unknown = Clean(SCHEMAS[schemaName], defs)
-    if (schemaName === "parser.prod") {
-      const parserDefs = finalized as ParserDefs & {
-        rules: readonly { lhs: SymbolId; rhs: readonly unknown[] }[]
-      }
-      const ruleInfo = computeRuleInfo(parserDefs.rules)
-      finalized = {
-        ...parserDefs,
-        tables: {
-          ...parserDefs.tables,
-          yyRuleInfoLhs: ruleInfo.yyRuleInfoLhs,
-          yyRuleInfoNRhs: ruleInfo.yyRuleInfoNRhs,
-          yy_expected: computeYyExpected(parserDefs.tables, parserDefs.constants),
-        },
-      }
-    }
+    const finalized: unknown = Clean(SCHEMAS[schemaName], defs)
 
     // Compact JSON — every saved byte counts when the defs dominates the bundle.
     const outText = JSON.stringify(finalized)

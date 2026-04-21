@@ -4,9 +4,8 @@
 // the benchmarks exercise the in-repo parser implementation without
 // depending on the package wrapper layer.
 
-import parserDefsJson from "../generated/3.54.0/parser.prod.json" with { type: "json" }
 import keywordDefsJson from "../generated/3.54.0/keywords.prod.json" with { type: "json" }
-import { createState, reduce } from "../generated/3.54.0/parse.ts"
+import * as parserDefs from "../generated/3.54.0/parse.ts"
 import { parserModuleForGrammar } from "../src/parser.ts"
 import type { KeywordDefs } from "../src/tokenize.ts"
 
@@ -58,14 +57,7 @@ CREATE TABLE analytics_events (
 // heuristics and renderCodeBlock-oriented diagnostics.
 export const BROKEN = "SELECT a,\n       b,\n       FROM t"
 
-const parserDefs = {
-  ...parserDefsJson,
-  symbols: parserDefsJson.symbols.map((symbol) => symbol.name),
-  reduce,
-  createState,
-}
-
-const parser = parserModuleForGrammar(parserDefs as any, keywordDefsJson as KeywordDefs, {})
+const parser = parserModuleForGrammar(parserDefs, keywordDefsJson as KeywordDefs, {})
 
 export const parse = parser.parse
 export const tokenize = parser.tokenize
