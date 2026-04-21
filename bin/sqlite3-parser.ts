@@ -13,7 +13,7 @@
 // is pinned to whatever `vendor/manifest.json` marks as `current`.
 
 import { parse, withOptions } from "../generated/current.ts"
-import { toSexpr } from "../src/traverse.ts"
+import { toSexpr } from "../src/ast/traverse.ts"
 
 interface CliOptions {
   pretty: boolean

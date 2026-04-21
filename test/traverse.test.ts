@@ -1,4 +1,4 @@
-// Unit tests for the AST traversal API in `src/traverse.ts`.
+// Unit tests for the AST traversal API in `src/ast/traverse.ts`.
 // Covers the enter/leave visitor pair, per-type `nodes` dispatch, the
 // "skip" / "break" control signals, and the `keys` override that
 // replaces `VisitorKeys[type]` for a specific parse.
@@ -6,7 +6,7 @@
 import { describe, expect, test } from "bun:test"
 
 import { parse } from "../generated/current.ts"
-import { traverse, VisitorKeys, type Visitor } from "../src/traverse.ts"
+import { traverse, VisitorKeys, type Visitor } from "../src/ast/traverse.ts"
 import type { AstNode } from "../src/ast/nodes.ts"
 
 function ast(sql: string): AstNode {

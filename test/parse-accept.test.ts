@@ -11,7 +11,7 @@
 import { describe, expect, test } from "bun:test"
 
 import { parse } from "../generated/current.ts"
-import { toSexpr } from "../src/traverse.ts"
+import { toSexpr } from "../src/ast/traverse.ts"
 import type { AstNode, CmdList } from "../src/ast/nodes.ts"
 
 function accepted(sql: string): CmdList {

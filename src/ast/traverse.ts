@@ -1,4 +1,4 @@
-// Depth-first walker over the SQLite AST defined in `./ast/nodes.ts`.
+// Depth-first walker over the SQLite AST defined in `./nodes.ts`.
 //
 // Shape and semantics follow the ESTree family (`estraverse`,
 // `eslint-visitor-keys`) so that downstream code — and eventually
@@ -6,7 +6,7 @@
 // a familiar `VisitorKeys` map plus enter/leave callbacks.  Node
 // discriminator is `type: string`, matching ESTree.
 
-import type { AstNode, AstNodeMap } from "./ast/nodes.ts"
+import type { AstNode, AstNodeMap } from "./nodes.ts"
 
 // ---------------------------------------------------------------------------
 // Type-level plumbing.

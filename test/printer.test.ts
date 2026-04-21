@@ -7,7 +7,7 @@
 import { describe, expect, test } from "bun:test"
 
 import { parse } from "../generated/current.ts"
-import { toSexpr } from "../src/traverse.ts"
+import { toSexpr } from "../src/ast/traverse.ts"
 import type { AstNode } from "../src/ast/nodes.ts"
 
 /** Parse `sql`, fail the test if the parser didn't accept, return the AST. */

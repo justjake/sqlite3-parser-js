@@ -21,6 +21,7 @@ export type * from "../../src/tokenize"
 export type * from "../../src/lempar"
 export type * from "../../src/errors"
 export type * from "../../src/ast/nodes"
+export * from "../../src/ast/traverse"
 
 // Explicit public surface from src/errors.ts: types and the runtime
 // helpers for building, formatting, and rendering diagnostics.  Types

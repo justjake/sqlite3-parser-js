@@ -22,8 +22,8 @@
 //   │       │                      `KEYWORDS_DUMP` named exports.
 //   │       └── index.d.ts         types
 //   ├── src/
-//   │   ├── traverse.js            public helper entry for `/traverse`
-//   │   ├── traverse.d.ts          types
+//   │   ├── ast/traverse.js        public helper entry for `/traverse`
+//   │   ├── ast/traverse.d.ts      types
 //   │   └── *.d.ts                 other source declarations
 //   └── chunk-*.js                 shared chunks (bun's splitting)
 //
@@ -73,7 +73,7 @@ const DIST = join(ROOT, "dist")
  * Paths are relative to BIN; outputs land at dist/bin/<name>.js.
  */
 const BIN_ENTRIES = ["sqlite3-parser.ts", "sqlite3-tokenizer.ts"]
-const SRC_ENTRIES = ["traverse.ts"]
+const SRC_ENTRIES = ["ast/traverse.ts"]
 
 function log(msg: string): void {
   console.log(`[build] ${msg}`)
