@@ -1,6 +1,6 @@
 // Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
-exports[`README.md code blocks README.md:15 (ts) 1`] = `
+exports[`README.md code blocks Usage #1 (ts) 1`] = `
 {
   "stderr": [],
   "stdout": [
@@ -12,7 +12,7 @@ exports[`README.md code blocks README.md:15 (ts) 1`] = `
 }
 `;
 
-exports[`README.md code blocks README.md:37 (ts) 1`] = `
+exports[`README.md code blocks Usage #2 (ts) 1`] = `
 {
   "stderr": [
     
@@ -30,7 +30,7 @@ At 1:45:
 }
 `;
 
-exports[`README.md code blocks README.md:67 (ts) 1`] = `
+exports[`README.md code blocks Usage #3 (ts) 1`] = `
 {
   "stderr": [],
   "stdout": [
@@ -41,18 +41,7 @@ exports[`README.md code blocks README.md:67 (ts) 1`] = `
 }
 `;
 
-exports[`README.md code blocks README.md:76 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "SelectStmt",
-    "10",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:90 (ts) 1`] = `
+exports[`README.md code blocks Errors #1 (ts) 1`] = `
 {
   "stderr": [],
   "stdout": [],
@@ -60,7 +49,7 @@ exports[`README.md code blocks README.md:90 (ts) 1`] = `
 }
 `;
 
-exports[`README.md code blocks README.md:118 (ts) 1`] = `
+exports[`README.md code blocks Errors #2 (ts) 1`] = `
 {
   "stderr": [
     
@@ -78,7 +67,7 @@ At 1:7:
 }
 `;
 
-exports[`README.md code blocks README.md:143 (ts) 1`] = `
+exports[`README.md code blocks Errors #3 (ts) 1`] = `
 {
   "stderr": [
     "1",
@@ -98,211 +87,7 @@ At 1:7:
 }
 `;
 
-exports[`README.md code blocks README.md:167 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "[ "t" ]",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:39 (ts) 1`] = `
-{
-  "stderr": [
-    
-"expected end of input after single statement
-
-At 1:45:
-   1│ SELECT id, name FROM users WHERE active = 1; SELECT 1
-    │                                              ^^^^^^^^"
-,
-  ],
-  "stdout": [
-    "SelectStmt",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:69 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "CmdList",
-    "SelectStmt",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:78 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "SelectStmt",
-    "10",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:94 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:122 (ts) 1`] = `
-{
-  "stderr": [
-    
-"near "FROM": syntax error
-
-At 1:7:
-   1│ SELECT FROM users
-    │        ^^^^
-
-  hint: expected a result expression before FROM"
-,
-  ],
-  "stdout": [],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:149 (ts) 1`] = `
-{
-  "stderr": [
-    "1",
-    "near "FROM": syntax error",
-    
-"near "FROM": syntax error
-
-At 1:7:
-   1│ SELECT FROM users
-    │        ^^^^
-
-  hint: expected a result expression before FROM"
-,
-  ],
-  "stdout": [],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:175 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "[ "t" ]",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:18 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "2",
-    "InsertStmt",
-    "SelectStmt",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:42 (ts) 1`] = `
-{
-  "stderr": [
-    
-"expected end of input after single statement
-
-At 1:45:
-   1│ SELECT id, name FROM users WHERE active = 1; SELECT 1
-    │                                              ^^^^^^^^"
-,
-  ],
-  "stdout": [
-    "SelectStmt",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:72 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "CmdList",
-    "SelectStmt",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:81 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [
-    "SelectStmt",
-    "10",
-  ],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:97 (ts) 1`] = `
-{
-  "stderr": [],
-  "stdout": [],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:125 (ts) 1`] = `
-{
-  "stderr": [
-    
-"near "FROM": syntax error
-
-At 1:7:
-   1│ SELECT FROM users
-    │        ^^^^
-
-  hint: expected a result expression before FROM"
-,
-  ],
-  "stdout": [],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:152 (ts) 1`] = `
-{
-  "stderr": [
-    "1",
-    "near "FROM": syntax error",
-    
-"near "FROM": syntax error
-
-At 1:7:
-   1│ SELECT FROM users
-    │        ^^^^
-
-  hint: expected a result expression before FROM"
-,
-  ],
-  "stdout": [],
-  "threw": undefined,
-}
-`;
-
-exports[`README.md code blocks README.md:178 (ts) 1`] = `
+exports[`README.md code blocks Traversing the AST (ts) 1`] = `
 {
   "stderr": [],
   "stdout": [

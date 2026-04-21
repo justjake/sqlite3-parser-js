@@ -63,7 +63,7 @@ function isAssertionError(value: unknown): boolean {
 }
 
 describe("README.md code blocks", () => {
-  test("README.md:17 (ts)", () => {
+  test("Usage #1 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -100,7 +100,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:41 (ts)", () => {
+  test("Usage #2 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -141,7 +141,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:71 (ts)", () => {
+  test("Usage #3 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -164,7 +164,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:84 (ts)", () => {
+  test("Errors #1 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -204,7 +204,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:112 (ts)", () => {
+  test("Errors #2 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -239,7 +239,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:139 (ts)", () => {
+  test("Errors #3 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -272,7 +272,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:165 (ts)", () => {
+  test("Traversing the AST (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {

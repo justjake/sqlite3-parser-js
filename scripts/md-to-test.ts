@@ -35,30 +35,36 @@ const RUNNABLE_LANGS = new Set(["ts", "typescript", "js", "javascript"])
 
 interface Block {
   lang: string
-  /** 1-based line number of the first code line inside the fence. */
-  startLine: number
+  /** Nearest preceding Markdown heading text, or "intro" if none. */
+  section: string
   code: string
 }
 
 function extractCodeBlocks(md: string): Block[] {
   const blocks: Block[] = []
   const lines = md.split("\n")
+  let section = "intro"
   let i = 0
   while (i < lines.length) {
+    const heading = lines[i]!.match(/^#{1,6}\s+(.+?)\s*$/)
+    if (heading) {
+      section = heading[1]!
+      i++
+      continue
+    }
     const fence = lines[i]!.match(/^```(\w+)\s*$/)
     if (!fence) {
       i++
       continue
     }
     const lang = fence[1]!
-    const startLine = i + 2
     i++
     const code: string[] = []
     while (i < lines.length && !lines[i]!.startsWith("```")) {
       code.push(lines[i]!)
       i++
     }
-    blocks.push({ lang, startLine, code: code.join("\n") })
+    blocks.push({ lang, section, code: code.join("\n") })
     i++
   }
   return blocks
@@ -227,10 +233,15 @@ function isAssertionError(value: unknown): boolean {
 }
 `
 
+  const perSectionCount = new Map<string, number>()
   const tests = blocks.map((block) => {
     const transformed = transformBlock(block.code)
     const body = indent(transformed, "      ")
-    const title = `README.md:${block.startLine} (${block.lang})`
+    const idx = (perSectionCount.get(block.section) ?? 0) + 1
+    perSectionCount.set(block.section, idx)
+    const total = blocks.filter((b) => b.section === block.section).length
+    const suffix = total > 1 ? ` #${idx}` : ""
+    const title = `${block.section}${suffix} (${block.lang})`
     return `  test(${JSON.stringify(title)}, () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
