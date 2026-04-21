@@ -49,7 +49,7 @@ import type {
   CmdList,
 } from "./nodes.ts"
 import type { Span, Token } from "../tokenize.ts"
-import type { Diagnostic, DiagnosticHint } from "../diagnostics.ts"
+import type { Diagnostic, DiagnosticHint } from "../errors.ts"
 import type { ParseState } from "./parseState.ts"
 
 // ---- Error constructors ----------------------------------------------

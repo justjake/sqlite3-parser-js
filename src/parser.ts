@@ -19,9 +19,14 @@ import {
   LalrReduce,
   CreateLalrEngine,
 } from "./lempar.ts"
-import { lineColAt, toParseErrors, type Diagnostic, type ParseError } from "./diagnostics.ts"
-import { bindSyntaxDiagnostics } from "./enhanceError.ts"
-import { buildIllegalTokenDiagnostic } from "./lexicalDiagnostics.ts"
+import {
+  bindSyntaxDiagnostics,
+  buildIllegalTokenDiagnostic,
+  lineColAt,
+  toParseErrors,
+  type Diagnostic,
+  type ParseError,
+} from "./errors.ts"
 import type { CmdList } from "./ast/nodes.ts"
 import { finalizeCmdList } from "./ast/parseActions.ts"
 import type { ParseState } from "./ast/parseState.ts"

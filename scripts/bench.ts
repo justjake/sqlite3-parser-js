@@ -17,7 +17,7 @@ import {
   parseErrored,
   tokenize,
 } from "./bench-common.ts"
-import { lineColAt, renderCodeBlock } from "../src/enhanceError.ts"
+import { lineColAt, renderCodeBlock } from "../src/errors.ts"
 import { runScript } from "./utils.ts"
 
 function drainTokens(sql: string): number {

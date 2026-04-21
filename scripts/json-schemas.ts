@@ -350,7 +350,7 @@ const ParserProdTables = matches<ParserTables>()(
     yyRuleInfoNRhs: Type.Array(Type.Integer()),
     // Per-state sorted array of terminal ids the grammar will shift
     // from that state.  Precomputed by slim-dump.ts; consumed by
-    // src/enhanceError.ts to render "expected: …" lists without
+    // src/errors.ts to render "expected: …" lists without
     // scanning every terminal per error.
     yy_expected: Type.Optional(Type.Array(Type.Array(TokenId))),
   }),

@@ -140,7 +140,7 @@ export interface TokenizeOpts {
  * input string plus the token's `length`, plus the 1-based `line` and
  * 0-based `col` of the first character.  LF breaks lines; CR is
  * treated as a regular column char (matches `lineColAt` in
- * src/enhanceError.ts).
+ * src/errors.ts).
  */
 export interface Span {
   readonly offset: number
@@ -1055,7 +1055,7 @@ export function tokenizerModuleForGrammar<Ctx, V>(
   // `line` is 1-based; `col` is 0-based (first column of a line is 0).
   // Each consumed character (including trivia) advances `col` by one;
   // each LF (0x0a) bumps `line` and resets `col` to 0.  CR is treated
-  // as a regular column — matching lineColAt() in src/enhanceError.ts.
+  // as a regular column — matching lineColAt() in src/errors.ts.
   function* tokenize(
     sql: string,
     { emitTrivia = false }: TokenizeOpts = {},

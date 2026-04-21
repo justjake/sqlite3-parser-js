@@ -19,7 +19,7 @@ import * as _keywordDefs from "./keywords.prod.json" with { type: "json" }
 export type * from "../../src/parser"
 export type * from "../../src/tokenize"
 export type * from "../../src/lempar"
-export type * from "../../src/enhanceError"
+export type * from "../../src/errors"
 export type * from "../../src/ast/nodes"
 
 /** The specific SQLite version this bundle was generated from. */

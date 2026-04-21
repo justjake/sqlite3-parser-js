@@ -157,7 +157,7 @@ export interface ParserTables {
    * slim-dump time so error diagnostics can read the "expected" set in
    * O(|accepted|) instead of iterating every terminal.  Optional —
    * older prod dumps generated before this field was added still load,
-   * and {@link enhanceError} falls back to the per-terminal scan.
+   * and {@link errors} falls back to the per-terminal scan.
    */
   yy_expected?: TokenId[][]
 }
