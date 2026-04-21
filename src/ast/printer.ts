@@ -9,7 +9,7 @@
 // earlier optional slot is absent.
 
 import type { AstNode } from "./nodes.ts"
-import { traverse, VisitorKeys } from "./traverse.ts"
+import { traverse, VisitorKeys } from "../traverse.ts"
 
 export interface PrintOptions {
   /** One level of indentation.  Default `"  "` (two spaces). */

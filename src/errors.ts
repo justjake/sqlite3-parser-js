@@ -435,8 +435,8 @@ function expectedHasRole(meta: SyntaxMeta, expected: readonly TokenId[], role: T
   return false
 }
 
-function expectedLabel(meta: SyntaxMeta, tokenId: TokenId): string | null {
-  if (isHiddenExpected(meta, tokenId)) return null
+function expectedLabel(meta: SyntaxMeta, tokenId: TokenId): string | undefined {
+  if (isHiddenExpected(meta, tokenId)) return undefined
   if (fallsBackToIdentifier(meta, tokenId)) return tokenLabel(meta, meta.tok.ID)
   return tokenLabel(meta, tokenId)
 }
@@ -453,7 +453,7 @@ function formatExpectedList(meta: SyntaxMeta, expected: readonly TokenId[]): str
   const labels: string[] = []
   for (const tokenId of expected) {
     const label = expectedLabel(meta, tokenId)
-    if (label === null || seen.has(label)) continue
+    if (label === undefined || seen.has(label)) continue
     seen.add(label)
     labels.push(label)
   }
@@ -473,14 +473,14 @@ function buildHint(
     token: Token
     canonical: string
     expected: readonly TokenId[]
-    previousToken: Token | null
+    previousToken: Token | undefined
     openers: readonly Token[]
     tokens: readonly Token[]
     tokenIndex: number
   },
-): DiagnosticHint[] | null {
+): DiagnosticHint[] | undefined {
   const { token, canonical, expected, previousToken, openers, tokens, tokenIndex } = ctx
-  const topOpener = openers[openers.length - 1] ?? null
+  const topOpener = openers[openers.length - 1]
 
   const missingTableName = buildMissingTableNameHint(meta, token, previousToken)
   if (missingTableName) return [{ message: missingTableName }]
@@ -510,7 +510,7 @@ function buildHint(
   const quotedIdentifier = buildQuotedIdentifierHint(meta, token, expected)
   if (quotedIdentifier) return [{ message: quotedIdentifier }]
 
-  return null
+  return undefined
 }
 
 function describeToken(token: Token): string {
@@ -521,34 +521,39 @@ function describeToken(token: Token): string {
 function buildMissingTableNameHint(
   meta: SyntaxMeta,
   token: Token,
-  previousToken: Token | null,
-): string | null {
-  if (!previousToken || !hasFlag(meta, previousToken.type, TokenFlag.TableNameContext)) return null
+  previousToken: Token | undefined,
+): string | undefined {
+  if (!previousToken || !hasFlag(meta, previousToken.type, TokenFlag.TableNameContext)) return undefined
   const after = tokenLabel(meta, previousToken.type)
-  if (token.synthetic && token.text.length === 0) return `expected a table name after ${after}`
-  if (token.type === meta.tok.ID || token.type === meta.tok.STRING) return null
+  if (isEndOfInput(meta, token)) return `expected a table name after ${after}`
+  if (token.type === meta.tok.ID || token.type === meta.tok.STRING) return undefined
   return `expected a table name after ${after}`
 }
 
 function buildUnclosedGroupHints(
   meta: SyntaxMeta,
   token: Token,
-  topOpener: Token | null,
-): DiagnosticHint[] | null {
-  if (!topOpener) return null
-  const isParen = topOpener.type === meta.tok.LP
-  const missing = isParen ? `missing ")" before ${describeToken(token)}` : `missing END before ${describeToken(token)}`
-  const matchWhat = isParen ? 'to match this "("' : "to match this CASE"
-  return [{ message: missing }, { message: matchWhat, span: topOpener.span }]
+  topOpener: Token | undefined,
+): DiagnosticHint[] | undefined {
+  if (!topOpener) return undefined
+  let missing: string
+  if (topOpener.type === meta.tok.LP) {
+    missing = `missing ")" before ${describeToken(token)}`
+  } else if (topOpener.type === meta.tok.CASE) {
+    missing = `missing END before ${describeToken(token)}`
+  } else {
+    return undefined
+  }
+  return [{ message: missing }, { message: "opened here", span: topOpener.span }]
 }
 
 function buildUnmatchedClosingHint(
   meta: SyntaxMeta,
   token: Token,
   openers: readonly Token[],
-): string | null {
-  if (token.type !== meta.tok.RP) return null
-  if (openers.some((o) => o.type === meta.tok.LP)) return null
+): string | undefined {
+  if (token.type !== meta.tok.RP) return undefined
+  if (openers.some((o) => o.type === meta.tok.LP)) return undefined
   return 'unexpected ")" with no matching "("'
 }
 
@@ -557,8 +562,8 @@ function buildFilterOrderingHint(
   token: Token,
   tokens: readonly Token[],
   tokenIndex: number,
-): string | null {
-  if (token.type !== meta.tok.FILTER) return null
+): string | undefined {
+  if (token.type !== meta.tok.FILTER) return undefined
   for (let i = tokenIndex - 1; i >= 0; i--) {
     const prev = tokens[i]!
     if (prev.synthetic) continue
@@ -566,15 +571,15 @@ function buildFilterOrderingHint(
     if (prev.type === meta.tok.FILTER) break
     if (prev.type === meta.tok.OVER) return "FILTER clauses must appear before OVER clauses"
   }
-  return null
+  return undefined
 }
 
 function buildClauseBoundaryHints(
   meta: SyntaxMeta,
   token: Token,
-  topOpener: Token | null,
-): DiagnosticHint[] | null {
-  if (!topOpener || !isClauseBoundary(meta, token)) return null
+  topOpener: Token | undefined,
+): DiagnosticHint[] | undefined {
+  if (!topOpener || !isClauseBoundary(meta, token)) return undefined
   return buildUnclosedGroupHints(meta, token, topOpener)
 }
 
@@ -582,19 +587,19 @@ function buildCommaHint(
   meta: SyntaxMeta,
   token: Token,
   expected: readonly TokenId[],
-  previousToken: Token | null,
-): string | null {
+  previousToken: Token | undefined,
+): string | undefined {
   if (token.type === meta.tok.COMMA && expectedHasId(expected, meta.tok.RP)) {
     return 'remove this comma or add another list item before ")"'
   }
-  if (token.synthetic && token.text.length === 0 && previousToken?.type === meta.tok.COMMA) {
+  if (isEndOfInput(meta, token) && previousToken?.type === meta.tok.COMMA) {
     return "remove the trailing comma or add another list item before end of input"
   }
   if (previousToken?.type === meta.tok.COMMA && isClauseBoundary(meta, token)) {
     return `remove the trailing comma or add another list item before ${describeToken(token)}`
   }
   if (!previousToken || !startsListItem(meta, token) || !endsListItem(meta, previousToken)) {
-    return null
+    return undefined
   }
   if (expectedHasId(expected, meta.tok.COMMA)) {
     return `missing comma before ${describeToken(token)}`
@@ -606,34 +611,45 @@ function buildCommaHint(
   ) {
     return `possible missing comma or operator before ${describeToken(token)}`
   }
-  return null
+  return undefined
 }
 
 function buildQuotedIdentifierHint(
   meta: SyntaxMeta,
   token: Token,
   expected: readonly TokenId[],
-): string | null {
-  if (!expectedAcceptsIdentifier(meta, expected)) return null
-  if (!looksKeywordToken(meta, token)) return null
+): string | undefined {
+  if (!expectedAcceptsIdentifier(meta, expected)) return undefined
+  if (!looksKeywordToken(meta, token)) return undefined
   return `if you intended ${describeToken(token)} as an identifier here, quote it`
 }
 
-function previousConcreteToken(tokens: readonly Token[], tokenIndex: number): Token | null {
+function previousConcreteToken(tokens: readonly Token[], tokenIndex: number): Token | undefined {
   for (let i = tokenIndex - 1; i >= 0; i--) {
     const token = tokens[i]!
     if (token.synthetic || token.type === 0) continue
     return token
   }
-  return null
+  return undefined
 }
 
 function hasFlag(meta: SyntaxMeta, tokenId: TokenId, flag: TokenFlag): boolean {
   return (meta.flagsById[tokenId] & flag) !== 0
 }
 
+/**
+ * True for the synthetic end-markers `parse()` injects when the input
+ * runs out: a `SEMI` with `synthetic: true` and the `EOF` (token id 0)
+ * that follows it.  Intentionally narrower than `token.synthetic` so
+ * other future synthetic tokens don't silently get treated as
+ * end-of-input here.
+ */
+function isEndOfInput(meta: SyntaxMeta, token: Token): boolean {
+  return token.type === 0 || (token.type === meta.tok.SEMI && token.synthetic === true)
+}
+
 function isClauseBoundary(meta: SyntaxMeta, token: Token): boolean {
-  return token.synthetic || hasFlag(meta, token.type, TokenFlag.ClauseBoundary)
+  return isEndOfInput(meta, token) || hasFlag(meta, token.type, TokenFlag.ClauseBoundary)
 }
 
 function startsListItem(meta: SyntaxMeta, token: Token): boolean {

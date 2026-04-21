@@ -1,1 +1,2 @@
+- Use `undefined` instead of `null`.
 - Never use `git stash`, there may be other agents or users working on the same worktree and this will disrupt them.

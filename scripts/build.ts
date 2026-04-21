@@ -22,8 +22,9 @@
 //   │       │                      `KEYWORDS_DUMP` named exports.
 //   │       └── index.d.ts         types
 //   ├── src/
-//   │   └── *.d.ts                 types only — runtime JS is inlined
-//   │                              into bun's shared chunks below
+//   │   ├── traverse.js            public helper entry for `/traverse`
+//   │   ├── traverse.d.ts          types
+//   │   └── *.d.ts                 other source declarations
 //   └── chunk-*.js                 shared chunks (bun's splitting)
 //
 // NO JSON FILES SHIP with the package.  The prod dumps are inlined
@@ -37,9 +38,9 @@
 // `.js` and `.d.ts` are colocated per-file, matching the convention
 // most npm packages follow.  Bun preserves the source tree relative
 // to the project root; tsc emits declarations into the same tree with
-// matching paths.  The only things without a sibling are src/*.d.ts —
-// those are type-only because the runtime JS has been inlined into a
-// shared chunk rather than getting its own per-file output.
+// matching paths.  Some src/ declarations remain type-only because the
+// runtime JS has been inlined into a shared chunk rather than getting
+// its own per-file output.
 //
 // The runtime graph doesn't touch any Node built-in, so `target:
 // 'browser'` produces JS that also runs on Node ≥ 18 and Bun without
@@ -64,6 +65,7 @@ import { runScript } from "./utils.ts"
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
 const GENERATED = join(ROOT, "generated")
 const BIN = join(ROOT, "bin")
+const SRC = join(ROOT, "src")
 const DIST = join(ROOT, "dist")
 
 /**
@@ -71,6 +73,7 @@ const DIST = join(ROOT, "dist")
  * Paths are relative to BIN; outputs land at dist/bin/<name>.js.
  */
 const BIN_ENTRIES = ["sqlite3-parser.ts", "sqlite3-tokenizer.ts"]
+const SRC_ENTRIES = ["traverse.ts"]
 
 function log(msg: string): void {
   console.log(`[build] ${msg}`)
@@ -111,6 +114,7 @@ async function buildJs(versions: string[]): Promise<void> {
   const entries = [
     join(GENERATED, "current.ts"),
     ...versions.map((v) => join(GENERATED, v, "index.ts")),
+    ...SRC_ENTRIES.map((f) => join(SRC, f)),
     ...BIN_ENTRIES.map((f) => join(BIN, f)),
   ]
   log(`bundling ${entries.length} entrypoint(s) with bun…`)
