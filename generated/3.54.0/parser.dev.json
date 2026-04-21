@@ -5270,7 +5270,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " state.stmt = { kind: \"SelectStmt\", select: yymsp[0].minor.yy21, span: nodeSpan() }; ",
+      "actionC": " state.stmt = { kind: \"SelectStmt\", body: yymsp[0].minor.yy21, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": null
     },
@@ -5527,7 +5527,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy32 = { kind: \"ValuesOneSelect\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy32 = { kind: \"SelectValues\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy32 = yylhsminor.yy32;\n"
     },
@@ -5568,7 +5568,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy32 = { kind: \"ValuesOneSelect\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
+      "actionC": " yylhsminor.yy32 = { kind: \"SelectValues\", values: yymsp[0].minor.yy81, span: nodeSpan() }; ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy32 = yylhsminor.yy32;\n"
     },

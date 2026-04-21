@@ -497,7 +497,7 @@ cmd ::= DROP VIEW ifexists(E) fullname(X). {
 
 //////////////////////// The SELECT statement /////////////////////////////////
 //
-cmd ::= select(X).  { state.stmt = { kind: "SelectStmt", select: X, span: nodeSpan() }; }
+cmd ::= select(X).  { state.stmt = { kind: "SelectStmt", body: X, span: nodeSpan() }; }
 
 %type select       {Select}
 %type selectnowith {SelectBody}
@@ -541,7 +541,7 @@ oneselect(A) ::= SELECT distinct(D) selcollist(W) from(X) where_opt(Y)
 // Single row VALUES clause.
 //
 %type values {ValuesRow[]}
-oneselect(A) ::= values(X).             { A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }; }
+oneselect(A) ::= values(X).             { A = { kind: "SelectValues", values: X, span: nodeSpan() }; }
 values(A) ::= VALUES LP nexprlist(X) RP. {
   A = [{ kind: "ValuesRow", values: X, span: nodeSpan() }];
 }
@@ -549,7 +549,7 @@ values(A) ::= VALUES LP nexprlist(X) RP. {
 // Multiple row VALUES clause.
 //
 %type mvalues {ValuesRow[]}
-oneselect(A) ::= mvalues(X).                    { A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }; }
+oneselect(A) ::= mvalues(X).                    { A = { kind: "SelectValues", values: X, span: nodeSpan() }; }
 mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP.  { valuesPush(state, A, Y, nodeSpan());}
 mvalues(A) ::= mvalues(A) COMMA LP nexprlist(Y) RP. { valuesPush(state, A, Y, nodeSpan());}
 

@@ -361,7 +361,7 @@ export interface SavepointStmt {
  */
 export interface SelectStmt {
   readonly kind: "SelectStmt"
-  readonly select: Select
+  readonly body: Select
   readonly span: Span
 }
 
@@ -947,7 +947,7 @@ export type CompoundOperator = "Union" | "UnionAll" | "Except" | "Intersect"
  * `SELECT` core: either a `SELECT` with clauses or a `VALUES` row set.
  * https://sqlite.org/syntax/select-core.html
  */
-export type OneSelect = SelectOneSelect | ValuesOneSelect
+export type OneSelect = SelectFrom | SelectValues
 
 /**
  * `FROM` clause.  The first source and any `JOIN`-chained sources.
@@ -1723,8 +1723,8 @@ export interface WithinGroupFunctionCallOrder {
   readonly span: Span
 }
 
-export interface SelectOneSelect {
-  readonly kind: "SelectOneSelect"
+export interface SelectFrom {
+  readonly kind: "SelectFrom"
   readonly distinctness: Distinctness | undefined
   readonly columns: readonly ResultColumn[]
   readonly from: FromClause | undefined
@@ -1735,8 +1735,8 @@ export interface SelectOneSelect {
   readonly span: Span
 }
 
-export interface ValuesOneSelect {
-  readonly kind: "ValuesOneSelect"
+export interface SelectValues {
+  readonly kind: "SelectValues"
   readonly values: readonly ValuesRow[]
   readonly span: Span
 }
@@ -2130,8 +2130,8 @@ export interface AstNodeMap {
   CompoundSelect: CompoundSelect
   FromClause: FromClause
   JoinedSelectTable: JoinedSelectTable
-  SelectOneSelect: SelectOneSelect
-  ValuesOneSelect: ValuesOneSelect
+  SelectFrom: SelectFrom
+  SelectValues: SelectValues
   ValuesRow: ValuesRow
   ExprResultColumn: ExprResultColumn
   StarResultColumn: StarResultColumn

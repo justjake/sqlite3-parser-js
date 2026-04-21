@@ -645,7 +645,7 @@ export function mkOneSelect(
     state.errors.push({ message: "no tables specified", span: offendingStar.span })
   }
   return {
-    kind: "SelectOneSelect",
+    kind: "SelectFrom",
     distinctness,
     columns,
     from,

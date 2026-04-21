@@ -36,12 +36,15 @@ export interface SyntaxDiagnostics {
   unexpected(opts: UnexpectedParseErrorOptions): Diagnostic
 }
 
-const enum TokenRole {
+const enum TokenFlag {
   ExprStart = 1 << 0,
   ItemStart = 1 << 1,
   ItemEnd = 1 << 2,
   ClauseBoundary = 1 << 3,
   TableNameContext = 1 << 4,
+  Hidden = 1 << 5,
+  KeywordLike = 1 << 6,
+  FallbackToId = 1 << 7,
 }
 
 interface BoundTokens {
@@ -65,8 +68,8 @@ interface SyntaxMeta {
   readonly defs: SyntaxParserDefs
   readonly tok: BoundTokens
   readonly displayById: readonly (string | undefined)[]
-  readonly roleBitsById: Uint32Array
-  readonly keywordLikeById: Uint8Array
+  readonly expectedDisplayById: readonly (string | undefined)[]
+  readonly flagsById: Uint16Array
 }
 
 type SyntaxParserDefs = Pick<ParserDefs<unknown, unknown>, "constants" | "tables" | "symbols">
@@ -76,140 +79,87 @@ type OpenGroup = {
   readonly token: Token
 }
 
-const DISPLAY_NAME_OVERRIDES: Readonly<Record<string, string>> = {
-  $: "end of input",
-  ID: "identifier",
-  STRING: "string literal",
-  INTEGER: "integer literal",
-  FLOAT: "float literal",
-  QNUMBER: "numeric literal",
-  BLOB: "blob literal",
-  VARIABLE: "bind parameter",
-  LP: "(",
-  RP: ")",
-  COMMA: ",",
-  SEMI: ";",
-  STAR: "*",
-  DOT: ".",
-  PLUS: "+",
-  MINUS: "-",
-  SLASH: "/",
-  REM: "%",
-  EQ: "=",
-  LT: "<",
-  LE: "<=",
-  GT: ">",
-  GE: ">=",
-  NE: "!=",
-  CONCAT: "||",
-  BITAND: "&",
-  BITOR: "|",
-  BITNOT: "~",
-  LSHIFT: "<<",
-  RSHIFT: ">>",
-  PTR: "->",
-  CTIME_KW: "date/time literal",
-  JOIN_KW: "join operator",
+interface TokenSpec {
+  readonly display?: string
+  readonly flags?: number
 }
 
-const ROLE_SPECS: ReadonlyArray<readonly [TokenRole, readonly string[]]> = [
-  [
-    TokenRole.ExprStart,
-    [
-      "ID",
-      "STRING",
-      "INTEGER",
-      "FLOAT",
-      "QNUMBER",
-      "BLOB",
-      "VARIABLE",
-      "LP",
-      "STAR",
-      "NULL",
-      "CASE",
-      "CAST",
-      "EXISTS",
-      "NOT",
-      "PLUS",
-      "MINUS",
-      "BITNOT",
-      "CURRENT",
-      "CTIME_KW",
-    ],
-  ],
-  [
-    TokenRole.ItemStart,
-    [
-      "ID",
-      "STRING",
-      "INTEGER",
-      "FLOAT",
-      "QNUMBER",
-      "BLOB",
-      "VARIABLE",
-      "LP",
-      "STAR",
-      "NULL",
-      "CASE",
-      "CAST",
-      "EXISTS",
-      "NOT",
-      "PLUS",
-      "MINUS",
-      "BITNOT",
-      "SELECT",
-      "VALUES",
-      "CURRENT",
-      "CTIME_KW",
-    ],
-  ],
-  [
-    TokenRole.ItemEnd,
-    [
-      "ID",
-      "STRING",
-      "INTEGER",
-      "FLOAT",
-      "QNUMBER",
-      "BLOB",
-      "VARIABLE",
-      "RP",
-      "NULL",
-      "TRUEFALSE",
-      "CURRENT",
-      "CTIME_KW",
-      "END",
-    ],
-  ],
-  [
-    TokenRole.ClauseBoundary,
-    [
-      "FROM",
-      "WHERE",
-      "GROUP",
-      "HAVING",
-      "WINDOW",
-      "ORDER",
-      "LIMIT",
-      "FILTER",
-      "OVER",
-      "JOIN",
-      "ON",
-      "USING",
-      "UNION",
-      "INTERSECT",
-      "EXCEPT",
-      "THEN",
-      "ELSE",
-      "WHEN",
-      "DO",
-      "SET",
-      "VALUES",
-      "RETURNING",
-    ],
-  ],
-  [TokenRole.TableNameContext, ["FROM", "JOIN", "INTO", "UPDATE"]],
-]
+const VALUE_TOKEN = TokenFlag.ExprStart | TokenFlag.ItemStart | TokenFlag.ItemEnd
+const PREFIX_EXPR_TOKEN = TokenFlag.ExprStart | TokenFlag.ItemStart
+const CLAUSE_TOKEN = TokenFlag.ClauseBoundary
+const TABLE_NAME_CONTEXT = TokenFlag.TableNameContext
+
+const TOKEN_SPECS: Readonly<Record<string, TokenSpec>> = {
+  $: { display: "end of input" },
+  SPACE: { flags: TokenFlag.Hidden },
+  COMMENT: { flags: TokenFlag.Hidden },
+  ILLEGAL: { flags: TokenFlag.Hidden },
+  ID: { display: "identifier", flags: VALUE_TOKEN },
+  STRING: { display: "string literal", flags: VALUE_TOKEN },
+  INTEGER: { display: "integer literal", flags: VALUE_TOKEN },
+  FLOAT: { display: "float literal", flags: VALUE_TOKEN },
+  QNUMBER: { display: "numeric literal", flags: VALUE_TOKEN },
+  BLOB: { display: "blob literal", flags: VALUE_TOKEN },
+  VARIABLE: { display: "bind parameter", flags: VALUE_TOKEN },
+  LP: { display: "(", flags: PREFIX_EXPR_TOKEN },
+  RP: { display: ")", flags: TokenFlag.ItemEnd },
+  COMMA: { display: "," },
+  SEMI: { display: ";" },
+  STAR: { display: "*", flags: PREFIX_EXPR_TOKEN },
+  DOT: { display: "." },
+  PLUS: { display: "+", flags: PREFIX_EXPR_TOKEN },
+  MINUS: { display: "-", flags: PREFIX_EXPR_TOKEN },
+  SLASH: { display: "/" },
+  REM: { display: "%" },
+  EQ: { display: "=" },
+  LT: { display: "<" },
+  LE: { display: "<=" },
+  GT: { display: ">" },
+  GE: { display: ">=" },
+  NE: { display: "!=" },
+  CONCAT: { display: "||" },
+  BITAND: { display: "&" },
+  BITOR: { display: "|" },
+  BITNOT: { display: "~", flags: PREFIX_EXPR_TOKEN },
+  LSHIFT: { display: "<<" },
+  RSHIFT: { display: ">>" },
+  PTR: { display: "->" },
+  NULL: { flags: VALUE_TOKEN },
+  CASE: { flags: PREFIX_EXPR_TOKEN },
+  CAST: { flags: PREFIX_EXPR_TOKEN },
+  EXISTS: { flags: PREFIX_EXPR_TOKEN },
+  NOT: { flags: PREFIX_EXPR_TOKEN },
+  CURRENT: { flags: VALUE_TOKEN },
+  CTIME_KW: { display: "date/time literal", flags: VALUE_TOKEN },
+  TRUEFALSE: { flags: TokenFlag.ItemEnd },
+  SELECT: { flags: TokenFlag.ItemStart },
+  VALUES: { flags: TokenFlag.ItemStart | CLAUSE_TOKEN },
+  END: { flags: TokenFlag.ItemEnd },
+  FROM: { flags: CLAUSE_TOKEN | TABLE_NAME_CONTEXT },
+  WHERE: { flags: CLAUSE_TOKEN },
+  GROUP: { flags: CLAUSE_TOKEN },
+  HAVING: { flags: CLAUSE_TOKEN },
+  WINDOW: { flags: CLAUSE_TOKEN },
+  ORDER: { flags: CLAUSE_TOKEN },
+  LIMIT: { flags: CLAUSE_TOKEN },
+  FILTER: { flags: CLAUSE_TOKEN },
+  OVER: { flags: CLAUSE_TOKEN },
+  JOIN: { flags: CLAUSE_TOKEN | TABLE_NAME_CONTEXT },
+  ON: { flags: CLAUSE_TOKEN },
+  USING: { flags: CLAUSE_TOKEN },
+  UNION: { flags: CLAUSE_TOKEN },
+  INTERSECT: { flags: CLAUSE_TOKEN },
+  EXCEPT: { flags: CLAUSE_TOKEN },
+  THEN: { flags: CLAUSE_TOKEN },
+  ELSE: { flags: CLAUSE_TOKEN },
+  WHEN: { flags: CLAUSE_TOKEN },
+  DO: { flags: CLAUSE_TOKEN },
+  SET: { flags: CLAUSE_TOKEN },
+  RETURNING: { flags: CLAUSE_TOKEN },
+  INTO: { flags: TABLE_NAME_CONTEXT },
+  UPDATE: { flags: TABLE_NAME_CONTEXT },
+  JOIN_KW: { display: "join operator" },
+}
 
 export function bindSyntaxDiagnostics(
   defs: SyntaxParserDefs,
@@ -232,14 +182,16 @@ function bindSyntaxMeta(defs: SyntaxParserDefs, keywordDefs: KeywordDefs): Synta
   const tokenCount = defs.constants.YYNTOKEN
   const tokenCode = new Map<string, TokenId>()
   const displayById: Array<string | undefined> = new Array(tokenCount)
-  const roleBitsById = new Uint32Array(tokenCount)
-  const keywordLikeById = new Uint8Array(tokenCount)
+  const expectedDisplayById: Array<string | undefined> = new Array(tokenCount)
+  const flagsById = new Uint16Array(tokenCount)
 
   for (let i = 0; i < tokenCount; i++) {
     const id = i as TokenId
     const name = defs.symbols[i]!
+    const spec = TOKEN_SPECS[name]
     tokenCode.set(name, id)
-    displayById[i] = displayNameForSymbol(name)
+    displayById[i] = displayNameForSymbol(name, spec)
+    flagsById[i] = spec?.flags ?? 0
   }
 
   const tok: BoundTokens = {
@@ -259,10 +211,11 @@ function bindSyntaxMeta(defs: SyntaxParserDefs, keywordDefs: KeywordDefs): Synta
     OVER: requireTokenId(tokenCode, "OVER"),
   }
 
-  for (const [role, names] of ROLE_SPECS) {
-    for (const name of names) {
-      const id = requireTokenId(tokenCode, name)
-      roleBitsById[id] |= role
+  const yyFallback = defs.tables.yyFallback ?? []
+  for (let i = 0; i < tokenCount; i++) {
+    if (i === tok.ID) continue
+    if ((yyFallback[i] ?? 0) === tok.ID) {
+      flagsById[i] |= TokenFlag.FallbackToId
     }
   }
 
@@ -270,10 +223,18 @@ function bindSyntaxMeta(defs: SyntaxParserDefs, keywordDefs: KeywordDefs): Synta
     const id = tokenCode.get(keyword.token)
     if (id === undefined) continue
     if (id === tok.ID || id === tok.STRING || id === tok.ILLEGAL) continue
-    keywordLikeById[id] = 1
+    flagsById[id] |= TokenFlag.KeywordLike
   }
 
-  return { defs, tok, displayById, roleBitsById, keywordLikeById }
+  for (let i = 0; i < tokenCount; i++) {
+    if ((flagsById[i] & TokenFlag.Hidden) !== 0) continue
+    expectedDisplayById[i] =
+      (flagsById[i] & TokenFlag.FallbackToId) !== 0
+        ? (displayById[tok.ID] ?? symbolName(defs, tok.ID))
+        : (displayById[i] ?? symbolName(defs, i as TokenId))
+  }
+
+  return { defs, tok, displayById, expectedDisplayById, flagsById }
 }
 
 function buildUnexpectedDiagnostic(
@@ -305,10 +266,9 @@ function buildUnexpectedDiagnostic(
     : { message: canonical, span: token.span, token }
 }
 
-function displayNameForSymbol(name: string): string | undefined {
-  if (name === "SPACE" || name === "COMMENT" || name === "ILLEGAL") return undefined
-  const override = DISPLAY_NAME_OVERRIDES[name]
-  if (override) return override
+function displayNameForSymbol(name: string, spec?: TokenSpec): string | undefined {
+  if ((spec?.flags ?? 0) & TokenFlag.Hidden) return undefined
+  if (spec?.display) return spec.display
   if (/^[A-Z_]+$/.test(name)) return name.replace(/_KW$/, "").toLowerCase()
   return name
 }
@@ -330,12 +290,11 @@ function collectExpected(meta: SyntaxMeta, state: number): readonly TokenId[] {
 }
 
 function isHiddenExpected(meta: SyntaxMeta, tokenId: TokenId): boolean {
-  return tokenId === meta.tok.SPACE || tokenId === meta.tok.COMMENT || tokenId === meta.tok.ILLEGAL
+  return hasFlag(meta, tokenId, TokenFlag.Hidden)
 }
 
 function fallsBackToIdentifier(meta: SyntaxMeta, tokenId: TokenId): boolean {
-  const fallback = meta.defs.tables.yyFallback?.[tokenId] ?? 0
-  return tokenId !== meta.tok.ID && fallback === meta.tok.ID
+  return hasFlag(meta, tokenId, TokenFlag.FallbackToId)
 }
 
 function expectedAcceptsIdentifier(meta: SyntaxMeta, expected: readonly TokenId[]): boolean {
@@ -349,19 +308,15 @@ function expectedHasId(expected: readonly TokenId[], tokenId: TokenId): boolean 
   return expected.includes(tokenId)
 }
 
-function expectedHasRole(meta: SyntaxMeta, expected: readonly TokenId[], role: TokenRole): boolean {
+function expectedHasRole(meta: SyntaxMeta, expected: readonly TokenId[], role: TokenFlag): boolean {
   for (const tokenId of expected) {
-    if (hasRole(meta, tokenId, role)) return true
+    if (hasFlag(meta, tokenId, role)) return true
   }
   return false
 }
 
 function expectedLabel(meta: SyntaxMeta, tokenId: TokenId): string | null {
-  if (isHiddenExpected(meta, tokenId)) return null
-  if (fallsBackToIdentifier(meta, tokenId)) {
-    return meta.displayById[meta.tok.ID] ?? symbolName(meta, meta.tok.ID)
-  }
-  return meta.displayById[tokenId] ?? symbolName(meta, tokenId)
+  return meta.expectedDisplayById[tokenId] ?? null
 }
 
 function compareExpectedLabels(left: string, right: string): number {
@@ -426,7 +381,7 @@ function buildHint(
   const missingCommaHint = buildCommaHint(meta, token, expected, previousToken)
   if (missingCommaHint) return missingCommaHint
 
-  if (token.type === meta.tok.FROM && expectedHasRole(meta, expected, TokenRole.ExprStart)) {
+  if (token.type === meta.tok.FROM && expectedHasRole(meta, expected, TokenFlag.ExprStart)) {
     return "expected a result expression before FROM"
   }
 
@@ -446,8 +401,8 @@ function buildMissingTableNameHint(
   token: Token,
   previousToken: Token | null,
 ): string | null {
-  if (!previousToken || !hasRole(meta, previousToken.type, TokenRole.TableNameContext)) return null
-  const after = expectedLabel(meta, previousToken.type) ?? symbolName(meta, previousToken.type)
+  if (!previousToken || !hasFlag(meta, previousToken.type, TokenFlag.TableNameContext)) return null
+  const after = tokenLabel(meta, previousToken.type)
   if (token.synthetic && token.text.length === 0) return `expected a table name after ${after}`
   if (token.type === meta.tok.ID || token.type === meta.tok.STRING) return null
   return `expected a table name after ${after}`
@@ -520,7 +475,7 @@ function buildCommaHint(
   if (
     expectedHasId(expected, meta.tok.RP) ||
     expectedHasId(expected, meta.tok.SEMI) ||
-    expectedHasRole(meta, expected, TokenRole.ClauseBoundary)
+    expectedHasRole(meta, expected, TokenFlag.ClauseBoundary)
   ) {
     return `possible missing comma or operator before ${describeToken(token)}`
   }
@@ -584,20 +539,20 @@ function popLastGroup(openGroups: OpenGroup[], kind: OpenGroup["kind"]): void {
   }
 }
 
-function hasRole(meta: SyntaxMeta, tokenId: TokenId, role: TokenRole): boolean {
-  return (meta.roleBitsById[tokenId] & role) !== 0
+function hasFlag(meta: SyntaxMeta, tokenId: TokenId, flag: TokenFlag): boolean {
+  return (meta.flagsById[tokenId] & flag) !== 0
 }
 
 function isClauseBoundary(meta: SyntaxMeta, token: Token): boolean {
-  return token.synthetic || hasRole(meta, token.type, TokenRole.ClauseBoundary)
+  return token.synthetic || hasFlag(meta, token.type, TokenFlag.ClauseBoundary)
 }
 
 function startsListItem(meta: SyntaxMeta, token: Token): boolean {
-  return hasRole(meta, token.type, TokenRole.ItemStart)
+  return hasFlag(meta, token.type, TokenFlag.ItemStart)
 }
 
 function endsListItem(meta: SyntaxMeta, token: Token): boolean {
-  return hasRole(meta, token.type, TokenRole.ItemEnd)
+  return hasFlag(meta, token.type, TokenFlag.ItemEnd)
 }
 
 function looksKeywordToken(meta: SyntaxMeta, token: Token): boolean {
@@ -608,9 +563,13 @@ function looksKeywordToken(meta: SyntaxMeta, token: Token): boolean {
   ) {
     return false
   }
-  return meta.keywordLikeById[token.type] === 1
+  return hasFlag(meta, token.type, TokenFlag.KeywordLike)
 }
 
-function symbolName(meta: SyntaxMeta, tokenId: TokenId): string {
-  return meta.defs.symbols[tokenId] ?? String(tokenId)
+function tokenLabel(meta: SyntaxMeta, tokenId: TokenId): string {
+  return meta.displayById[tokenId] ?? symbolName(meta.defs, tokenId)
+}
+
+function symbolName(defs: SyntaxParserDefs, tokenId: TokenId): string {
+  return defs.symbols[tokenId] ?? String(tokenId)
 }

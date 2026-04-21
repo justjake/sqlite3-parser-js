@@ -2809,7 +2809,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
     case 101: {
       // cmd ::= select(X)
       const X = popped[0].minor as Select
-      state.stmt = { kind: "SelectStmt", select: X, span: nodeSpan() }
+      state.stmt = { kind: "SelectStmt", body: X, span: nodeSpan() }
       return undefined
     }
     case 102: {
@@ -2927,7 +2927,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // oneselect(A) ::= values(X)
       const X = popped[0].minor as ValuesRow[]
       let A: OneSelect | undefined
-      A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }
+      A = { kind: "SelectValues", values: X, span: nodeSpan() }
       return A
     }
     case 114: {
@@ -2942,7 +2942,7 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // oneselect(A) ::= mvalues(X)
       const X = popped[0].minor as ValuesRow[]
       let A: OneSelect | undefined
-      A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }
+      A = { kind: "SelectValues", values: X, span: nodeSpan() }
       return A
     }
     case 116: // mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP
