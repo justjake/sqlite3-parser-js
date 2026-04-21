@@ -43,7 +43,7 @@ export interface LexedToken {
 
 /**
  * Tokenise `sql` and return an array of `{name, text}` pairs, with trivia
- * (SPACE + COMMENT) suppressed by default.  Pass `{skipTrivia: false}` to
+ * (SPACE + COMMENT) suppressed by default. Pass `{emitTrivia: true}` to
  * include them.
  */
 export function lex(sql: string, opts?: TokenizeOpts, t: Tokenizer = tk): LexedToken[] {

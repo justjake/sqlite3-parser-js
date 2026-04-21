@@ -133,7 +133,6 @@ export const VisitorKeys: VisitorKeyMap = {
   InTableExpr: ["lhs", "rhs", "args"],
   IsNullExpr: ExprKeys,
   LikeExpr: ["lhs", "rhs", "escape"],
-  LiteralExpr: ["literal"],
   NameExpr: NameKeys,
   NotNullExpr: ExprKeys,
   ParenthesizedExpr: ["exprs"],

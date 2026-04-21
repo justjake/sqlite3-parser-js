@@ -44,22 +44,24 @@ import type {
   Type,
   UnaryOperator,
   UpsertIndex,
+  ValuesRow,
   WindowDef,
   With,
   Cmd,
   CmdList,
 } from "./nodes.ts"
 import type { Span, Token } from "../tokenize.ts"
-import type { AstParseError, ParseState } from "./parseState.ts"
+import type { Diagnostic, DiagnosticHint } from "../diagnostics.ts"
+import type { ParseState } from "./parseState.ts"
 
 // ---- Error constructors ----------------------------------------------
 
-/** Build an {@link AstParseError} with zero or more secondary hints. */
-export function mkAstParseError(
+/** Build a {@link Diagnostic} with zero or more secondary hints. */
+export function mkDiagnostic(
   message: string,
   span: Span,
-  ...hints: ReadonlyArray<{ readonly message: string; readonly span: Span | undefined }>
-): AstParseError {
+  ...hints: readonly DiagnosticHint[]
+): Diagnostic {
   return hints.length > 0 ? { message, span, hints } : { message, span }
 }
 
@@ -68,12 +70,12 @@ export function mkAstParseError(
  * primary span at the conflicting occurrence and attaches a single
  * `first specified here` hint at the original's span.
  */
-export function mkDuplicateError(
+export function mkDuplicateDiagnostic(
   message: string,
   span: Span,
   firstSpecifiedHereSpan: Span,
-): AstParseError {
-  return mkAstParseError(message, span, {
+): Diagnostic {
+  return mkDiagnostic(message, span, {
     message: "first specified here",
     span: firstSpecifiedHereSpan,
   })
@@ -644,11 +646,11 @@ export function mkOneSelect(
 /** Append a VALUES row, checking that it has the same arity as earlier rows. */
 export function valuesPush(
   state: ParseState,
-  values: Expr[][],
+  values: ValuesRow[],
   row: readonly Expr[],
   span: Span,
 ): void {
-  const firstRow = values[0]
+  const firstRow = values[0]?.values
   if (firstRow && firstRow.length !== row.length) {
     const firstRowSpan =
       firstRow.length > 0
@@ -656,14 +658,14 @@ export function valuesPush(
         : undefined
     state.errors.push(
       firstRowSpan
-        ? mkAstParseError("all VALUES must have the same number of terms", span, {
+        ? mkDiagnostic("all VALUES must have the same number of terms", span, {
             message: `first row has ${firstRow.length} terms`,
             span: firstRowSpan,
           })
-        : mkAstParseError("all VALUES must have the same number of terms", span),
+        : mkDiagnostic("all VALUES must have the same number of terms", span),
     )
   }
-  values.push(row as Expr[])
+  values.push({ kind: "ValuesRow", values: row, span })
 }
 
 // ---- Column / constraint helpers -------------------------------------
@@ -710,7 +712,7 @@ export function addColumn(
   const duplicateOf = columns.find((c) => c.colName.name === cd.colName.name)
   if (duplicateOf) {
     state.errors.push(
-      mkDuplicateError(
+      mkDuplicateDiagnostic(
         `duplicate column name: ${cd.colName.name}`,
         cd.colName.span,
         duplicateOf.colName.span,
@@ -742,7 +744,7 @@ export function addCte(state: ParseState, ctes: CommonTableExpr[], cte: CommonTa
   const duplicateOf = ctes.find((c) => c.tblName.name === cte.tblName.name)
   if (duplicateOf) {
     state.errors.push(
-      mkDuplicateError(
+      mkDuplicateDiagnostic(
         `duplicate WITH table name: ${cte.tblName.name}`,
         cte.tblName.span,
         duplicateOf.tblName.span,

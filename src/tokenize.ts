@@ -130,8 +130,8 @@ export interface CreateTokenizerOptions {
 
 /** Options for one call to `tokenizer.tokenize(sql, opts?)`. */
 export interface TokenizeOpts {
-  /** Drop SPACE and COMMENT tokens from the output stream.  Default: true. */
-  readonly skipTrivia?: boolean
+  /** Emit SPACE and COMMENT tokens into the output stream. Default: false. */
+  readonly emitTrivia?: boolean
 }
 
 /** One token as yielded by `tokenizer.tokenize()`. */
@@ -154,9 +154,9 @@ export interface Span {
  * code Lemon assigned; `text` is the source slice the token covers;
  * `span` is the position/length of that slice in the input.
  *
- * Note: this type intentionally does NOT include the `synthetic` flag
- * {@link TokenNode} carries — runtime Tokens fed to the parser are
- * always real lexer output.  The CST wrapper adds that flag if needed.
+ * Most tokens are emitted directly by the tokenizer. The parser may
+ * inject zero-length synthetic `SEMI` / EOF markers at end-of-input, so
+ * the `synthetic` bit lives here rather than on a parallel token type.
  */
 export interface Token {
   readonly type: TokenId
@@ -1058,7 +1058,7 @@ export function tokenizerModuleForGrammar(
   // as a regular column — matching lineColAt() in src/enhanceError.ts.
   function* tokenize(
     sql: string,
-    { skipTrivia = true }: TokenizeOpts = {},
+    { emitTrivia = false }: TokenizeOpts = {},
   ): IterableIterator<Token> {
     const out: [TokenId] = [0 as TokenId]
     let i = 0
@@ -1082,7 +1082,7 @@ export function tokenizerModuleForGrammar(
         }
       }
       i = end
-      if (skipTrivia && (type === T.SPACE || type === T.COMMENT)) continue
+      if (!emitTrivia && (type === T.SPACE || type === T.COMMENT)) continue
       yield {
         type,
         text: sql.slice(offset, end),

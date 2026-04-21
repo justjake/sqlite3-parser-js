@@ -55,7 +55,7 @@ describe("normalize-120 (comments scattered through a SELECT)", () => {
   })
 
   test("both comment styles tokenise as COMMENT", () => {
-    const kept = lex(sql, { skipTrivia: false })
+    const kept = lex(sql, { emitTrivia: true })
     const comments = kept.filter((t) => t.name === "COMMENT").map((t) => t.text)
     expect(comments).toEqual(["-- comment text", "/* CTE */"])
   })

@@ -18,13 +18,7 @@
 //     instantiation doesn't contaminate the per-op numbers.
 
 import { run, bench, group, do_not_optimize } from "mitata"
-import {
-  LARGE,
-  MEDIUM,
-  SMALL,
-  TINY,
-  parseAccepted as ourParse,
-} from "./bench-common.ts"
+import { LARGE, MEDIUM, SMALL, TINY, parseAccepted as ourParse } from "./bench-common.ts"
 import { createLiteParser } from "../vendor/liteparser/wasm/src/index.ts"
 // @ts-expect-error — no types shipped
 import applandParse from "@appland/sql-parser"

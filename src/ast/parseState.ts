@@ -1,37 +1,11 @@
 // Parser-session types shared by the action-based parser (parse.y →
 // generated/<ver>/parse.ts) and its downstream helpers in parseActions.ts.
 //
-// `Span` (position tuple every AST node carries) and `Token` (the
-// tokenizer's runtime value — `type` + `text` + `span`) are defined in
-// `src/tokenize.ts` and imported here by the types that need them.
+// `Span` (position tuple every AST node carries) is defined in
+// `src/tokenize.ts`. Shared diagnostics live in `src/diagnostics.ts`.
 
-import type { Span, Token } from "../tokenize.ts"
+import type { Diagnostic } from "../diagnostics.ts"
 import type { Cmd, ExplainKind, Name, Stmt } from "./nodes.ts"
-
-/**
- * One semantic diagnostic produced by an AST-building parser action.
- *
- * The name emphasises that these are AST-layer findings (duplicate
- * column names, DISTINCT-arity violations, misplaced digit separators,
- * etc.) — distinct from syntax errors raised by the LALR engine, which
- * travel on {@link engineModuleForGrammar}'s own error channel.  The
- * driver merges both streams into a single `errors` array on the
- * public {@link ParseResult}.
- */
-export interface AstParseError {
-  readonly message: string
-  readonly span: Span
-  /**
-   * Secondary diagnostic pointers.  Useful for "duplicate name"-style
-   * errors where we want to call out where the first declaration lives
-   * in addition to the conflicting one, or for "unclosed LP" where we
-   * want to highlight the opener alongside the missing closer.
-   */
-  readonly hints?: ReadonlyArray<{
-    readonly message: string
-    readonly span: Span | undefined
-  }>
-}
 
 /**
  * Parser session state.  One instance per parse; threaded through every
@@ -66,7 +40,7 @@ export interface ParseState {
   /** Scratch buffer for the current vtabarg, flushed between args. */
   vtabArgCurrent: string
   /** Diagnostics emitted by parser actions. */
-  errors: AstParseError[]
+  errors: Diagnostic[]
   /**
    * Digit-separator character used by the tokenizer.  The `term ::=
    * QNUMBER` action passes this to `sqlite3DequoteNumber` so separator
@@ -84,7 +58,7 @@ export interface ParseState {
  */
 export interface ParseResult {
   readonly cmd: Cmd | undefined
-  readonly errors: readonly AstParseError[]
+  readonly errors: readonly Diagnostic[]
 }
 
 /** Allocate a fresh {@link ParseState} for a new parse session. */

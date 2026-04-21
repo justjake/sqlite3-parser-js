@@ -30,23 +30,27 @@ export function rootRelativePath(...subpaths: string[]): string {
   return relative(REPO_ROOT, path)
 }
 
-const PackageJsonSchema = s.Compile(t.Object({
-  name: t.String(),
-  version: t.String(),
-}))
+const PackageJsonSchema = s.Compile(
+  t.Object({
+    name: t.String(),
+    version: t.String(),
+  }),
+)
 
 export const PACKAGE_JSON_PATH = rootPath("package.json")
 
 /**
  * Contents of the package.json file described in {@link PackageJsonSchema}.
  */
-export const PACKAGE_JSON = PackageJsonSchema.Parse(JSON.parse(readFileSync(PACKAGE_JSON_PATH, "utf8")))
+export const PACKAGE_JSON = PackageJsonSchema.Parse(
+  JSON.parse(readFileSync(PACKAGE_JSON_PATH, "utf8")),
+)
 
 const defaultFlags = {
   help: {
     type: "boolean",
-    short: 'h',
-  }
+    short: "h",
+  },
 } as const satisfies ParseArgsOptionsConfig
 
 function formatUsage(cfg: ParseArgsConfig & { usage: string }): string {
@@ -80,7 +84,9 @@ export class CliUsageError extends Error {
 export async function runScript<T extends ParseArgsConfig>(
   shouldRun: boolean,
   parseConfig: T & { usage: string },
-  main: (args: ParsedResult<Omit<T, "allowPositionals"> & { allowPositionals: true }>) => void | Promise<void>,
+  main: (
+    args: ParsedResult<Omit<T, "allowPositionals"> & { allowPositionals: true }>,
+  ) => void | Promise<void>,
 ): Promise<void> {
   if (!shouldRun) return
 

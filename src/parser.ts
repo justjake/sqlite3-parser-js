@@ -1,104 +1,29 @@
-// CST-building SQL parser.
+// AST-building SQL parser.
 //
-// This module is a thin layer on top of src/lempar.ts (the pure LALR
-// driver, itself a 1:1 port of tool/lempar.c).  The engine handles all
-// of the faithful-to-lempar.c work — shift/reduce dispatch, fallback
-// lookup, wildcard, etc.  Everything in *this* file is CST-emitter
-// divergence from the C codebase: we translate raw tokens into CST
-// {@link TokenNode}s, reduce callbacks into CST {@link RuleNode}s, and reconstruct
-// the grammar structure that Lemon's table generator elided via
-// unit-rule elimination.
-//
-// If you're porting a change from sqlite/tool/lempar.c, you're
-// probably looking at src/lempar.ts — not this file.  Reach for
-// parser.ts when the CST shape changes, or when you want to alter how
-// virtual tokens / error messages / trivia are represented.
+// This module is the orchestration layer above src/lempar.ts (the pure
+// LALR driver). It tokenizes source text, feeds terminals into the
+// engine, lets the generated reducer build AST state, and merges
+// low-level diagnostics into the public ParseError API.
 
 import {
   TokenizeOpts,
   tokenizerModuleForGrammar,
-  Token as LexerToken,
+  type Token,
   type CreateTokenizerOptions,
   type KeywordDefs,
 } from "./tokenize.ts"
 import {
   engineModuleForGrammar,
-  type ParserRhsPos,
-  type LalrPopped,
   type ParserDefs,
-  type RuleId,
-  type SymbolId,
   type TokenId,
   LalrReduce,
-  LalrEngine,
   CreateLalrEngine,
 } from "./lempar.ts"
-import {
-  buildIllegalTokenError,
-  createParserError,
-  enhanceParseError,
-  lineColAt,
-  type ParseError,
-} from "./enhanceError.ts"
+import { lineColAt, toParseErrors, type Diagnostic, type ParseError } from "./diagnostics.ts"
+import { buildIllegalTokenDiagnostic, enhanceParseError } from "./enhanceError.ts"
 import type { CmdList } from "./ast/nodes.ts"
 import { finalizeCmdList } from "./ast/parseActions.ts"
 import type { ParseState } from "./ast/parseState.ts"
-
-// ---------------------------------------------------------------------------
-// CST node shapes.  These are emitter-defined — the engine knows
-// nothing about them.
-// ---------------------------------------------------------------------------
-
-/** A leaf node — one token from the tokenizer. */
-export interface TokenNode {
-  readonly kind: "token"
-  /** Numeric TK_* code (matches lemon's terminal symbol id). */
-  readonly type: TokenId
-  /** Stringified TK_* name, e.g. `"SELECT"`, `"ID"`, `"INTEGER"`. */
-  readonly name: string
-  /** Source text covered by the token.  Empty string for synthetic tokens. */
-  readonly text: string
-  /** Byte offset of the token in the original source string. */
-  readonly start: number
-  /** Length of the token in source characters.  Zero for synthetic tokens. */
-  readonly length: number
-  /** 1-based line number of the token's first character (LF breaks lines). */
-  readonly line: number
-  /** 1-based column of the token's first character, in UTF-16 code units. */
-  readonly col: number
-  /**
-   * True iff this token was injected by the parser rather than read from
-   * the source.  At end-of-input we inject a virtual SEMI (to close the
-   * current statement) and a virtual `$` (to trigger YY_ACCEPT_ACTION);
-   * both carry `synthetic: true`, `text: ""`, `length: 0`, `start:
-   * sql.length`, and `line`/`col` pointing past the last source char.
-   * `tokenLeaves()` filters these out by default so existing callers see
-   * only source tokens.
-   */
-  readonly synthetic: boolean
-}
-
-/** An internal node — the result of a grammar reduction. */
-export interface RuleNode {
-  readonly kind: "rule"
-  /** Lemon rule id (matches `rules[ruleId]` in the defs). */
-  readonly rule: RuleId
-  /**
-   * The nonterminal name on the left-hand side, e.g. `"select"`,
-   * `"expr"`, `"cmdlist"`.  This is the natural CST label.
-   */
-  readonly name: string
-  /** Nonterminal symbol id (always a nonterminal, despite the union type). */
-  readonly lhs: SymbolId
-  /** Direct children, in source order. */
-  readonly children: readonly CstNode[]
-  /** Source offset of the first child (or 0 for an empty reduction). */
-  readonly start: number
-  /** Source length, from the first child's start to the last child's end. */
-  readonly length: number
-}
-
-export type CstNode = TokenNode | RuleNode
 
 /** Options for a parser module.  Tokenizer-level options are forwarded verbatim. */
 export interface CreateParserOptions extends CreateTokenizerOptions {
@@ -123,14 +48,19 @@ export type ParseResult =
 // parser.json + keywords.json.
 // ---------------------------------------------------------------------------
 
+export type ParseOpts = TokenizeOpts & {
+  /** Annotate any returned errors with this filename. */
+  filename?: string
+}
+
 /**
  * SQlite3 Parser library.
  */
 export interface ParserModule {
-  /** Parse a SQL string into a CST. */
-  parse(source: string): ParseResult
+  /** Parse a SQL string into an AST. */
+  parse(source: string, opts?: ParseOpts): ParseResult
   /** Tokenize a SQL string into a stream of tokens. */
-  tokenize(source: string, opts?: TokenizeOpts): IterableIterator<LexerToken>
+  tokenize(source: string, opts?: TokenizeOpts): IterableIterator<Token>
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
   tokenName(code: TokenId): string | undefined
   /** Create the underlying LALR state machine engine, used by {@link parse}. */
@@ -158,11 +88,11 @@ export function parserModuleForGrammar(
   keywordDefs: KeywordDefs,
   options: CreateParserOptions,
 ): ParserModule {
-  const { symbols, reduce, createState } = parserDefs
+  const { reduce, createState } = parserDefs
   const tk = tokenizerModuleForGrammar(parserDefs, keywordDefs, options)
   const createEngine = engineModuleForGrammar(parserDefs)
 
-  const { ILLEGAL, SEMI } = tk.tokens
+  const { COMMENT, ILLEGAL, SEMI, SPACE } = tk.tokens
   const EOF = 0 as TokenId
 
   // -------------------------------------------------------------------------
@@ -170,10 +100,12 @@ export function parserModuleForGrammar(
   //
   // Tokenises the input, feeds it to the engine as a lazy iterable of
   // `{major, value}` pairs, and translates the engine's result into a
-  // ParseResult with CST and user-facing error messages.
+  // ParseResult with AST and user-facing error messages.
   // -------------------------------------------------------------------------
-  function parse(sql: string): ParseResult {
-    const errors: ParseError[] = []
+  function parse(sql: string, opts: ParseOpts = {}): ParseResult {
+    const { filename, ...tokenizeOpts } = opts
+    const errorContext = { source: sql, filename }
+    const diagnostics: Diagnostic[] = []
 
     // Structurally the same shape as sqlite's tokenize.c:674
     // sqlite3RunParser: get a token, feed it to the parser, repeat
@@ -183,10 +115,10 @@ export function parserModuleForGrammar(
     const session = createEngine(reduce, state)
 
     // Chronological token stream we actually fed the session.
-    // enhanceParseError scans this backward from the failing token to
-    // find unclosed groups, trailing commas, FILTER-before-OVER, etc.,
-    // so it needs to include synthetic SEMI/EOF markers too.
-    const tokenStream: TokenNode[] = []
+    // If `emitTrivia` is enabled on the tokenizer we still screen out
+    // SPACE/COMMENT before parser dispatch, so this remains aligned with
+    // the engine's tokenIndex values. Synthetic SEMI/EOF are appended.
+    const tokenStream: Token[] = []
 
     // `singleStatement` tripwire: the `ecmd ::= cmdx SEMI` reduction
     // that bumps `state.cmds` from 0 to 1 is deferred by LALR lookahead
@@ -198,44 +130,34 @@ export function parserModuleForGrammar(
     // "second valid stmt past first" (engine would keep running) — in
     // both cases the token's offset is the start of the trailing range.
     let lastMajor: TokenId | undefined
-    for (const tok of tk.tokenize(sql)) {
-      const node: TokenNode = {
-        kind: "token",
-        type: tok.type,
-        name: symbols[tok.type] ?? String(tok.type),
-        text: tok.text,
-        start: tok.span.offset,
-        length: tok.span.length,
-        line: tok.span.line,
-        col: tok.span.col,
-        synthetic: false,
-      }
+    for (const tok of tk.tokenize(sql, tokenizeOpts)) {
+      if (tok.type === SPACE || tok.type === COMMENT) continue
 
       if (tok.type === ILLEGAL) {
         // sqlite's tokenize.c:707 formats it as: unrecognized token.
         // We record it and bail — attempting to recover typically
         // cascades into noise.
-        errors.push(buildIllegalTokenError(sql, node))
-        return { status: "errored", errors }
+        diagnostics.push(buildIllegalTokenDiagnostic(tok))
+        diagnostics.push(...state.errors)
+        return { status: "errored", errors: toParseErrors(errorContext, diagnostics) }
       }
 
-      tokenStream.push(node)
-      session.next(tok.type, node)
+      tokenStream.push(tok)
+      session.next(tok.type, tok)
 
       if (options.singleStatement && state.cmds.length >= 1 && tok.type !== SEMI) {
-        errors.push(
-          createParserError({
-            message: "expected end of input after single statement",
-            span: {
-              offset: tok.span.offset,
-              length: sql.length - tok.span.offset,
-              line: tok.span.line,
-              col: tok.span.col,
-            },
-            sql,
-          }),
-        )
-        return { status: "errored", errors }
+        diagnostics.push({
+          message: "expected end of input after single statement",
+          token: tok,
+          span: {
+            offset: tok.span.offset,
+            length: sql.length - tok.span.offset,
+            line: tok.span.line,
+            col: tok.span.col,
+          },
+        })
+        diagnostics.push(...state.errors)
+        return { status: "errored", errors: toParseErrors(errorContext, diagnostics) }
       }
 
       if (session.phase !== "running") break
@@ -245,55 +167,44 @@ export function parserModuleForGrammar(
     // EOF tail — mirrors tokenize.c:674 sqlite3RunParser.  If the last
     // real token wasn't a SEMI, feed a virtual one to close the
     // current statement.  Then feed 0 (end-of-input marker) to trigger
-    // the final reduce/accept.  Both are real TokenNodes with
-    // `synthetic: true` and zero-length span at `sql.length`.  Skip
-    // both if the session already terminated during the token loop.
+    // the final reduce/accept.  Both are synthetic tokens with
+    // zero-length spans at `sql.length`. Skip both if the session already
+    // terminated during the token loop.
     if (session.phase === "running") {
       const endPos = sql.length
       const { line: endLine, col: endCol } = lineColAt(sql, endPos)
+      const endSpan = { offset: endPos, length: 0, line: endLine, col: endCol }
 
       if (lastMajor !== SEMI) {
-        const semiNode: TokenNode = {
-          kind: "token",
+        const semiToken: Token = {
           type: SEMI,
-          name: symbols[SEMI] ?? "SEMI",
           text: "",
-          start: endPos,
-          length: 0,
-          line: endLine,
-          col: endCol,
+          span: endSpan,
           synthetic: true,
         }
-        tokenStream.push(semiNode)
-        session.next(SEMI, semiNode)
+        tokenStream.push(semiToken)
+        session.next(SEMI, semiToken)
       }
 
       if (session.phase === "running") {
-        const eofNode: TokenNode = {
-          kind: "token",
+        const eofToken: Token = {
           type: EOF,
-          name: symbols[EOF] ?? "$",
           text: "",
-          start: endPos,
-          length: 0,
-          line: endLine,
-          col: endCol,
+          span: endSpan,
           synthetic: true,
         }
-        tokenStream.push(eofNode)
-        session.next(EOF, eofNode)
+        tokenStream.push(eofToken)
+        session.next(EOF, eofToken)
       }
     }
 
-    // Translate each engine error into a grammar-aware ParseError.
+    // Translate each engine error into a grammar-aware diagnostic.
     // YYNOERRORRECOVERY means the engine records at most one, but loop
-    // in case that ever changes.  Engine input values are always
-    // TokenNodes (we only feed terminals), so the cast is safe.
+    // in case that ever changes. Engine input values are always Tokens.
     for (const e of session.errors) {
-      errors.push(
+      diagnostics.push(
         enhanceParseError({
-          sql,
-          token: e.minor as TokenNode,
+          token: e.minor as Token,
           state: e.stateno,
           defs: parserDefs,
           tokens: tokenStream,
@@ -302,10 +213,23 @@ export function parserModuleForGrammar(
       )
     }
 
+    diagnostics.push(...state.errors)
+
+    if (diagnostics.length > 0) {
+      return { status: "errored", errors: toParseErrors(errorContext, diagnostics) }
+    }
     if (session.phase === "accepted") {
       return { status: "accepted", ast: finalizeCmdList(state) }
     } else {
-      return { status: "errored", errors }
+      return {
+        status: "errored",
+        errors: toParseErrors(errorContext, [
+          {
+            message: "parse did not accept input",
+            span: { offset: 0, length: 0, line: 1, col: 0 },
+          },
+        ]),
+      }
     }
   }
 

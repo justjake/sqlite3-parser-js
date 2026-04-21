@@ -322,7 +322,6 @@ await runScript(
 )
 
 async function vendorMain(cli: CliOptions): Promise<void> {
-
   const manifest = readManifest()
   verifyExistingHashes(manifest)
 

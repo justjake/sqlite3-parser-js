@@ -6,13 +6,14 @@
 // an interface.  Bitflag types are `number` aliases with a companion
 // const object holding the bit masks.  `Option<T>` maps to `T | undefined`.
 //
-// The seven "outer" unions — `Cmd`, `Stmt`, `Expr`, `Literal`,
-// `ColumnConstraint`, `TableConstraint`, `TriggerCmd` — expose every
-// variant as a separately exported interface named
-// `<Variant><UnionName>` (e.g. `AlterTableStmt`, `BetweenExpr`,
-// `NumericLiteral`).  Downstream narrowing code can reference a
-// variant directly without having to restate its shape in a type
-// predicate.
+// The major unions — `Cmd`, `Stmt`, `Expr`, `ColumnConstraint`,
+// `TableConstraint`, `TriggerCmd` — expose every variant as a
+// separately exported interface named `<Variant><UnionName>` (e.g.
+// `AlterTableStmt`, `BetweenExpr`).  `Literal` is a named subset of
+// `Expr` covering the eight literal-producing node kinds
+// (`NumericLiteral`, `StringLiteral`, …).  Downstream narrowing code
+// can reference a variant directly without having to restate its
+// shape in a type predicate.
 //
 // Terminal-producing nodes (`Name`, `Id`, each `Literal` variant,
 // `VariableExpr`) carry a `span: Span` back-pointer so callers
@@ -487,8 +488,21 @@ export interface BinaryExpr {
 export interface CaseExpr {
   readonly kind: "CaseExpr"
   readonly base: Expr | undefined
-  readonly whenThenPairs: readonly { readonly when: Expr; readonly then: Expr }[]
+  readonly whenThenPairs: readonly WhenThen[]
   readonly elseExpr: Expr | undefined
+  readonly span: Span
+}
+
+/**
+ * ```sql
+ * SELECT CASE x WHEN 1 THEN 'a' WHEN 2 THEN 'b' END FROM t
+ *               ^^^^^^^^^^^^^^^
+ * ```
+ */
+export interface WhenThen {
+  readonly kind: "WhenThen"
+  readonly when: Expr
+  readonly then: Expr
   readonly span: Span
 }
 
@@ -658,18 +672,6 @@ export interface LikeExpr {
 
 /**
  * ```sql
- * SELECT 42 FROM t
- *        ^^
- * ```
- */
-export interface LiteralExpr {
-  readonly kind: "LiteralExpr"
-  readonly literal: Literal
-  readonly span: Span
-}
-
-/**
- * ```sql
  * PRAGMA cache_size = DEFAULT_SIZE
  *                     ^^^^^^^^^^^^
  * ```
@@ -787,7 +789,7 @@ export type Expr =
   | InTableExpr
   | IsNullExpr
   | LikeExpr
-  | LiteralExpr
+  | Literal
   | NameExpr
   | NotNullExpr
   | ParenthesizedExpr
@@ -897,7 +899,8 @@ export interface CurrentTimestampLiteral {
 }
 
 /**
- * SQL literal value.
+ * SQL literal value.  Literals are themselves expressions — `Literal`
+ * is a `Expr` subset grouping the eight literal-producing node kinds.
  * Text-form literals are stored dequoted: the parser strips the outer
  * `'…'` delimiters from strings, collapses `''` pairs to `'`, and
  * decodes `x'…'` blobs into raw bytes.  Every variant carries a
@@ -1774,7 +1777,19 @@ export interface SelectOneSelect {
 
 export interface ValuesOneSelect {
   readonly kind: "ValuesOneSelect"
-  readonly values: readonly (readonly Expr[])[]
+  readonly values: readonly ValuesRow[]
+  readonly span: Span
+}
+
+/**
+ * ```sql
+ * VALUES (1, 2), (3, 4)
+ *        ^^^^^^
+ * ```
+ */
+export interface ValuesRow {
+  readonly kind: "ValuesRow"
+  readonly values: readonly Expr[]
   readonly span: Span
 }
 
@@ -2081,7 +2096,7 @@ export interface UnboundedPrecedingFrameBound {
 
 /**
  * Map of all AST node shapes, keyed by their `kind` discriminator.
- * 
+ *
  * Advanced users may inject new node shapes using TypeScript declaration merging.
  */
 export interface AstNodeMap {
@@ -2122,6 +2137,7 @@ export interface AstNodeMap {
   BetweenExpr: BetweenExpr
   BinaryExpr: BinaryExpr
   CaseExpr: CaseExpr
+  WhenThen: WhenThen
   CastExpr: CastExpr
   CollateExpr: CollateExpr
   DoublyQualifiedExpr: DoublyQualifiedExpr
@@ -2134,7 +2150,6 @@ export interface AstNodeMap {
   InTableExpr: InTableExpr
   IsNullExpr: IsNullExpr
   LikeExpr: LikeExpr
-  LiteralExpr: LiteralExpr
   NameExpr: NameExpr
   NotNullExpr: NotNullExpr
   ParenthesizedExpr: ParenthesizedExpr
@@ -2162,6 +2177,7 @@ export interface AstNodeMap {
   JoinedSelectTable: JoinedSelectTable
   SelectOneSelect: SelectOneSelect
   ValuesOneSelect: ValuesOneSelect
+  ValuesRow: ValuesRow
   ExprResultColumn: ExprResultColumn
   StarResultColumn: StarResultColumn
   TableStarResultColumn: TableStarResultColumn
@@ -2312,4 +2328,3 @@ type _AssertTrue<T extends true> = T
 type _AstNodeMapWellFormed = _AssertTrue<
   _AstNodeMapKeyCheck[keyof AstNodeMap] extends true ? true : false
 >
-

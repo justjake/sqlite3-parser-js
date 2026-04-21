@@ -43,14 +43,14 @@
 //
 %syntax_error {
   if( yymajor===0 /* TK_EOF */ ){
-    state.errors.push(mkAstParseError("incomplete input", yyminor.span));
+    state.errors.push(mkDiagnostic("incomplete input", yyminor.span));
   }else{
-    state.errors.push(mkAstParseError(`near "${yyminor.text}": syntax error`, yyminor.span));
+    state.errors.push(mkDiagnostic(`near "${yyminor.text}": syntax error`, yyminor.span));
   }
 }
 
 %stack_overflow {
-  state.errors.push(mkAstParseError("parser stack overflow", { offset: 0, length: 0, line: 0, col: 0 }));
+  state.errors.push(mkDiagnostic("parser stack overflow", { offset: 0, length: 0, line: 0, col: 0 }));
 }
 
 // The name of the generated procedure that implements the parser is as follows:
@@ -73,10 +73,10 @@ import type {
   SelectBody, SelectTable, SetAssignment, SortOrder, SortedColumn, Stmt,
   TabFlags, TableConstraint, TransactionType, TriggerCmd, TriggerEvent,
   TriggerTime, Type, TypeSize, UnaryOperator, Upsert, UpsertDo, UpsertIndex,
-  Window, WindowDef, With,
+  ValuesRow, WhenThen, Window, WindowDef, With,
 } from "../../../src/ast/nodes.ts";
 import type { Span, Token } from "../../../src/tokenize.ts";
-import type { AstParseError, ParseState } from "../../../src/ast/parseState.ts";
+import type { ParseState } from "../../../src/ast/parseState.ts";
 import type { FromClauseMut } from "../../../src/ast/parseActions.ts";
 import {
   mkName, mkId, mkIdExpr, mkVariableExpr,
@@ -93,7 +93,7 @@ import {
   mkColumnDefinition, addColumn, mkColumnsAndConstraints,
   addCte, mkUpsertIndex, flushCmd,
   spanFromPopped,
-  mkAstParseError, mkDuplicateError,
+  mkDiagnostic, mkDuplicateDiagnostic,
 } from "../../../src/ast/parseActions.ts";
 import { sqlite3Dequote, sqlite3DequoteNumber } from "../../../src/util.ts";
 
@@ -173,7 +173,7 @@ table_option(A) ::= WITHOUT nm(X). {
   if( X.name.toLowerCase()==="rowid" ){
     A = 0x00000080 /* TabFlags.WithoutRowid */;
   }else{
-    state.errors.push(mkAstParseError(
+    state.errors.push(mkDiagnostic(
       `unknown table option: ${X.name}`,
       X.span,
       { message: "expected WITHOUT ROWID", span: undefined },
@@ -185,7 +185,7 @@ table_option(A) ::= nm(X). {
   if( X.name.toLowerCase()==="strict" ){
     A = 0x00010000 /* TabFlags.Strict */;
   }else{
-    state.errors.push(mkAstParseError(
+    state.errors.push(mkDiagnostic(
       `unknown table option: ${X.name}`,
       X.span,
       { message: "expected STRICT or WITHOUT ROWID", span: undefined },
@@ -540,13 +540,15 @@ oneselect(A) ::= SELECT distinct(D) selcollist(W) from(X) where_opt(Y)
 
 // Single row VALUES clause.
 //
-%type values {Expr[][]}
+%type values {ValuesRow[]}
 oneselect(A) ::= values(X).             { A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }; }
-values(A) ::= VALUES LP nexprlist(X) RP. { A = [X]; }
+values(A) ::= VALUES LP nexprlist(X) RP. {
+  A = [{ kind: "ValuesRow", values: X, span: nodeSpan() }];
+}
 
 // Multiple row VALUES clause.
 //
-%type mvalues {Expr[][]}
+%type mvalues {ValuesRow[]}
 oneselect(A) ::= mvalues(X).                    { A = { kind: "ValuesOneSelect", values: X, span: nodeSpan() }; }
 mvalues(A) ::= values(A) COMMA LP nexprlist(Y) RP.  { valuesPush(state, A, Y, nodeSpan());}
 mvalues(A) ::= mvalues(A) COMMA LP nexprlist(Y) RP. { valuesPush(state, A, Y, nodeSpan());}
@@ -804,7 +806,7 @@ idlist_opt(A) ::= LP idlist(X) RP.    { A = X;    }
 idlist(A) ::= idlist(A) COMMA nm(Y).  {
   const duplicateOf = A.find(n => n.name===Y.name);
   if( duplicateOf ){
-    state.errors.push(mkDuplicateError(
+    state.errors.push(mkDuplicateDiagnostic(
       `column "${Y.name}" specified more than once`,
       Y.span,
       duplicateOf.span,
@@ -827,10 +829,10 @@ expr(A) ::= nm(X) DOT nm(Y).      { A = { kind: "QualifiedExpr",        table: X
 expr(A) ::= nm(X) DOT nm(Y) DOT nm(Z). {
   A = { kind: "DoublyQualifiedExpr", schema: X, table: Y, column: Z, span: nodeSpan() };
 }
-term(A) ::= NULL(X).              { A = { kind: "LiteralExpr", literal: mkNullLiteral(X), span: nodeSpan()    }; }
-term(A) ::= BLOB(X).              { A = { kind: "LiteralExpr", literal: mkBlobLiteral(X), span: nodeSpan()    }; }
-term(A) ::= STRING(X).            { A = { kind: "LiteralExpr", literal: mkStringLiteral(X), span: nodeSpan()  }; }
-term(A) ::= FLOAT|INTEGER(X).     { A = { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() }; }
+term(A) ::= NULL(X).              { A = mkNullLiteral(X); }
+term(A) ::= BLOB(X).              { A = mkBlobLiteral(X); }
+term(A) ::= STRING(X).            { A = mkStringLiteral(X); }
+term(A) ::= FLOAT|INTEGER(X).     { A = mkNumericLiteral(X); }
 expr(A) ::= VARIABLE(X).          { A = mkVariableExpr(X); }
 expr(A) ::= expr(X) COLLATE ids(C). { A = mkCollate(X, C, nodeSpan()); }
 %ifndef SQLITE_OMIT_CAST
@@ -866,7 +868,7 @@ expr(A) ::= idj(X) LP distinct(D) exprlist(Y) RP WITHIN GROUP LP ORDER BY expr(E
 %endif SQLITE_ENABLE_ORDERED_SET_AGGREGATES
 %endif SQLITE_OMIT_WINDOWFUNC
 
-term(A) ::= CTIME_KW(OP). { A = { kind: "LiteralExpr", literal: literalFromCtimeKw(OP), span: nodeSpan() }; }
+term(A) ::= CTIME_KW(OP). { A = literalFromCtimeKw(OP); }
 
 expr(A) ::= LP nexprlist(X) COMMA expr(Y) RP. {
   A = { kind: "ParenthesizedExpr", exprs: [...X, Y], span: nodeSpan() };
@@ -936,12 +938,12 @@ expr(A) ::= expr(B) between_op(N) expr(X) AND expr(Y). [BETWEEN] {
 expr(A) ::= CASE case_operand(X) case_exprlist(Y) case_else(Z) END. {
   A = { kind: "CaseExpr", base: X, whenThenPairs: Y, elseExpr: Z, span: nodeSpan() };
 }
-%type case_exprlist {{when: Expr, then: Expr, span: Span}[]}
+%type case_exprlist {WhenThen[]}
 case_exprlist(A) ::= case_exprlist(A) WHEN expr(Y) THEN expr(Z). {
-  A.push({ when: Y, then: Z, span: nodeSpan() });
+  A.push({ kind: "WhenThen", when: Y, then: Z, span: nodeSpan() });
 }
 case_exprlist(A) ::= WHEN expr(Y) THEN expr(Z). {
-  A = [{ when: Y, then: Z, span: nodeSpan() }];
+  A = [{ kind: "WhenThen", when: Y, then: Z, span: nodeSpan() }];
 }
 %type case_else {Expr | undefined}
 case_else(A) ::= ELSE expr(X).         { A = X;    }
@@ -1028,19 +1030,19 @@ cmd ::= PRAGMA fullname(X) LP minus_num(Y) RP. { state.stmt = { kind: "PragmaStm
 %type nmnum {Expr}
 nmnum(A) ::= plus_num(A).
 nmnum(A) ::= nm(X).      { A = { kind: "NameExpr", name: X, span: nodeSpan() }; }
-nmnum(A) ::= ON(X).      { A = { kind: "LiteralExpr", literal: mkKeywordLiteral(X), span: nodeSpan() }; }
-nmnum(A) ::= DELETE(X).  { A = { kind: "LiteralExpr", literal: mkKeywordLiteral(X), span: nodeSpan() }; }
-nmnum(A) ::= DEFAULT(X). { A = { kind: "LiteralExpr", literal: mkKeywordLiteral(X), span: nodeSpan() }; }
+nmnum(A) ::= ON(X).      { A = mkKeywordLiteral(X); }
+nmnum(A) ::= DELETE(X).  { A = mkKeywordLiteral(X); }
+nmnum(A) ::= DEFAULT(X). { A = mkKeywordLiteral(X); }
 %endif SQLITE_OMIT_PRAGMA
 %token_class number INTEGER|FLOAT.
 %type plus_num  {Expr}
 plus_num(A) ::= PLUS number(X). {
-  A = mkUnary("Positive", { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() }, nodeSpan());
+  A = mkUnary("Positive", mkNumericLiteral(X), nodeSpan());
 }
-plus_num(A) ::= number(X).      { A = { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() }; }
+plus_num(A) ::= number(X).      { A = mkNumericLiteral(X); }
 %type minus_num {Expr}
 minus_num(A) ::= MINUS number(X). {
-  A = mkUnary("Negative", { kind: "LiteralExpr", literal: mkNumericLiteral(X), span: nodeSpan() }, nodeSpan());
+  A = mkUnary("Negative", mkNumericLiteral(X), nodeSpan());
 }
 
 //////////////////////////// The CREATE TRIGGER command /////////////////////
@@ -1084,13 +1086,13 @@ trigger_cmd_list(A) ::= trigger_cmd(X) SEMI.                     { A = [X];  }
 //
 tridxby ::= .
 tridxby ::= INDEXED BY nm. {
-  state.errors.push(mkAstParseError(
+  state.errors.push(mkDiagnostic(
     "the INDEXED BY clause is not allowed on UPDATE or DELETE statements within triggers",
     nodeSpan(),
   ));
 }
 tridxby ::= NOT INDEXED. {
-  state.errors.push(mkAstParseError(
+  state.errors.push(mkDiagnostic(
     "the NOT INDEXED clause is not allowed on UPDATE or DELETE statements within triggers",
     nodeSpan(),
   ));
@@ -1104,7 +1106,7 @@ trigger_cmd(A) ::= UPDATE orconf(R) xfullname(X) tridxby SET setlist(Y) from(F) 
 // INSERT
 trigger_cmd(A) ::= insert_cmd(R) INTO xfullname(X) idlist_opt(F) select(S) upsert(U). {
   if( U.returning ){
-    state.errors.push(mkAstParseError(
+    state.errors.push(mkDiagnostic(
       "cannot use RETURNING in a trigger",
       U.returningSpan ?? nodeSpan(),
     ));
@@ -1391,7 +1393,7 @@ term(A) ::= QNUMBER(X). {
   // placement surfaces as a parse error.
   const dq = sqlite3DequoteNumber(X.text, { digitSeparator: state.digitSeparator });
   if( dq.error ){
-    state.errors.push(mkAstParseError(
+    state.errors.push(mkDiagnostic(
       dq.error,
       X.span,
       {
@@ -1400,7 +1402,7 @@ term(A) ::= QNUMBER(X). {
       },
     ));
   }
-  A = { kind: "LiteralExpr", literal: { kind: "NumericLiteral", value: dq.text, span: X.span }, span: nodeSpan() };
+  A = { kind: "NumericLiteral", value: dq.text, span: X.span };
 }
 
 /*

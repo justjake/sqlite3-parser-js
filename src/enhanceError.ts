@@ -1,4 +1,4 @@
-// Grammar-aware parse-error diagnostics.
+// Grammar-aware syntax diagnostics.
 //
 // Given (sql, failing token, parser state, full token stream), produce a
 // structured diagnostic: line/col/range, a list of terminals that would
@@ -11,96 +11,24 @@
 // message when nothing pattern-matches.
 //
 // Adapted from the lemonjs port; the algorithms are unchanged, but the
-// data access has been rewritten against sqlite3-parser's ParserDefs / CST
-// shapes (see src/lempar.ts, src/parser.ts).
+// data access is bound to sqlite3-parser's ParserDefs and runtime tokens.
 
 import type { ParserDefs, SymbolId } from "./lempar.ts"
-import type { TokenNode } from "./parser.ts"
-import { Span } from "./tokenize.ts";
+import type { Diagnostic } from "./diagnostics.ts"
+import type { Token } from "./tokenize.ts"
 
-// ---------------------------------------------------------------------------
-// Public types.
-// ---------------------------------------------------------------------------
-
-/** A single parse error. */
-export interface ParseError {
-  /** Error message. */
-  readonly message: string
-  /** The offending token. */
-  readonly span: Span
-  /** Additional information about the error, optionally pointing to another location. */
-  readonly hints?: readonly {
-    readonly message: string
-    readonly span: Span | undefined
-  }[]
-  /** Format all erorr details with a code block. */
-  format(): string
-  /** Alias of {@link format} */
-  toString(): string
-}
-
-export type CreateParserErrorArgs = Pick<ParseError,  "message" | "span" | "hints"> & { sql: string, filename?: string }
-
-export function formatParseError(args: CreateParserErrorArgs): string {
-  const { sql, filename, message, span, hints } = args
-    const loc = filename ? `At ${filename}:${span.line}:${span.col}:` : `At ${span.line}:${span.col}:`
-    const parts: string[] = [
-      message,
-      "",
-      loc,
-      renderCodeBlock({ sql, span, indent: "  " }),
-    ]
-
-    hints?.forEach(({ message, span }, i) => {
-      if (i === 0 || span) {
-        parts.push("")
-      }
-      parts.push(`  hint: ${message}`)
-      if (span) {
-        parts.push(renderCodeBlock({ sql, span, indent: "    ", contextBefore: 0, contextAfter: 0 }))
-      }
-    })
-
-    return parts.join("\n")
-}
-
-class ParserError implements ParseError {
-  #args: CreateParserErrorArgs
-  #formatted: string | undefined
-
-  constructor(args: CreateParserErrorArgs) {
-    this.#args = args
-  }
-
-  get message(): string {
-    return this.#args.message
-  }
-
-  get span(): Span {
-    return this.#args.span
-  }
-
-  get hints(): readonly { message: string, span: Span | undefined }[] | undefined {
-    return this.#args.hints
-  }
-
-  format(): string {
-    return this.#formatted ??= formatParseError(this.#args)
-  }
-
-  toString(): string {
-    return this.format()
-  }
-}
-
-export function createParserError(args: CreateParserErrorArgs): ParserError {
-  return new ParserError(args)
-}
+export type { Diagnostic, DiagnosticHint, ParseError, ParseErrorContext } from "./diagnostics.ts"
+export {
+  formatParseError,
+  lineColAt,
+  renderCodeBlock,
+  toParseError,
+  toParseErrors,
+} from "./diagnostics.ts"
 
 export interface EnhanceParseErrorOptions {
-  readonly sql: string
   /** The failing token as the engine saw it (may be synthetic). */
-  readonly token: TokenNode
+  readonly token: Token
   /** Parser state number at the time of failure. */
   readonly state: number
   /** Full grammar defs — symbol table + action tables. */
@@ -110,7 +38,7 @@ export interface EnhanceParseErrorOptions {
    * including any synthetic SEMI/EOF at the tail.  Used for context
    * scanning (open groups, trailing commas, FILTER/OVER ordering).
    */
-  readonly tokens: readonly TokenNode[]
+  readonly tokens: readonly Token[]
   /** 0-based index of `token` within `tokens`. */
   readonly tokenIndex: number
 }
@@ -254,7 +182,7 @@ const TABLE_NAME_CONTEXT_TOKEN_NAMES = new Set(["FROM", "JOIN", "INTO", "UPDATE"
 
 type OpenGroup = {
   readonly kind: "LP" | "CASE"
-  readonly token: TokenNode
+  readonly token: Token
 }
 
 // ---------------------------------------------------------------------------
@@ -262,19 +190,20 @@ type OpenGroup = {
 // ---------------------------------------------------------------------------
 
 /** SQLite-style short message: `near "FROM": syntax error` / `incomplete input`. */
-export function canonicalParseMessage(token: TokenNode): string {
+export function canonicalParseMessage(token: Token): string {
   return token.text.length > 0 ? `near "${token.text}": syntax error` : "incomplete input"
 }
 
-export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
-  const { sql, token, state, defs, tokens, tokenIndex } = opts
+export function enhanceParseError(opts: EnhanceParseErrorOptions): Diagnostic {
+  const { token, state, defs, tokens, tokenIndex } = opts
   const canonical = canonicalParseMessage(token)
 
   const idSymbolId = findIdSymbol(defs)
   const expected = collectExpectedTerminals(defs, state, idSymbolId)
   const previousToken = previousConcreteToken(tokens, tokenIndex)
-  const openGroups = scanOpenGroups(tokens, tokenIndex)
+  const openGroups = scanOpenGroups(defs, tokens, tokenIndex)
   const hint = buildHint({
+    defs,
     token,
     canonical,
     expected,
@@ -283,27 +212,28 @@ export function enhanceParseError(opts: EnhanceParseErrorOptions): ParseError {
     tokens,
     tokenIndex,
   })
-  return new ParserError({
-    token,
-    canonical,
-    hint,
-    expected,
-    sql,
-  })
+  const hints =
+    hint !== null
+      ? [{ message: hint }]
+      : expected.length > 0
+        ? [{ message: `expected ${formatExpectedList(expected)}` }]
+        : undefined
+  return hints
+    ? { message: canonical, span: token.span, token, hints }
+    : { message: canonical, span: token.span, token }
 }
 
 /**
- * Build a ParseError for an ILLEGAL token that the tokenizer could not
+ * Build a Diagnostic for an ILLEGAL token that the tokenizer could not
  * classify.  No grammar state is consulted, so `expected` is empty.
  */
-export function buildIllegalTokenError(sql: string, token: TokenNode): ParseError {
-  return new ParserError({
+export function buildIllegalTokenDiagnostic(token: Token): Diagnostic {
+  return {
+    message: `unrecognized token: ${JSON.stringify(token.text)}`,
+    span: token.span,
     token,
-    canonical: `unrecognized token: ${JSON.stringify(token.text)}`,
-    hint: illegalTokenHint(token.text),
-    expected: [],
-    sql,
-  })
+    hints: [{ message: illegalTokenHint(token.text) }],
+  }
 }
 
 function illegalTokenHint(text: string): string {
@@ -313,93 +243,6 @@ function illegalTokenHint(text: string): string {
   }
   if (/^[0-9.]/.test(text)) return "malformed numeric literal"
   return "the tokenizer could not classify this input"
-}
-
-function tokenRange(sql: string, token: TokenNode): [number, number] {
-  if (token.synthetic && token.text.length === 0) return [sql.length, sql.length]
-  return [token.start, token.start + token.length]
-}
-
-// ---------------------------------------------------------------------------
-// Location.
-// ---------------------------------------------------------------------------
-
-export function lineColAt(sql: string, offset: number, startAt: Span | undefined): { line: number; col: number } {
-  let line = startAt?.line ?? 1
-  let col = startAt?.col ?? 0
-  for (let i = startAt?.offset ?? 0; i < offset; i++) {
-    if (sql.charCodeAt(i) === 10) {
-      line++
-      col = 0
-    } else {
-      col++
-    }
-  }
-  return { line, col }
-}
-
-export interface RenderCodeBlockOptions {
-  /** Number of source lines to show before the error line. Default 1. */
-  contextBefore?: number
-  /** Number of source lines to show after the error line. Default 1. */
-  contextAfter?: number
-  /** Indentation to apply to the code block. */
-  indent?: string
-}
-
-const CODE_BLOCK_SEPARATOR = '│ '
-
-/**
- * Render a Roc-style source snippet for a half-open range `[start, end)`:
- *
- *     5│ greet : Str -> Str
- *     6│ greet = \name -> name + "!"
- *                              ^^^^^
- *
- * Line numbers right-align in a gutter separated by `│`.  Every line the
- * span covers gets its own underline directly below the code: the first
- * line starts at `startLoc.col` and runs to end-of-line, intermediate
- * lines underline the whole line, and the final line runs from column 0
- * to `endLoc.col`.  An empty range (`start === end`) renders as a
- * single `^`.  `col` is 0-based.
- */
-export function renderCodeBlock(args: {
-  sql: string,
-  span: Span,
-  contextBefore?: number,
-  contextAfter?: number,
-  indent?: string,
-}): string {
-  const { sql, span } = args
-  const contextBefore = Math.max(0, args.contextBefore ?? 1)
-  const contextAfter = Math.max(0, args.contextAfter ?? 1)
-  const indent = args.indent ?? ""
-
-  const start = Math.max(0, Math.min(span.offset, sql.length))
-  const end = Math.max(start, Math.min(span.offset + span.length, sql.length))
-  const lines = sql.split("\n")
-
-  const startLoc = span.offset === start ? span : lineColAt(sql, start, undefined)
-  const endLoc = lineColAt(sql, end, span)
-
-  const firstLine = Math.max(1, startLoc.line - contextBefore)
-  const lastLine = Math.min(lines.length, endLoc.line + contextAfter)
-  const gutterWidth = Math.max(2, String(lastLine).length)
-
-  const out: string[] = []
-  for (let ln = firstLine; ln <= lastLine; ln++) {
-    const text = lines[ln - 1] ?? ""
-    out.push(`${indent}${String(ln).padStart(gutterWidth, " ")}${CODE_BLOCK_SEPARATOR}${text}`)
-
-    if (ln < startLoc.line || ln > endLoc.line) continue
-    const startCol = ln === startLoc.line ? startLoc.col : 0
-    const endCol = ln === endLoc.line ? endLoc.col : text.length
-    const caretCount = Math.max(1, endCol - startCol)
-    const pad = " ".repeat(gutterWidth) + CODE_BLOCK_SEPARATOR + " ".repeat(startCol)
-    out.push(indent + pad + "^".repeat(caretCount))
-  }
-
-  return out.join("\n")
 }
 
 // ---------------------------------------------------------------------------
@@ -487,18 +330,19 @@ function formatExpectedList(expected: readonly string[]): string {
 // ---------------------------------------------------------------------------
 
 function buildHint(ctx: {
-  token: TokenNode
+  defs: ParserDefs
+  token: Token
   canonical: string
   expected: readonly string[]
-  previousToken: TokenNode | null
+  previousToken: Token | null
   openGroups: readonly OpenGroup[]
-  tokens: readonly TokenNode[]
+  tokens: readonly Token[]
   tokenIndex: number
-}): string {
-  const { token, canonical, expected, previousToken, openGroups, tokens, tokenIndex } = ctx
+}): string | null {
+  const { defs, token, canonical, expected, previousToken, openGroups, tokens, tokenIndex } = ctx
   const topOpenGroup = openGroups[openGroups.length - 1] ?? null
 
-  const missingTableNameHint = buildMissingTableNameHint(token, previousToken)
+  const missingTableNameHint = buildMissingTableNameHint(defs, token, previousToken)
   if (missingTableNameHint) return missingTableNameHint
 
   if (canonical === "incomplete input") {
@@ -507,99 +351,118 @@ function buildHint(ctx: {
     return "query ended before a complete statement was formed"
   }
 
-  const unmatchedClosingHint = buildUnmatchedClosingHint(token, openGroups)
+  const unmatchedClosingHint = buildUnmatchedClosingHint(defs, token, openGroups)
   if (unmatchedClosingHint) return unmatchedClosingHint
 
-  const filterOrderingHint = buildFilterOrderingHint(token, tokens, tokenIndex)
+  const filterOrderingHint = buildFilterOrderingHint(defs, token, tokens, tokenIndex)
   if (filterOrderingHint) return filterOrderingHint
 
-  const clauseBoundaryHint = buildClauseBoundaryHint(token, topOpenGroup)
+  const clauseBoundaryHint = buildClauseBoundaryHint(defs, token, topOpenGroup)
   if (clauseBoundaryHint) return clauseBoundaryHint
 
-  const missingCommaHint = buildCommaHint(token, expected, previousToken)
+  const missingCommaHint = buildCommaHint(defs, token, expected, previousToken)
   if (missingCommaHint) return missingCommaHint
 
-  if (token.name === "FROM" && expected.some((item) => EXPRESSION_STARTERS.has(item))) {
+  if (tokenName(defs, token) === "FROM" && expected.some((item) => EXPRESSION_STARTERS.has(item))) {
     return "expected a result expression before FROM"
   }
 
-  const quotedIdentifierHint = buildQuotedIdentifierHint(token, expected)
+  const quotedIdentifierHint = buildQuotedIdentifierHint(defs, token, expected)
   if (quotedIdentifierHint) return quotedIdentifierHint
 
-  return `unexpected ${describeToken(token)}`
+  return null
 }
 
-function describeToken(token: TokenNode): string {
+function describeToken(token: Token): string {
   if (token.text.length === 0) return "end of input"
   return `"${token.text}"`
 }
 
 function buildMissingTableNameHint(
-  token: TokenNode,
-  previousToken: TokenNode | null,
+  defs: ParserDefs,
+  token: Token,
+  previousToken: Token | null,
 ): string | null {
-  if (!previousToken || !TABLE_NAME_CONTEXT_TOKEN_NAMES.has(previousToken.name)) {
+  if (!previousToken || !TABLE_NAME_CONTEXT_TOKEN_NAMES.has(tokenName(defs, previousToken))) {
     return null
   }
   if (token.synthetic && token.text.length === 0) {
-    return `expected a table name after ${previousToken.name}`
+    return `expected a table name after ${tokenName(defs, previousToken)}`
   }
-  if (token.name === "ID" || token.name === "STRING") return null
-  return `expected a table name after ${previousToken.name}`
+  const name = tokenName(defs, token)
+  if (name === "ID" || name === "STRING") return null
+  return `expected a table name after ${tokenName(defs, previousToken)}`
 }
 
-function buildUnclosedGroupHint(token: TokenNode, topOpenGroup: OpenGroup | null): string | null {
+function buildUnclosedGroupHint(token: Token, topOpenGroup: OpenGroup | null): string | null {
   if (!topOpenGroup) return null
   if (topOpenGroup.kind === "LP") return `missing ")" before ${describeToken(token)}`
   return `missing END before ${describeToken(token)}`
 }
 
 function buildUnmatchedClosingHint(
-  token: TokenNode,
+  defs: ParserDefs,
+  token: Token,
   openGroups: readonly OpenGroup[],
 ): string | null {
-  if (token.name !== "RP") return null
+  if (tokenName(defs, token) !== "RP") return null
   if (openGroups.some((g) => g.kind === "LP")) return null
   return 'unexpected ")" with no matching "("'
 }
 
 function buildFilterOrderingHint(
-  token: TokenNode,
-  tokens: readonly TokenNode[],
+  defs: ParserDefs,
+  token: Token,
+  tokens: readonly Token[],
   tokenIndex: number,
 ): string | null {
-  if (token.name !== "FILTER") return null
+  if (tokenName(defs, token) !== "FILTER") return null
   for (let i = tokenIndex - 1; i >= 0; i--) {
     const prev = tokens[i]!
     if (prev.synthetic) continue
-    if (prev.name === "SEMI") break
-    if (prev.name === "FILTER") break
-    if (prev.name === "OVER") return "FILTER clauses must appear before OVER clauses"
+    const prevName = tokenName(defs, prev)
+    if (prevName === "SEMI") break
+    if (prevName === "FILTER") break
+    if (prevName === "OVER") return "FILTER clauses must appear before OVER clauses"
   }
   return null
 }
 
-function buildClauseBoundaryHint(token: TokenNode, topOpenGroup: OpenGroup | null): string | null {
-  if (!topOpenGroup || !isClauseBoundary(token)) return null
+function buildClauseBoundaryHint(
+  defs: ParserDefs,
+  token: Token,
+  topOpenGroup: OpenGroup | null,
+): string | null {
+  if (!topOpenGroup || !isClauseBoundary(defs, token)) return null
   if (topOpenGroup.kind === "LP") return `missing ")" before ${describeToken(token)}`
   return `missing END before ${describeToken(token)}`
 }
 
 function buildCommaHint(
-  token: TokenNode,
+  defs: ParserDefs,
+  token: Token,
   expected: readonly string[],
-  previousToken: TokenNode | null,
+  previousToken: Token | null,
 ): string | null {
-  if (token.name === "COMMA" && expected.includes(")")) {
+  if (tokenName(defs, token) === "COMMA" && expected.includes(")")) {
     return 'remove this comma or add another list item before ")"'
   }
-  if (token.synthetic && token.text.length === 0 && previousToken?.name === "COMMA") {
+  if (
+    token.synthetic &&
+    token.text.length === 0 &&
+    previousToken &&
+    tokenName(defs, previousToken) === "COMMA"
+  ) {
     return "remove the trailing comma or add another list item before end of input"
   }
-  if (previousToken?.name === "COMMA" && isClauseBoundary(token)) {
+  if (
+    previousToken &&
+    tokenName(defs, previousToken) === "COMMA" &&
+    isClauseBoundary(defs, token)
+  ) {
     return `remove the trailing comma or add another list item before ${describeToken(token)}`
   }
-  if (!previousToken || !startsListItem(token) || !endsListItem(previousToken)) {
+  if (!previousToken || !startsListItem(defs, token) || !endsListItem(defs, previousToken)) {
     return null
   }
   if (expected.includes(",")) {
@@ -621,9 +484,13 @@ function buildCommaHint(
   return null
 }
 
-function buildQuotedIdentifierHint(token: TokenNode, expected: readonly string[]): string | null {
+function buildQuotedIdentifierHint(
+  defs: ParserDefs,
+  token: Token,
+  expected: readonly string[],
+): string | null {
   if (!expected.includes("identifier")) return null
-  if (!looksKeywordToken(token)) return null
+  if (!looksKeywordToken(defs, token)) return null
   return `if you intended ${describeToken(token)} as an identifier here, quote it`
 }
 
@@ -631,10 +498,10 @@ function buildQuotedIdentifierHint(token: TokenNode, expected: readonly string[]
 // Token-stream scans.
 // ---------------------------------------------------------------------------
 
-function previousConcreteToken(tokens: readonly TokenNode[], tokenIndex: number): TokenNode | null {
+function previousConcreteToken(tokens: readonly Token[], tokenIndex: number): Token | null {
   for (let i = tokenIndex - 1; i >= 0; i--) {
     const t = tokens[i]!
-    if (t.synthetic || t.name === "$") continue
+    if (t.synthetic || t.type === 0) continue
     return t
   }
   return null
@@ -644,12 +511,16 @@ function previousConcreteToken(tokens: readonly TokenNode[], tokenIndex: number)
 // that haven't been closed yet.  Used to produce "missing )" / "missing
 // END" hints when the error token is something else (e.g. a clause
 // boundary that interrupted the group).
-function scanOpenGroups(tokens: readonly TokenNode[], tokenIndex: number): OpenGroup[] {
+function scanOpenGroups(
+  defs: ParserDefs,
+  tokens: readonly Token[],
+  tokenIndex: number,
+): OpenGroup[] {
   const openGroups: OpenGroup[] = []
   for (let i = 0; i < tokenIndex; i++) {
     const t = tokens[i]!
     if (t.synthetic) continue
-    switch (t.name) {
+    switch (tokenName(defs, t)) {
       case "LP":
         openGroups.push({ kind: "LP", token: t })
         break
@@ -682,22 +553,27 @@ function popLastGroup(openGroups: OpenGroup[], kind: OpenGroup["kind"]): void {
 // Token-kind predicates.
 // ---------------------------------------------------------------------------
 
-function isClauseBoundary(token: TokenNode): boolean {
-  return token.synthetic || CLAUSE_BOUNDARY_TOKEN_NAMES.has(token.name)
+function isClauseBoundary(defs: ParserDefs, token: Token): boolean {
+  return token.synthetic || CLAUSE_BOUNDARY_TOKEN_NAMES.has(tokenName(defs, token))
 }
-function startsListItem(token: TokenNode): boolean {
-  return ITEM_STARTER_TOKEN_NAMES.has(token.name)
+function startsListItem(defs: ParserDefs, token: Token): boolean {
+  return ITEM_STARTER_TOKEN_NAMES.has(tokenName(defs, token))
 }
-function endsListItem(token: TokenNode): boolean {
-  return ITEM_ENDER_TOKEN_NAMES.has(token.name)
+function endsListItem(defs: ParserDefs, token: Token): boolean {
+  return ITEM_ENDER_TOKEN_NAMES.has(tokenName(defs, token))
 }
 
 // Something that looks like a bare SQL keyword — ALL_CAPS with optional
 // digits/underscores, but not ID/STRING/ILLEGAL.  Used to suggest
 // quoting when a keyword appears where an identifier was expected.
-function looksKeywordToken(token: TokenNode): boolean {
-  if (token.name === "ID" || token.name === "STRING" || token.name === "ILLEGAL") {
+function looksKeywordToken(defs: ParserDefs, token: Token): boolean {
+  const name = tokenName(defs, token)
+  if (name === "ID" || name === "STRING" || name === "ILLEGAL") {
     return false
   }
-  return /^[A-Z][A-Z0-9_]*$/.test(token.name)
+  return /^[A-Z][A-Z0-9_]*$/.test(name)
+}
+
+function tokenName(defs: ParserDefs, token: Token): string {
+  return defs.symbols[token.type] ?? String(token.type)
 }

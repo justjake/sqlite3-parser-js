@@ -63,7 +63,7 @@ describe("tokenize-2 (unterminated block comment)", () => {
   // sqlite considers the comment unterminated-but-valid and the
   // statement returns (1, 2).  The comment is consumed to EOI.
   test('tokenize-2.2: "SELECT 1, 2 /* " consumes the rest as COMMENT', () => {
-    const toks = lex("SELECT 1, 2 /* ", { skipTrivia: false })
+    const toks = lex("SELECT 1, 2 /* ", { emitTrivia: true })
     const lastName = toks[toks.length - 1].name
     const lastText = toks[toks.length - 1].text
     expect(lastName).toBe("COMMENT")

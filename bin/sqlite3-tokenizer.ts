@@ -78,7 +78,7 @@ const mod = withOptions(
   cli.digitSeparator !== undefined ? { digitSeparator: cli.digitSeparator } : {},
 )
 
-for (const tok of mod.tokenize(sql, { skipTrivia: !cli.includeTrivia })) {
+for (const tok of mod.tokenize(sql, { emitTrivia: cli.includeTrivia })) {
   console.log(
     JSON.stringify({
       ...tok,

@@ -108,8 +108,8 @@ describe("comments and whitespace", () => {
     ])
   })
 
-  test("trivia kept when skipTrivia:false", () => {
-    expect(lexNames("SELECT -- c\n1", { skipTrivia: false })).toEqual([
+  test("trivia kept when emitTrivia:true", () => {
+    expect(lexNames("SELECT -- c\n1", { emitTrivia: true })).toEqual([
       "SELECT",
       "SPACE",
       "COMMENT",
@@ -119,7 +119,7 @@ describe("comments and whitespace", () => {
   })
 
   test("/* block comment */", () => {
-    expect(lexNames("/* hi */ SELECT", { skipTrivia: false })).toEqual([
+    expect(lexNames("/* hi */ SELECT", { emitTrivia: true })).toEqual([
       "COMMENT",
       "SPACE",
       "SELECT",
@@ -127,7 +127,7 @@ describe("comments and whitespace", () => {
   })
 
   test("unterminated /* block comment is still COMMENT (consumed to EOI)", () => {
-    expect(lexNames("/* never closes", { skipTrivia: false })).toEqual(["COMMENT"])
+    expect(lexNames("/* never closes", { emitTrivia: true })).toEqual(["COMMENT"])
   })
 })
 
