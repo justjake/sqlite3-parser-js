@@ -14,6 +14,11 @@ export const TINY = "SELECT 1;"
 export const SMALL =
   "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT NOT NULL, email TEXT UNIQUE);"
 
+// MEDIUM intentionally avoids window functions (`… OVER (…)`) and
+// `FILTER (WHERE …)` so every parser in bench-compare.ts can handle
+// it — sqlite-parser (2015-2017) predates both.  Everything else —
+// CTE, joins, IN lists, correlated subqueries, CASE, date() — is
+// supported across the board.
 export const MEDIUM = `
 WITH active AS (
   SELECT u.id, u.name, MAX(o.created_at) AS last_order
@@ -25,13 +30,13 @@ WITH active AS (
 SELECT a.id,
        a.name,
        a.last_order,
-       ROW_NUMBER() OVER (ORDER BY a.last_order DESC) AS rn,
-       SUM(o.total) FILTER (WHERE o.status = 'paid') AS paid_total
+       (SELECT COUNT(*) FROM orders o WHERE o.user_id = a.id) AS order_count,
+       (SELECT COALESCE(SUM(o.total), 0) FROM orders o
+        WHERE o.user_id = a.id AND o.status = 'paid') AS paid_total,
+       CASE WHEN a.last_order > date('now', '-30 days') THEN 'active'
+            ELSE 'dormant' END AS activity
 FROM active a
-LEFT JOIN orders o ON o.user_id = a.id
-WHERE a.last_order > date('now', '-30 days')
-GROUP BY a.id, a.name, a.last_order
-HAVING paid_total > 0
+WHERE a.last_order IS NOT NULL
 ORDER BY a.last_order DESC
 LIMIT 100;
 `.trim()
