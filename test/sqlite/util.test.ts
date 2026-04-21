@@ -266,8 +266,8 @@ describe("sqlite3AtoF", () => {
 // End-to-end: use the tokenizer to lex, then feed the raw token text
 // into the util helpers.  This is the pattern real consumers will use.
 describe("tokenizer → util pipeline", () => {
-  // These tests were previously in literal-4 (b) — the malformed QNUMBER
-  // cases that the tokenizer accepts but sqlite3DequoteNumber rejects.
+  // Malformed QNUMBER cases that the tokenizer accepts but
+  // sqlite3DequoteNumber rejects.
   test("tokenizer QNUMBER + util rejection matches sqlite end-to-end", () => {
     const rows = [
       "1_",
