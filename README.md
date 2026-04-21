@@ -25,10 +25,10 @@ const result = parse(`
 if (result.status === "ok") {
   // Root is a CmdListNode containing all top-level statements
   const { cmds } = result.root
-  console.log(cmds)         // 2
+  console.log(cmds.length) // 2
   console.log(cmds[0].type) // InsertStmt
   console.log(cmds[1].type) // SelectStmt
-}
+} else { throw "expected ok" }
 ```
 
 Parse single statement at a time, or return an error:
@@ -53,7 +53,9 @@ function* parseEach(sql: string) {
   while (sql) {
     const result = parseStmt(sql, { allowTrailing: true })
     yield result
-    if (result.status === "error") { return }
+    if (result.status === "error") {
+      return
+    }
     sql = sql.slice(result.tail)
   }
 }
@@ -65,7 +67,9 @@ Parse or throw an error:
 import { parseOrThrow, parseStmtOrThrow } from "sqlite3-parser"
 
 const { root: cmds } = parseOrThrow("SELECT id, name FROM users WHERE active = 1; SELECT 1")
+console.log(cmds.type) // -> CmdList
 const { root: stmt } = parseStmtOrThrow("SELECT id, name FROM users WHERE active = 1")
+console.log(stmt.type) // -> SelectStmt
 ```
 
 ```ts
@@ -73,15 +77,14 @@ import { parseStmt } from "sqlite3-parser"
 
 const r = parseStmt("SELECT 1; SELECT 2", { allowTrailing: true })
 if (r.status === "ok") {
-  r.root // Stmt
-  r.tail // 10 — source.slice(tail) is what's left to parse
-}
+  console.log(r.root.type) // SelectStmt
+  console.log(r.tail) // 10 — source.slice(tail) is what's left to parse
+} else { throw "expected ok" }
 ```
 
 ### Errors
 
 Parse failures are modeled as "diagnostics". These are not sub-classes of `Error`, so constructing them is cheap since no stack trace is captured.
-
 
 ```ts
 export type ParseDiagnostic = {
@@ -123,15 +126,15 @@ if (result.status === "error") {
   }
 
   // Same as result.errors.map(e => e.format()).join("\n")
-  console.error(result.errors.join("\n"))
-}
-// near "FROM": syntax error
-//
-// At 1:7:
-//    1│ SELECT FROM users
-//     │        ^^^^
-//
-//   hint: expected a result expression before FROM
+  console.error(result.errors.join("\n")) // -v
+  // near "FROM": syntax error
+  //
+  // At 1:7:
+  //    1│ SELECT FROM users
+  //     │        ^^^^
+  //
+  //   hint: expected a result expression before FROM
+} else { throw "expected error" }
 ```
 
 `parseOrThrow` and `parseStmtOrThrow` throw a `Sqlite3ParserDiagnosticError` with the diagnostics formatted as the error message.
@@ -142,9 +145,9 @@ try {
   parseOrThrow("SELECT FROM users")
 } catch (e) {
   if (e instanceof Sqlite3ParserDiagnosticError) {
-    console.error(e.errors.length) // 1
-    console.error(e.errors[0].message) // "near \"FROM\": syntax error"
-    console.error(e.message)
+    console.error(e.errors.length) // -> 1
+    console.error(e.errors[0].message) // -> "near \"FROM\": syntax error"
+    console.error(e.message) // -v
     // near "FROM": syntax error
     //
     // At 1:7:
@@ -152,9 +155,7 @@ try {
     //     │        ^^^^
     //
     //   hint: expected a result expression before FROM
-  }
-
-  throw e
+  } else { throw e }
 }
 ```
 
@@ -194,6 +195,8 @@ traverse(root, {
     SelectStmt: ["with", "select", "compounds"],
   },
 })
+
+console.log(tables) // -> ["t"]
 ```
 
 A few things worth knowing:
