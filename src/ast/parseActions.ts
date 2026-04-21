@@ -111,6 +111,13 @@ export function spanOver(first: Span, last: Span): Span {
   }
 }
 
+// The `typeof === "object"` / `"span" in` gauntlet is intentionally
+// defensive: an optional-chain fast path (`(minor as {span?})?.span`)
+// benchmarks ~2× slower because `?.` boxes primitive `minor` values
+// (numbers, booleans from grammar reductions) and sends the property
+// access through a polymorphic IC, whereas the typeof short-circuit
+// rejects primitives without allocation. See "Do not revisit" in
+// PERF_IDEAS.md.
 function extractSpan(minor: unknown): Span | undefined {
   if (minor && typeof minor === "object" && "span" in minor) {
     return (minor as { span: Span }).span

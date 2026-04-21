@@ -84,21 +84,25 @@ function extractSpan(minor: unknown): Span | undefined {
 }
 ```
 
-Two options:
+**Do not attempt the `minor?.span` fast path.** Replacing the gauntlet
+with `(minor as {span?:Span} | null | undefined)?.span` **regresses**:
+extractSpan self% jumped from 3.0% → 8.0% and TINY/SMALL/MEDIUM wall
+time got 7–11% slower. Why: `?.` on primitive `minor` values
+(numbers/booleans from grammar reductions) boxes them and sends the
+property access through a polymorphic IC, whereas `typeof === "object"`
+short-circuits primitives without allocation. Verified by benchmark on
+2026-04-21; also documented as a comment on the function itself.
 
-- **Fast path** — check `minor?.span` directly; skip the
-  `typeof/"in"` gauntlet in the common case where every stack entry is
-  an AstNode with a `span`.
+The remaining idea worth trying:
+
 - **Emitter inlining** — `scripts/emit-ts-parser.ts` knows per-rule which
   popped positions carry spans (from the `%type` declarations), so it
   can emit `const _span = spanOver(popped[0]!.minor.span, popped[N]!.minor.span)`
-  directly in the reducer body and skip `spanFromPopped` entirely.
+  directly in the reducer body and skip `spanFromPopped` entirely. This
+  avoids the defensive check by construction — the emitter only emits
+  `.span` access for positions that statically have one.
 
-Option 2 removes an entire helper call per reduce and is probably
-a bigger win, but emitter changes are higher-friction than a runtime
-patch. Start with option 1.
-
-**Success metric:** ~2–3% throughput gain.
+**Success metric:** ~2–3% throughput gain on the emitter-inlined version.
 
 ### 3. Audit AST node constructor shapes — UNKNOWN SIZE, LOW RISK
 
