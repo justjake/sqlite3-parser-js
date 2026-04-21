@@ -9,6 +9,8 @@ import {
   type LalrPopped,
   type LalrReduce,
   type ParserDefs,
+  type ParserSymbolNames,
+  type ParserTables,
   type RuleId,
   type SymbolId,
   type TokenId,

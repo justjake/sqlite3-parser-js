@@ -181,6 +181,12 @@ interface UnexpectedSyntaxErrorOptions {
   readonly state: number
   readonly tokens: readonly Token[]
   readonly tokenIndex: number
+  /**
+   * Stack of currently unmatched opener tokens (LP / CASE), maintained
+   * by `parse()` in lockstep with the dispatch loop.  The innermost
+   * open delimiter is the last element.
+   */
+  readonly openers: readonly Token[]
 }
 
 const enum TokenFlag {
@@ -221,11 +227,6 @@ interface SyntaxMeta {
 }
 
 type SyntaxParserDefs = Pick<ParserDefs<unknown, unknown>, "constants" | "tables" | "symbols">
-
-type OpenGroup = {
-  readonly kind: "LP" | "CASE"
-  readonly token: Token
-}
 
 interface TokenSpec {
   readonly display?: string
@@ -357,26 +358,23 @@ function buildUnexpectedDiagnostic(
   meta: SyntaxMeta,
   opts: UnexpectedSyntaxErrorOptions,
 ): Diagnostic {
-  const { token, state, tokens, tokenIndex } = opts
+  const { token, state, tokens, tokenIndex, openers } = opts
   const canonical = canonicalParseMessage(token)
   const expected = collectExpected(meta, state)
   const previousToken = previousConcreteToken(tokens, tokenIndex)
-  const openGroups = scanOpenGroups(meta, tokens, tokenIndex)
-  const hint = buildHint(meta, {
-    token,
-    canonical,
-    expected,
-    previousToken,
-    openGroups,
-    tokens,
-    tokenIndex,
-  })
   const hints =
-    hint !== null
-      ? [{ message: hint }]
-      : expected.length > 0
-        ? [{ message: `expected ${formatExpectedList(meta, expected)}` }]
-        : undefined
+    buildHint(meta, {
+      token,
+      canonical,
+      expected,
+      previousToken,
+      openers,
+      tokens,
+      tokenIndex,
+    }) ??
+    (expected.length > 0
+      ? [{ message: `expected ${formatExpectedList(meta, expected)}` }]
+      : undefined)
   return hints
     ? { message: canonical, span: token.span, token, hints }
     : { message: canonical, span: token.span, token }
@@ -476,41 +474,41 @@ function buildHint(
     canonical: string
     expected: readonly TokenId[]
     previousToken: Token | null
-    openGroups: readonly OpenGroup[]
+    openers: readonly Token[]
     tokens: readonly Token[]
     tokenIndex: number
   },
-): string | null {
-  const { token, canonical, expected, previousToken, openGroups, tokens, tokenIndex } = ctx
-  const topOpenGroup = openGroups[openGroups.length - 1] ?? null
+): DiagnosticHint[] | null {
+  const { token, canonical, expected, previousToken, openers, tokens, tokenIndex } = ctx
+  const topOpener = openers[openers.length - 1] ?? null
 
-  const missingTableNameHint = buildMissingTableNameHint(meta, token, previousToken)
-  if (missingTableNameHint) return missingTableNameHint
+  const missingTableName = buildMissingTableNameHint(meta, token, previousToken)
+  if (missingTableName) return [{ message: missingTableName }]
 
   if (canonical === "incomplete input") {
-    const unclosedGroupHint = buildUnclosedGroupHint(token, topOpenGroup)
-    if (unclosedGroupHint) return unclosedGroupHint
-    return "query ended before a complete statement was formed"
+    return buildUnclosedGroupHints(meta, token, topOpener) ?? [
+      { message: "query ended before a complete statement was formed" },
+    ]
   }
 
-  const unmatchedClosingHint = buildUnmatchedClosingHint(meta, token, openGroups)
-  if (unmatchedClosingHint) return unmatchedClosingHint
+  const unmatchedClosing = buildUnmatchedClosingHint(meta, token, openers)
+  if (unmatchedClosing) return [{ message: unmatchedClosing }]
 
-  const filterOrderingHint = buildFilterOrderingHint(meta, token, tokens, tokenIndex)
-  if (filterOrderingHint) return filterOrderingHint
+  const filterOrdering = buildFilterOrderingHint(meta, token, tokens, tokenIndex)
+  if (filterOrdering) return [{ message: filterOrdering }]
 
-  const clauseBoundaryHint = buildClauseBoundaryHint(meta, token, topOpenGroup)
-  if (clauseBoundaryHint) return clauseBoundaryHint
+  const clauseBoundary = buildClauseBoundaryHints(meta, token, topOpener)
+  if (clauseBoundary) return clauseBoundary
 
-  const missingCommaHint = buildCommaHint(meta, token, expected, previousToken)
-  if (missingCommaHint) return missingCommaHint
+  const missingComma = buildCommaHint(meta, token, expected, previousToken)
+  if (missingComma) return [{ message: missingComma }]
 
   if (token.type === meta.tok.FROM && expectedHasRole(meta, expected, TokenFlag.ExprStart)) {
-    return "expected a result expression before FROM"
+    return [{ message: "expected a result expression before FROM" }]
   }
 
-  const quotedIdentifierHint = buildQuotedIdentifierHint(meta, token, expected)
-  if (quotedIdentifierHint) return quotedIdentifierHint
+  const quotedIdentifier = buildQuotedIdentifierHint(meta, token, expected)
+  if (quotedIdentifier) return [{ message: quotedIdentifier }]
 
   return null
 }
@@ -532,19 +530,25 @@ function buildMissingTableNameHint(
   return `expected a table name after ${after}`
 }
 
-function buildUnclosedGroupHint(token: Token, topOpenGroup: OpenGroup | null): string | null {
-  if (!topOpenGroup) return null
-  if (topOpenGroup.kind === "LP") return `missing ")" before ${describeToken(token)}`
-  return `missing END before ${describeToken(token)}`
+function buildUnclosedGroupHints(
+  meta: SyntaxMeta,
+  token: Token,
+  topOpener: Token | null,
+): DiagnosticHint[] | null {
+  if (!topOpener) return null
+  const isParen = topOpener.type === meta.tok.LP
+  const missing = isParen ? `missing ")" before ${describeToken(token)}` : `missing END before ${describeToken(token)}`
+  const matchWhat = isParen ? 'to match this "("' : "to match this CASE"
+  return [{ message: missing }, { message: matchWhat, span: topOpener.span }]
 }
 
 function buildUnmatchedClosingHint(
   meta: SyntaxMeta,
   token: Token,
-  openGroups: readonly OpenGroup[],
+  openers: readonly Token[],
 ): string | null {
   if (token.type !== meta.tok.RP) return null
-  if (openGroups.some((g) => g.kind === "LP")) return null
+  if (openers.some((o) => o.type === meta.tok.LP)) return null
   return 'unexpected ")" with no matching "("'
 }
 
@@ -565,14 +569,13 @@ function buildFilterOrderingHint(
   return null
 }
 
-function buildClauseBoundaryHint(
+function buildClauseBoundaryHints(
   meta: SyntaxMeta,
   token: Token,
-  topOpenGroup: OpenGroup | null,
-): string | null {
-  if (!topOpenGroup || !isClauseBoundary(meta, token)) return null
-  if (topOpenGroup.kind === "LP") return `missing ")" before ${describeToken(token)}`
-  return `missing END before ${describeToken(token)}`
+  topOpener: Token | null,
+): DiagnosticHint[] | null {
+  if (!topOpener || !isClauseBoundary(meta, token)) return null
+  return buildUnclosedGroupHints(meta, token, topOpener)
 }
 
 function buildCommaHint(
@@ -623,44 +626,6 @@ function previousConcreteToken(tokens: readonly Token[], tokenIndex: number): To
     return token
   }
   return null
-}
-
-function scanOpenGroups(
-  meta: SyntaxMeta,
-  tokens: readonly Token[],
-  tokenIndex: number,
-): OpenGroup[] {
-  const openGroups: OpenGroup[] = []
-  for (let i = 0; i < tokenIndex; i++) {
-    const token = tokens[i]!
-    if (token.synthetic) continue
-    switch (token.type) {
-      case meta.tok.LP:
-        openGroups.push({ kind: "LP", token })
-        break
-      case meta.tok.RP:
-        popLastGroup(openGroups, "LP")
-        break
-      case meta.tok.CASE:
-        openGroups.push({ kind: "CASE", token })
-        break
-      case meta.tok.END:
-        popLastGroup(openGroups, "CASE")
-        break
-      default:
-        break
-    }
-  }
-  return openGroups
-}
-
-function popLastGroup(openGroups: OpenGroup[], kind: OpenGroup["kind"]): void {
-  for (let i = openGroups.length - 1; i >= 0; i--) {
-    if (openGroups[i]!.kind === kind) {
-      openGroups.splice(i, 1)
-      return
-    }
-  }
 }
 
 function hasFlag(meta: SyntaxMeta, tokenId: TokenId, flag: TokenFlag): boolean {

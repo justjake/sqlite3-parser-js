@@ -50,7 +50,6 @@ import type {
   ParserRule,
   ParserSymbol,
   ParserConstants,
-  ParserDefs,
   ParserTables,
   RuleId as BrandedRuleId,
   SymbolId as BrandedSymbolId,
@@ -399,14 +398,19 @@ const ParserProdRule = matches<ParserRule>()(
   }),
 )
 
-const ParserProdSchema = matches<ParserDefs>()(
-  Strict({
-    constants: ParserProdConstants,
-    tables: ParserProdTables,
-    symbols: Type.Array(ParserProdSymbol),
-    rules: Type.Array(ParserProdRule),
-  }),
-)
+// The JSON-serializable subset of `ParserDefs` (minus `reduce` /
+// `createState`, which are code), plus the `rules` table used by the
+// CST emitter / upgrade scripts.  `ParserDefs.symbols` is
+// `readonly string[]` at runtime (the names-only slim emitted by
+// `emit-ts-parser.ts`) but the JSON preserves the richer
+// `{name, isTerminal}` form for external tooling, so we can't
+// `matches<ParserDefs>()` this schema — we just assemble it directly.
+const ParserProdSchema = Strict({
+  constants: ParserProdConstants,
+  tables: ParserProdTables,
+  symbols: Type.Array(ParserProdSymbol),
+  rules: Type.Array(ParserProdRule),
+})
 
 // ===========================================================================
 // KEYWORDS DEV SCHEMA — mirrors tool/mkkeywordhash.c::dump_keywords_json.

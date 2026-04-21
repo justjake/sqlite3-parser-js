@@ -7,7 +7,7 @@
 // but tests need `Tokenizer.tokens` and `Tokenizer._keywordCount` for
 // introspection.
 
-import { PARSER_DEFS, KEYWORD_DEFS } from "../generated/current.ts"
+import { parserDefs as _parserDefs, keywordDefs as _keywordDefs } from "../generated/current.ts"
 import {
   tokenizerModuleForGrammar,
   type CreateTokenizerOptions,
@@ -15,24 +15,22 @@ import {
   type Tokenizer,
   type TokenizeOpts,
 } from "../src/tokenize.ts"
-import type { ParserDefs } from "../src/lempar.ts"
-
 /** The parser defs used by every helper in this file.  Tracks `current`. */
-export const parserDefs: ParserDefs = PARSER_DEFS
+export const parserDefs: typeof _parserDefs = _parserDefs
 /** The keywords defs used by every helper.  Tracks `current`. */
-export const keywordDefs: KeywordDefs = KEYWORD_DEFS
+export const keywordDefs: KeywordDefs = _keywordDefs
 
 /** Default tokenizer: every feature flag enabled, no digit separator. */
-export const tk: Tokenizer = tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS)
+export const tk: Tokenizer = tokenizerModuleForGrammar(_parserDefs, _keywordDefs)
 
 /** Tokenizer with the `_` digit separator (SQLite 3.45+ default). */
-export const tkSep: Tokenizer = tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, {
+export const tkSep: Tokenizer = tokenizerModuleForGrammar(_parserDefs, _keywordDefs, {
   digitSeparator: "_",
 })
 
 /** Build a tokenizer with custom options (flags, digit separator). */
 export function makeTokenizer(opts: CreateTokenizerOptions = {}): Tokenizer {
-  return tokenizerModuleForGrammar(PARSER_DEFS, KEYWORD_DEFS, opts)
+  return tokenizerModuleForGrammar(_parserDefs, _keywordDefs, opts)
 }
 
 /** A `{name, text}` pair — the lex() return shape used throughout the suite. */

@@ -20,7 +20,7 @@ import { describe, test, expect } from "bun:test"
 import { parserDefs, tokenTriples } from "../helpers.ts"
 
 // Symbol ids are array indices in the prod defs; no explicit `id` field.
-const idTokenId = (parserDefs.symbols as Array<{ name: string }>).findIndex((s) => s.name === "ID")
+const idTokenId = parserDefs.symbols.findIndex((name) => name === "ID")
 if (idTokenId < 0) throw new Error("parser defs are missing the ID terminal")
 
 const yyFallback = (parserDefs.tables.yyFallback ?? []) as number[]
@@ -99,9 +99,7 @@ describe("SQLite test/keyword1.test tokenizer-adjacent cases", () => {
       expect(kw.tokenName).toBe(kw.rawTokenName)
 
       // Look up the numeric id for the token via the symbol table.
-      const kwId = (parserDefs.symbols as Array<{ name: string }>).findIndex(
-        (s) => s.name === kw.rawTokenName,
-      )
+      const kwId = parserDefs.symbols.findIndex((name) => name === kw.rawTokenName)
       expect(kwId).toBeGreaterThanOrEqual(0)
       expect(yyFallback[kwId]).toBe(idTokenId)
     })

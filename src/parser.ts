@@ -99,7 +99,7 @@ export function parserModuleForGrammar(
   const createEngine = engineModuleForGrammar(parserDefs)
   const buildSyntaxError = bindSyntaxDiagnostics(parserDefs, keywordDefs)
 
-  const { COMMENT, ILLEGAL, SEMI, SPACE } = tk.tokens
+  const { CASE, COMMENT, END, ILLEGAL, LP, RP, SEMI, SPACE } = tk.tokens
   const EOF = 0 as TokenId
 
   // -------------------------------------------------------------------------
@@ -127,6 +127,15 @@ export function parserModuleForGrammar(
     // the engine's tokenIndex values. Synthetic SEMI/EOF are appended.
     const tokenStream: Token[] = []
 
+    // Open-delimiter stack, maintained in lockstep with the dispatch
+    // loop.  Lets `buildSyntaxError` point at the unmatched opener
+    // without rescanning the token stream.  END is shared between
+    // CASE/END and (future) BEGIN/END blocks, so we peek the top to
+    // decide whether a close matches — a pure close-token lookup would
+    // misbehave.  Only the opener Token is retained; the pair is
+    // implicit in its type.
+    const openers: Token[] = []
+
     // `singleStatement` tripwire: the `ecmd ::= cmdx SEMI` reduction
     // that bumps `state.cmds` from 0 to 1 is deferred by LALR lookahead
     // — it fires when we feed the token *after* the terminating SEMI.
@@ -150,7 +159,16 @@ export function parserModuleForGrammar(
       }
 
       tokenStream.push(tok)
-      session.next(tok.type, tok)
+      const t = tok.type
+      if (t === LP || t === CASE) {
+        openers.push(tok)
+      } else if (t === RP || t === END) {
+        const top = openers[openers.length - 1]
+        if (top && ((top.type === LP && t === RP) || (top.type === CASE && t === END))) {
+          openers.pop()
+        }
+      }
+      session.next(t, tok)
 
       if (options.singleStatement && state.cmds.length >= 1 && tok.type !== SEMI) {
         diagnostics.push({
@@ -215,6 +233,7 @@ export function parserModuleForGrammar(
           state: e.stateno,
           tokens: tokenStream,
           tokenIndex: e.tokenIndex,
+          openers,
         }),
       )
     }

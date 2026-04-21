@@ -206,6 +206,8 @@ export interface TokenizerTokens {
   readonly QNUMBER: TokenId
   readonly VARIABLE: TokenId
   readonly BLOB: TokenId
+  readonly CASE: TokenId
+  readonly END: TokenId
 }
 
 /** Return type of {@link tokenizerModuleForGrammar}. */
@@ -649,6 +651,8 @@ export function tokenizerModuleForGrammar<Ctx, V>(
     QNUMBER: TokenId("QNUMBER"),
     VARIABLE: TokenId("VARIABLE"),
     BLOB: TokenId("BLOB"),
+    CASE: TokenId("CASE"),
+    END: TokenId("END"),
   }
 
   // Build the keyword lookup map.  Keys are uppercase ASCII keyword
