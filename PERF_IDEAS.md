@@ -42,28 +42,33 @@ Rolled-up from the per-function table — single percentages are
 Ordered by (estimated impact × feasibility). Each entry is framed as a
 concrete change with a success metric.
 
-### 1. Replace the tokenizer generator with an iterator class — BIG
+### 1. Replace the tokenizer generator with an iterator class — BIG ✅ LANDED
 
-**Evidence:** `generatorResume` accounts for **29% cumulative total
-time**. `iterate` appears at four different line numbers in
-`tokenize.ts` totalling **~15% self time**. JS generators carry
-per-yield state-save/restore overhead that V8 and JSC optimize poorly
-compared to hand-rolled iterators — every `yield tok` forces a stack
-unwind through the `generatorResume` host function.
+**Status:** Landed. The `function*` generator in `tokenize()` is now a
+`TokenStreamImpl` class with `next()` / `[Symbol.iterator]()` and
+public `offset` / `line` / `col` fields (no more `Object.defineProperties`
+slow path on every call).
 
-**Change:** `tokenize()` currently is `function*`. Rewrite as a
-class/object with an explicit `next()` method backed by a state machine
-(position, classification flags, lookahead buffer). The call-site
-contract is already iterator-shaped (`for (const tok of sourceTokens)`),
-so the only change is how `tokenize()` produces its return value. Most
-of the body stays intact — only the `yield` sites change to `return
-token` / `continue` in a state machine.
+**Result (same 500µs profile, same inputs, same iteration counts):**
 
-**Risk:** the tokenizer is substantial; this is a measured but real
-refactor, not a one-liner. Worth prototyping on a branch first, running
-`bun scripts/bench-compare.ts` before and after.
+| Input  | Before | After  | Speedup        |
+| ------ | -----: | -----: | -------------- |
+| TINY   | 1687ms |  903ms | **1.87×**      |
+| SMALL  | 2426ms | 1766ms | **1.37×**      |
+| MEDIUM | 3220ms | 2610ms | **1.23×**      |
+| LARGE  | 4100ms | 3436ms | **1.19×**      |
+| DEEP   | 3442ms | 3449ms | ~1.00×         |
 
-**Success metric:** **>15% throughput gain on MEDIUM / LARGE / DEEP**.
+Total profile wall time: **15.09s → 12.35s (−18%)**. `generatorResume`
+(was 28.1% cumulative) and `defineProperties` (was 4.8% self — from the
+`Object.defineProperties(iterate(), …)` cursor attachment) both dropped
+out of the profile entirely. DEEP is unchanged because it's
+parser-dominated (deep expression nesting → tons of reduces), not
+tokenizer-dominated.
+
+**Success metric was:** >15% gain on MEDIUM/LARGE/DEEP. Met on
+MEDIUM/LARGE; DEEP unaffected by design (parser-bound, not
+tokenizer-bound). Exceeded metric on TINY/SMALL.
 
 ### 2. Inline `extractSpan` via emitter-generated span code — MEDIUM
 

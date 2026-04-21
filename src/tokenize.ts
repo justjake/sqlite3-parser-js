@@ -1070,23 +1070,63 @@ export function tokenizerModuleForGrammar<Ctx, V>(
     return i - p
   }
 
-  // Public entry: yield successive tokens.
+  // Public entry: iterate successive tokens.
   //
   // `line` is 1-based; `col` is 0-based (first column of a line is 0).
   // Each consumed character (including trivia) advances `col` by one;
   // each LF (0x0a) bumps `line` and resets `col` to 0.  CR is treated
   // as a regular column — matching lineColAt() in src/errors.ts.
-  function tokenize(sql: string, { emitTrivia = false }: TokenizeOptions = {}): TokenIterator {
-    const out: [TokenId] = [0 as TokenId]
-    let i = 0
-    let line = 1
-    let col = 0
-    const len = sql.length
-    function* iterate(): IterableIterator<Token> {
+  //
+  // Implemented as an explicit iterator class rather than a generator:
+  // `generatorResume` dominated prior profiles (~28% cumulative), and
+  // hand-rolled `next()` methods are optimized more aggressively than
+  // coroutine state machines.
+  const T_SPACE = T.SPACE
+  const T_COMMENT = T.COMMENT
+  const DONE: IteratorResult<Token> = { done: true, value: undefined }
+  class TokenStreamImpl implements IterableIterator<Token> {
+    readonly sql: string
+    readonly len: number
+    readonly emitTrivia: boolean
+    offset: number
+    line: number
+    col: number
+    // Shared single-slot output buffer for `nextToken` — avoids one
+    // tiny allocation per token without spilling across `next()` calls.
+    readonly _out: [TokenId] = [0 as TokenId]
+
+    constructor(sql: string, emitTrivia: boolean) {
+      this.sql = sql
+      this.len = sql.length
+      this.emitTrivia = emitTrivia
+      this.offset = 0
+      this.line = 1
+      this.col = 0
+    }
+
+    [Symbol.iterator](): this {
+      return this
+    }
+
+    next(): IteratorResult<Token> {
+      const sql = this.sql
+      const len = this.len
+      const emitTrivia = this.emitTrivia
+      const out = this._out
+      let i = this.offset
+      let line = this.line
+      let col = this.col
+
       while (i < len) {
         const n = nextToken(sql, i, out)
         const type = out[0]
-        if (n === 0) break // CC_NUL at offset i
+        if (n === 0) {
+          // CC_NUL at offset i — stop without advancing.
+          this.offset = i
+          this.line = line
+          this.col = col
+          return DONE
+        }
         const offset = i
         const tokenLine = line
         const tokenCol = col
@@ -1100,20 +1140,29 @@ export function tokenizerModuleForGrammar<Ctx, V>(
           }
         }
         i = end
-        if (!emitTrivia && (type === T.SPACE || type === T.COMMENT)) continue
-        yield {
-          type,
-          text: sql.slice(offset, end),
-          span: { offset, length: n, line: tokenLine, col: tokenCol },
+        if (!emitTrivia && (type === T_SPACE || type === T_COMMENT)) continue
+        this.offset = i
+        this.line = line
+        this.col = col
+        return {
+          done: false,
+          value: {
+            type,
+            text: sql.slice(offset, end),
+            span: { offset, length: n, line: tokenLine, col: tokenCol },
+          },
         }
       }
-    }
 
-    return Object.defineProperties(iterate(), {
-      offset: { get: () => i },
-      line: { get: () => line },
-      col: { get: () => col },
-    }) as TokenIterator
+      this.offset = i
+      this.line = line
+      this.col = col
+      return DONE
+    }
+  }
+
+  function tokenize(sql: string, { emitTrivia = false }: TokenizeOptions = {}): TokenIterator {
+    return new TokenStreamImpl(sql, emitTrivia) as unknown as TokenIterator
   }
 
   return {
