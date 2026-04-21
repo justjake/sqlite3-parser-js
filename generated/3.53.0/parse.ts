@@ -2174,14 +2174,14 @@ export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) =
       // typename(A) ::= ?(X)
       const X = popped[0].minor as Token
       let A: string | undefined
-      A = sqlite3Dequote(X.text) as string
+      A = sqlite3Dequote(X.text)
       return A
     }
     case 39: {
       // typename(A) ::= typename(A) ?(Y)
       const Y = popped[1].minor as Token
       let A: string = popped[0].minor as string
-      A = A + " " + (sqlite3Dequote(Y.text) as string)
+      A = A + " " + sqlite3Dequote(Y.text)
       return A
     }
     case 40: {

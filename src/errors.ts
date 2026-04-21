@@ -483,9 +483,11 @@ function buildHint(
   if (missingTableName) return [{ message: missingTableName }]
 
   if (canonical === "incomplete input") {
-    return buildUnclosedGroupHints(meta, token, topOpener) ?? [
-      { message: "query ended before a complete statement was formed" },
-    ]
+    return (
+      buildUnclosedGroupHints(meta, token, topOpener) ?? [
+        { message: "query ended before a complete statement was formed" },
+      ]
+    )
   }
 
   const unmatchedClosing = buildUnmatchedClosingHint(meta, token, openers)
@@ -520,7 +522,8 @@ function buildMissingTableNameHint(
   token: Token,
   previousToken: Token | undefined,
 ): string | undefined {
-  if (!previousToken || !hasFlag(meta, previousToken.type, TokenFlag.TableNameContext)) return undefined
+  if (!previousToken || !hasFlag(meta, previousToken.type, TokenFlag.TableNameContext))
+    return undefined
   const after = tokenLabel(meta, previousToken.type)
   if (isEndOfInput(meta, token)) return `expected a table name after ${after}`
   if (token.type === meta.tok.ID || token.type === meta.tok.STRING) return undefined
@@ -560,9 +563,7 @@ function buildFilterOrderingHint(
   sawOverSinceLastFilterOrSemi: boolean,
 ): string | undefined {
   if (token.type !== meta.tok.FILTER) return undefined
-  return sawOverSinceLastFilterOrSemi
-    ? "FILTER clauses must appear before OVER clauses"
-    : undefined
+  return sawOverSinceLastFilterOrSemi ? "FILTER clauses must appear before OVER clauses" : undefined
 }
 
 function buildClauseBoundaryHints(

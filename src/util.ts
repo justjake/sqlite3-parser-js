@@ -103,8 +103,8 @@ function isQuote(ch: string | undefined): boolean {
 // loop handles them identically).  Non-quoted input is returned
 // unchanged — mirroring the C no-op behaviour.
 // ---------------------------------------------------------------------------
-export function sqlite3Dequote(z: string | null | undefined): string | null | undefined {
-  if (z == null || z.length === 0) return z
+export function sqlite3Dequote(z: string): string {
+  if (z.length === 0) return z
   if (!isQuote(z[0])) return z
   const close = z[0] === "[" ? "]" : z[0]
   let out = ""

@@ -7,7 +7,7 @@
 import { describe, expect, test } from "bun:test"
 
 import { parse } from "../generated/current.ts"
-import { toSexpr } from "../src/ast/printer.ts"
+import { toSexpr } from "../src/traverse.ts"
 import type { AstNode } from "../src/ast/nodes.ts"
 
 /** Parse `sql`, fail the test if the parser didn't accept, return the AST. */
@@ -182,7 +182,7 @@ describe("toSexpr — shapes", () => {
     )
   })
 
-  test("BLOB literal renders as hex #x\"...\"", () => {
+  test('BLOB literal renders as hex #x"..."', () => {
     expect(toSexpr(ast("SELECT x'FF00'"))).toBe(
       `(CmdList
   (SelectStmt

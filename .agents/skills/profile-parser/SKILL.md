@@ -37,7 +37,7 @@ bottleneck in one scan.
    keeps the baseline intact for side-by-side diffing.
 5. **Compare** the top-10 lists. If the targeted function's % didn't
    drop — the change didn't help and shouldn't land.
-6. **Record findings** in `PERF_IDEAS.md` — both wins *and* failed
+6. **Record findings** in `PERF_IDEAS.md` — both wins _and_ failed
    experiments with their regression data, so the next person doesn't
    redo the same dead-end.
 

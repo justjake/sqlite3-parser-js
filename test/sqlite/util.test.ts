@@ -50,7 +50,6 @@ describe("sqlite3Dequote", () => {
   test("non-quoted input is passed through unchanged (C no-op)", () => {
     expect(sqlite3Dequote("plain")).toBe("plain")
     expect(sqlite3Dequote("")).toBe("")
-    expect(sqlite3Dequote(null)).toBe(null)
   })
 })
 

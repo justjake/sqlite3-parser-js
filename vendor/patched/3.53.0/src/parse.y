@@ -293,8 +293,8 @@ typetoken(A) ::= typename(X) LP signed(Y) COMMA signed(Z) RP. {
   A = { type: "Type", name: X, size: { type: "TypeSizeTypeSize", size1: Y, size2: Z, span: nodeSpan() }, span: nodeSpan() };
 }
 %type typename {string}
-typename(A) ::= ids(X).               { A = sqlite3Dequote(X.text) as string; }
-typename(A) ::= typename(A) ids(Y).   { A = A + " " + (sqlite3Dequote(Y.text) as string); }
+typename(A) ::= ids(X).               { A = sqlite3Dequote(X.text); }
+typename(A) ::= typename(A) ids(Y).   { A = A + " " + sqlite3Dequote(Y.text); }
 %type signed {Expr}
 signed(A) ::= plus_num(A).
 signed(A) ::= minus_num(A).

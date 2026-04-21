@@ -129,14 +129,14 @@ function extractSpan(minor: unknown): Span | undefined {
  */
 export const mkName = (tok: Token): Name => ({
   type: "Name",
-  name: sqlite3Dequote(tok.text) as string,
+  name: sqlite3Dequote(tok.text),
   span: tok.span,
 })
 
 /** Build an {@link Id}.  Same dequoting contract as {@link mkName}. */
 export const mkId = (tok: Token): Id => ({
   type: "Id",
-  name: sqlite3Dequote(tok.text) as string,
+  name: sqlite3Dequote(tok.text),
   span: tok.span,
 })
 
@@ -156,7 +156,7 @@ export const mkNullLiteral = (tok: Token): Literal => ({ type: "NullLiteral", sp
 /** String literal: dequote `'…'` / escape `''` pairs. */
 export const mkStringLiteral = (tok: Token): Literal => ({
   type: "StringLiteral",
-  value: sqlite3Dequote(tok.text) as string,
+  value: sqlite3Dequote(tok.text),
   span: tok.span,
 })
 
@@ -289,7 +289,7 @@ export const mkVariableExpr = (t: Token): Expr => ({
 export const mkCollate = (e: Expr, c: Token, span: Span): Expr => ({
   type: "CollateExpr",
   expr: e,
-  collation: sqlite3Dequote(c.text) as string,
+  collation: sqlite3Dequote(c.text),
   span,
 })
 

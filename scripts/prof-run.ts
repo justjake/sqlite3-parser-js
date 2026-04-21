@@ -17,14 +17,7 @@
 // output on stderr shows up in the orchestrator's console; the .cpuprofile
 // / .md files are written by Bun's sampler automatically on exit.
 
-import {
-  DEEP,
-  LARGE,
-  MEDIUM,
-  SMALL,
-  TINY,
-  parseAccepted as ourParse,
-} from "./bench-common.ts"
+import { DEEP, LARGE, MEDIUM, SMALL, TINY, parseAccepted as ourParse } from "./bench-common.ts"
 import { runScript } from "./utils.ts"
 
 interface Plan {

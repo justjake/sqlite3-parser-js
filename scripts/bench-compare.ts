@@ -37,14 +37,7 @@
 //     dominates.  Trust MEDIUM / LARGE / DEEP for throughput.
 
 import { run, bench, group, summary, do_not_optimize } from "mitata"
-import {
-  DEEP,
-  LARGE,
-  MEDIUM,
-  SMALL,
-  TINY,
-  parseAccepted as ourParse,
-} from "./bench-common.ts"
+import { DEEP, LARGE, MEDIUM, SMALL, TINY, parseAccepted as ourParse } from "./bench-common.ts"
 import { createLiteParser } from "../vendor/liteparser/wasm/src/index.ts"
 // @ts-expect-error — no types shipped
 import sqliteParser from "sqlite-parser"

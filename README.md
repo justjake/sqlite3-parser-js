@@ -2,7 +2,7 @@
 
 Parse SQLite query syntax.
 
-- **Fast**: 1.5x-200x faster than other SQL parsers  See [benchmarks](#benchmarks).
+- **Fast**: 1.5x-200x faster than other SQL parsers See [benchmarks](#benchmarks).
 - **Light**: Pure JavaScript, no WebAssembly overhead. Ships ~22 KB gzipped and runs unchanged in Node, Bun, and the browser.
 - **Faithful**: The parser based on [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html) to emit [TypeScript code](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 - **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups with a pointer at the opener, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
@@ -74,9 +74,9 @@ traverse(ast, {
       // From any handler:
       //   return "skip" to stop descending into the current node
       //   return "break" to halt the whole walk
-      //   return "continue" / nothing to proceed 
+      //   return "continue" / nothing to proceed
       return "skip"
-    }
+    },
   },
   leave(node, parent) {
     // Runs after visiting children.
@@ -84,7 +84,7 @@ traverse(ast, {
   keys: {
     // Override traversal order & keys for a specific node type.
     SelectStmt: ["with", "select", "compounds"],
-  }
+  },
 })
 ```
 
@@ -110,60 +110,64 @@ tl;dr:
   ~250x   faster than @appland/sql-parser
 ```
 
-Results are averages from `bun run bench` and `bun run bench:compare` on one machine:
-
-- CPU: Apple M4 Max
-- Runtime: Bun 1.3.11 (`arm64-darwin`)
-
-These are point-in-time measurements from this repository. They are not guarantees and should be treated as approximate.
-Benchmarks are parse-only. The compared parsers do not produce the same AST shape.
+- Results are averages from `bun run bench:compare` on one machine:
+  - CPU: Apple M4 Max
+  - Runtime: Bun 1.3.11 (`arm64-darwin`)
+- The compared parsers do not produce the same AST shape.
+- WebAssembly libraries pay some bridging overhead.
 
 ### Cases
 
-| Case | Description |
-| ---- | ----------- |
-| `tiny` | Single `SELECT 1;` statement. |
-| `small` | Single `CREATE TABLE users (...)` statement. |
+| Case     | Description                                                                                     |
+| -------- | ----------------------------------------------------------------------------------------------- |
+| `tiny`   | Single `SELECT 1;` statement.                                                                   |
+| `small`  | Single `CREATE TABLE users (...)` statement.                                                    |
 | `medium` | `WITH` query with joins, aggregate, window function, `FILTER`, grouping, ordering, and `LIMIT`. |
-| `large` | Wide `CREATE TABLE analytics_events (...)` statement with 96 metric columns. |
-| `deep` | Nested expressions with a subquery. |
-| `broken` | Invalid input with a trailing comma before `FROM`; used for the syntax-error path. |
+| `large`  | Wide `CREATE TABLE analytics_events (...)` statement with 96 metric columns.                    |
+| `deep`   | Nested expressions with a subquery.                                                             |
+| `broken` | Invalid input with a trailing comma before `FROM`; used for the syntax-error path.              |
 
-### Comparison
+### Results
 
-`bun run bench:compare`
+Avg per-iteration parse time across the five inputs.
 
+| Parser                              | `tiny`      | `small`     | `medium`    | `large`     | `deep`     |
+| ----------------------------------- | ----------- | ----------- | ----------- | ----------- | ---------- |
+| Ours                                | `1.52 µs`   | `4.36 µs`   | `22.96 µs`  | `68.24 µs`  | `11.57 µs` |
+| `liteparser (wasm)`                 | `1.87 µs`   | `4.65 µs`   | `46.10 µs`  | `84.00 µs`  | `29.41 µs` |
+| `@guanmingchiu/sqlparser-ts (wasm)` | `5.98 µs`   | `14.57 µs`  | `142.96 µs` | `184.17 µs` | `68.29 µs` |
+| `node-sql-parser`                   | `9.95 µs`   | `24.41 µs`  | `262.60 µs` | `557.08 µs` | `1.07 ms`  |
+| `pgsql-ast-parser`                  | `51.89 µs`  | `55.27 µs`  | `2.44 ms`   | `919.56 µs` | `1.02 ms`  |
+| `sqlite-parser`                     | `424.35 µs` | `559.10 µs` | `4.91 ms`   | `6.75 ms`   | `2.98 ms`  |
+| `@appland/sql-parser`               | `501.53 µs` | `640.94 µs` | `6.01 ms`   | `7.81 ms`   | `3.37 ms`  |
 
-| Case | Ours | `liteparser (wasm)` | `sqlite-parser` | `@appland/sql-parser` |
-| ---- | ---- | ------------------- | --------------- | --------------------- |
-| `tiny` | `1.63 µs` | `1.99 µs` | `390.94 µs` | `508.94 µs` |
-| `small` | `4.34 µs` | `4.77 µs` | `514.94 µs` | `652.41 µs` |
-| `medium` | `24.26 µs` | `48.28 µs` | `5.40 ms` | `6.61 ms` |
-| `large` | `69.02 µs` | `84.72 µs` | `6.87 ms` | `7.85 ms` |
-| `deep` | `11.66 µs` | `31.07 µs` | `3.19 ms` | `3.61 ms` |
+Libraries compared:
 
-## Parse rules & porting
+- **Ours** - TypeScript parser derived from SQLite's parse.y grammar, uses Lemon LALR(1) parser generator to dump parser tables as JSON, which is used to drive a small TypeScript emitter.
+- **[`@sqliteai/liteparser`](https://github.com/sqliteai/liteparser)** — C/WebAssembly parser extracted from the original SQLite parser (parse.y) with minimal modifications. It uses the same Lemon LALR(1) parser generator and a hand-written tokenizer derived from SQLite's own lexer.
+- **[`sqlite-parser`](https://github.com/codeschool/sqlite-parser)** — PEG.js-generated pure-JS parser for SQLite (Code School, 2015-2017).
+- **[`@appland/sql-parser`](https://github.com/applandinc/sqlite-parser)** — AppLand's maintained fork of `sqlite-parser` with additional grammar coverage.
+- **[`node-sql-parser`](https://github.com/taozhi8833998/node-sql-parser)** — PEG.js-derived multi-dialect parser; run here with `database: "sqlite"`.
+- **[`pgsql-ast-parser`](https://github.com/oguimbal/pgsql-ast-parser)** — nearley + moo Postgres grammar.
+- **[`@guanmingchiu/sqlparser-ts`](https://github.com/guan404ming/sqlparser-ts)** — Rust/WebAssembly wrapper around [`datafusion-sqlparser-rs`](https://github.com/apache/datafusion-sqlparser-rs); run with its `"sqlite"` dialect.
 
-At runtime, the parser is driven by JSON tables (for keywords) and emitted TypeScript (for the LALR reducer) per SQLite version:
+## Lemon JSON
 
-| File                                     | Contents                                                                                                                           |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `generated/<version>/parse.ts`           | LALR(1) action/goto tables, symbol list, rule list, and the per-rule reducer that builds the AST. Self-contained module; no deps. |
-| `generated/<version>/keywords.prod.json` | The SQL keyword table — maps keyword text to the terminal id the grammar expects.                                                  |
+Lemon is a LALR(1) parser generator similar to Yacc, written by SQLite's author, Dr. Richard Hipp. SQLite's own parser is generated with Lemon.
 
-The parser tables and reducer are **generated** from the upstream `tool/lemon.c`, `tool/mkkeywordhash.c`, and `src/parse.y` (the first two patched to emit a machine-readable JSON dump alongside their usual output — see [`vendor/README.md`](./vendor/README.md)). A `generated/<version>/parser.dev.json` sits alongside with the full un-slimmed grammar dump: rule action-C source, symbol metadata, precedence tables, destructors. `parser.dev.json` is for debugging and introspection; `parse.ts` is what the runtime actually loads.
+Our patched [lemon.c](https://github.com/sqlite/sqlite/blob/master/src/tool/lemon.c) can emit a JSON dump of the parser tables, making Lemon usable for any programming language.
 
-`parser.dev.json` ships with a formal JSON Schema at `generated/json-schema/v1/parser.dev.schema.json`, validated in the Makefile's build graph so a malformed dump never lands silently on disk.
+- The dumped parse tables are described by a JSON Schema at [generated/json-schema/v1/parser.dev.schema.json](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/json-schema/v1/parser.dev.schema.json).
+- Our parse.y grammar file: [vendor/patched/3.53.0/src/parse.y](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/src/parse.y).
+- Example dumped parse tables: [generated/3.53.0/parser.dev.json](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parser.dev.json).
+- Our TypeScript emitter script: [scripts/emit-ts-parser.ts](https://github.com/justjake/sqlite3-parser-js/blob/main/scripts/emit-ts-parser.ts).
+- The output TypeScript parser: [generated/3.53.0/parse.ts](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 
-### Porting to another language
+To implement a SQLite parser in another language you need roughly:
 
-The dumps + grammar file are self-contained: no SQLite sources, no C toolchain required by the consumer. To implement a SQLite parser in another language you need roughly:
-
-1. **A lexer.** Port `src/tokenize.ts` — ~1000 lines of pure character-class dispatch plus a keyword-lookup table built from `keywords.prod.json`. It's a 1:1 port of SQLite's `src/tokenize.c`.
-2. **An LALR(1) driver.** Port `src/lempar.ts` — ~400 lines, 1:1 with SQLite's `tool/lempar.c`. Consumes the tables in `parser.dev.json`, emits shift/reduce events.
-3. **A reducer.** Our implementation runs the action bodies verbatim from the grammar file to build the AST defined in `src/ast/nodes.ts`. Yours could target any shape: a flat IR, semantic analysis on the fly, or nothing at all — the driver is agnostic.
-
-The JSON Schemas at `generated/json-schema/v1/` document every field the runtime reads. Any language with a JSON parser and typed integer arrays can consume them.
+1. **A lexer.** Eg our [`src/tokenize.ts`](https://github.com/justjake/sqlite3-parser-js/blob/main/src/tokenize.ts), SQLite's [src/tokenize.c](https://github.com/sqlite/sqlite/blob/master/src/tokenize.c) — ~1000 LoC.
+2. **An LALR(1) driver.** Eg our [`src/lempar.ts`](https://github.com/justjake/sqlite3-parser-js/blob/main/src/lempar.ts), SQLite's [tool/lempar.c](https://github.com/sqlite/sqlite/blob/master/tool/lempar.c) — ~400 LoC. Consumes the tables in `parser.dev.json`, emits shift/reduce events.
+3. **parse.y**, updated for your AST & language. Eg our [parse.y](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/src/parse.y),SQLite's [parse.y](https://github.com/sqlite/sqlite/blob/master/src/parse.y). Start with one and replace action bodies with your own.
 
 ## Contributing
 
@@ -172,14 +176,13 @@ The JSON Schemas at `generated/json-schema/v1/` document every field the runtime
 │   ├── lempar.ts               LALR(1) engine — 1:1 port of sqlite/tool/lempar.c
 │   ├── parser.ts               AST-building parser layered on lempar
 │   ├── tokenize.ts             lexer — port of sqlite/src/tokenize.c
-│   ├── util.ts                 pure helpers from sqlite/src/util.c
+│   ├── util.ts                 pure helpers from sqlite/src/util.c, string unquoting
 │   ├── errors.ts               Diagnostic / ParseError API + grammar-aware hints
-│   ├── traverse.ts             ESTree-style AST walker (`sqlite3-parser/traverse`)
+│   ├── traverse.ts             ESTree-style AST walker + helpers
 │   └── ast/                    AST definitions + helpers
 │       ├── nodes.ts            every node interface, plus `AstNode` / `AstNodeMap`
 │       ├── parseActions.ts     node constructors invoked from grammar actions
-│       ├── parseState.ts       per-parse mutable state threaded to the reducer
-│       └── printer.ts          AST → indented s-expression (used by `bin`)
+│       └── parseState.ts       per-parse mutable state threaded to the reducer
 ├── generated/                  codegen + tables (checked into git)
 │   ├── current.ts              re-export shim for the default version
 │   ├── <version>/              one directory per tracked SQLite release
@@ -204,7 +207,7 @@ The JSON Schemas at `generated/json-schema/v1/` document every field the runtime
 │   ├── diff-ast.ts             grammar-shape diff across two parser.dev dumps
 │   ├── ast-coverage.ts         unhit-rule report for the AST layer
 │   ├── bench.ts                micro-benchmarks (tokenize, parse, errors)
-│   └── bench-compare.ts        ours vs liteparser / sqlite-parser / @appland
+│   └── bench-compare.ts        Compare performance against other libraries
 ├── test/                       test suites
 ├── bin/                        standalone CLIs (sqlite3-parser, sqlite3-tokenizer)
 └── Makefile                    pattern rules for the per-version build graph
@@ -218,7 +221,7 @@ Development commands:
 | `bun run build`          | Produce `dist/` (bundled JS + colocated `.d.ts`).                      |
 | `bun run typecheck`      | `tsc --noEmit` over source + tests + scripts.                          |
 | `bun run bench`          | Run the internal benchmarks (tokenize, parse, error path).             |
-| `bun run bench:compare`  | Four-way comparison: ours vs liteparser, sqlite-parser, @appland.      |
+| `bun run bench:compare`  | Compare performance against other libraries.                           |
 | `bun run vendor <ref>`   | Onboard a new SQLite version (see below).                              |
 | `make generated/<ver>/…` | Regenerate a specific output without re-running the whole vendor flow. |
 | `make help`              | List every pattern target Make knows about.                            |

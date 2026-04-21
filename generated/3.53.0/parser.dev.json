@@ -3925,7 +3925,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yylhsminor.yy576 = sqlite3Dequote(yymsp[0].minor.yy0.text) as string; ",
+      "actionC": " yylhsminor.yy576 = sqlite3Dequote(yymsp[0].minor.yy0.text); ",
       "codePrefix": null,
       "codeSuffix": "  yymsp[0].minor.yy576 = yylhsminor.yy576;\n"
     },
@@ -3953,7 +3953,7 @@
       "canReduce": true,
       "neverReduce": false,
       "lhsStart": false,
-      "actionC": " yymsp[-1].minor.yy576 = yymsp[-1].minor.yy576 + \" \" + (sqlite3Dequote(yymsp[0].minor.yy0.text) as string); ",
+      "actionC": " yymsp[-1].minor.yy576 = yymsp[-1].minor.yy576 + \" \" + sqlite3Dequote(yymsp[0].minor.yy0.text); ",
       "codePrefix": null,
       "codeSuffix": null
     },

@@ -13,29 +13,29 @@ finding + action list.
 Rolled-up from the per-function table — single percentages are
 **self-time** share of total profile samples.
 
-| Subsystem | Self % of total | Details |
-|---|---|---|
-| Tokenizer (generator + scanning + keyword) | **~25%** | `iterate` × 4 locations + `finishKeyword` × 2 + `nextToken` + `toUpperCase`. `generatorResume` cumulative is **29% total time**. |
-| LR engine (`#yy_reduce` + `next` + `reverse`) | **~22%** | `#yy_reduce` self alone is 24% across 7 line-level attributions; `next` 3.3%; `reverse` 5%. |
-| Generated reducer bodies (line-attributed in `parse.ts`) | **~15%** | Spread across ~30 rule handlers; no single rule dominates. |
-| AST construction helpers | **~10%** | `addColumn`, `extractSpan`, `spanOver`, `mkName`, `mkParenthesized`, `nodeSpan`, etc. |
-| Object-literal materialization (`defineProperties` native) | **~5%** | Every `{kind, …, span}` allocation funnels through this host function. |
-| Dequoting / small utils | **~3%** | `sqlite3Dequote` × 2 locations, `toUpperCase`, `copyDataProperties`. |
+| Subsystem                                                  | Self % of total | Details                                                                                                                          |
+| ---------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Tokenizer (generator + scanning + keyword)                 | **~25%**        | `iterate` × 4 locations + `finishKeyword` × 2 + `nextToken` + `toUpperCase`. `generatorResume` cumulative is **29% total time**. |
+| LR engine (`#yy_reduce` + `next` + `reverse`)              | **~22%**        | `#yy_reduce` self alone is 24% across 7 line-level attributions; `next` 3.3%; `reverse` 5%.                                      |
+| Generated reducer bodies (line-attributed in `parse.ts`)   | **~15%**        | Spread across ~30 rule handlers; no single rule dominates.                                                                       |
+| AST construction helpers                                   | **~10%**        | `addColumn`, `extractSpan`, `spanOver`, `mkName`, `mkParenthesized`, `nodeSpan`, etc.                                            |
+| Object-literal materialization (`defineProperties` native) | **~5%**         | Every `{kind, …, span}` allocation funnels through this host function.                                                           |
+| Dequoting / small utils                                    | **~3%**         | `sqlite3Dequote` × 2 locations, `toUpperCase`, `copyDataProperties`.                                                             |
 
 ### Top 10 self-time functions
 
-| % | Function | Location |
-|---|---|---|
-| 13.6% | `#yy_reduce` | `src/lempar.ts:555` (reducer call site) |
-| 6.7% | `iterate` | `src/tokenize.ts:1087` (generator body) |
-| 5.0% | `reverse` | native — from `popped.reverse()` inside `#yy_reduce` |
-| 4.8% | `defineProperties` | native — AST object-literal materialization |
-| 4.8% | `finishKeyword` | `src/tokenize.ts:1063` |
-| 4.7% | `nextToken` | `src/tokenize.ts` |
-| 4.4% | `iterate` | `src/tokenize.ts:1106` |
-| 3.9% | `addColumn` | `src/ast/parseActions.ts:737` |
-| 3.3% | `iterate` | `src/tokenize.ts:1085` |
-| 3.3% | `next` | `src/lempar.ts:500` |
+| %     | Function           | Location                                             |
+| ----- | ------------------ | ---------------------------------------------------- |
+| 13.6% | `#yy_reduce`       | `src/lempar.ts:555` (reducer call site)              |
+| 6.7%  | `iterate`          | `src/tokenize.ts:1087` (generator body)              |
+| 5.0%  | `reverse`          | native — from `popped.reverse()` inside `#yy_reduce` |
+| 4.8%  | `defineProperties` | native — AST object-literal materialization          |
+| 4.8%  | `finishKeyword`    | `src/tokenize.ts:1063`                               |
+| 4.7%  | `nextToken`        | `src/tokenize.ts`                                    |
+| 4.4%  | `iterate`          | `src/tokenize.ts:1106`                               |
+| 3.9%  | `addColumn`        | `src/ast/parseActions.ts:737`                        |
+| 3.3%  | `iterate`          | `src/tokenize.ts:1085`                               |
+| 3.3%  | `next`             | `src/lempar.ts:500`                                  |
 
 ## Ranked action list
 
@@ -116,7 +116,7 @@ The payoff is uncertain — could be 2–5% if there's real
 hidden-class churn; could be 0% if JSC is already folding these into a
 single shape. Worth a morning's audit regardless.
 
-**Success metric:** measurable throughput bump *or* confirmation that
+**Success metric:** measurable throughput bump _or_ confirmation that
 the profile is honest and this %age is unavoidable.
 
 ### 4. Audit `addColumn` and `parseActions.ts` list-mutation helpers — SMALL
@@ -160,11 +160,11 @@ fresh `{major, minor}` wrappers — looked wasteful on paper, but
 benchmarks showed three separate attempts to eliminate the allocation
 each regressed throughput by 3–109%:
 
-| Attempt | Regression vs. baseline |
-|---|---|
-| Alias stack entries directly (share hidden class) | −109% (SMALL) — reducer's `popped[i].minor` inline-cache went polymorphic |
-| Fresh wrappers + reused array + indexed fill + `length` set | −14% (DEEP) |
-| Fresh wrappers + reused array + pop/reverse | −6% (uniform) |
+| Attempt                                                     | Regression vs. baseline                                                   |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Alias stack entries directly (share hidden class)           | −109% (SMALL) — reducer's `popped[i].minor` inline-cache went polymorphic |
+| Fresh wrappers + reused array + indexed fill + `length` set | −14% (DEEP)                                                               |
+| Fresh wrappers + reused array + pop/reverse                 | −6% (uniform)                                                             |
 
 **Root cause:** V8/JSC already fast-paths `new Array()` + `push` +
 `reverse` + short-lived nursery-allocated `{major, minor}` wrappers.
