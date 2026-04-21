@@ -9,6 +9,7 @@ import {
   TokenizeOpts,
   tokenizerModuleForGrammar,
   type Token,
+  type TokenIterator,
   type CreateTokenizerOptions,
   type KeywordDefs,
 } from "./tokenize.ts"
@@ -22,7 +23,6 @@ import {
 import {
   bindSyntaxDiagnostics,
   buildIllegalTokenDiagnostic,
-  lineColAt,
   createParseErrorArray,
   type Diagnostic,
   type ParseError,
@@ -66,7 +66,7 @@ export interface ParserModule {
   /** Parse a SQL string into an AST. */
   parse(source: string, opts?: ParseOpts): ParseResult
   /** Tokenize a SQL string into a stream of tokens. */
-  tokenize(source: string, opts?: TokenizeOpts): IterableIterator<Token>
+  tokenize(source: string, opts?: TokenizeOpts): TokenIterator
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
   tokenName(code: TokenId): string | undefined
   /** Create the underlying LALR state machine engine, used by {@link parse}. */
@@ -146,7 +146,8 @@ export function parserModuleForGrammar(
     // "second valid stmt past first" (engine would keep running) — in
     // both cases the token's offset is the start of the trailing range.
     let lastMajor: TokenId | undefined
-    for (const tok of tk.tokenize(sql, tokenizeOpts)) {
+    const sourceTokens = tk.tokenize(sql, tokenizeOpts)
+    for (const tok of sourceTokens) {
       if (tok.type === SPACE || tok.type === COMMENT) continue
 
       if (tok.type === ILLEGAL) {
@@ -193,12 +194,15 @@ export function parserModuleForGrammar(
     // real token wasn't a SEMI, feed a virtual one to close the
     // current statement.  Then feed 0 (end-of-input marker) to trigger
     // the final reduce/accept.  Both are synthetic tokens with
-    // zero-length spans at `sql.length`. Skip both if the session already
-    // terminated during the token loop.
+    // zero-length spans at the tokenizer's final cursor. Skip both if
+    // the session already terminated during the token loop.
     if (session.phase === "running") {
-      const endPos = sql.length
-      const { line: endLine, col: endCol } = lineColAt(sql, endPos)
-      const endSpan = { offset: endPos, length: 0, line: endLine, col: endCol }
+      const endSpan = {
+        offset: sourceTokens.offset,
+        length: 0,
+        line: sourceTokens.line,
+        col: sourceTokens.col,
+      }
 
       if (lastMajor !== SEMI) {
         const semiToken: Token = {

@@ -1,4 +1,5 @@
-// Comparative parse benchmarks: ours vs liteparser (WASM) vs @appland/sql-parser.
+// Comparative parse benchmarks: ours vs liteparser (WASM) vs
+// sqlite-parser vs @appland/sql-parser.
 //
 // Run with `bun run bench:compare`.  Liteparser must be built first —
 // `make liteparser-wasm` (requires emscripten).
@@ -9,46 +10,92 @@
 //   * Each parser produces a different AST shape.  We measure time to
 //     go from SQL string → parser's own representation.  Not an
 //     AST-equivalence benchmark.
-//   * Liteparser is C compiled to WASM with a JS marshalling layer that
-//     walks the C AST and materialises JS objects via HEAPU32 reads.
-//     The marshalling is not free and is part of what we're measuring.
-//   * @appland/sql-parser is pure JS (CJS), no native/WASM component.
+//   * Liteparser is C compiled to WASM.  Its `parse(sql)` path
+//     (see vendor/liteparser/wasm/src/liteparser.ts) runs the C parser,
+//     serialises the C AST to a JSON string inside WASM, decodes that
+//     to a JS string via `UTF8ToString`, then `JSON.parse`s it into
+//     JS objects.  The JSON round-trip is a non-trivial share of the
+//     measured cost and reflects the wrapper's marshalling strategy,
+//     not C parsing in isolation; a HEAPU32-walking marshaller would
+//     be faster.
+//   * sqlite-parser (npm) is a PEG.js-generated pure-JS parser for a
+//     SQLite grammar.
+//   * @appland/sql-parser is a more recently maintained fork of
+//     sqlite-parser with additional grammar coverage — also pure JS.
 //   * Ours is pure JS + generated tables from Lemon.
 //   * We call `createLiteParser()` once outside the hot loop so WASM
 //     instantiation doesn't contaminate the per-op numbers.
+//   * TINY is small enough that fixed per-call overhead (WASM
+//     boundary-crossings for liteparser, module bootstrap for PEG
+//     parsers) dominates.  Trust MEDIUM / LARGE / DEEP for throughput.
 
 import { run, bench, group, summary, do_not_optimize } from "mitata"
-import { LARGE, MEDIUM, SMALL, TINY, parseAccepted as ourParse } from "./bench-common.ts"
+import {
+  DEEP,
+  LARGE,
+  MEDIUM,
+  SMALL,
+  TINY,
+  parseAccepted as ourParse,
+} from "./bench-common.ts"
 import { createLiteParser } from "../vendor/liteparser/wasm/src/index.ts"
+// @ts-expect-error — no types shipped
+import sqliteParser from "sqlite-parser"
 // @ts-expect-error — no types shipped
 import applandParse from "@appland/sql-parser"
 import { runScript } from "./utils.ts"
 
 const liteparser = await createLiteParser()
 
-// Sanity: fail fast if any parser can't handle an input.  Catches API
-// regressions before we waste minutes warming mitata.
-for (const [name, sql] of [
-  ["TINY", TINY],
-  ["SMALL", SMALL],
-  ["MEDIUM", MEDIUM],
-  ["LARGE", LARGE],
-] as const) {
-  ourParse(sql)
-  liteparser.parse(sql)
-  applandParse(sql)
-  void name
+// Each competitor: a label and an invoker.  `ours` must come first so
+// it becomes the baseline row.  The sanity loop below also uses this
+// list to skip (input × parser) combinations the parser can't handle
+// — sqlite-parser (2015-2017) rejects window FILTER / newer grammar
+// that the fork @appland/sql-parser picked up; we show those as `—`
+// rather than crashing the whole run.
+const competitors = [
+  { label: "ours", parse: (sql: string) => ourParse(sql) },
+  { label: "liteparser (wasm)", parse: (sql: string) => liteparser.parse(sql) },
+  { label: "sqlite-parser", parse: (sql: string) => sqliteParser(sql) },
+  { label: "@appland/sql-parser", parse: (sql: string) => applandParse(sql) },
+] as const
+
+// Probe sanity once per (input, competitor) so we (a) fail loudly if
+// *our* parser regresses and (b) omit inputs that individual
+// competitors can't handle from the mitata runs.
+const canHandle = new Map<string, Set<string>>()
+function probe(label: string, sql: string): void {
+  const ok = new Set<string>()
+  for (const c of competitors) {
+    try {
+      c.parse(sql)
+      ok.add(c.label)
+    } catch (e) {
+      if (c.label === "ours") throw e
+      console.warn(`${label}: skipping ${c.label} (${(e as Error).message})`)
+    }
+  }
+  canHandle.set(label, ok)
 }
+
+probe("tiny", TINY)
+probe("small", SMALL)
+probe("medium", MEDIUM)
+probe("large (wide create table)", LARGE)
+probe("deep (nested expr + subquery)", DEEP)
 
 // Each group uses mitata's `summary` wrapper so it prints a
 // "N.NNx faster/slower than <baseline>" line at the end.  We mark
 // `ours` as the baseline so every comparison is "X relative to ours".
 function groupFor(label: string, sql: string): void {
+  const ok = canHandle.get(label) ?? new Set<string>()
   group(label, () => {
     summary(() => {
-      bench(`${label} / ours`, () => do_not_optimize(ourParse(sql))).baseline(true)
-      bench(`${label} / liteparser (wasm)`, () => do_not_optimize(liteparser.parse(sql)))
-      bench(`${label} / @appland/sql-parser`, () => do_not_optimize(applandParse(sql)))
+      for (const c of competitors) {
+        if (!ok.has(c.label)) continue
+        const b = bench(`${label} / ${c.label}`, () => do_not_optimize(c.parse(sql)))
+        if (c.label === "ours") b.baseline(true)
+      }
     })
   })
 }
@@ -57,6 +104,7 @@ groupFor("tiny", TINY)
 groupFor("small", SMALL)
 groupFor("medium", MEDIUM)
 groupFor("large (wide create table)", LARGE)
+groupFor("deep (nested expr + subquery)", DEEP)
 
 await runScript(
   import.meta.main,
@@ -84,10 +132,10 @@ liteparser.destroy()
 // Per-group summaries from mitata are great for scanning, but readers
 // comparing trends across input sizes want a single table.  This
 // aggregator walks the `run()` trials, groups them by label prefix
-// (`tiny`, `small`, `medium`, `large …`) and competitor suffix
-// (`ours`, `liteparser (wasm)`, `@appland/sql-parser`), and prints an
-// ASCII matrix with both absolute avg timings and ×-multiples relative
-// to `ours`.
+// (`tiny`, `small`, `medium`, `large …`, `deep …`) and competitor
+// suffix (`ours`, `liteparser (wasm)`, `sqlite-parser`,
+// `@appland/sql-parser`), and prints an ASCII matrix with both
+// absolute avg timings and ×-multiples relative to `ours`.
 // ---------------------------------------------------------------------------
 
 interface Trial {

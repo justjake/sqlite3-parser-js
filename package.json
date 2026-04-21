@@ -62,6 +62,7 @@
     "mitata": "^1.0.34",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
+    "sqlite-parser": "^1.0.1",
     "typebox": "1.1.28",
     "typescript": "^6.0.3"
   }

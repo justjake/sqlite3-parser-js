@@ -53,6 +53,22 @@ CREATE TABLE analytics_events (
 );
 `.trim()
 
+// Deep expression + subquery nesting. Stresses the engine's LALR
+// stack, the reducer's recursive construction, and each parser's
+// tolerance for nested parentheses / correlated subqueries — the
+// opposite axis from LARGE's wide-not-deep column list.
+const DEEP_EXPR = (() => {
+  let e = "a"
+  for (let i = 0; i < 16; i++) e = `(${e} + ${i})`
+  return e
+})()
+const DEEP_SUBQUERY = (() => {
+  let q = `SELECT ${DEEP_EXPR} FROM t`
+  for (let i = 0; i < 4; i++) q = `SELECT (${q}) FROM t`
+  return q
+})()
+export const DEEP = `${DEEP_SUBQUERY};`
+
 // Error-path input: trailing comma before FROM. Exercises the hint
 // heuristics and renderCodeBlock-oriented diagnostics.
 export const BROKEN = "SELECT a,\n       b,\n       FROM t"

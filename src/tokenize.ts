@@ -165,6 +165,16 @@ export interface Token {
   synthetic?: boolean
 }
 
+/** Live tokenizer cursor location. */
+export interface TokenizeCursor {
+  readonly offset: number
+  readonly line: number
+  readonly col: number
+}
+
+/** Iterator returned by {@link Tokenizer.tokenize}. */
+export type TokenIterator = IterableIterator<Token> & TokenizeCursor
+
 /**
  * The 33 TK_* codes the lexer emits directly.  Every key is required
  * — their presence is verified at {@link tokenizerModuleForGrammar} time
@@ -216,8 +226,14 @@ export interface Tokenizer {
   readonly tokens: TokenizerTokens
   /** TokenId → display name (`"SELECT"`, `"ID"`, …) or undefined. */
   tokenName(code: TokenId): string | undefined
-  /** Iterate tokens in `sql`.  Trivia is skipped by default. */
-  tokenize(sql: string, opts?: TokenizeOpts): IterableIterator<Token>
+  /**
+   * Iterate tokens in `sql`. Trivia is skipped by default.
+   *
+   * The returned iterator also exposes the live tokenizer cursor
+   * (`offset`, `line`, `col`). After exhaustion, that cursor is the
+   * tokenizer's final location in the input.
+   */
+  tokenize(sql: string, opts?: TokenizeOpts): TokenIterator
   /** @internal — exposed for tests. */
   _nextToken(z: string, p: number, outType: [TokenId]): number
   /** @internal — exposed for tests. */
@@ -1060,39 +1076,44 @@ export function tokenizerModuleForGrammar<Ctx, V>(
   // Each consumed character (including trivia) advances `col` by one;
   // each LF (0x0a) bumps `line` and resets `col` to 0.  CR is treated
   // as a regular column — matching lineColAt() in src/errors.ts.
-  function* tokenize(
-    sql: string,
-    { emitTrivia = false }: TokenizeOpts = {},
-  ): IterableIterator<Token> {
+  function tokenize(sql: string, { emitTrivia = false }: TokenizeOpts = {}): TokenIterator {
     const out: [TokenId] = [0 as TokenId]
     let i = 0
     let line = 1
     let col = 0
     const len = sql.length
-    while (i < len) {
-      const n = nextToken(sql, i, out)
-      const type = out[0]
-      if (n === 0) break // CC_NUL at offset i
-      const offset = i
-      const tokenLine = line
-      const tokenCol = col
-      const end = offset + n
-      for (let k = offset; k < end; k++) {
-        if (sql.charCodeAt(k) === 10) {
-          line++
-          col = 0
-        } else {
-          col++
+    function* iterate(): IterableIterator<Token> {
+      while (i < len) {
+        const n = nextToken(sql, i, out)
+        const type = out[0]
+        if (n === 0) break // CC_NUL at offset i
+        const offset = i
+        const tokenLine = line
+        const tokenCol = col
+        const end = offset + n
+        for (let k = offset; k < end; k++) {
+          if (sql.charCodeAt(k) === 10) {
+            line++
+            col = 0
+          } else {
+            col++
+          }
+        }
+        i = end
+        if (!emitTrivia && (type === T.SPACE || type === T.COMMENT)) continue
+        yield {
+          type,
+          text: sql.slice(offset, end),
+          span: { offset, length: n, line: tokenLine, col: tokenCol },
         }
       }
-      i = end
-      if (!emitTrivia && (type === T.SPACE || type === T.COMMENT)) continue
-      yield {
-        type,
-        text: sql.slice(offset, end),
-        span: { offset, length: n, line: tokenLine, col: tokenCol },
-      }
     }
+
+    return Object.defineProperties(iterate(), {
+      offset: { get: () => i },
+      line: { get: () => line },
+      col: { get: () => col },
+    }) as TokenIterator
   }
 
   return {
