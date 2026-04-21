@@ -1,18 +1,19 @@
 {
   "name": "sqlite3-parser",
-  "version": "0.5.1",
-  "description": "Parse SQLite query syntax. 1.5x-200x faster than other JavaScript SQL parsers.",
+  "version": "0.5.2",
+  "description": "Parse SQLite query syntax using a LALR(1) parser derived from SQLite's parse.y grammar. 1.5x-200x faster than other JavaScript SQL parsers.",
   "keywords": [
-    "ast",
-    "lalr",
-    "libsql",
-    "parser",
     "sql",
     "sqlite",
-    "sqlite3",
+    "parser",
+    "ast",
+    "lalr",
     "syntax",
     "tokenizer",
-    "turso"
+    "sqlite3",
+    "libsql",
+    "turso",
+    "lemon"
   ],
   "homepage": "https://github.com/justjake/sqlite3-parser-js#readme",
   "bugs": {
