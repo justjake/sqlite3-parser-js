@@ -63,7 +63,7 @@ function isAssertionError(value: unknown): boolean {
 }
 
 describe("README.md code blocks", () => {
-  test("README.md:15 (ts)", () => {
+  test("README.md:18 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -100,7 +100,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:39 (ts)", () => {
+  test("README.md:42 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -141,7 +141,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:69 (ts)", () => {
+  test("README.md:72 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -164,7 +164,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:78 (ts)", () => {
+  test("README.md:81 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -188,7 +188,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:94 (ts)", () => {
+  test("README.md:97 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -228,7 +228,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:122 (ts)", () => {
+  test("README.md:125 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -263,7 +263,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:149 (ts)", () => {
+  test("README.md:152 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
@@ -296,7 +296,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("README.md:175 (ts)", () => {
+  test("README.md:178 (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {

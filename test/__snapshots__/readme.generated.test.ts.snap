@@ -203,3 +203,111 @@ exports[`README.md code blocks README.md:175 (ts) 1`] = `
   "threw": undefined,
 }
 `;
+
+exports[`README.md code blocks README.md:18 (ts) 1`] = `
+{
+  "stderr": [],
+  "stdout": [
+    "2",
+    "InsertStmt",
+    "SelectStmt",
+  ],
+  "threw": undefined,
+}
+`;
+
+exports[`README.md code blocks README.md:42 (ts) 1`] = `
+{
+  "stderr": [
+    
+"expected end of input after single statement
+
+At 1:45:
+   1│ SELECT id, name FROM users WHERE active = 1; SELECT 1
+    │                                              ^^^^^^^^"
+,
+  ],
+  "stdout": [
+    "SelectStmt",
+  ],
+  "threw": undefined,
+}
+`;
+
+exports[`README.md code blocks README.md:72 (ts) 1`] = `
+{
+  "stderr": [],
+  "stdout": [
+    "CmdList",
+    "SelectStmt",
+  ],
+  "threw": undefined,
+}
+`;
+
+exports[`README.md code blocks README.md:81 (ts) 1`] = `
+{
+  "stderr": [],
+  "stdout": [
+    "SelectStmt",
+    "10",
+  ],
+  "threw": undefined,
+}
+`;
+
+exports[`README.md code blocks README.md:97 (ts) 1`] = `
+{
+  "stderr": [],
+  "stdout": [],
+  "threw": undefined,
+}
+`;
+
+exports[`README.md code blocks README.md:125 (ts) 1`] = `
+{
+  "stderr": [
+    
+"near "FROM": syntax error
+
+At 1:7:
+   1│ SELECT FROM users
+    │        ^^^^
+
+  hint: expected a result expression before FROM"
+,
+  ],
+  "stdout": [],
+  "threw": undefined,
+}
+`;
+
+exports[`README.md code blocks README.md:152 (ts) 1`] = `
+{
+  "stderr": [
+    "1",
+    "near "FROM": syntax error",
+    
+"near "FROM": syntax error
+
+At 1:7:
+   1│ SELECT FROM users
+    │        ^^^^
+
+  hint: expected a result expression before FROM"
+,
+  ],
+  "stdout": [],
+  "threw": undefined,
+}
+`;
+
+exports[`README.md code blocks README.md:178 (ts) 1`] = `
+{
+  "stderr": [],
+  "stdout": [
+    "[ "t" ]",
+  ],
+  "threw": undefined,
+}
+`;

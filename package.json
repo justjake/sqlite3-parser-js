@@ -1,7 +1,19 @@
 {
   "name": "sqlite3-parser",
   "version": "0.4.0",
-  "description": "Build a JS SQL parser by ingesting machine-readable dumps from the patched lemon and mkkeywordhash tools.",
+  "description": "Parse SQLite query syntax. 1.5x-200x faster than other JavasScript SQL parsers.",
+  "keywords": [
+    "sqlite",
+    "sql",
+    "parser",
+    "syntax",
+    "ast",
+    "lalr",
+    "tokenizer",
+    "sqlite3",
+    "libsql",
+    "turso"
+  ],
   "homepage": "https://github.com/justjake/sqlite3-parser-js#readme",
   "bugs": {
     "url": "https://github.com/justjake/sqlite3-parser-js/issues"
