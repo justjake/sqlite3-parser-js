@@ -104,7 +104,10 @@ class ParserDiagnostic implements ParseDiagnostic {
   }
 }
 
-export function createParseDiagnostic(ctx: ParseErrorContext, diagnostic: Diagnostic): ParseDiagnostic {
+export function createParseDiagnostic(
+  ctx: ParseErrorContext,
+  diagnostic: Diagnostic,
+): ParseDiagnostic {
   return new ParserDiagnostic(ctx, diagnostic)
 }
 

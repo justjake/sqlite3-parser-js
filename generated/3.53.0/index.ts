@@ -19,27 +19,20 @@ import * as _keywordDefs from "./keywords.prod.json" with { type: "json" }
 export type * from "../../src/parser"
 export type * from "../../src/tokenize"
 export type * from "../../src/lempar"
-export type * from "../../src/errors"
 export type * from "../../src/ast/nodes"
-export * from "../../src/ast/traverse"
+export type * from "../../src/diagnostics"
 
-// Explicit public surface from src/errors.ts: types and the runtime
-// helpers for building, formatting, and rendering diagnostics.  Types
-// are already covered by `export type *` above; re-listing them here
-// documents the intended API and keeps a single point of truth for
-// the supported error-handling entry points.
+export * from "../../src/ast/traverse"
+export * from "../../src/errors"
+
+// Make specific diagnostics APIs public.
 export {
-  type Diagnostic,
-  type DiagnosticHint,
-  type ParseDiagnostic as ParseError,
-  type ParseErrorContext,
-  type RenderCodeBlockOptions,
-  formatDiagnostic as formatParseError,
-  createParseDiagnostic as createParseError,
-  createParseDiagnosticArray as createParseErrorArray,
+  formatDiagnostic,
+  createParseDiagnostic,
+  createParseDiagnosticArray,
   lineColAt,
   renderCodeBlock,
-} from "../../src/errors"
+} from "../../src/diagnostics"
 
 /** The specific SQLite version this bundle was generated from. */
 export const SQLITE_VERSION = "3.53.0" as const
@@ -47,15 +40,24 @@ export const SQLITE_VERSION = "3.53.0" as const
 const mod = parserModuleForGrammar(_parserDefs, _keywordDefs as KeywordDefs, {})
 
 /**
- * Parse a SQL string into a CST.
+ * Parse a SQL string into an AST.
  */
 export const parse: ParserModule["parse"] = mod.parse
 
 /**
- * Parse exactly one top-level SQL statement from a string, returning
- * it alongside a `tail` offset past its terminating `;`.
+ * Parse a SQL string into an AST, or throw if parse errors occur.
+ */
+export const parseOrThrow: ParserModule["parseOrThrow"] = mod.parseOrThrow
+
+/**
+ * Parse exactly one top-level SQL statement from a string.
  */
 export const parseStmt: ParserModule["parseStmt"] = mod.parseStmt
+
+/**
+ * Parse exactly one top-level SQL statement from a string, or throw if parse errors occur.
+ */
+export const parseStmtOrThrow: ParserModule["parseStmtOrThrow"] = mod.parseStmtOrThrow
 
 /**
  * Tokenize a SQL string into a stream of tokens.

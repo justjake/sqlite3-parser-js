@@ -1,4 +1,4 @@
-import type { ParseDiagnostic } from "./diagnostics";
+import type { ParseDiagnostic } from "./diagnostics"
 
 const Sqlite3ParserErrorSymbol = Symbol("Sqlite3ParserError")
 
@@ -8,19 +8,24 @@ export class Sqlite3ParserError extends Error {
     if (error instanceof Sqlite3ParserError) {
       return error
     }
-    return new Sqlite3ParserError(error.stack ?? `${error.name}: ${error.message}`, { cause: error }) as Sqlite3ParserError
+    return new Sqlite3ParserError(error.stack ?? `${error.name}: ${error.message}`, {
+      cause: error,
+    }) as Sqlite3ParserError
   }
 
   readonly [Sqlite3ParserErrorSymbol]: true = true
 
   /** toJSON provided so all error properties appear in structured logging. */
   toJSON(): object {
-    return Object.assign({
-      name: this.name,
-      message: this.message,
-      stack: this.stack,
-      cause: this.cause,
-    }, this)
+    return Object.assign(
+      {
+        name: this.name,
+        message: this.message,
+        stack: this.stack,
+        cause: this.cause,
+      },
+      this,
+    )
   }
 }
 

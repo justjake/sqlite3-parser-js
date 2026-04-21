@@ -20,20 +20,13 @@ export type * from "../../src/parser"
 export type * from "../../src/tokenize"
 export type * from "../../src/lempar"
 export type * from "../../src/ast/nodes"
+export type * from "../../src/diagnostics"
+
 export * from "../../src/ast/traverse"
 export * from "../../src/errors"
 
-// Explicit public surface from src/errors.ts: types and the runtime
-// helpers for building, formatting, and rendering diagnostics.  Types
-// are already covered by `export type *` above; re-listing them here
-// documents the intended API and keeps a single point of truth for
-// the supported error-handling entry points.
+// Make specific diagnostics APIs public.
 export {
-  type Diagnostic,
-  type DiagnosticHint,
-  type ParseDiagnostic,
-  type ParseErrorContext,
-  type RenderCodeBlockOptions,
   formatDiagnostic,
   createParseDiagnostic,
   createParseDiagnosticArray,

@@ -2,9 +2,9 @@
 // generated/<ver>/parse.ts) and its downstream helpers in parseActions.ts.
 //
 // `Span` (position tuple every AST node carries) is defined in
-// `src/tokenize.ts`. Shared diagnostics live in `src/errors.ts`.
+// `src/tokenize.ts`. Shared diagnostics live in `src/diagnostics.ts`.
 
-import type { Diagnostic } from "../errors.ts"
+import type { Diagnostic } from "../diagnostics.ts"
 import type { Name, Stmt } from "./nodes.ts"
 
 /**
