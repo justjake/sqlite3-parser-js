@@ -55,11 +55,18 @@ group("renderCodeBlock", () => {
 await runScript(
   import.meta.main,
   {
-    usage: "usage: bun scripts/bench.ts [--filter <regex>]",
-    options: { filter: { type: "string" } },
+    usage: "usage: bun scripts/bench.ts [--filter <regex>] [--md]",
+    options: {
+      filter: { type: "string" },
+      md: { type: "boolean" },
+    },
   },
   async ({ values }) => {
     const filter = values.filter as string | undefined
-    await run(filter ? { filter: new RegExp(filter) } : {})
+    const md = Boolean(values.md)
+    await run({
+      ...(filter ? { filter: new RegExp(filter) } : {}),
+      ...(md ? { format: "markdown" as const, colors: false } : {}),
+    })
   },
 )
