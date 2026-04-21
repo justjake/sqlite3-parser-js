@@ -44,7 +44,7 @@
     "build": "bun run build:gen && bun run build:bundle",
     "build:gen": "make gen",
     "build:bundle": "bun scripts/build.ts",
-    "test": "bun test test/",
+    "test": "bun test --path-ignore-patterns='vendor/**'",
     "fmt": "oxfmt",
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
