@@ -76,18 +76,6 @@ const { root: stmt } = parseStmtOrThrow("SELECT id, name FROM users WHERE active
 console.log(stmt.type) // -> SelectStmt
 ```
 
-```ts
-import { parseStmt } from "sqlite3-parser"
-
-const r = parseStmt("SELECT 1; SELECT 2", { allowTrailing: true })
-if (r.status === "ok") {
-  console.log(r.root.type) // SelectStmt
-  console.log(r.tail) // 10 — source.slice(tail) is what's left to parse
-} else {
-  throw "expected ok"
-}
-```
-
 ### Errors
 
 Parse failures are modeled as "diagnostics". These are not sub-classes of `Error`, so constructing them is cheap since no stack trace is captured.
