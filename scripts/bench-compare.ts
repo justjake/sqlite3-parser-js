@@ -1,5 +1,5 @@
 // Comparative parse benchmarks: ours vs liteparser (WASM) vs
-// sqlite-parser vs @appland/sql-parser.
+// several pure-JS / WASM SQL parsers from npm.
 //
 // Run with `bun run bench:compare`.  Liteparser must be built first —
 // `make liteparser-wasm` (requires emscripten).
@@ -22,12 +22,19 @@
 //     SQLite grammar.
 //   * @appland/sql-parser is a more recently maintained fork of
 //     sqlite-parser with additional grammar coverage — also pure JS.
+//   * node-sql-parser is a PEG.js-derived multi-dialect parser.  We
+//     run it with `database: "sqlite"` to pick its SQLite grammar.
+//   * pgsql-ast-parser is a Postgres grammar (nearley + moo); we feed
+//     it the same SQL and skip cases it can't handle.
+//   * @guanmingchiu/sqlparser-ts wraps datafusion-sqlparser-rs in
+//     WASM — same WASM boundary-crossing caveats as liteparser, plus
+//     a JSON serialise/parse across the FFI.
 //   * Ours is pure JS + generated tables from Lemon.
-//   * We call `createLiteParser()` once outside the hot loop so WASM
-//     instantiation doesn't contaminate the per-op numbers.
+//   * We call `createLiteParser()` and `init()` once outside the hot
+//     loop so WASM instantiation doesn't contaminate per-op numbers.
 //   * TINY is small enough that fixed per-call overhead (WASM
-//     boundary-crossings for liteparser, module bootstrap for PEG
-//     parsers) dominates.  Trust MEDIUM / LARGE / DEEP for throughput.
+//     boundary-crossings, module bootstrap for PEG parsers)
+//     dominates.  Trust MEDIUM / LARGE / DEEP for throughput.
 
 import { run, bench, group, summary, do_not_optimize } from "mitata"
 import {
@@ -43,22 +50,65 @@ import { createLiteParser } from "../vendor/liteparser/wasm/src/index.ts"
 import sqliteParser from "sqlite-parser"
 // @ts-expect-error — no types shipped
 import applandParse from "@appland/sql-parser"
+import { Parser as NodeSqlParser } from "node-sql-parser"
+import { parse as pgAstParse } from "pgsql-ast-parser"
+import { Parser as SqlParserTs, init as sqlParserTsInit } from "@guanmingchiu/sqlparser-ts"
+import ourPkg from "../package.json" with { type: "json" }
+import sqliteParserPkg from "sqlite-parser/package.json" with { type: "json" }
+import applandPkg from "@appland/sql-parser/package.json" with { type: "json" }
+import nodeSqlParserPkg from "node-sql-parser/package.json" with { type: "json" }
+import pgsqlAstParserPkg from "pgsql-ast-parser/package.json" with { type: "json" }
+// @ts-expect-error — package's exports map doesn't expose ./package.json to TS
+import sqlParserTsPkg from "@guanmingchiu/sqlparser-ts/package.json" with { type: "json" }
+import liteparserPkg from "../vendor/liteparser/wasm/package.json" with { type: "json" }
 import { runScript } from "./utils.ts"
 
 const liteparser = await createLiteParser()
+await sqlParserTsInit()
+const nodeSql = new NodeSqlParser()
+const nodeSqlOpt = { database: "sqlite" } as const
 
-// Each competitor: a label and an invoker.  `ours` must come first so
-// it becomes the baseline row.  The sanity loop below also uses this
-// list to skip (input × parser) combinations the parser can't handle
-// — sqlite-parser (2015-2017) rejects window FILTER / newer grammar
-// that the fork @appland/sql-parser picked up; we show those as `—`
-// rather than crashing the whole run.
-const competitors = [
-  { label: "ours", parse: (sql: string) => ourParse(sql) },
-  { label: "liteparser (wasm)", parse: (sql: string) => liteparser.parse(sql) },
-  { label: "sqlite-parser", parse: (sql: string) => sqliteParser(sql) },
-  { label: "@appland/sql-parser", parse: (sql: string) => applandParse(sql) },
-] as const
+// Each competitor: a label, an invoker, and the package metadata used
+// for the markdown header.  `ours` must come first so it becomes the
+// baseline row.  The sanity loop below also uses this list to skip
+// (input × parser) combinations the parser can't handle — sqlite-parser
+// (2015-2017) rejects window FILTER / newer grammar that the fork
+// @appland/sql-parser picked up, and parsers targeting other dialects
+// may refuse SQLite-isms; we show those as `—` rather than crashing
+// the whole run.
+interface PkgInfo {
+  readonly name: string
+  readonly version?: string
+  readonly description?: string
+  readonly homepage?: string
+  readonly repository?: string | { readonly url?: string }
+}
+interface Competitor {
+  readonly label: string
+  readonly parse: (sql: string) => unknown
+  readonly pkg: PkgInfo
+}
+const competitors: readonly Competitor[] = [
+  { label: "ours", parse: (sql) => ourParse(sql), pkg: ourPkg },
+  {
+    label: "liteparser (wasm)",
+    parse: (sql) => liteparser.parse(sql),
+    pkg: liteparserPkg,
+  },
+  { label: "sqlite-parser", parse: (sql) => sqliteParser(sql), pkg: sqliteParserPkg },
+  { label: "@appland/sql-parser", parse: (sql) => applandParse(sql), pkg: applandPkg },
+  {
+    label: "node-sql-parser",
+    parse: (sql) => nodeSql.astify(sql, nodeSqlOpt),
+    pkg: nodeSqlParserPkg,
+  },
+  { label: "pgsql-ast-parser", parse: (sql) => pgAstParse(sql), pkg: pgsqlAstParserPkg },
+  {
+    label: "@guanmingchiu/sqlparser-ts (wasm)",
+    parse: (sql) => SqlParserTs.parse(sql, "sqlite"),
+    pkg: sqlParserTsPkg,
+  },
+]
 
 // Probe sanity once per (input, competitor) so we (a) fail loudly if
 // *our* parser regresses and (b) omit inputs that individual
@@ -118,6 +168,7 @@ await runScript(
   async ({ values }) => {
     const filter = values.filter as string | undefined
     const md = Boolean(values.md)
+    if (md) printParserHeader(competitors)
     const result = await run({
       ...(filter ? { filter: new RegExp(filter) } : {}),
       ...(md ? { format: "markdown" as const, colors: false } : {}),
@@ -223,6 +274,39 @@ function formatRatio(
   if (a === undefined || b === undefined) return "—"
   if (a >= b) return `${(a / b).toFixed(2)}× slower`
   return `${(b / a).toFixed(2)}× faster`
+}
+
+function printParserHeader(parsers: readonly Competitor[]): void {
+  const print = (s: string): void => {
+    process.stdout.write(s + "\n")
+  }
+  print("## parsers under test")
+  print("")
+  for (const c of parsers) {
+    const pkg = c.pkg
+    const version = pkg.version ? ` \`${pkg.version}\`` : ""
+    const link = packageLink(pkg)
+    const name = link ? `[\`${pkg.name}\`](${link})` : `\`${pkg.name}\``
+    const desc = pkg.description ? ` — ${pkg.description}` : ""
+    print(`- **${c.label}**: ${name}${version}${desc}`)
+  }
+  print("")
+}
+
+function packageLink(pkg: PkgInfo): string | undefined {
+  if (pkg.homepage) return pkg.homepage
+  const repo = pkg.repository
+  if (!repo) return undefined
+  const raw = typeof repo === "string" ? repo : repo.url
+  if (!raw) return undefined
+  return normalizeRepoUrl(raw)
+}
+
+function normalizeRepoUrl(raw: string): string {
+  let url = raw.replace(/^git\+/, "").replace(/\.git$/, "")
+  const sshMatch = url.match(/^git@([^:]+):(.+)$/)
+  if (sshMatch) url = `https://${sshMatch[1]}/${sshMatch[2]}`
+  return url
 }
 
 function stripAnsi(s: string): string {

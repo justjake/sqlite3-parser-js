@@ -59,10 +59,13 @@
   },
   "devDependencies": {
     "@appland/sql-parser": "^1.5.1",
+    "@guanmingchiu/sqlparser-ts": "^0.61.1",
     "@types/bun": "latest",
     "mitata": "^1.0.34",
+    "node-sql-parser": "^5.4.0",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
+    "pgsql-ast-parser": "^12.0.2",
     "sqlite-parser": "^1.0.1",
     "typebox": "1.1.28",
     "typescript": "^6.0.3"
