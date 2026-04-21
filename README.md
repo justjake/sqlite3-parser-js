@@ -16,7 +16,7 @@ import { parse } from "sqlite3-parser"
 const result = parse("SELECT id, name FROM users WHERE active = 1")
 if (result.status === "accepted") {
   const cmd = result.ast.cmds[0] // CmdList → first top-level command
-  // cmd.kind === "SelectStmt", walk from here
+  // cmd.type === "SelectStmt", walk from here
 }
 ```
 
@@ -91,12 +91,63 @@ traverse(ast, {
 
 A few things worth knowing:
 
-- **Per-kind handlers.** Instead of a single `enter` with a big switch, pass `nodes: { SelectStmt(node) { … }, BinaryExpr(node, parent) { … }, … }`. Each handler is strongly typed to that kind.
+- **Per-type handlers.** Instead of a single `enter` with a big switch, pass `nodes: { SelectStmt(node) { … }, BinaryExpr(node, parent) { … }, … }`. Each handler is strongly typed to that node type.
 - **Visit control.** Callbacks may return `"skip"` to stop descending into the current node (but still fire `leave`), `"break"` to halt the whole walk, or nothing / `"continue"` to proceed.
-- **Visitor keys.** `VisitorKeys` is the per-kind list of child-bearing property names in traversal order. You can pass `keys: { CaseExpr: ["base", "elseExpr"] }` to override traversal for specific kinds per call.
+- **Visitor keys.** `VisitorKeys` is the per-type list of child-bearing property names in traversal order. You can pass `keys: { CaseExpr: ["base", "elseExpr"] }` to override traversal for specific types per call.
 - **Parent tracking.** Callbacks receive `(node, parent)` where parent is the enclosing AST node, or `undefined` at the root.
 
-The type `AstNodeMap` maps every `kind` discriminator string to its interface. `traverse` uses that map to type per-kind handlers; user code can too — e.g. `type NodeOfKind<K extends keyof AstNodeMap> = AstNodeMap[K]`.
+The type `AstNodeMap` maps every `type` discriminator string to its interface. `traverse` uses that map to type per-type handlers; user code can too — e.g. `type NodeOfType<T extends keyof AstNodeMap> = AstNodeMap[T]`.
+
+## Benchmarks
+
+Results below are averages from `bun run bench` and `bun run bench:compare` on one machine:
+
+- CPU: Apple M4 Max
+- Runtime: Bun 1.3.11 (`arm64-darwin`)
+
+These are point-in-time measurements from this repository. They are not guarantees and should be treated as approximate.
+
+### Cases
+
+| Case | Description |
+| ---- | ----------- |
+| `tiny` | Single `SELECT 1;` statement. |
+| `small` | Single `CREATE TABLE users (...)` statement. |
+| `medium` | `WITH` query with joins, aggregate, window function, `FILTER`, grouping, ordering, and `LIMIT`. |
+| `large` | Wide `CREATE TABLE analytics_events (...)` statement with 96 metric columns. |
+| `deep` | Nested expressions with a subquery. |
+| `broken` | Invalid input with a trailing comma before `FROM`; used for the syntax-error path. |
+
+### Internal
+
+`bun run bench`
+
+| Case | Tokenize avg | Parse avg |
+| ---- | ------------ | --------- |
+| `tiny` | `728.72 ns` | `1.86 µs` |
+| `small` | `1.90 µs` | `4.20 µs` |
+| `medium` | `9.66 µs` | `24.75 µs` |
+| `large` | `19.82 µs` | `66.89 µs` |
+
+Error-path benchmark from the same run:
+
+| Case | Operation | Avg |
+| ---- | --------- | --- |
+| `broken` | `parse only` | `1.61 µs` |
+
+### Comparison
+
+`bun run bench:compare`
+
+This is parse-only. The compared parsers do not produce the same AST shape. The `liteparser` numbers include JavaScript/WebAssembly marshalling.
+
+| Case | Ours | `liteparser (wasm)` | `sqlite-parser` | `@appland/sql-parser` |
+| ---- | ---- | ------------------- | --------------- | --------------------- |
+| `tiny` | `1.63 µs` | `1.99 µs` | `390.94 µs` | `508.94 µs` |
+| `small` | `4.34 µs` | `4.77 µs` | `514.94 µs` | `652.41 µs` |
+| `medium` | `24.26 µs` | `48.28 µs` | `5.40 ms` | `6.61 ms` |
+| `large` | `69.02 µs` | `84.72 µs` | `6.87 ms` | `7.85 ms` |
+| `deep` | `11.66 µs` | `31.07 µs` | `3.19 ms` | `3.61 ms` |
 
 ## Parse rules & porting
 
