@@ -6,7 +6,7 @@
 // low-level diagnostics into the public ParseError API.
 
 import {
-  TokenizeOptions,
+  type TokenizeOptions,
   tokenizerModuleForGrammar,
   type Token,
   type TokenIterator,
@@ -17,8 +17,8 @@ import {
   engineModuleForGrammar,
   type ParserDefs,
   type TokenId,
-  LalrReduce,
-  CreateLalrEngine,
+  type LalrReduce,
+  type CreateLalrEngine,
 } from "./lempar.ts"
 import {
   bindSyntaxDiagnostics,

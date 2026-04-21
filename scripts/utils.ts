@@ -14,7 +14,7 @@ import * as t from "typebox"
 import * as s from "typebox/schema"
 import { readFileSync } from "node:fs"
 import { dirname, relative, resolve } from "node:path"
-import { parseArgs, ParseArgsOptionsConfig } from "node:util"
+import { parseArgs, type ParseArgsOptionsConfig } from "node:util"
 import type { ParseArgsConfig, ParseArgsOptionDescriptor } from "node:util"
 type parseArgs = typeof parseArgs
 type ParsedResult<T extends ParseArgsConfig> = ReturnType<typeof parseArgs<T>>

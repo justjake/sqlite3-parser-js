@@ -2,7 +2,7 @@
 
 Parse SQLite query syntax.
 
-- **Fast**: 1.5x-200x faster than other JavaScript SQL parsers, see [benchmarks](#benchmarks).
+- **Fast**: 2x-200x faster than other JavaScript SQL parsers, see [benchmarks](#benchmarks).
 - **Light**: Pure JavaScript, no WebAssembly overhead. Ships ~32 KB gzipped and runs unchanged in Node, Bun, and the browser.
 - **Faithful**: The parser based on [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html) to emit [TypeScript code](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 - **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups with a pointer at the opener, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
@@ -210,12 +210,12 @@ The type `AstNodeMap` maps every `type` discriminator string to its interface. `
 tl;dr:
 
 ```text
-    ~1.5x faster than liteparser (wasm)
-    ~5x   faster than @guanmingchiu/sqlparser-ts (wasm)
-   ~10x   faster than node-sql-parser
-  ~100x   faster than pgsql-ast-parser
-  ~200x   faster than sqlite-parser
-  ~250x   faster than @appland/sql-parser
+    ~2x faster than liteparser (wasm)
+    ~5x faster than @guanmingchiu/sqlparser-ts (wasm)
+   ~10x faster than node-sql-parser
+  ~100x faster than pgsql-ast-parser
+  ~200x faster than sqlite-parser
+  ~250x faster than @appland/sql-parser
 ```
 
 - Results are averages from `bun run bench:compare` on one machine:
@@ -241,13 +241,13 @@ Avg per-iteration parse time across the five inputs.
 
 | Parser                              | `tiny`      | `small`     | `medium`    | `large`     | `deep`     |
 | ----------------------------------- | ----------- | ----------- | ----------- | ----------- | ---------- |
-| Ours                                | `1.52 µs`   | `4.36 µs`   | `22.96 µs`  | `68.24 µs`  | `11.57 µs` |
-| `liteparser (wasm)`                 | `1.87 µs`   | `4.65 µs`   | `46.10 µs`  | `84.00 µs`  | `29.41 µs` |
-| `@guanmingchiu/sqlparser-ts (wasm)` | `5.98 µs`   | `14.57 µs`  | `142.96 µs` | `184.17 µs` | `68.29 µs` |
-| `node-sql-parser`                   | `9.95 µs`   | `24.41 µs`  | `262.60 µs` | `557.08 µs` | `1.07 ms`  |
-| `pgsql-ast-parser`                  | `51.89 µs`  | `55.27 µs`  | `2.44 ms`   | `919.56 µs` | `1.02 ms`  |
-| `sqlite-parser`                     | `424.35 µs` | `559.10 µs` | `4.91 ms`   | `6.75 ms`   | `2.98 ms`  |
-| `@appland/sql-parser`               | `501.53 µs` | `640.94 µs` | `6.01 ms`   | `7.81 ms`   | `3.37 ms`  |
+| Ours                                | `0.91 µs`   | `3.48 µs`   | `23.24 µs`  | `66.45 µs`  | `10.64 µs` |
+| `liteparser (wasm)`                 | `2.02 µs`   | `4.90 µs`   | `48.87 µs`  | `85.42 µs`  | `31.48 µs` |
+| `@guanmingchiu/sqlparser-ts (wasm)` | `6.10 µs`   | `14.71 µs`  | `142.59 µs` | `191.27 µs` | `70.14 µs` |
+| `node-sql-parser`                   | `10.40 µs`  | `26.74 µs`  | `284.04 µs` | `559.81 µs` | `1.11 ms`  |
+| `pgsql-ast-parser`                  | `57.26 µs`  | `70.41 µs`  | `2.58 ms`   | `1.07 ms`   | `1.17 ms`  |
+| `sqlite-parser`                     | `477.15 µs` | `612.41 µs` | `5.50 ms`   | `7.37 ms`   | `3.28 ms`  |
+| `@appland/sql-parser`               | `576.26 µs` | `722.21 µs` | `6.78 ms`   | `8.03 ms`   | `3.71 ms`  |
 
 Libraries compared:
 
