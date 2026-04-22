@@ -51,7 +51,7 @@ sidecar in the same format.
   the function name first and only use the line as a rough hint.
 
 The `prof:report` script accepts any V8 `.cpuprofile` (either runtime)
-and emits the same markdown the `prof` wrappers do.  Use it to
+and emits the same markdown the `prof` wrappers do. Use it to
 re-summarise an old profile, tweak `--top N`, or target `--out
 path.md` when piping output is awkward.
 

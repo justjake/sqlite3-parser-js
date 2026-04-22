@@ -240,7 +240,9 @@ await runScript(
 
     console.log(`total distinct types with inconsistent shapes: ${variants.length}`)
     const allSites = [...byType.values()].reduce((a, b) => a + b.length, 0)
-    console.log(`scan stats: ${byType.size} distinct types found across ${allSites} construction sites`)
+    console.log(
+      `scan stats: ${byType.size} distinct types found across ${allSites} construction sites`,
+    )
 
     const topHitters = [...byType.entries()].sort((a, b) => b[1].length - a[1].length).slice(0, 15)
     console.log("\ntop construction hotspots (type × site count):")

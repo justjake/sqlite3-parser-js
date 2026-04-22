@@ -421,12 +421,7 @@ function spanShape(typeStr: string): SpanShape {
   }
 
   // Array (`T[]`, `Array<T>`, `readonly T[]`, `ReadonlyArray<T>`).
-  if (
-    t.endsWith("[]") ||
-    /^Array</.test(t) ||
-    /^ReadonlyArray</.test(t) ||
-    /^readonly\s/.test(t)
-  ) {
+  if (t.endsWith("[]") || /^Array</.test(t) || /^ReadonlyArray</.test(t) || /^readonly\s/.test(t)) {
     return "never"
   }
 

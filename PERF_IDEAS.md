@@ -91,12 +91,12 @@ listed explicitly in `NON_SPANFUL_TYPES` so the heuristic stays honest.
 
 **Result (500µs profile, same inputs, same iteration counts):**
 
-| Input  | Before (post-addColumn) | After (post-extractSpan-inline) | Δ        |
-| ------ | ----------------------: | ------------------------------: | -------- |
-| TINY   |                   837ms |                           776ms | −7.3%    |
-| SMALL  |                  1582ms |                          1415ms | −10.6%   |
-| MEDIUM |                  2312ms |                          1970ms | −14.8%   |
-| LARGE  |                  3085ms |                          2650ms | −14.1%   |
+| Input  | Before (post-addColumn) | After (post-extractSpan-inline) | Δ          |
+| ------ | ----------------------: | ------------------------------: | ---------- |
+| TINY   |                   837ms |                           776ms | −7.3%      |
+| SMALL  |                  1582ms |                          1415ms | −10.6%     |
+| MEDIUM |                  2312ms |                          1970ms | −14.8%     |
+| LARGE  |                  3085ms |                          2650ms | −14.1%     |
 | DEEP   |                  3049ms |                          2519ms | **−17.4%** |
 
 Total profile wall: **11.04s → 9.50s (−14.0%)**. `extractSpan` vanished
@@ -205,13 +205,13 @@ a comment warning callers not to stash the wrapper across `next()` calls.
 
 **Result:**
 
-| Input  | Before | After  | Δ           |
-| ------ | -----: | -----: | ----------- |
-| TINY   |  776ms |  735ms | **−5.3%**   |
-| SMALL  | 1415ms | 1336ms | **−5.6%**   |
-| MEDIUM | 1970ms | 1830ms | **−7.1%**   |
-| LARGE  | 2650ms | 2426ms | **−8.5%**   |
-| DEEP   | 2519ms | 2245ms | **−10.9%**  |
+| Input  | Before |  After | Δ          |
+| ------ | -----: | -----: | ---------- |
+| TINY   |  776ms |  735ms | **−5.3%**  |
+| SMALL  | 1415ms | 1336ms | **−5.6%**  |
+| MEDIUM | 1970ms | 1830ms | **−7.1%**  |
+| LARGE  | 2650ms | 2426ms | **−8.5%**  |
+| DEEP   | 2519ms | 2245ms | **−10.9%** |
 
 Total profile wall: **9.50s → 8.73s (−8.1%)**. DEEP got the biggest
 win again: deep expression nesting means the most tokens consumed per

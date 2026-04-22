@@ -177,9 +177,7 @@ function renderMarkdown(profile: CpuProfile, topN: number): string {
   lines.push("")
   lines.push("| Duration | Samples | Interval | Functions |")
   lines.push("|----------|---------|----------|-----------|")
-  lines.push(
-    `| ${fmtMs(durationUs)} | ${sampleCount} | ${fmtMs(intervalUs)} | ${frames.length} |`,
-  )
+  lines.push(`| ${fmtMs(durationUs)} | ${sampleCount} | ${fmtMs(intervalUs)} | ${frames.length} |`)
   lines.push("")
 
   const top10 = frames

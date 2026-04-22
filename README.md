@@ -239,15 +239,15 @@ tl;dr:
 
 Avg per-iteration parse time across the five inputs.
 
-| Parser                              | `tiny`      | `small`     | `medium`    | `large`     | `deep`     |
-| ----------------------------------- | ----------- | ----------- | ----------- | ----------- | ---------- |
-| Ours                                | `0.77 µs`   | `2.74 µs`   | `17.61 µs`  | `55.41 µs`  | `8.48 µs`  |
-| `liteparser (wasm)`                 | `1.93 µs`   | `4.58 µs`   | `46.12 µs`  | `81.20 µs`  | `30.03 µs` |
-| `@guanmingchiu/sqlparser-ts (wasm)` | `5.59 µs`   | `13.78 µs`  | `139.71 µs` | `176.26 µs` | `65.80 µs` |
-| `node-sql-parser`                   | `9.34 µs`   | `25.25 µs`  | `259.20 µs` | `525.64 µs` | `1.03 ms`  |
+| Parser                              | `tiny`      | `small`     | `medium`    | `large`     | `deep`      |
+| ----------------------------------- | ----------- | ----------- | ----------- | ----------- | ----------- |
+| Ours                                | `0.77 µs`   | `2.74 µs`   | `17.61 µs`  | `55.41 µs`  | `8.48 µs`   |
+| `liteparser (wasm)`                 | `1.93 µs`   | `4.58 µs`   | `46.12 µs`  | `81.20 µs`  | `30.03 µs`  |
+| `@guanmingchiu/sqlparser-ts (wasm)` | `5.59 µs`   | `13.78 µs`  | `139.71 µs` | `176.26 µs` | `65.80 µs`  |
+| `node-sql-parser`                   | `9.34 µs`   | `25.25 µs`  | `259.20 µs` | `525.64 µs` | `1.03 ms`   |
 | `pgsql-ast-parser`                  | `46.60 µs`  | `55.72 µs`  | `2.43 ms`   | `849.50 µs` | `932.67 µs` |
-| `sqlite-parser`                     | `430.27 µs` | `561.29 µs` | `4.95 ms`   | `6.34 ms`   | `2.88 ms`  |
-| `@appland/sql-parser`               | `518.49 µs` | `655.36 µs` | `5.95 ms`   | `7.16 ms`   | `3.21 ms`  |
+| `sqlite-parser`                     | `430.27 µs` | `561.29 µs` | `4.95 ms`   | `6.34 ms`   | `2.88 ms`   |
+| `@appland/sql-parser`               | `518.49 µs` | `655.36 µs` | `5.95 ms`   | `7.16 ms`   | `3.21 ms`   |
 
 Libraries compared:
 
