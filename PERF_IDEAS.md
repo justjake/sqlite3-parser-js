@@ -70,39 +70,45 @@ tokenizer-dominated.
 MEDIUM/LARGE; DEEP unaffected by design (parser-bound, not
 tokenizer-bound). Exceeded metric on TINY/SMALL.
 
-### 2. Inline `extractSpan` via emitter-generated span code — MEDIUM
+### 2. Inline `extractSpan` via emitter-generated span code — MEDIUM ✅ LANDED
 
-**Evidence:** `extractSpan` is **2.5% self**, called inside
-`spanFromPopped`. It's defensive because `minor` is typed `unknown`:
+**Status:** Landed. The `nodeSpan()` closure that used to live at the
+top of `reduce` is gone; each rule now emits its own `const _span: Span =
+…` preamble — but only when the action body actually references it. For
+~270 of the ~273 reducer cases the emitter inlines the span via direct
+`(popped[i].minor as T).span` reads wrapped in `spanOver(...)`; the 3
+remaining single-position rules whose only RHS is `string` or an array
+fall back to the runtime `spanFromPopped(popped)` helper.
 
-```ts
-function extractSpan(minor: unknown): Span | undefined {
-  if (minor && typeof minor === "object" && "span" in minor) {
-    return (minor as { span: Span }).span
-  }
-  return undefined
-}
-```
+Mechanism: `scripts/emit-ts-parser.ts` now carries a `spanShape(typeStr)`
+heuristic that classifies a `%type` datatype as `always` / `maybe` /
+`never` / `unknown`. The emitter walks each rule's RHS, picks the first
+and last positions with `always | maybe` shape, and emits a direct
+`spanOver(...)` call. Anything `unknown` or `never` falls back to
+`spanFromPopped`. Non-spanful `PascalCase` types (scratch helpers like
+`FromClauseMut`, `SelectBody`, plus the string-literal-union enums) are
+listed explicitly in `NON_SPANFUL_TYPES` so the heuristic stays honest.
 
-**Do not attempt the `minor?.span` fast path.** Replacing the gauntlet
-with `(minor as {span?:Span} | null | undefined)?.span` **regresses**:
-extractSpan self% jumped from 3.0% → 8.0% and TINY/SMALL/MEDIUM wall
-time got 7–11% slower. Why: `?.` on primitive `minor` values
-(numbers/booleans from grammar reductions) boxes them and sends the
-property access through a polymorphic IC, whereas `typeof === "object"`
-short-circuits primitives without allocation. Verified by benchmark on
-2026-04-21; also documented as a comment on the function itself.
+**Result (500µs profile, same inputs, same iteration counts):**
 
-The remaining idea worth trying:
+| Input  | Before (post-addColumn) | After (post-extractSpan-inline) | Δ        |
+| ------ | ----------------------: | ------------------------------: | -------- |
+| TINY   |                   837ms |                           776ms | −7.3%    |
+| SMALL  |                  1582ms |                          1415ms | −10.6%   |
+| MEDIUM |                  2312ms |                          1970ms | −14.8%   |
+| LARGE  |                  3085ms |                          2650ms | −14.1%   |
+| DEEP   |                  3049ms |                          2519ms | **−17.4%** |
 
-- **Emitter inlining** — `scripts/emit-ts-parser.ts` knows per-rule which
-  popped positions carry spans (from the `%type` declarations), so it
-  can emit `const _span = spanOver(popped[0]!.minor.span, popped[N]!.minor.span)`
-  directly in the reducer body and skip `spanFromPopped` entirely. This
-  avoids the defensive check by construction — the emitter only emits
-  `.span` access for positions that statically have one.
+Total profile wall: **11.04s → 9.50s (−14.0%)**. `extractSpan` vanished
+from the profile entirely. `spanFromPopped` dropped from 0.7% → 0.1%
+(only the 3 fallback rules call it). DEEP got the biggest win because
+deep expression nesting has the most reductions per parse, so the
+per-reduce savings compound.
 
-**Success metric:** ~2–3% throughput gain on the emitter-inlined version.
+The "do not attempt `minor?.span`" warning from the prior failed
+experiment is preserved as a comment on `extractSpan` in
+`parseActions.ts` — the helper is still around for the runtime fallback
+path and to keep tests/utilities working.
 
 ### 3. Audit AST node constructor shapes — UNKNOWN SIZE, LOW RISK
 

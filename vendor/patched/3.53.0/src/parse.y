@@ -92,7 +92,7 @@ import {
   mkSelect, pushCompound, mkOneSelect, valuesPush,
   mkColumnDefinition, addColumn, mkColumnsAndConstraints,
   addCte, mkUpsertIndex, flushCmd,
-  spanFromPopped,
+  spanFromPopped, spanOver, ZERO_SPAN,
   mkDiagnostic, mkDuplicateDiagnostic,
 } from "../../../src/ast/parseActions.ts";
 import { sqlite3Dequote, sqlite3DequoteNumber } from "../../../src/util.ts";

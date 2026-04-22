@@ -84,8 +84,10 @@ export function mkDuplicateDiagnostic(
 /**
  * A zero-filled Span.  Used as a conservative fallback when a popped
  * entry doesn't carry span info (e.g. primitive-typed nonterminals).
+ * Exported so the codegen-emitted reducer can reference it directly
+ * for rules where no RHS position carries a span.
  */
-const ZERO_SPAN: Span = { offset: 0, length: 0, line: 0, col: 0 }
+export const ZERO_SPAN: Span = { offset: 0, length: 0, line: 0, col: 0 }
 
 /**
  * Compute a Span covering every popped entry in one LALR reduction.
