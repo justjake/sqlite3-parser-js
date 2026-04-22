@@ -210,12 +210,12 @@ The type `AstNodeMap` maps every `type` discriminator string to its interface. `
 tl;dr:
 
 ```text
-    ~2x faster than liteparser (wasm)
-    ~5x faster than @guanmingchiu/sqlparser-ts (wasm)
-   ~10x faster than node-sql-parser
-  ~100x faster than pgsql-ast-parser
-  ~200x faster than sqlite-parser
-  ~250x faster than @appland/sql-parser
+    ~2.5x faster than liteparser (wasm)
+    ~6x   faster than @guanmingchiu/sqlparser-ts (wasm)
+   ~10x   faster than node-sql-parser
+  ~100x   faster than pgsql-ast-parser
+  ~200x   faster than sqlite-parser
+  ~250x   faster than @appland/sql-parser
 ```
 
 - Results are averages from `bun run bench:compare` on one machine:
@@ -241,13 +241,13 @@ Avg per-iteration parse time across the five inputs.
 
 | Parser                              | `tiny`      | `small`     | `medium`    | `large`     | `deep`     |
 | ----------------------------------- | ----------- | ----------- | ----------- | ----------- | ---------- |
-| Ours                                | `0.91 µs`   | `3.48 µs`   | `23.24 µs`  | `66.45 µs`  | `10.64 µs` |
-| `liteparser (wasm)`                 | `2.02 µs`   | `4.90 µs`   | `48.87 µs`  | `85.42 µs`  | `31.48 µs` |
-| `@guanmingchiu/sqlparser-ts (wasm)` | `6.10 µs`   | `14.71 µs`  | `142.59 µs` | `191.27 µs` | `70.14 µs` |
-| `node-sql-parser`                   | `10.40 µs`  | `26.74 µs`  | `284.04 µs` | `559.81 µs` | `1.11 ms`  |
-| `pgsql-ast-parser`                  | `57.26 µs`  | `70.41 µs`  | `2.58 ms`   | `1.07 ms`   | `1.17 ms`  |
-| `sqlite-parser`                     | `477.15 µs` | `612.41 µs` | `5.50 ms`   | `7.37 ms`   | `3.28 ms`  |
-| `@appland/sql-parser`               | `576.26 µs` | `722.21 µs` | `6.78 ms`   | `8.03 ms`   | `3.71 ms`  |
+| Ours                                | `0.77 µs`   | `2.74 µs`   | `17.61 µs`  | `55.41 µs`  | `8.48 µs`  |
+| `liteparser (wasm)`                 | `1.93 µs`   | `4.58 µs`   | `46.12 µs`  | `81.20 µs`  | `30.03 µs` |
+| `@guanmingchiu/sqlparser-ts (wasm)` | `5.59 µs`   | `13.78 µs`  | `139.71 µs` | `176.26 µs` | `65.80 µs` |
+| `node-sql-parser`                   | `9.34 µs`   | `25.25 µs`  | `259.20 µs` | `525.64 µs` | `1.03 ms`  |
+| `pgsql-ast-parser`                  | `46.60 µs`  | `55.72 µs`  | `2.43 ms`   | `849.50 µs` | `932.67 µs` |
+| `sqlite-parser`                     | `430.27 µs` | `561.29 µs` | `4.95 ms`   | `6.34 ms`   | `2.88 ms`  |
+| `@appland/sql-parser`               | `518.49 µs` | `655.36 µs` | `5.95 ms`   | `7.16 ms`   | `3.21 ms`  |
 
 Libraries compared:
 

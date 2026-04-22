@@ -1,6 +1,6 @@
 {
   "name": "sqlite3-parser",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Parse SQLite query syntax using a LALR(1) parser derived from SQLite's parse.y grammar. 1.5x-200x faster than other JavaScript SQL parsers.",
   "keywords": [
     "sql",
@@ -69,6 +69,8 @@
     "bench:node:dist": "bun scripts/dist-bench.ts bench node",
     "bench:compare:node:dist": "bun scripts/dist-bench.ts bench-compare node",
     "prof": "bun scripts/prof.ts",
+    "prof:node": "bun scripts/prof.ts --runtime=node",
+    "prof:report": "bun scripts/prof-report.ts",
     "dist-test": "bun scripts/dist-test.ts",
     "dist-test:build": "bun scripts/dist-test.ts --build"
   },
