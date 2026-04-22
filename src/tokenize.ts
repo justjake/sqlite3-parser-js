@@ -1134,6 +1134,15 @@ export function tokenizerModuleForGrammar<Ctx, V>(
     // Shared single-slot output buffer for `nextToken` — avoids one
     // tiny allocation per token without spilling across `next()` calls.
     readonly _out: [TokenId] = [0 as TokenId]
+    // Reused IteratorResult wrapper. Standard consumers (for-of,
+    // Array.from, spread) read `.value` and discard the wrapper, so
+    // mutating `_result.value` on each call is safe and saves one
+    // per-token allocation.  Callers that stash the wrapper across
+    // `next()` calls would see the stashed copy mutate — don't do that.
+    readonly _result: { done: false; value: Token } = {
+      done: false,
+      value: undefined as unknown as Token,
+    }
 
     constructor(sql: string, emitTrivia: boolean) {
       this.sql = sql
@@ -1184,14 +1193,12 @@ export function tokenizerModuleForGrammar<Ctx, V>(
         this.offset = i
         this.line = line
         this.col = col
-        return {
-          done: false,
-          value: {
-            type,
-            text: sql.slice(offset, end),
-            span: { offset, length: n, line: tokenLine, col: tokenCol },
-          },
+        this._result.value = {
+          type,
+          text: sql.slice(offset, end),
+          span: { offset, length: n, line: tokenLine, col: tokenCol },
         }
+        return this._result
       }
 
       this.offset = i

@@ -194,6 +194,30 @@ for the ride (CTE dedup in nested-subquery shape).
 Still O(n²) in the worst case — a wider table (~500 columns) would
 reward a Set-based fast path. Not relevant on our current workloads.
 
+### 4a. Reuse the tokenizer's `IteratorResult` wrapper — MEDIUM ✅ LANDED
+
+**Status:** Landed. `TokenStreamImpl.next()` used to allocate a fresh
+`{done: false, value: {…}}` wrapper per token. The wrapper is now a
+per-instance field (`_result`) mutated in place — one allocation saved
+per emitted token. Standard consumers (for-of, Array.from, spread) read
+`.value` and discard the wrapper, so mutation is safe; the change adds
+a comment warning callers not to stash the wrapper across `next()` calls.
+
+**Result:**
+
+| Input  | Before | After  | Δ           |
+| ------ | -----: | -----: | ----------- |
+| TINY   |  776ms |  735ms | **−5.3%**   |
+| SMALL  | 1415ms | 1336ms | **−5.6%**   |
+| MEDIUM | 1970ms | 1830ms | **−7.1%**   |
+| LARGE  | 2650ms | 2426ms | **−8.5%**   |
+| DEEP   | 2519ms | 2245ms | **−10.9%**  |
+
+Total profile wall: **9.50s → 8.73s (−8.1%)**. DEEP got the biggest
+win again: deep expression nesting means the most tokens consumed per
+parse, so the per-token allocation win compounds. Bigger than the
+predicted 1-2%.
+
 ### 5. `tokenStream` retention on the happy path — MEMORY, NOT CPU
 
 **Evidence:** Not visible in the CPU profile (`Array.prototype.push`
