@@ -128,20 +128,65 @@ single shape. Worth a morning's audit regardless.
 **Success metric:** measurable throughput bump _or_ confirmation that
 the profile is honest and this %age is unavoidable.
 
-### 4. Audit `addColumn` and `parseActions.ts` list-mutation helpers — SMALL
+### 3a. Length-bucketed keyword lookup — MEDIUM ✅ LANDED
 
-**Evidence:** `addColumn` at `parseActions.ts:737` is **3.9% self**,
-one specific helper for CREATE TABLE column lists. Other list-mutation
-helpers are probably similarly costly but split across shorter-named
-functions.
+**Status:** Landed. `finishKeyword` no longer allocates. The
+`keywordCode` Map + `z.slice(p,i).toUpperCase()` + `Map.get()` triplet
+is replaced with a length-indexed bucket array. For a word of length
+`L`, `finishKeyword` pulls the bucket for `L` (or bails immediately if
+`L > maxKwLen`) and walks candidates comparing source bytes via
+`charCodeAt` with ASCII case-fold (`src === cand || src === (cand | 0x20)`).
 
-**Change:** review `parseActions.ts:~720–780` for the mutation pattern.
-Confirm it uses the `(list ? list.push(x) : [x])` idiom (which V8
-optimizes well) rather than `Object.assign`, spread concatenation, or
-shape-transitioning operations.
+**Result (500µs profile, same inputs, same iteration counts):**
 
-**Success metric:** small (~1–2%), more about confirming we're not
-leaving easy wins on the table.
+| Input  | Before (post-tokenizer) | After (post-keyword) | Speedup |
+| ------ | ----------------------: | -------------------: | ------- |
+| TINY   |                   922ms |                836ms | -9.3%   |
+| SMALL  |                  1814ms |               1584ms | -12.7%  |
+| MEDIUM |                  2712ms |               2265ms | -16.5%  |
+| LARGE  |                  3460ms |               3261ms | -5.8%   |
+| DEEP   |                  3491ms |               3248ms | -7.0%   |
+
+Total profile wall: **12.35s → 11.37s (−7.9%)**. `toUpperCase` (was
+2.6% native self) dropped to 0.0%. `finishKeyword` self% appears
+_higher_ (9.3% vs 7.3%) because the comparison work that previously
+lived inside `toUpperCase`/`Map.get`/hash-probe now runs inline inside
+`finishKeyword` — absolute combined time in the subsystem went
+~1400ms → ~1060ms (−24%).
+
+MEDIUM got the biggest win (schema + keyword mix maximizes both paths:
+keyword fast-identify plus identifier-length-mismatch fast-reject).
+LARGE and DEEP moved less since they're already parser-bound.
+
+### 4. Audit `addColumn` and `parseActions.ts` list-mutation helpers — SMALL ✅ LANDED
+
+**Status:** Landed — but the actual hotspot wasn't the mutation
+pattern, it was O(n²) duplicate-name detection. `addColumn` and the
+parallel `addCte` were both doing `columns.find(c => c.colName.text
+=== cd.colName.text)`, which (a) allocates a fresh arrow closure on
+every call and (b) doesn't inline through `Array.prototype.find`'s
+dispatch. For the LARGE benchmark's 96-column CREATE TABLE that's
+~4600 comparisons per table through a slow path.
+
+Replaced both with plain for-loops that compare `.text` directly.
+
+**Result:**
+
+| Input  | Before |  After | Δ           |
+| ------ | -----: | -----: | ----------- |
+| TINY   |  836ms |  837ms | ~0%         |
+| SMALL  | 1584ms | 1582ms | ~0%         |
+| MEDIUM | 2265ms | 2312ms | +2% (noise) |
+| LARGE  | 3261ms | 3085ms | **−5.4%**   |
+| DEEP   | 3248ms | 3049ms | **−6.1%**   |
+
+Total profile wall: 11.37s → 11.04s (−2.9%). `addColumn` self%
+dropped 5.1% → 4.0% (absolute 580ms → 447ms, −23%). LARGE got the
+expected win from removing the quadratic scan; DEEP's drop came along
+for the ride (CTE dedup in nested-subquery shape).
+
+Still O(n²) in the worst case — a wider table (~500 columns) would
+reward a Set-based fast path. Not relevant on our current workloads.
 
 ### 5. `tokenStream` retention on the happy path — MEMORY, NOT CPU
 

@@ -690,10 +690,32 @@ export function tokenizerModuleForGrammar<Ctx, V>(
     enabledMask = KeywordMask(enabledMask | (maskFlags[f] ?? 0))
   }
 
-  const keywordCode = new Map<string, TokenId>()
+  // Length-bucketed keyword table.  Each bucket holds the enabled
+  // keywords with that exact length, as parallel `names[]` / `codes[]`
+  // arrays for cache-friendly linear scan.  Keyword `name` strings are
+  // uppercase ASCII letters (enforced by SQLite's mkkeywordhash and
+  // verified at init below), so the case-insensitive compare in
+  // `finishKeyword` can fold the source byte with `| 0x20` without
+  // worrying about non-letter candidates producing garbage.
+  interface KwBucket {
+    readonly names: readonly string[]
+    readonly codes: readonly TokenId[]
+  }
+  const keywordsByLen: (KwBucket | undefined)[] = []
+  let maxKwLen = 0
+  let keywordCount = 0
   for (const kw of keywordDefs.keywords) {
     if ((kw.mask & enabledMask) === 0) continue
-    keywordCode.set(kw.name, TokenId(kw.token))
+    keywordCount++
+    const len = kw.name.length
+    if (len > maxKwLen) maxKwLen = len
+    let bucket = keywordsByLen[len] as { names: string[]; codes: TokenId[] } | undefined
+    if (bucket === undefined) {
+      bucket = { names: [], codes: [] }
+      keywordsByLen[len] = bucket
+    }
+    bucket.names.push(kw.name)
+    bucket.codes.push(TokenId(kw.token))
   }
 
   // -----------------------------------------------------------------------
@@ -1057,17 +1079,35 @@ export function tokenizerModuleForGrammar<Ctx, V>(
 
   // Resolve an identifier-shaped token to its keyword code, if any.
   // SQLite keyword matching is ASCII case-insensitive.
+  //
+  // Length-bucketed scan: keywords with mismatched length are never
+  // examined, and the inner loop compares source bytes to the candidate
+  // keyword directly with `charCodeAt`, case-folding via `| 0x20`
+  // (SQLite keywords are uppercase ASCII letters, so the lowercase form
+  // of each byte is exactly one bit away). No allocation: this path
+  // replaces the prior `z.slice().toUpperCase()` + `Map.get()`.
   function finishKeyword(z: string, p: number, i: number, outType: [TokenId]): number {
-    const word = z.slice(p, i)
-    if (word.length >= 2) {
-      const code = keywordCode.get(word.toUpperCase())
-      if (code !== undefined) {
-        outType[0] = code
-        return i - p
+    const len = i - p
+    if (len >= 2 && len <= maxKwLen) {
+      const bucket = keywordsByLen[len]
+      if (bucket !== undefined) {
+        const names = bucket.names
+        const codes = bucket.codes
+        const count = names.length
+        candidate: for (let b = 0; b < count; b++) {
+          const name = names[b]!
+          for (let k = 0; k < len; k++) {
+            const src = z.charCodeAt(p + k)
+            const cand = name.charCodeAt(k)
+            if (src !== cand && src !== (cand | 0x20)) continue candidate
+          }
+          outType[0] = codes[b]!
+          return len
+        }
       }
     }
     outType[0] = T.ID
-    return i - p
+    return len
   }
 
   // Public entry: iterate successive tokens.
@@ -1170,6 +1210,6 @@ export function tokenizerModuleForGrammar<Ctx, V>(
     tokenName: (code: TokenId) => tokenNameMap.get(code),
     tokenize,
     _nextToken: nextToken,
-    _keywordCount: keywordCode.size,
+    _keywordCount: keywordCount,
   }
 }

@@ -36,14 +36,19 @@
 //     boundary-crossings, module bootstrap for PEG parsers)
 //     dominates.  Trust MEDIUM / LARGE / DEEP for throughput.
 
+import { readFileSync } from "node:fs"
 import { run, bench, group, summary, do_not_optimize } from "mitata"
 import { DEEP, LARGE, MEDIUM, SMALL, TINY, parseAccepted as ourParse } from "./bench-common.ts"
-import { createLiteParser } from "../vendor/liteparser/wasm/src/index.ts"
 // @ts-expect-error — no types shipped
 import sqliteParser from "sqlite-parser"
 // @ts-expect-error — no types shipped
 import applandParse from "@appland/sql-parser"
-import { Parser as NodeSqlParser } from "node-sql-parser"
+// node-sql-parser ships CJS; Node's ESM interop only sees a default
+// export.  Destructure to get the Parser class across both runtimes.
+import nodeSqlParserModule from "node-sql-parser"
+const { Parser: NodeSqlParser } = nodeSqlParserModule as unknown as {
+  Parser: new () => { astify(sql: string, opts: { database: string }): unknown }
+}
 import { parse as pgAstParse } from "pgsql-ast-parser"
 import { Parser as SqlParserTs, init as sqlParserTsInit } from "@guanmingchiu/sqlparser-ts"
 import ourPkg from "../package.json" with { type: "json" }
@@ -51,12 +56,31 @@ import sqliteParserPkg from "sqlite-parser/package.json" with { type: "json" }
 import applandPkg from "@appland/sql-parser/package.json" with { type: "json" }
 import nodeSqlParserPkg from "node-sql-parser/package.json" with { type: "json" }
 import pgsqlAstParserPkg from "pgsql-ast-parser/package.json" with { type: "json" }
-// @ts-expect-error — package's exports map doesn't expose ./package.json to TS
-import sqlParserTsPkg from "@guanmingchiu/sqlparser-ts/package.json" with { type: "json" }
-import liteparserPkg from "../vendor/liteparser/wasm/package.json" with { type: "json" }
 import { runScript } from "./utils.ts"
 
-const liteparser = await createLiteParser()
+// @guanmingchiu/sqlparser-ts's `exports` map doesn't expose
+// `./package.json`, which Node enforces but Bun tolerates.  Read
+// directly to keep both runtimes happy.
+const sqlParserTsPkg = JSON.parse(
+  readFileSync(
+    new URL("../node_modules/@guanmingchiu/sqlparser-ts/package.json", import.meta.url),
+    "utf8",
+  ),
+) as { name: string; version?: string; description?: string; homepage?: string }
+
+// liteparser is bundled as a TypeScript ESM wrapper around WASM with
+// `.js`-extension imports that Node's resolver can't rewrite.  Skip it
+// under Node; include it only when running on Bun.  bench-compare gives
+// useful numbers either way — liteparser just pins our "vs WASM" delta.
+const isBun = typeof (globalThis as { Bun?: unknown }).Bun !== "undefined"
+const liteparser = isBun
+  ? await (await import("../vendor/liteparser/wasm/src/index.ts")).createLiteParser()
+  : undefined
+const liteparserPkg = isBun
+  ? ((await import("../vendor/liteparser/wasm/package.json", { with: { type: "json" } }))
+      .default as PkgInfo)
+  : undefined
+
 await sqlParserTsInit()
 const nodeSql = new NodeSqlParser()
 const nodeSqlOpt = { database: "sqlite" } as const
@@ -83,11 +107,15 @@ interface Competitor {
 }
 const competitors: readonly Competitor[] = [
   { label: "ours", parse: (sql) => ourParse(sql), pkg: ourPkg },
-  {
-    label: "liteparser (wasm)",
-    parse: (sql) => liteparser.parse(sql),
-    pkg: liteparserPkg,
-  },
+  ...(liteparser && liteparserPkg
+    ? [
+        {
+          label: "liteparser (wasm)",
+          parse: (sql: string) => liteparser.parse(sql),
+          pkg: liteparserPkg,
+        },
+      ]
+    : []),
   { label: "sqlite-parser", parse: (sql) => sqliteParser(sql), pkg: sqliteParserPkg },
   { label: "@appland/sql-parser", parse: (sql) => applandParse(sql), pkg: applandPkg },
   {
@@ -170,7 +198,7 @@ await runScript(
   },
 )
 
-liteparser.destroy()
+liteparser?.destroy()
 
 // ---------------------------------------------------------------------------
 // Per-group summaries from mitata are great for scanning, but readers

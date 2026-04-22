@@ -62,6 +62,12 @@
     "coverage:ast": "bun scripts/ast-coverage.ts",
     "bench": "bun scripts/bench.ts",
     "bench:compare": "make liteparser-wasm && bun scripts/bench-compare.ts",
+    "bench:node": "node --experimental-transform-types --disable-warning=ExperimentalWarning scripts/bench.ts",
+    "bench:compare:node": "node --experimental-transform-types --disable-warning=ExperimentalWarning scripts/bench-compare.ts",
+    "bench:dist": "bun scripts/dist-bench.ts bench bun",
+    "bench:compare:dist": "bun scripts/dist-bench.ts bench-compare bun",
+    "bench:node:dist": "bun scripts/dist-bench.ts bench node",
+    "bench:compare:node:dist": "bun scripts/dist-bench.ts bench-compare node",
     "prof": "bun scripts/prof.ts",
     "dist-test": "bun scripts/dist-test.ts",
     "dist-test:build": "bun scripts/dist-test.ts --build"

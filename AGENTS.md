@@ -1,3 +1,3 @@
+- It is not okay to use `git stash`, even for just a moment. Never use `git stash`. There may be other agents or users working on the same worktree and this will disrupt them.
 - Use `undefined` instead of `null`.
-- Never use `git stash`, there may be other agents or users working on the same worktree and this will disrupt them.
 - There is TypeScript code in ./vendor/patched/3.53.0/src/parse.y, consider when doing refactors.

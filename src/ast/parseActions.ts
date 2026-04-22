@@ -741,16 +741,23 @@ export function addColumn(
   columns: ColumnDefinition[],
   cd: ColumnDefinition,
 ): void {
-  const duplicateOf = columns.find((c) => c.colName.text === cd.colName.text)
-  if (duplicateOf) {
-    state.errors.push(
-      mkDuplicateDiagnostic(
-        `duplicate column name: ${cd.colName.text}`,
-        cd.colName.span,
-        duplicateOf.colName.span,
-      ),
-    )
-    return
+  // Plain for-loop beats `columns.find(c => ...)`: the arrow closure
+  // is reallocated on every call and the `find()` dispatch doesn't
+  // inline cleanly. For LARGE CREATE TABLEs with ~100 columns this is
+  // O(n²) across the table, so the per-comparison constant matters.
+  const newText = cd.colName.text
+  for (let i = 0; i < columns.length; i++) {
+    const existing = columns[i]
+    if (existing.colName.text === newText) {
+      state.errors.push(
+        mkDuplicateDiagnostic(
+          `duplicate column name: ${newText}`,
+          cd.colName.span,
+          existing.colName.span,
+        ),
+      )
+      return
+    }
   }
   columns.push(cd)
 }
@@ -773,16 +780,19 @@ export function mkColumnsAndConstraints(
 
 /** Append a CTE, rejecting duplicate names. */
 export function addCte(state: ParseState, ctes: CommonTableExpr[], cte: CommonTableExpr): void {
-  const duplicateOf = ctes.find((c) => c.tblName.text === cte.tblName.text)
-  if (duplicateOf) {
-    state.errors.push(
-      mkDuplicateDiagnostic(
-        `duplicate WITH table name: ${cte.tblName.text}`,
-        cte.tblName.span,
-        duplicateOf.tblName.span,
-      ),
-    )
-    return
+  const newText = cte.tblName.text
+  for (let i = 0; i < ctes.length; i++) {
+    const existing = ctes[i]
+    if (existing.tblName.text === newText) {
+      state.errors.push(
+        mkDuplicateDiagnostic(
+          `duplicate WITH table name: ${newText}`,
+          cte.tblName.span,
+          existing.tblName.span,
+        ),
+      )
+      return
+    }
   }
   ctes.push(cte)
 }
