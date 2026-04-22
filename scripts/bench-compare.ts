@@ -190,10 +190,28 @@ await runScript(
     const filter = values.filter as string | undefined
     const md = Boolean(values.md)
     if (md) printParserHeader(competitors)
+
+    // Capture mitata's per-line output via its `print` hook (src/main.mjs:318)
+    // so we can emit a README-compatible summary table FIRST. Without the
+    // reorder the summary lands below five per-input tables in the CI job
+    // summary, defeating the copy-paste-into-README workflow.
+    const captured: string[] = []
     const result = await run({
       ...(filter ? { filter: new RegExp(filter) } : {}),
-      ...(md ? { format: "markdown" as const, colors: false } : {}),
+      ...(md
+        ? {
+            format: "markdown" as const,
+            colors: false,
+            print: (s: string) => captured.push(s),
+          }
+        : {}),
     })
+
+    if (md) {
+      printReadmeSummaryTable(result.benchmarks)
+      process.stdout.write("\n")
+      for (const line of captured) process.stdout.write(line + "\n")
+    }
     printAggregateTable(result.benchmarks, md)
   },
 )
@@ -274,6 +292,123 @@ function printAggregateTable(benchmarks: readonly Trial[], md = false): void {
   print(join(cols.map((c) => c.header)))
   print(rule)
   for (const l of labels) print(join(cols.map((c) => c.cell(l))))
+}
+
+/**
+ * Emit a markdown table matching the `### Results` block in README.md:
+ * rows are parsers, columns are inputs, each non-baseline cell carries
+ * a `(N.N×)` slowdown factor relative to ours.  Intended as a
+ * copy-paste-into-README summary at the top of `bench-compare --md`.
+ */
+function printReadmeSummaryTable(benchmarks: readonly Trial[]): void {
+  const trials = benchmarks
+    .map((t) => {
+      const idx = t.alias.lastIndexOf(" / ")
+      if (idx < 0) return undefined
+      const avg = t.runs[0]?.stats?.avg
+      if (avg === undefined) return undefined
+      return { label: t.alias.slice(0, idx), competitor: t.alias.slice(idx + 3), avg }
+    })
+    .filter((t): t is { label: string; competitor: string; avg: number } => t !== undefined)
+  if (trials.length === 0) return
+
+  const labels = [...new Set(trials.map((t) => t.label))]
+  const byKey = new Map<string, number>()
+  for (const t of trials) byKey.set(`${t.label}\0${t.competitor}`, t.avg)
+
+  const BASELINE = "ours"
+
+  // Order competitors the way the README does: baseline first, then
+  // the rest sorted by geometric mean of avg-time across inputs so the
+  // fastest-next-to-ours lands near the top. Geometric mean because
+  // sizes span four orders of magnitude (ns to ms) and an arithmetic
+  // mean would be dominated by LARGE/MEDIUM.
+  const allCompetitors = [...new Set(trials.map((t) => t.competitor))]
+  const geomean = (c: string): number => {
+    let log = 0
+    let n = 0
+    for (const l of labels) {
+      const v = byKey.get(`${l}\0${c}`)
+      if (v !== undefined && v > 0) {
+        log += Math.log(v)
+        n++
+      }
+    }
+    return n === 0 ? Infinity : Math.exp(log / n)
+  }
+  const competitors = [
+    ...(allCompetitors.includes(BASELINE) ? [BASELINE] : []),
+    ...allCompetitors.filter((c) => c !== BASELINE).sort((a, b) => geomean(a) - geomean(b)),
+  ]
+
+  const print = (s: string): void => {
+    process.stdout.write(s + "\n")
+  }
+  // README uses the short label (strip `" (..."` qualifier on LARGE / DEEP).
+  const shortInput = (l: string): string => l.split(" (")[0]!
+  const parserDisplay = (c: string): string => (c === BASELINE ? "Ours" : `\`${c}\``)
+
+  // Pre-index "ours" timings so the ratio lookup is O(1).
+  const oursByLabel = new Map<string, number>()
+  for (const l of labels) {
+    const a = byKey.get(`${l}\0${BASELINE}`)
+    if (a !== undefined) oursByLabel.set(l, a)
+  }
+
+  // Build rows as string arrays first so we can pad to matching column
+  // widths — the README's table is pre-formatted and readers expect the
+  // copy-pasted block to land lined up.
+  const header = ["Parser", ...labels.map((l) => `\`${shortInput(l)}\``)]
+  const rows: string[][] = [header]
+  for (const c of competitors) {
+    const row: string[] = [parserDisplay(c)]
+    for (const l of labels) {
+      const avg = byKey.get(`${l}\0${c}`)
+      if (avg === undefined) {
+        row.push("—")
+        continue
+      }
+      const base = oursByLabel.get(l)
+      if (c === BASELINE || base === undefined) {
+        row.push(`\`${formatAvgReadme(avg)}\``)
+      } else {
+        row.push(`\`${formatAvgReadme(avg)}\` (${formatRatioShort(avg / base)})`)
+      }
+    }
+    rows.push(row)
+  }
+
+  const widths = header.map((_, col) => Math.max(...rows.map((r) => r[col]!.length)))
+  const padCell = (s: string, w: number): string => s + " ".repeat(Math.max(0, w - s.length))
+  const formatRow = (r: readonly string[]): string =>
+    "| " + r.map((cell, i) => padCell(cell, widths[i]!)).join(" | ") + " |"
+
+  print("### Results (README-compatible summary)")
+  print("")
+  print(
+    "Avg per-iteration parse time across the five inputs. Parentheticals show the slowdown factor vs ours (lower = closer to ours; ours is the baseline so it has no parenthetical).",
+  )
+  print("")
+  print(formatRow(header))
+  print("| " + widths.map((w) => "-".repeat(w)).join(" | ") + " |")
+  for (const r of rows.slice(1)) print(formatRow(r))
+}
+
+/** `(1.47×)` / `(12×)` / `(559×)`. Matches the README's parenthetical style. */
+function formatRatioShort(r: number): string {
+  if (r >= 10) return `${Math.round(r)}×`
+  return `${r.toFixed(1)}×`
+}
+
+/**
+ * Like {@link formatAvg} but always uses µs/ms/s (no ns) and always two
+ * decimal places. Matches the README's `### Results` table convention
+ * so the summary is a drop-in paste.
+ */
+function formatAvgReadme(avg: number): string {
+  if (avg < 1_000_000) return `${(avg / 1_000).toFixed(2)} µs`
+  if (avg < 1_000_000_000) return `${(avg / 1_000_000).toFixed(2)} ms`
+  return `${(avg / 1_000_000_000).toFixed(2)} s`
 }
 
 function formatAvg(avg: number | undefined): string {
