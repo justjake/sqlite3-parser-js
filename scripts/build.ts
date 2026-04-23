@@ -128,7 +128,11 @@ async function buildJs(versions: string[]): Promise<void> {
     entrypoints: entries,
     outdir: DIST,
     root: ROOT, // preserves `generated/…` in output paths
-    target: "browser",
+    // `node` target across the board.  The library source doesn't use
+    // any node-only APIs, so node-target bundles stay portable to web
+    // runtimes; the CLIs genuinely need node:util/node:fs.  Sharing a
+    // single target also means bin/* and src/* can share chunks.
+    target: "node",
     format: "esm",
     splitting: true,
     sourcemap: "linked",

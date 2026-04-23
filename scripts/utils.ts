@@ -13,13 +13,30 @@
 import * as t from "typebox"
 import * as s from "typebox/schema"
 import { existsSync, readFileSync, statSync } from "node:fs"
-import { dirname, relative, resolve } from "node:path"
+import { dirname, join, relative, resolve } from "node:path"
 import { parseArgs, type ParseArgsOptionsConfig } from "node:util"
 import type { ParseArgsConfig, ParseArgsOptionDescriptor } from "node:util"
 type parseArgs = typeof parseArgs
 type ParsedResult<T extends ParseArgsConfig> = ReturnType<typeof parseArgs<T>>
 
-export const REPO_ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
+// Walk up from utils.ts's location until we hit a directory with a
+// package.json.  In the source tree this resolves to the repo root;
+// in a `dist/bin/*.js` bundle it skips past the dist/ dir and lands
+// on the package root (either the repo root in dev, or
+// `node_modules/<pkg>` once installed).  Anchoring on `package.json`
+// rather than a fixed ascent count keeps the CLIs portable across
+// both layouts.
+function findRepoRoot(start: string): string {
+  let dir = start
+  while (true) {
+    if (existsSync(join(dir, "package.json"))) return dir
+    const parent = dirname(dir)
+    if (parent === dir) return start
+    dir = parent
+  }
+}
+
+export const REPO_ROOT = findRepoRoot(dirname(new URL(import.meta.url).pathname))
 
 export function rootPath(...subpaths: string[]): string {
   return resolve(REPO_ROOT, ...subpaths)
