@@ -56,6 +56,12 @@ export interface EmitTsTestModuleOptions {
    * Omit to run every record unconditionally.
    */
   readonly dbname?: string
+  /**
+   * Starting value for the `#N` counter in `test(...)` titles. Defaults
+   * to 1. Set this when {@link records} is a slice of a larger run so
+   * the titles preserve the original numbering.
+   */
+  readonly startIndex?: number
 }
 
 /**
@@ -69,7 +75,7 @@ export function emitTsTestModule(
   records: readonly TestRecord[],
   options: EmitTsTestModuleOptions,
 ): string {
-  const { title, runner, driver, imports, dbname } = options
+  const { title, runner, driver, imports, dbname, startIndex = 1 } = options
   const namespaceBinding = driver.importName ?? defaultNamespaceBinding(driver.specifier)
   const driverBinding = driver.importName ?? namespaceBinding
 
@@ -96,7 +102,7 @@ export function emitTsTestModule(
   )
   out.push("")
 
-  let nextTestIndex = 1
+  let nextTestIndex = startIndex
   for (const rec of records) {
     const index = rec.type === "statement" || rec.type === "query" ? nextTestIndex++ : undefined
     emitTestRecord(out, rec, dbname, "  ", index)

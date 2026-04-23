@@ -37,22 +37,21 @@ BEGIN
   INSERT INTO log(msg) VALUES ('b or c changed');
 END
 
-# #306 tridxby ::= INDEXED BY nm
-# #307 tridxby ::= NOT INDEXED
 # #310 trigger_cmd ::= DELETE FROM xfullname tridxby where_opt
+# Note: rules #306 (tridxby ::= INDEXED BY nm) and #307
+# (tridxby ::= NOT INDEXED) reduce inside a trigger body but the
+# action body then rejects with "the NOT INDEXED clause is not allowed
+# on UPDATE or DELETE statements within triggers", so parseOrThrow
+# can't accept them.  The empty `tridxby ::=` arm (which is
+# what this stanza exercises) is the only path a trigger DELETE/UPDATE
+# can actually take successfully.
 statement ok
 CREATE INDEX t1_b ON t1(b)
 
 statement ok
-CREATE TRIGGER tr_del_indexed BEFORE INSERT ON t1
+CREATE TRIGGER tr_del BEFORE INSERT ON t1
 BEGIN
-  DELETE FROM t1 INDEXED BY t1_b WHERE b = new.b;
-END
-
-statement ok
-CREATE TRIGGER tr_del_notindexed BEFORE INSERT ON t1
-BEGIN
-  DELETE FROM t1 NOT INDEXED WHERE b = new.b;
+  DELETE FROM t1 WHERE b = new.b;
 END
 
 # #314 raisetype ::= ROLLBACK (and ABORT — covered already)

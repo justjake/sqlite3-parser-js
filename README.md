@@ -157,7 +157,61 @@ try {
 }
 ```
 
-### Traversing the AST
+### AST Viewer
+
+Use the included `sqlite3-parser` command-line tool to quicly view AST of queries as JSON (default) or as S-expressions with `--pretty`:
+
+```console
+$ sqlite3-parser 'select 1' --pretty
+(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (NumericLiteral :value "1"))))))$ sqlite3-parser --pretty "SELECT 1"
+```
+
+You can chain with the `sqllogictest-parser` tool to extract queries from a [sqllogictest](https://sqlite.org/sqllogictest/doc/trunk/about.wiki) file for parsing:
+
+```console
+$ sqllogictest-parser test/examples/expr.sqllogictest --sql --idx 4:5 |
+    sqlite3-parser --pretty
+(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr :distinctness "Distinct"
+            (Id :name "group_concat")
+            (Id :name "d")
+            (SortListFunctionCallOrder
+              (SortedColumn
+                (Id :name "a")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1")))))))
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "percentile_cont")
+            (NumericLiteral :value "0.5")
+            (WithinGroupFunctionCallOrder
+              (Id :name "a"))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))
+```
+
+There are many example queries in the sqlite3-parser [test suite](https://github.com/justjake/sqlite3-parser-js/tree/main/test):
+
+- SQL: [`test/examples/expr.sqllogictest`](https://github.com/justjake/sqlite3-parser-js/blob/main/test/examples/expr.sqllogictest)
+- Generated AST: [`test/examples/__snapshots__/expr.generated.test.ts.snap`](https://github.com/justjake/sqlite3-parser-js/blob/main/test/examples/__snapshots__/expr.generated.test.ts.snap)
+
+### AST Traversal
 
 `traverse` exposes an ESTree-style walker. A depth-first walk fires `enter` on every node, recurses into child slots in their surface-syntax order, then fires `leave`:
 

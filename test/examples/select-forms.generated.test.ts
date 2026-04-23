@@ -98,12 +98,12 @@ describe("test/examples/select-forms.sqllogictest", () => {
       conditions: [],
     })
   })
-  test("#11 statement ok: SELECT * FROM t1 LEFT OUTER CROSS JOIN t2", () => {
+  test("#11 statement ok: SELECT * FROM t1 NATURAL LEFT OUTER JOIN t2", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
-      sql: "SELECT * FROM t1 LEFT OUTER CROSS JOIN t2",
-      line: 44,
+      sql: "SELECT * FROM t1 NATURAL LEFT OUTER JOIN t2",
+      line: 45,
       conditions: [],
     })
   })
@@ -112,7 +112,7 @@ describe("test/examples/select-forms.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "SELECT a FROM t1 INDEXED BY t1_a WHERE a > 0",
-      line: 48,
+      line: 49,
       conditions: [],
     })
   })
@@ -121,7 +121,7 @@ describe("test/examples/select-forms.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "SELECT a FROM t1 ORDER BY b ASC NULLS FIRST",
-      line: 53,
+      line: 54,
       conditions: [],
     })
   })
@@ -130,7 +130,7 @@ describe("test/examples/select-forms.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "SELECT a FROM t1 ORDER BY b DESC NULLS LAST",
-      line: 56,
+      line: 57,
       conditions: [],
     })
   })
@@ -139,7 +139,7 @@ describe("test/examples/select-forms.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "SELECT a FROM t1 LIMIT 5, 10",
-      line: 61,
+      line: 62,
       conditions: [],
     })
   })
@@ -148,7 +148,7 @@ describe("test/examples/select-forms.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "SELECT a, sum(b) OVER w FROM t1 GROUP BY a HAVING a > 0 WINDOW w AS (ORDER BY a)",
-      line: 68,
+      line: 69,
       conditions: [],
     })
   })

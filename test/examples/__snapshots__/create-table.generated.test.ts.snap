@@ -94,7 +94,13 @@ exports[`test/examples/create-table.sqllogictest #5 statement ok: CREATE TABLE c
         (Type :name "TEXT")
         (NamedColumnConstraint
           (CollateColumnConstraint
-            (Name :text "NOCASE")))))))"
+            (Name :text "NOCASE"))))
+      (ColumnDefinition :flags 4
+        (Name :text "e")
+        (Type :name "TEXT")
+        (NamedColumnConstraint
+          (DefaultColumnConstraint
+            (Id :name "fallback_name")))))))"
 `;
 
 exports[`test/examples/create-table.sqllogictest #6 statement ok: CREATE TABLE ct2( a INTEGER DEFAULT (1 + 2), b INTEGER DEFA… 1`] = `
@@ -319,7 +325,17 @@ exports[`test/examples/create-table.sqllogictest #15 statement ok: CREATE TABLE 
             (BinaryExpr :op "Add"
               (Id :name "a")
               (NumericLiteral :value "5"))
-            (Id :name "VIRTUAL")))))))"
+            (Id :name "VIRTUAL"))))
+      (ColumnDefinition :flags 100
+        (Name :text "f")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (Name :text "gen_f")
+          (GeneratedColumnConstraint
+            (BinaryExpr :op "Add"
+              (Id :name "a")
+              (NumericLiteral :value "10"))
+            (Id :name "STORED")))))))"
 `;
 
 exports[`test/examples/create-table.sqllogictest #16 statement ok: CREATE TABLE ai1( a INTEGER PRIMARY KEY AUTOINCREMENT, b TE… 1`] = `
@@ -372,4 +388,92 @@ exports[`test/examples/create-table.sqllogictest #17 statement ok: CREATE TABLE 
             (IndexedColumn
               (Name :text "id")))
           (DeferSubclause :deferrable false))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #18 statement ok: CREATE TABLE parent_col(id TEXT) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "parent_col"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "id")
+        (Type :name "TEXT")))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #19 statement ok: CREATE TABLE fk_collate( ref TEXT REFERENCES parent_col(id… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "fk_collate"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "ref")
+        (Type :name "TEXT")
+        (NamedColumnConstraint
+          (ForeignKeyColumnConstraint
+            (ForeignKeyClause
+              (Name :text "parent_col")
+              (IndexedColumn
+                (Name :text "id")
+                (Name :text "NOCASE")))))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #20 statement ok: CREATE TABLE t_base(a TEXT, b TEXT) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t_base"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "TEXT"))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "TEXT")))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #21 statement ok: CREATE VIEW v_collate(a COLLATE NOCASE, b COLLATE BINARY DE… 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "v_collate"))
+    (IndexedColumn
+      (Name :text "a")
+      (Name :text "NOCASE"))
+    (IndexedColumn :order "Desc"
+      (Name :text "b")
+      (Name :text "BINARY"))
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (ExprResultColumn
+          (Id :name "b"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t_base"))))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #22 statement ok: WITH cte_collate(a COLLATE NOCASE) AS (SELECT 'X') SELECT *… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (With :recursive false
+        (CommonTableExpr :materialized "Any"
+          (Name :text "cte_collate")
+          (IndexedColumn
+            (Name :text "a")
+            (Name :text "NOCASE"))
+          (Select
+            (SelectFrom
+              (ExprResultColumn
+                (StringLiteral :value "X"))))))
+      (SelectFrom
+        (StarResultColumn)
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "cte_collate"))))))))"
 `;

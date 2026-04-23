@@ -48,8 +48,8 @@ describe("test/examples/create-table.sqllogictest", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
-      sql: "CREATE TABLE ct1(\n  a INTEGER CONSTRAINT pk_a PRIMARY KEY,\n  b INTEGER NOT NULL DEFAULT 0,\n  c INTEGER CONSTRAINT c_null NULL ON CONFLICT IGNORE,\n  d TEXT COLLATE NOCASE\n)",
-      line: 38,
+      sql: "CREATE TABLE ct1(\n  a INTEGER CONSTRAINT pk_a PRIMARY KEY,\n  b INTEGER NOT NULL DEFAULT 0,\n  c INTEGER CONSTRAINT c_null NULL ON CONFLICT IGNORE,\n  d TEXT COLLATE NOCASE,\n  e TEXT DEFAULT fallback_name\n)",
+      line: 39,
       conditions: [],
     })
   })
@@ -58,7 +58,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE ct2(\n  a INTEGER DEFAULT (1 + 2),\n  b INTEGER DEFAULT +5,\n  c INTEGER DEFAULT -5\n)",
-      line: 49,
+      line: 51,
       conditions: [],
     })
   })
@@ -67,7 +67,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE ct3(\n  a INTEGER CHECK (a > 0)\n)",
-      line: 57,
+      line: 59,
       conditions: [],
     })
   })
@@ -76,7 +76,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE parent(id INTEGER PRIMARY KEY)",
-      line: 70,
+      line: 72,
       conditions: [],
     })
   })
@@ -85,7 +85,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE fk1(\n  x INTEGER REFERENCES parent(id)\n    MATCH FULL\n    ON INSERT SET NULL\n    ON UPDATE SET DEFAULT\n    ON DELETE RESTRICT\n)",
-      line: 73,
+      line: 75,
       conditions: [],
     })
   })
@@ -94,7 +94,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE fk2(\n  x INTEGER REFERENCES parent(id) ON DELETE NO ACTION\n)",
-      line: 82,
+      line: 84,
       conditions: [],
     })
   })
@@ -103,7 +103,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE fk3(\n  x INTEGER REFERENCES parent(id) NOT DEFERRABLE\n)",
-      line: 93,
+      line: 95,
       conditions: [],
     })
   })
@@ -112,7 +112,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE fk4(\n  x INTEGER REFERENCES parent(id) DEFERRABLE\n)",
-      line: 98,
+      line: 100,
       conditions: [],
     })
   })
@@ -121,7 +121,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE fk5(\n  x INTEGER REFERENCES parent(id) DEFERRABLE INITIALLY DEFERRED\n)",
-      line: 103,
+      line: 105,
       conditions: [],
     })
   })
@@ -130,7 +130,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE fk6(\n  x INTEGER REFERENCES parent(id) DEFERRABLE INITIALLY IMMEDIATE\n)",
-      line: 108,
+      line: 110,
       conditions: [],
     })
   })
@@ -138,8 +138,8 @@ describe("test/examples/create-table.sqllogictest", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
-      sql: "CREATE TABLE gen1(\n  a INTEGER,\n  b INTEGER GENERATED ALWAYS AS (a + 1),\n  c INTEGER AS (a * 2),\n  d INTEGER AS (a - 1) STORED,\n  e INTEGER GENERATED ALWAYS AS (a + 5) VIRTUAL\n)",
-      line: 117,
+      sql: "CREATE TABLE gen1(\n  a INTEGER,\n  b INTEGER GENERATED ALWAYS AS (a + 1),\n  c INTEGER AS (a * 2),\n  d INTEGER AS (a - 1) STORED,\n  e INTEGER GENERATED ALWAYS AS (a + 5) VIRTUAL,\n  f INTEGER CONSTRAINT gen_f GENERATED ALWAYS AS (a + 10) STORED\n)",
+      line: 122,
       conditions: [],
     })
   })
@@ -148,7 +148,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE ai1(\n  a INTEGER PRIMARY KEY AUTOINCREMENT,\n  b TEXT\n)",
-      line: 127,
+      line: 133,
       conditions: [],
     })
   })
@@ -157,7 +157,52 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE tc1(\n  a INTEGER,\n  b INTEGER,\n  CONSTRAINT pk PRIMARY KEY (a, b) ON CONFLICT IGNORE,\n  CONSTRAINT chk1 CHECK (a > 0) ON CONFLICT ROLLBACK,\n  FOREIGN KEY (a) REFERENCES parent(id) NOT DEFERRABLE\n)",
-      line: 141,
+      line: 147,
+      conditions: [],
+    })
+  })
+  test("#18 statement ok: CREATE TABLE parent_col(id TEXT)", () => {
+    driver.runRecord({
+      type: "statement",
+      expect: "ok",
+      sql: "CREATE TABLE parent_col(id TEXT)",
+      line: 161,
+      conditions: [],
+    })
+  })
+  test("#19 statement ok: CREATE TABLE fk_collate( ref TEXT REFERENCES parent_col(id…", () => {
+    driver.runRecord({
+      type: "statement",
+      expect: "ok",
+      sql: "CREATE TABLE fk_collate(\n  ref TEXT REFERENCES parent_col(id COLLATE NOCASE)\n)",
+      line: 164,
+      conditions: [],
+    })
+  })
+  test("#20 statement ok: CREATE TABLE t_base(a TEXT, b TEXT)", () => {
+    driver.runRecord({
+      type: "statement",
+      expect: "ok",
+      sql: "CREATE TABLE t_base(a TEXT, b TEXT)",
+      line: 169,
+      conditions: [],
+    })
+  })
+  test("#21 statement ok: CREATE VIEW v_collate(a COLLATE NOCASE, b COLLATE BINARY DE…", () => {
+    driver.runRecord({
+      type: "statement",
+      expect: "ok",
+      sql: "CREATE VIEW v_collate(a COLLATE NOCASE, b COLLATE BINARY DESC) AS\n  SELECT a, b FROM t_base",
+      line: 172,
+      conditions: [],
+    })
+  })
+  test("#22 statement ok: WITH cte_collate(a COLLATE NOCASE) AS (SELECT 'X') SELECT *…", () => {
+    driver.runRecord({
+      type: "statement",
+      expect: "ok",
+      sql: "WITH cte_collate(a COLLATE NOCASE) AS (SELECT 'X') SELECT * FROM cte_collate",
+      line: 176,
       conditions: [],
     })
   })

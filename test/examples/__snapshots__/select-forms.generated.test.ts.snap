@@ -146,6 +146,23 @@ exports[`test/examples/select-forms.sqllogictest #10 statement ok: INSERT INTO m
             (NumericLiteral :value "4")))))))"
 `;
 
+exports[`test/examples/select-forms.sqllogictest #11 statement ok: SELECT * FROM t1 NATURAL LEFT OUTER JOIN t2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (StarResultColumn)
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1")))
+          (JoinedSelectTable
+            (TypedJoinJoinOperator :joinType 44)
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t2")))))))))"
+`;
+
 exports[`test/examples/select-forms.sqllogictest #12 statement ok: SELECT a FROM t1 INDEXED BY t1_a WHERE a > 0 1`] = `
 "(CmdList
   (SelectStmt

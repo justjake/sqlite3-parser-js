@@ -118,7 +118,25 @@ exports[`test/examples/trigger.sqllogictest #6 statement ok: CREATE INDEX t1_b O
       (Id :name "b"))))"
 `;
 
-exports[`test/examples/trigger.sqllogictest #9 statement ok: CREATE TRIGGER tr_raise_rollback BEFORE INSERT ON t1 BEGIN… 1`] = `
+exports[`test/examples/trigger.sqllogictest #7 statement ok: CREATE TRIGGER tr_del BEFORE INSERT ON t1 BEGIN DELETE FROM… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "tr_del"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (DeleteTriggerCmd
+      (QualifiedName
+        (Name :text "t1"))
+      (BinaryExpr :op "Equals"
+        (Id :name "b")
+        (QualifiedExpr
+          (Name :text "new")
+          (Name :text "b"))))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #8 statement ok: CREATE TRIGGER tr_raise_rollback BEFORE INSERT ON t1 BEGIN… 1`] = `
 "(CmdList
   (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
     (QualifiedName
@@ -134,7 +152,7 @@ exports[`test/examples/trigger.sqllogictest #9 statement ok: CREATE TRIGGER tr_r
               (StringLiteral :value "nope"))))))))"
 `;
 
-exports[`test/examples/trigger.sqllogictest #10 statement ok: CREATE TRIGGER tr_raise_fail BEFORE INSERT ON t1 BEGIN SELE… 1`] = `
+exports[`test/examples/trigger.sqllogictest #9 statement ok: CREATE TRIGGER tr_raise_fail BEFORE INSERT ON t1 BEGIN SELE… 1`] = `
 "(CmdList
   (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
     (QualifiedName
@@ -150,7 +168,7 @@ exports[`test/examples/trigger.sqllogictest #10 statement ok: CREATE TRIGGER tr_
               (StringLiteral :value "bad"))))))))"
 `;
 
-exports[`test/examples/trigger.sqllogictest #11 statement ok: CREATE TRIGGER tr_raise_abort BEFORE INSERT ON t1 BEGIN SEL… 1`] = `
+exports[`test/examples/trigger.sqllogictest #10 statement ok: CREATE TRIGGER tr_raise_abort BEFORE INSERT ON t1 BEGIN SEL… 1`] = `
 "(CmdList
   (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
     (QualifiedName

@@ -26,8 +26,15 @@ import { existsSync, readFileSync, statSync } from "node:fs"
 
 import { parseTest } from "../src/sqllogictest/testparser.ts"
 import { shouldSkipForDbname } from "../src/sqllogictest/drivers.ts"
+import type { TestRecord } from "../src/sqllogictest/nodes.ts"
 import { emitTsTestModule, type TsTestDriverImport } from "../src/sqllogictest/ts-test-emitter.ts"
-import { PACKAGE_JSON_PATH, resolveCliInput, rootPath, runScript } from "../scripts/utils.ts"
+import {
+  CliUsageError,
+  PACKAGE_JSON_PATH,
+  resolveCliInput,
+  rootPath,
+  runScript,
+} from "../scripts/utils.ts"
 
 const DEFAULT_TS_RUNNER = "bun:test"
 const DEFAULT_TS_DRIVER = "SQLite3ParserTestDriver:sqlite3-parser/sqllogictest"
@@ -47,6 +54,9 @@ await runScript(
     usage:
       "usage: sqllogictest-parser [options] [<input>]\n" +
       "  --emit-trivia          Keep `#` comments and blank-line runs as nodes.\n" +
+      "  --sql                  Emit just the SQL bodies of statement / query\n" +
+      "                         records, each terminated by `;`. Mutually\n" +
+      "                         exclusive with --ts.\n" +
       "  --ts                   Emit a bun:test test module instead of JSON.\n" +
       "  --ts-imports <str>     TS code or path to a file, inlined into the import\n" +
       "                         zone of the --ts output.\n" +
@@ -66,21 +76,32 @@ await runScript(
       "                         skipif/onlyif modifiers would skip for that name\n" +
       "                         are omitted from JSON output, or emitted as\n" +
       "                         test.skip under --ts.\n" +
+      "  --idx <N>[:<M>]        Emit only the Nth statement/query record, or the\n" +
+      "                         inclusive range N..M. Numbering is 1-based and\n" +
+      "                         matches the `#N` labels in --ts output; trivia\n" +
+      "                         and control records are always skipped.\n" +
       "  <input>                sqllogictest source, a path to a `.test` file, or\n" +
       "                         '-' for stdin.",
     options: {
       "emit-trivia": { type: "boolean" },
+      sql: { type: "boolean" },
       ts: { type: "boolean" },
       "ts-imports": { type: "string" },
       "ts-runner": { type: "string", default: DEFAULT_TS_RUNNER },
       "ts-driver": { type: "string", default: DEFAULT_TS_DRIVER },
       "skip-if-dbname": { type: "string" },
+      idx: { type: "string" },
     },
   },
   async ({ values, positionals }) => {
     const emitTrivia = Boolean(values["emit-trivia"])
+    const sqlMode = Boolean(values["sql"])
     const tsMode = Boolean(values["ts"])
+    if (sqlMode && tsMode) {
+      throw new CliUsageError("--sql and --ts are mutually exclusive")
+    }
     const dbname = values["skip-if-dbname"]
+    const idxRange = parseIdxRange(values["idx"])
     const tsRunner = values["ts-runner"] ?? DEFAULT_TS_RUNNER
     const tsImports = resolveTsImports(values["ts-imports"])
     const tsDriver = resolveTsDriver(values["ts-driver"] ?? DEFAULT_TS_DRIVER)
@@ -94,27 +115,68 @@ await runScript(
 
     for (const err of result.errors) console.error(err.format())
 
+    const records = idxRange ? sliceByIndex(result.records, idxRange) : result.records
+
     if (tsMode) {
       console.log(
-        emitTsTestModule(result.records, {
+        emitTsTestModule(records, {
           title: result.filename,
           runner: tsRunner,
           driver: tsDriver,
           imports: tsImports,
           dbname,
+          startIndex: idxRange?.lo,
         }),
       )
+    } else if (sqlMode) {
+      const bodies: string[] = []
+      for (const rec of records) {
+        if (rec.type !== "statement" && rec.type !== "query") continue
+        if (dbname !== undefined && shouldSkipForDbname(rec, dbname)) continue
+        bodies.push(`${rec.sql};`)
+      }
+      console.log(bodies.join("\n"))
     } else {
       const filtered =
-        dbname !== undefined
-          ? result.records.filter((r) => !shouldSkipForDbname(r, dbname))
-          : result.records
+        dbname !== undefined ? records.filter((r) => !shouldSkipForDbname(r, dbname)) : records
       console.log(JSON.stringify(filtered, undefined, 2))
     }
 
     if (result.errors.length > 0) process.exit(1)
   },
 )
+
+interface IdxRange {
+  readonly lo: number
+  readonly hi: number
+}
+
+// Accept `<N>` (single record) or `<N>:<M>` (inclusive range).
+function parseIdxRange(raw: string | undefined): IdxRange | undefined {
+  if (raw === undefined) return undefined
+  const m = /^(\d+)(?::(\d+))?$/.exec(raw)
+  if (!m) throw new CliUsageError(`invalid --idx: ${raw} (expected N or N:M)`)
+  const lo = Number(m[1])
+  const hi = m[2] !== undefined ? Number(m[2]) : lo
+  if (lo < 1 || hi < lo) throw new CliUsageError(`invalid --idx range: ${raw}`)
+  return { lo, hi }
+}
+
+// Keep only statement / query records whose 1-based ordinal falls
+// inside `range`. Trivia and control records are dropped entirely, so
+// the result is a flat list of the requested SQL-bearing records.
+function sliceByIndex(records: readonly TestRecord[], range: IdxRange): readonly TestRecord[] {
+  const out: TestRecord[] = []
+  let ordinal = 0
+  for (const rec of records) {
+    if (rec.type !== "statement" && rec.type !== "query") continue
+    ordinal++
+    if (ordinal < range.lo) continue
+    if (ordinal > range.hi) break
+    out.push(rec)
+  }
+  return out
+}
 
 // --ts-imports can be inline TS text or a path to a file whose contents
 // are inlined verbatim. Treat the arg as a path only if it plausibly

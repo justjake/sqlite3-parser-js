@@ -52,6 +52,11 @@ interface Rule {
   noCode: boolean
   canReduce: boolean
   neverReduce: boolean
+  // Unit productions (A ::= B) where Lemon short-circuits the
+  // reduction in the state tables — the rule id is assigned but no
+  // reduce() call is ever made at runtime.  These rules are
+  // structurally unreachable and excluded from the coverage target.
+  doesReduce: boolean
 }
 
 function loadRules(version: string): Rule[] {
@@ -195,13 +200,19 @@ await runScript(
       }
     }
 
-    const report = buildReport(rules, labels, hits)
+    const fullReport = buildReport(rules, labels, hits)
+    // Exclude unit-production shadows — Lemon marks these
+    // doesReduce=false and the state tables never call reduce() for
+    // them, so they're unreachable regardless of input.
+    const report = fullReport.filter((r) => r.rule.doesReduce)
+    const shadowed = fullReport.length - report.length
     const missing = report.filter((r) => r.hits === 0)
     const covered = report.length - missing.length
     const pct = report.length === 0 ? 0 : (100 * covered) / report.length
 
     console.log(`Rule coverage — parser ${version}`)
-    console.log(`  Total rules:  ${report.length}`)
+    console.log(`  Total rules:  ${fullReport.length}`)
+    console.log(`  Reachable:    ${report.length}  (${shadowed} unit-production shadows excluded)`)
     console.log(`  Covered:      ${covered}  (${pct.toFixed(1)}%)`)
     console.log(`  Uncovered:    ${missing.length}`)
     console.log()

@@ -5,7 +5,36 @@ hash-threshold 8
 statement ok
 CREATE TABLE t1(a INTEGER, b INTEGER)
 
-# #344 with ::= WITH RECURSIVE wqlist
+# #344 with ::= WITH RECURSIVE wqlist — fires only when the `with`
+# non-terminal is consumed by DELETE/UPDATE/INSERT (select has inline
+# WITH-aware rules that never reduce through `with`).
+statement ok
+CREATE TABLE t_cte(a INTEGER, b INTEGER)
+
+statement ok
+WITH RECURSIVE counter(n) AS (
+  SELECT 1
+  UNION ALL
+  SELECT n + 1 FROM counter WHERE n < 10
+)
+DELETE FROM t_cte WHERE a IN (SELECT n FROM counter)
+
+statement ok
+WITH RECURSIVE counter(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM counter WHERE n < 5)
+UPDATE t_cte SET b = 1 WHERE a IN (SELECT n FROM counter)
+
+statement ok
+WITH RECURSIVE counter(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM counter WHERE n < 5)
+INSERT INTO t_cte(a, b) SELECT n, n FROM counter
+
+# Also exercise the non-recursive `with` form with DELETE so the
+# non-RECURSIVE `with ::= WITH wqlist` rule fires.
+statement ok
+WITH counter2(n) AS (SELECT 1)
+DELETE FROM t_cte WHERE a IN (SELECT n FROM counter2)
+
+# Keep a SELECT-shaped WITH RECURSIVE for completeness — uses the
+# inlined select-with rule (#510), not #344.
 statement ok
 WITH RECURSIVE counter(n) AS (
   SELECT 1

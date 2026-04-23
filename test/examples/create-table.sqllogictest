@@ -32,7 +32,8 @@ CREATE TABLE types1(
 )
 
 # #42 ccons ::= CONSTRAINT nm (named column constraint)
-# #47 ccons ::= DEFAULT <signed-number>
+# #47 ccons ::= DEFAULT id — DEFAULT followed by a bare identifier
+#     (SQLite treats this as a string-ish default, e.g. `DEFAULT foo`).
 # #48 ccons ::= NULL onconf
 # #55 ccons ::= COLLATE ids
 statement ok
@@ -40,7 +41,8 @@ CREATE TABLE ct1(
   a INTEGER CONSTRAINT pk_a PRIMARY KEY,
   b INTEGER NOT NULL DEFAULT 0,
   c INTEGER CONSTRAINT c_null NULL ON CONFLICT IGNORE,
-  d TEXT COLLATE NOCASE
+  d TEXT COLLATE NOCASE,
+  e TEXT DEFAULT fallback_name
 )
 
 # #44 ccons ::= DEFAULT LP expr RP
@@ -111,6 +113,9 @@ CREATE TABLE fk6(
 )
 
 # #56 ccons ::= GENERATED ALWAYS AS generated
+#     Only reached when a CONSTRAINT <name> prefix puts the parser in
+#     a state where GENERATED ALWAYS can't be fallback-absorbed as an
+#     identifier — otherwise Lemon reduces through #57 (AS generated).
 # #57 ccons ::= AS generated
 # #58 generated ::= LP expr RP
 # #59 generated ::= LP expr RP ID (VIRTUAL / STORED)
@@ -120,7 +125,8 @@ CREATE TABLE gen1(
   b INTEGER GENERATED ALWAYS AS (a + 1),
   c INTEGER AS (a * 2),
   d INTEGER AS (a - 1) STORED,
-  e INTEGER GENERATED ALWAYS AS (a + 5) VIRTUAL
+  e INTEGER GENERATED ALWAYS AS (a + 5) VIRTUAL,
+  f INTEGER CONSTRAINT gen_f GENERATED ALWAYS AS (a + 10) STORED
 )
 
 # #61 autoinc ::= AUTOINCR
@@ -146,6 +152,29 @@ CREATE TABLE tc1(
   CONSTRAINT chk1 CHECK (a > 0) ON CONFLICT ROLLBACK,
   FOREIGN KEY (a) REFERENCES parent(id) NOT DEFERRABLE
 )
+
+# #273 collate ::= COLLATE ids — fires when a column in an `eidlist`
+# context has a COLLATE clause.  eidlist is only used in REFERENCES
+# columns, VIEW column lists, and CTE column lists — not in CREATE
+# INDEX (which uses sortlist).  Per-column COLLATE + sort-order in
+# these contexts triggers collate + sortorder together.
+statement ok
+CREATE TABLE parent_col(id TEXT)
+
+statement ok
+CREATE TABLE fk_collate(
+  ref TEXT REFERENCES parent_col(id COLLATE NOCASE)
+)
+
+statement ok
+CREATE TABLE t_base(a TEXT, b TEXT)
+
+statement ok
+CREATE VIEW v_collate(a COLLATE NOCASE, b COLLATE BINARY DESC) AS
+  SELECT a, b FROM t_base
+
+statement ok
+WITH cte_collate(a COLLATE NOCASE) AS (SELECT 'X') SELECT * FROM cte_collate
 
 # #330 cmd ::= ALTER TABLE fullname DROP CONSTRAINT nm — in create-table block for adjacency
 # handled in alter-table.sqllogictest

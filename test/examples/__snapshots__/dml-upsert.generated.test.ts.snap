@@ -56,7 +56,30 @@ exports[`test/examples/dml-upsert.sqllogictest #4 statement ok: INSERT INTO t1(b
       (Id :name "b"))))"
 `;
 
-exports[`test/examples/dml-upsert.sqllogictest #5 statement ok: DELETE FROM t1 WHERE a = 1 RETURNING a 1`] = `
+exports[`test/examples/dml-upsert.sqllogictest #5 statement ok: DELETE FROM t1 RETURNING a 1`] = `
+"(CmdList
+  (DeleteStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (ExprResultColumn
+      (Id :name "a"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #6 statement ok: UPDATE t1 SET b = 5 RETURNING a, b 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "b")
+      (NumericLiteral :value "5"))
+    (ExprResultColumn
+      (Id :name "a"))
+    (ExprResultColumn
+      (Id :name "b"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #7 statement ok: DELETE FROM t1 WHERE a = 1 RETURNING a 1`] = `
 "(CmdList
   (DeleteStmt
     (QualifiedName
@@ -68,7 +91,7 @@ exports[`test/examples/dml-upsert.sqllogictest #5 statement ok: DELETE FROM t1 W
       (Id :name "a"))))"
 `;
 
-exports[`test/examples/dml-upsert.sqllogictest #6 statement ok: UPDATE t1 SET b = 5 WHERE a = 1 RETURNING a, b 1`] = `
+exports[`test/examples/dml-upsert.sqllogictest #8 statement ok: UPDATE t1 SET b = 5 WHERE a = 1 RETURNING a, b 1`] = `
 "(CmdList
   (UpdateStmt
     (QualifiedName
@@ -85,7 +108,48 @@ exports[`test/examples/dml-upsert.sqllogictest #6 statement ok: UPDATE t1 SET b 
       (Id :name "b"))))"
 `;
 
-exports[`test/examples/dml-upsert.sqllogictest #7 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT (a) DO NOTHI… 1`] = `
+exports[`test/examples/dml-upsert.sqllogictest #9 statement ok: DELETE FROM main.t1 WHERE a = 1 1`] = `
+"(CmdList
+  (DeleteStmt
+    (QualifiedName
+      (Name :text "main")
+      (Name :text "t1"))
+    (BinaryExpr :op "Equals"
+      (Id :name "a")
+      (NumericLiteral :value "1"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #10 statement ok: UPDATE main.t1 SET b = 1 WHERE a = 1 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "main")
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "b")
+      (NumericLiteral :value "1"))
+    (BinaryExpr :op "Equals"
+      (Id :name "a")
+      (NumericLiteral :value "1"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #11 statement ok: INSERT INTO main.t1(a, b) VALUES (99, 100) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "main")
+      (Name :text "t1"))
+    (Name :text "a")
+    (Name :text "b")
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "99")
+            (NumericLiteral :value "100")))))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #12 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT (a) DO NOTHI… 1`] = `
 "(CmdList
   (InsertStmt
     (QualifiedName
@@ -110,7 +174,7 @@ exports[`test/examples/dml-upsert.sqllogictest #7 statement ok: INSERT INTO t1(a
           (NothingUpsertDo))))))"
 `;
 
-exports[`test/examples/dml-upsert.sqllogictest #8 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT DO NOTHING R… 1`] = `
+exports[`test/examples/dml-upsert.sqllogictest #13 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT DO NOTHING R… 1`] = `
 "(CmdList
   (InsertStmt
     (QualifiedName
@@ -129,7 +193,7 @@ exports[`test/examples/dml-upsert.sqllogictest #8 statement ok: INSERT INTO t1(a
       (Id :name "a"))))"
 `;
 
-exports[`test/examples/dml-upsert.sqllogictest #9 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT DO UPDATE SE… 1`] = `
+exports[`test/examples/dml-upsert.sqllogictest #14 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT DO UPDATE SE… 1`] = `
 "(CmdList
   (InsertStmt
     (QualifiedName
@@ -158,7 +222,7 @@ exports[`test/examples/dml-upsert.sqllogictest #9 statement ok: INSERT INTO t1(a
       (Id :name "b"))))"
 `;
 
-exports[`test/examples/dml-upsert.sqllogictest #10 statement ok: UPDATE t1 SET (b, c) = (10, 20) WHERE a = 1 1`] = `
+exports[`test/examples/dml-upsert.sqllogictest #15 statement ok: UPDATE t1 SET (b, c) = (10, 20) WHERE a = 1 1`] = `
 "(CmdList
   (UpdateStmt
     (QualifiedName
@@ -174,7 +238,7 @@ exports[`test/examples/dml-upsert.sqllogictest #10 statement ok: UPDATE t1 SET (
       (NumericLiteral :value "1"))))"
 `;
 
-exports[`test/examples/dml-upsert.sqllogictest #11 statement ok: UPDATE t1 SET a = 1, (b, c) = (2, 3) WHERE a = 1 1`] = `
+exports[`test/examples/dml-upsert.sqllogictest #16 statement ok: UPDATE t1 SET a = 1, (b, c) = (2, 3) WHERE a = 1 1`] = `
 "(CmdList
   (UpdateStmt
     (QualifiedName

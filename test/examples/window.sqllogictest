@@ -41,6 +41,13 @@ WINDOW
   w_base2 AS (PARTITION BY g),
   w_ord AS (w_base2 ORDER BY a DESC)
 
+# #359 window ::= nm frame_opt (inherit from named window + add frame only)
+statement ok
+SELECT a, sum(b) OVER w_frame FROM t1
+WINDOW
+  w_base3 AS (ORDER BY a),
+  w_frame AS (w_base3 ROWS 3 PRECEDING)
+
 # #361 frame_opt ::= range_or_rows frame_bound_s frame_exclude_opt
 #   Single-bound frame (implicit BETWEEN <bound> AND CURRENT ROW).
 # #367 frame_bound_s ::= UNBOUNDED PRECEDING

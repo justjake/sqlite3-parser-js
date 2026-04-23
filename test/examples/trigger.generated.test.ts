@@ -58,52 +58,43 @@ describe("test/examples/trigger.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE INDEX t1_b ON t1(b)",
-      line: 43,
+      line: 48,
       conditions: [],
     })
   })
-  test("#7 statement ok: CREATE TRIGGER tr_del_indexed BEFORE INSERT ON t1 BEGIN DEL…", () => {
+  test("#7 statement ok: CREATE TRIGGER tr_del BEFORE INSERT ON t1 BEGIN DELETE FROM…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
-      sql: "CREATE TRIGGER tr_del_indexed BEFORE INSERT ON t1\nBEGIN\n  DELETE FROM t1 INDEXED BY t1_b WHERE b = new.b;\nEND",
-      line: 46,
+      sql: "CREATE TRIGGER tr_del BEFORE INSERT ON t1\nBEGIN\n  DELETE FROM t1 WHERE b = new.b;\nEND",
+      line: 51,
       conditions: [],
     })
   })
-  test("#8 statement ok: CREATE TRIGGER tr_del_notindexed BEFORE INSERT ON t1 BEGIN…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "CREATE TRIGGER tr_del_notindexed BEFORE INSERT ON t1\nBEGIN\n  DELETE FROM t1 NOT INDEXED WHERE b = new.b;\nEND",
-      line: 52,
-      conditions: [],
-    })
-  })
-  test("#9 statement ok: CREATE TRIGGER tr_raise_rollback BEFORE INSERT ON t1 BEGIN…", () => {
+  test("#8 statement ok: CREATE TRIGGER tr_raise_rollback BEFORE INSERT ON t1 BEGIN…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
       sql: "CREATE TRIGGER tr_raise_rollback BEFORE INSERT ON t1\nBEGIN\n  SELECT RAISE(ROLLBACK, 'nope');\nEND",
-      line: 60,
+      line: 59,
       conditions: [],
     })
   })
-  test("#10 statement ok: CREATE TRIGGER tr_raise_fail BEFORE INSERT ON t1 BEGIN SELE…", () => {
+  test("#9 statement ok: CREATE TRIGGER tr_raise_fail BEFORE INSERT ON t1 BEGIN SELE…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
       sql: "CREATE TRIGGER tr_raise_fail BEFORE INSERT ON t1\nBEGIN\n  SELECT RAISE(FAIL, 'bad');\nEND",
-      line: 66,
+      line: 65,
       conditions: [],
     })
   })
-  test("#11 statement ok: CREATE TRIGGER tr_raise_abort BEFORE INSERT ON t1 BEGIN SEL…", () => {
+  test("#10 statement ok: CREATE TRIGGER tr_raise_abort BEFORE INSERT ON t1 BEGIN SEL…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
       sql: "CREATE TRIGGER tr_raise_abort BEFORE INSERT ON t1\nBEGIN\n  SELECT RAISE(ABORT, 'abort');\nEND",
-      line: 72,
+      line: 71,
       conditions: [],
     })
   })

@@ -14,7 +14,170 @@ exports[`test/examples/cte.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEG
         (Type :name "INTEGER")))))"
 `;
 
-exports[`test/examples/cte.sqllogictest #2 statement ok: WITH RECURSIVE counter(n) AS ( SELECT 1 UNION ALL SELECT n… 1`] = `
+exports[`test/examples/cte.sqllogictest #2 statement ok: CREATE TABLE t_cte(a INTEGER, b INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t_cte"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/cte.sqllogictest #3 statement ok: WITH RECURSIVE counter(n) AS ( SELECT 1 UNION ALL SELECT n… 1`] = `
+"(CmdList
+  (DeleteStmt
+    (With :recursive true
+      (CommonTableExpr :materialized "Any"
+        (Name :text "counter")
+        (IndexedColumn
+          (Name :text "n"))
+        (Select
+          (SelectFrom
+            (ExprResultColumn
+              (NumericLiteral :value "1")))
+          (CompoundSelect :operator "UnionAll"
+            (SelectFrom
+              (ExprResultColumn
+                (BinaryExpr :op "Add"
+                  (Id :name "n")
+                  (NumericLiteral :value "1")))
+              (FromClause
+                (TableSelectTable
+                  (QualifiedName
+                    (Name :text "counter"))))
+              (BinaryExpr :op "Less"
+                (Id :name "n")
+                (NumericLiteral :value "10")))))))
+    (QualifiedName
+      (Name :text "t_cte"))
+    (InSelectExpr :not false
+      (Id :name "a")
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (Id :name "n"))
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "counter")))))))))"
+`;
+
+exports[`test/examples/cte.sqllogictest #4 statement ok: WITH RECURSIVE counter(n) AS (SELECT 1 UNION ALL SELECT n +… 1`] = `
+"(CmdList
+  (UpdateStmt
+    (With :recursive true
+      (CommonTableExpr :materialized "Any"
+        (Name :text "counter")
+        (IndexedColumn
+          (Name :text "n"))
+        (Select
+          (SelectFrom
+            (ExprResultColumn
+              (NumericLiteral :value "1")))
+          (CompoundSelect :operator "UnionAll"
+            (SelectFrom
+              (ExprResultColumn
+                (BinaryExpr :op "Add"
+                  (Id :name "n")
+                  (NumericLiteral :value "1")))
+              (FromClause
+                (TableSelectTable
+                  (QualifiedName
+                    (Name :text "counter"))))
+              (BinaryExpr :op "Less"
+                (Id :name "n")
+                (NumericLiteral :value "5")))))))
+    (QualifiedName
+      (Name :text "t_cte"))
+    (SetAssignment
+      (Name :text "b")
+      (NumericLiteral :value "1"))
+    (InSelectExpr :not false
+      (Id :name "a")
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (Id :name "n"))
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "counter")))))))))"
+`;
+
+exports[`test/examples/cte.sqllogictest #5 statement ok: WITH RECURSIVE counter(n) AS (SELECT 1 UNION ALL SELECT n +… 1`] = `
+"(CmdList
+  (InsertStmt
+    (With :recursive true
+      (CommonTableExpr :materialized "Any"
+        (Name :text "counter")
+        (IndexedColumn
+          (Name :text "n"))
+        (Select
+          (SelectFrom
+            (ExprResultColumn
+              (NumericLiteral :value "1")))
+          (CompoundSelect :operator "UnionAll"
+            (SelectFrom
+              (ExprResultColumn
+                (BinaryExpr :op "Add"
+                  (Id :name "n")
+                  (NumericLiteral :value "1")))
+              (FromClause
+                (TableSelectTable
+                  (QualifiedName
+                    (Name :text "counter"))))
+              (BinaryExpr :op "Less"
+                (Id :name "n")
+                (NumericLiteral :value "5")))))))
+    (QualifiedName
+      (Name :text "t_cte"))
+    (Name :text "a")
+    (Name :text "b")
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (Id :name "n"))
+          (ExprResultColumn
+            (Id :name "n"))
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "counter")))))))))"
+`;
+
+exports[`test/examples/cte.sqllogictest #6 statement ok: WITH counter2(n) AS (SELECT 1) DELETE FROM t_cte WHERE a IN… 1`] = `
+"(CmdList
+  (DeleteStmt
+    (With :recursive false
+      (CommonTableExpr :materialized "Any"
+        (Name :text "counter2")
+        (IndexedColumn
+          (Name :text "n"))
+        (Select
+          (SelectFrom
+            (ExprResultColumn
+              (NumericLiteral :value "1"))))))
+    (QualifiedName
+      (Name :text "t_cte"))
+    (InSelectExpr :not false
+      (Id :name "a")
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (Id :name "n"))
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "counter2")))))))))"
+`;
+
+exports[`test/examples/cte.sqllogictest #7 statement ok: WITH RECURSIVE counter(n) AS ( SELECT 1 UNION ALL SELECT n… 1`] = `
 "(CmdList
   (SelectStmt
     (Select
@@ -48,7 +211,7 @@ exports[`test/examples/cte.sqllogictest #2 statement ok: WITH RECURSIVE counter(
               (Name :text "counter"))))))))"
 `;
 
-exports[`test/examples/cte.sqllogictest #3 statement ok: WITH c1 AS MATERIALIZED (SELECT a FROM t1) SELECT * FROM c1 1`] = `
+exports[`test/examples/cte.sqllogictest #8 statement ok: WITH c1 AS MATERIALIZED (SELECT a FROM t1) SELECT * FROM c1 1`] = `
 "(CmdList
   (SelectStmt
     (Select
@@ -71,7 +234,7 @@ exports[`test/examples/cte.sqllogictest #3 statement ok: WITH c1 AS MATERIALIZED
               (Name :text "c1"))))))))"
 `;
 
-exports[`test/examples/cte.sqllogictest #4 statement ok: WITH c2 AS NOT MATERIALIZED (SELECT a FROM t1) SELECT * FRO… 1`] = `
+exports[`test/examples/cte.sqllogictest #9 statement ok: WITH c2 AS NOT MATERIALIZED (SELECT a FROM t1) SELECT * FRO… 1`] = `
 "(CmdList
   (SelectStmt
     (Select
@@ -94,7 +257,7 @@ exports[`test/examples/cte.sqllogictest #4 statement ok: WITH c2 AS NOT MATERIAL
               (Name :text "c2"))))))))"
 `;
 
-exports[`test/examples/cte.sqllogictest #5 statement ok: WITH RECURSIVE base AS MATERIALIZED (SELECT 1 AS n), rec(n)… 1`] = `
+exports[`test/examples/cte.sqllogictest #10 statement ok: WITH RECURSIVE base AS MATERIALIZED (SELECT 1 AS n), rec(n)… 1`] = `
 "(CmdList
   (SelectStmt
     (Select

@@ -40,9 +40,10 @@ INSERT INTO t1 AS alias1(a, b) VALUES (1, 2)
 statement ok
 INSERT INTO main.t1 AS alias2(a, b) VALUES (3, 4)
 
-# #146 joinop ::= JOIN_KW nm nm JOIN (e.g. LEFT OUTER CROSS JOIN)
+# #146 joinop ::= JOIN_KW nm nm JOIN — three-keyword join.
+# Valid shape: <JOIN_KW> <nm> <nm> JOIN, e.g. NATURAL LEFT OUTER JOIN.
 statement ok
-SELECT * FROM t1 LEFT OUTER CROSS JOIN t2
+SELECT * FROM t1 NATURAL LEFT OUTER JOIN t2
 
 # #151 indexed_opt ::= INDEXED BY nm
 statement ok

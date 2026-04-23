@@ -13,16 +13,34 @@ INSERT INTO t1 DEFAULT VALUES
 statement ok
 INSERT INTO t1(a, b) DEFAULT VALUES
 
-# #191 returning ::= RETURNING selcollist
-# #176 where_opt_ret ::= RETURNING selcollist (DELETE / UPDATE with RETURNING)
+# #191 returning ::= RETURNING selcollist  (INSERT returning)
+# #176 where_opt_ret ::= RETURNING selcollist  (DELETE/UPDATE returning
+#      without a WHERE — where_opt_ret subsumes both WHERE and RETURNING,
+#      and only the no-WHERE form takes the `RETURNING selcollist` arm.)
 statement ok
 INSERT INTO t1(b, c) VALUES (1, 2) RETURNING a, b
+
+statement ok
+DELETE FROM t1 RETURNING a
+
+statement ok
+UPDATE t1 SET b = 5 RETURNING a, b
 
 statement ok
 DELETE FROM t1 WHERE a = 1 RETURNING a
 
 statement ok
 UPDATE t1 SET b = 5 WHERE a = 1 RETURNING a, b
+
+# #139 xfullname ::= nm DOT nm — db-qualified DELETE/UPDATE/INSERT target.
+statement ok
+DELETE FROM main.t1 WHERE a = 1
+
+statement ok
+UPDATE main.t1 SET b = 1 WHERE a = 1
+
+statement ok
+INSERT INTO main.t1(a, b) VALUES (99, 100)
 
 # #188 upsert ::= ON CONFLICT LP sortlist RP where_opt DO NOTHING upsert
 # Two chained ON CONFLICT targets — the second upsert is the second

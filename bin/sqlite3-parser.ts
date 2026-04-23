@@ -12,7 +12,7 @@
 // (`import { parse } from 'sqlite3-parser'`) in real code.  This CLI
 // is pinned to whatever `vendor/manifest.json` marks as `current`.
 
-import { parse, withOptions } from "../generated/current.ts"
+import { parse, parseStmt, withOptions } from "../generated/current.ts"
 import { toSexpr } from "../src/ast/traverse.ts"
 import { resolveCliInput, runScript } from "../scripts/utils.ts"
 
@@ -20,21 +20,25 @@ await runScript(
   import.meta.main,
   {
     usage:
-      "usage: sqlite3-parser [--pretty] [--digit-separator <char>] [<input>]\n" +
+      "usage: sqlite3-parser [--pretty] [--stmt] [--digit-separator <char>] [<input>]\n" +
       "  --pretty             Print the AST as indented S-expressions instead of JSON.\n" +
+      "  --stmt               Parse a single statement via parseStmt (root is a Stmt\n" +
+      "                       node rather than a CmdList).\n" +
       "  --digit-separator    Single-char separator for numeric literals\n" +
       '                       (default: disabled; pass "_" for sqlite 3.45+ behaviour).\n' +
       "  <input>              SQL text, a path to a file on disk, or '-' for stdin.",
     options: {
       pretty: { type: "boolean" },
+      stmt: { type: "boolean" },
       "digit-separator": { type: "string" },
     },
   },
   async ({ values, positionals }) => {
     const { source } = await resolveCliInput(positionals)
     const digitSeparator = values["digit-separator"]
-    const result =
-      digitSeparator !== undefined ? withOptions({ digitSeparator }).parse(source) : parse(source)
+    const mod = digitSeparator !== undefined ? withOptions({ digitSeparator }) : undefined
+    const parseFn = values.stmt ? (mod?.parseStmt ?? parseStmt) : (mod?.parse ?? parse)
+    const result = parseFn(source)
 
     if (result.status === "error") {
       for (const err of result.errors) console.error(err.format())
