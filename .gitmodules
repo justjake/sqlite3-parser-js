@@ -7,3 +7,6 @@
 [submodule "sqlite-3.53.0"]
 	path = vendor/submodule/3.53.0
 	url = https://github.com/sqlite/sqlite.git
+[submodule "vendor/submodule/sqllogictest"]
+	path = vendor/submodule/sqllogictest
+	url = https://github.com/gregrahn/sqllogictest.git
