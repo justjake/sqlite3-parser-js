@@ -38,6 +38,30 @@ jobs:
         run: git diff --exit-code
       - run: bun run test
 
+      - name: Rule coverage
+        # Re-run the suite with v8 coverage instrumentation and map
+        # DA hits back to Lemon rule ids.  Non-gating for now; see
+        # scripts/rule-coverage.ts and the --no-fail flag.  Once the
+        # corpus is filled out, drop --no-fail or snapshot rules.json
+        # and gate on regression.
+        run: |
+          bun test --coverage --coverage-reporter=lcov --path-ignore-patterns='vendor/**'
+          bun scripts/rule-coverage.ts --no-fail --json coverage/rules.json | tee coverage/summary.txt
+          {
+            echo "## Rule coverage"
+            echo ""
+            echo '```'
+            cat coverage/summary.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: warn
+
       - name: npm pack
         run: |
           mkdir -p build/npm
