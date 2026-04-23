@@ -23,6 +23,7 @@ test("#306 tridxby ::= INDEXED BY nm fires in trigger body reducer", () => {
     "CREATE TRIGGER tr_idx BEFORE INSERT ON t1 BEGIN DELETE FROM t1 INDEXED BY ix WHERE a = 1; END",
   )
   expect(result.status).toBe("error")
+  if (result.status !== "error") throw new Error("expected error")
   expect(result.errors[0]!.message).toContain("INDEXED BY clause is not allowed")
 })
 
@@ -31,6 +32,7 @@ test("#307 tridxby ::= NOT INDEXED fires in trigger body reducer", () => {
     "CREATE TRIGGER tr_notidx BEFORE INSERT ON t1 BEGIN DELETE FROM t1 NOT INDEXED WHERE a = 1; END",
   )
   expect(result.status).toBe("error")
+  if (result.status !== "error") throw new Error("expected error")
   expect(result.errors[0]!.message).toContain("NOT INDEXED clause is not allowed")
 })
 
