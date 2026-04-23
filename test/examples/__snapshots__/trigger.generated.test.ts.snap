@@ -1,0 +1,167 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/trigger.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEGER PRIMARY KEY, b INTEGER, c INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement false)))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #2 statement ok: CREATE TABLE log(ts TEXT, msg TEXT) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "log"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "ts")
+        (Type :name "TEXT"))
+      (ColumnDefinition :flags 4
+        (Name :text "msg")
+        (Type :name "TEXT")))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #3 statement ok: CREATE VIEW v1 AS SELECT * FROM t1 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "v1"))
+    (Select
+      (SelectFrom
+        (StarResultColumn)
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #4 statement ok: CREATE TRIGGER tr_instead INSTEAD OF INSERT ON v1 FOR EACH… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "InsteadOf" :forEachRow true
+    (QualifiedName
+      (Name :text "tr_instead"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "v1"))
+    (BinaryExpr :op "Greater"
+      (QualifiedExpr
+        (Name :text "new")
+        (Name :text "a"))
+      (NumericLiteral :value "0"))
+    (InsertTriggerCmd
+      (QualifiedName
+        (Name :text "t1"))
+      (Name :text "a")
+      (Name :text "b")
+      (Select
+        (SelectValues
+          (ValuesRow
+            (QualifiedExpr
+              (Name :text "new")
+              (Name :text "a"))
+            (QualifiedExpr
+              (Name :text "new")
+              (Name :text "b"))))))
+    (InsertTriggerCmd
+      (QualifiedName
+        (Name :text "log"))
+      (Name :text "msg")
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (BinaryExpr :op "Concat"
+              (StringLiteral :value "inserted ")
+              (QualifiedExpr
+                (Name :text "new")
+                (Name :text "a")))))))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #5 statement ok: CREATE TRIGGER tr_update_of AFTER UPDATE OF b, c ON t1 BEGI… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "After" :forEachRow false
+    (QualifiedName
+      (Name :text "tr_update_of"))
+    (UpdateOfTriggerEvent
+      (Name :text "b")
+      (Name :text "c"))
+    (QualifiedName
+      (Name :text "t1"))
+    (InsertTriggerCmd
+      (QualifiedName
+        (Name :text "log"))
+      (Name :text "msg")
+      (Select
+        (SelectValues
+          (ValuesRow
+            (StringLiteral :value "b or c changed")))))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #6 statement ok: CREATE INDEX t1_b ON t1(b) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1_b"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "b"))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #9 statement ok: CREATE TRIGGER tr_raise_rollback BEFORE INSERT ON t1 BEGIN… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "tr_raise_rollback"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (RaiseExpr :resolve "Rollback"
+              (StringLiteral :value "nope"))))))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #10 statement ok: CREATE TRIGGER tr_raise_fail BEFORE INSERT ON t1 BEGIN SELE… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "tr_raise_fail"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (RaiseExpr :resolve "Fail"
+              (StringLiteral :value "bad"))))))))"
+`;
+
+exports[`test/examples/trigger.sqllogictest #11 statement ok: CREATE TRIGGER tr_raise_abort BEFORE INSERT ON t1 BEGIN SEL… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "tr_raise_abort"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (RaiseExpr :resolve "Abort"
+              (StringLiteral :value "abort"))))))))"
+`;

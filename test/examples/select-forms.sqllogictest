@@ -1,0 +1,69 @@
+# SELECT-shape rules: table DOT STAR, named-table join (CROSS/LEFT/…),
+# INDEXED BY, NULLS FIRST/LAST, LIMIT a, b, xfullname forms (db.name,
+# name AS alias, db.name AS alias), seltablist (fn-call as table).
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER, b INTEGER)
+
+statement ok
+CREATE TABLE t2(x INTEGER, y INTEGER)
+
+statement ok
+CREATE INDEX t1_a ON t1(a)
+
+# #124 selcollist ::= sclp nm DOT STAR (SELECT tbl.* form)
+statement ok
+SELECT t1.* FROM t1
+
+statement ok
+SELECT t1.*, t2.x FROM t1, t2
+
+# #133 seltablist ::= stl_prefix fullname LP exprlist RP as on_using
+# A table-valued function call in FROM position (e.g. json_each(arg)).
+statement ok
+SELECT * FROM json_each('[1, 2, 3]')
+
+statement ok
+SELECT * FROM json_tree('{}', '$') AS jt
+
+# #139 xfullname ::= nm DOT nm (database-qualified name)
+# #140 xfullname ::= nm AS nm (aliased)
+# #141 xfullname ::= nm DOT nm AS nm (qualified + aliased)
+statement ok
+CREATE INDEX main.ix_t1_b ON t1(b)
+
+statement ok
+INSERT INTO t1 AS alias1(a, b) VALUES (1, 2)
+
+statement ok
+INSERT INTO main.t1 AS alias2(a, b) VALUES (3, 4)
+
+# #146 joinop ::= JOIN_KW nm nm JOIN (e.g. LEFT OUTER CROSS JOIN)
+statement ok
+SELECT * FROM t1 LEFT OUTER CROSS JOIN t2
+
+# #151 indexed_opt ::= INDEXED BY nm
+statement ok
+SELECT a FROM t1 INDEXED BY t1_a WHERE a > 0
+
+# #160 nulls ::= NULLS FIRST
+# #161 nulls ::= NULLS LAST
+statement ok
+SELECT a FROM t1 ORDER BY b ASC NULLS FIRST
+
+statement ok
+SELECT a FROM t1 ORDER BY b DESC NULLS LAST
+
+# #170 limit_opt ::= LIMIT expr COMMA expr
+# Legacy "LIMIT offset, count" form.
+statement ok
+SELECT a FROM t1 LIMIT 5, 10
+
+# #112 oneselect ::= SELECT distinct selcollist from where_opt groupby_opt having_opt window_clause
+# A SELECT that uses the WINDOW clause but NOT ORDER/LIMIT — exercises
+# the specific 8-RHS reduction.  (SELECT-with-WINDOW but without trailing
+# ORDER/LIMIT is relatively rare in the corpus.)
+statement ok
+SELECT a, sum(b) OVER w FROM t1 GROUP BY a HAVING a > 0 WINDOW w AS (ORDER BY a)

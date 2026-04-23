@@ -1,0 +1,41 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/create-vtab.sqllogictest #1 statement ok: CREATE VIRTUAL TABLE vt1 USING fts5 1`] = `
+"(CmdList
+  (CreateVirtualTableStmt :ifNotExists false
+    (QualifiedName
+      (Name :text "vt1"))
+    (Name :text "fts5")))"
+`;
+
+exports[`test/examples/create-vtab.sqllogictest #2 statement ok: CREATE VIRTUAL TABLE vt2 USING fts5(content, tokenize = 'po… 1`] = `
+"(CmdList
+  (CreateVirtualTableStmt :ifNotExists false :args ["content","tokenize='porter unicode61'"]
+    (QualifiedName
+      (Name :text "vt2"))
+    (Name :text "fts5")))"
+`;
+
+exports[`test/examples/create-vtab.sqllogictest #3 statement ok: CREATE VIRTUAL TABLE vt3 USING rtree(id, minX, maxX, minY,… 1`] = `
+"(CmdList
+  (CreateVirtualTableStmt :ifNotExists false :args ["id","minX","maxX","minY","maxY"]
+    (QualifiedName
+      (Name :text "vt3"))
+    (Name :text "rtree")))"
+`;
+
+exports[`test/examples/create-vtab.sqllogictest #4 statement ok: CREATE VIRTUAL TABLE vt4 USING fts5( body, tokenize = "port… 1`] = `
+"(CmdList
+  (CreateVirtualTableStmt :ifNotExists false :args ["body","tokenize=\\"porter unicode61 remove_diacritics 2\\"","content='t1'","prefix='2 3'"]
+    (QualifiedName
+      (Name :text "vt4"))
+    (Name :text "fts5")))"
+`;
+
+exports[`test/examples/create-vtab.sqllogictest #5 statement ok: CREATE VIRTUAL TABLE vt5 USING mymod(a (b (c d) e) f) 1`] = `
+"(CmdList
+  (CreateVirtualTableStmt :ifNotExists false :args ["a()f"]
+    (QualifiedName
+      (Name :text "vt5"))
+    (Name :text "mymod")))"
+`;

@@ -1,0 +1,123 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/pragma-vacuum.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #2 statement ok: VACUUM main 1`] = `
+"(CmdList
+  (VacuumStmt
+    (Name :text "main")))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #3 statement ok: VACUUM main INTO 'backup.db' 1`] = `
+"(CmdList
+  (VacuumStmt
+    (Name :text "main")
+    (StringLiteral :value "backup.db")))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #4 statement ok: PRAGMA foreign_keys 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "foreign_keys"))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #5 statement ok: PRAGMA cache_size = -2000 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "cache_size"))
+    (EqualsPragmaBody
+      (UnaryExpr :op "Negative"
+        (NumericLiteral :value "2000")))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #6 statement ok: PRAGMA cache_size(-4000) 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "cache_size"))
+    (CallPragmaBody
+      (UnaryExpr :op "Negative"
+        (NumericLiteral :value "4000")))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #7 statement ok: PRAGMA cache_size = +4000 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "cache_size"))
+    (EqualsPragmaBody
+      (UnaryExpr :op "Positive"
+        (NumericLiteral :value "4000")))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #8 statement ok: PRAGMA foreign_keys = ON 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "foreign_keys"))
+    (EqualsPragmaBody
+      (KeywordLiteral :value "ON"))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #9 statement ok: PRAGMA secure_delete = DELETE 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "secure_delete"))
+    (EqualsPragmaBody
+      (KeywordLiteral :value "DELETE"))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #10 statement ok: PRAGMA encoding = DEFAULT 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "encoding"))
+    (EqualsPragmaBody
+      (KeywordLiteral :value "DEFAULT"))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #11 statement ok: PRAGMA busy_timeout = +5000 1`] = `
+"(CmdList
+  (PragmaStmt
+    (QualifiedName
+      (Name :text "busy_timeout"))
+    (EqualsPragmaBody
+      (UnaryExpr :op "Positive"
+        (NumericLiteral :value "5000")))))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #12 statement ok: ATTACH DATABASE 'other.db' AS other KEY 'secretpass' 1`] = `
+"(CmdList
+  (AttachStmt
+    (StringLiteral :value "other.db")
+    (Id :name "other")
+    (StringLiteral :value "secretpass")))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #13 statement ok: REINDEX 1`] = `
+"(CmdList
+  (ReindexStmt))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #14 statement ok: ANALYZE 1`] = `
+"(CmdList
+  (AnalyzeStmt))"
+`;
+
+exports[`test/examples/pragma-vacuum.sqllogictest #15 statement ok: DETACH other 1`] = `
+"(CmdList
+  (DetachStmt
+    (Id :name "other")))"
+`;

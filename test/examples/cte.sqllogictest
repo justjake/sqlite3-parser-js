@@ -1,0 +1,36 @@
+# Common Table Expressions: WITH RECURSIVE and AS [NOT] MATERIALIZED.
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER, b INTEGER)
+
+# #344 with ::= WITH RECURSIVE wqlist
+statement ok
+WITH RECURSIVE counter(n) AS (
+  SELECT 1
+  UNION ALL
+  SELECT n + 1 FROM counter WHERE n < 10
+)
+SELECT * FROM counter
+
+# #346 wqas ::= AS MATERIALIZED
+statement ok
+WITH c1 AS MATERIALIZED (SELECT a FROM t1)
+SELECT * FROM c1
+
+# #347 wqas ::= AS NOT MATERIALIZED
+statement ok
+WITH c2 AS NOT MATERIALIZED (SELECT a FROM t1)
+SELECT * FROM c2
+
+# RECURSIVE + materialization combined — exercises wqlist over both arms.
+statement ok
+WITH RECURSIVE
+  base AS MATERIALIZED (SELECT 1 AS n),
+  rec(n) AS NOT MATERIALIZED (
+    SELECT n FROM base
+    UNION ALL
+    SELECT n + 1 FROM rec WHERE n < 5
+  )
+SELECT * FROM rec

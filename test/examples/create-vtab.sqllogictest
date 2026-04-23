@@ -1,0 +1,32 @@
+# CREATE VIRTUAL TABLE — cmd#335, vtabargtoken#340, lp#341, anylist
+# variants (empty / recursive LP/ANY tokens).
+
+hash-threshold 8
+
+# #335 cmd ::= create_vtab (no args)
+# #410 anylist ::= (empty)
+statement ok
+CREATE VIRTUAL TABLE vt1 USING fts5
+
+# #340 vtabargtoken ::= lp anylist RP
+# #341 lp ::= LP
+# #411 anylist ::= anylist LP anylist RP — nested paren groups in module args
+# #412 anylist ::= anylist ANY — plain tokens between parens
+statement ok
+CREATE VIRTUAL TABLE vt2 USING fts5(content, tokenize = 'porter unicode61')
+
+# Nested parens in module args (e.g. rtree ranges, fts5 tokenizer options).
+statement ok
+CREATE VIRTUAL TABLE vt3 USING rtree(id, minX, maxX, minY, maxY)
+
+statement ok
+CREATE VIRTUAL TABLE vt4 USING fts5(
+  body,
+  tokenize = "porter unicode61 remove_diacritics 2",
+  content = 't1',
+  prefix = '2 3'
+)
+
+# Deeply nested parens exercise anylist ::= anylist LP anylist RP.
+statement ok
+CREATE VIRTUAL TABLE vt5 USING mymod(a (b (c d) e) f)

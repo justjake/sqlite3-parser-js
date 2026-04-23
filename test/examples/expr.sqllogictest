@@ -1,0 +1,162 @@
+# Hand-authored fixtures targeting expression-shaped grammar rules
+# that the upstream sqllogictest corpus doesn't exercise.  One stanza
+# per rule cluster, annotated with the Lemon rule id(s) it covers.
+#
+# Rule ids reference generated/3.53.0/parser.dev.json.  Re-run
+# `bun run coverage` and diff the uncovered list to see which
+# fixtures here are still pulling their weight.
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER, b INTEGER, c INTEGER, d TEXT, e INTEGER)
+
+statement ok
+CREATE TABLE t2(x INTEGER, y INTEGER, g INTEGER)
+
+# #211 expr ::= idj LP distinct exprlist ORDER BY sortlist RP
+# aggregate function with inline ORDER BY (e.g. group_concat(x ORDER BY y))
+statement ok
+SELECT group_concat(d ORDER BY a DESC) FROM t1
+
+statement ok
+SELECT group_concat(DISTINCT d ORDER BY a) FROM t1
+
+# #213 expr ::= idj LP distinct exprlist RP WITHIN GROUP LP ORDER BY expr RP
+# ordered-set aggregate without filter/over
+statement ok
+SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY a) FROM t1
+
+# #215 expr ::= idj LP distinct exprlist ORDER BY sortlist RP filter_over
+# aggregate with inline ORDER BY followed by FILTER / OVER
+statement ok
+SELECT group_concat(d ORDER BY a) FILTER (WHERE a > 0) FROM t1
+
+statement ok
+SELECT group_concat(d ORDER BY a) OVER (PARTITION BY b) FROM t1
+
+# #216 expr ::= idj LP STAR RP filter_over
+# `count(*) OVER (...)` / `count(*) FILTER (...) OVER (...)`
+statement ok
+SELECT count(*) OVER (ORDER BY a) FROM t1
+
+statement ok
+SELECT count(*) FILTER (WHERE a > 0) OVER (PARTITION BY b) FROM t1
+
+# #217 expr ::= idj LP distinct exprlist RP WITHIN GROUP LP ORDER BY expr RP filter_over
+# ordered-set aggregate with FILTER / OVER
+statement ok
+SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY a) OVER (PARTITION BY b) FROM t1
+
+statement ok
+SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY a) FILTER (WHERE a > 0) FROM t1
+
+# #219 expr ::= LP nexprlist COMMA expr RP
+# row-value expression `(a, b, c)` used in comparisons / IN
+statement ok
+SELECT (1, 2, 3) FROM t1
+
+statement ok
+SELECT x FROM t1 WHERE (a, b) IN (SELECT x, y FROM t2)
+
+statement ok
+SELECT x FROM t1 WHERE (a, b) = (1, 2)
+
+# #229 likeop ::= NOT LIKE_KW|MATCH
+# #230 expr ::= expr likeop expr (no ESCAPE)
+statement ok
+SELECT a FROM t1 WHERE d NOT LIKE '%abc%'
+
+statement ok
+SELECT a FROM t1 WHERE d NOT GLOB 'foo*'
+
+statement ok
+SELECT a FROM t1 WHERE d NOT REGEXP '[a-z]+'
+
+statement ok
+SELECT a FROM t1 WHERE d NOT MATCH 'bar'
+
+# #236 expr ::= expr IS NOT DISTINCT FROM expr
+statement ok
+SELECT a FROM t1 WHERE a IS NOT DISTINCT FROM b
+
+# #237 expr ::= expr IS DISTINCT FROM expr
+statement ok
+SELECT a FROM t1 WHERE a IS DISTINCT FROM b
+
+# #264 paren_exprlist ::= LP exprlist RP
+# `expr NOT IN tbl(args)` — paren_exprlist only fires in
+# `expr in_op fullname paren_exprlist`.
+statement ok
+SELECT a FROM t1 WHERE a IN t2(x, y)
+
+statement ok
+SELECT a FROM t1 WHERE a NOT IN t2(x, y)
+
+# #273 collate ::= COLLATE ids
+# Standalone COLLATE inside ORDER BY / comparison.
+statement ok
+SELECT a FROM t1 ORDER BY d COLLATE NOCASE
+
+statement ok
+SELECT a FROM t1 WHERE d COLLATE BINARY = 'foo'
+
+# #312 expr ::= RAISE LP IGNORE RP
+# RAISE(IGNORE) inside a trigger body.
+statement ok
+CREATE TRIGGER trig_ignore BEFORE INSERT ON t1
+BEGIN
+  SELECT RAISE(IGNORE);
+END
+
+# #386 term ::= QNUMBER
+# SQLite quoted-number literal (numeric text in a string delimiter).
+# Emitted by the tokenizer when a STRING's contents are a valid
+# number and it's in an expression context; covered here by use in
+# a DEFAULT / column-value context.
+statement ok
+SELECT "123" FROM t1
+
+# #400 expr ::= term
+# Bare literal in expression position — hit via term paths that
+# don't have a direct `expr ::=` form (CTIME_KW, QNUMBER, BLOB).
+statement ok
+SELECT CURRENT_TIMESTAMP FROM t1
+
+statement ok
+SELECT CURRENT_DATE, CURRENT_TIME FROM t1
+
+statement ok
+SELECT x'deadbeef' FROM t1
+
+# Miscellaneous expression forms worth flushing out even if already
+# covered — useful regression fixtures:
+statement ok
+SELECT a FROM t1 WHERE a BETWEEN 1 AND 10
+
+statement ok
+SELECT a FROM t1 WHERE a NOT BETWEEN 1 AND 10
+
+statement ok
+SELECT CASE WHEN a > 0 THEN 'pos' WHEN a < 0 THEN 'neg' ELSE 'zero' END FROM t1
+
+statement ok
+SELECT CASE a WHEN 1 THEN 'one' WHEN 2 THEN 'two' END FROM t1
+
+statement ok
+SELECT a || d FROM t1
+
+statement ok
+SELECT a + b * c - d FROM t1
+
+statement ok
+SELECT a & b | c << 2 >> 1 FROM t1
+
+statement ok
+SELECT ~a FROM t1
+
+statement ok
+SELECT NOT a FROM t1
+
+statement ok
+SELECT -a, +b FROM t1

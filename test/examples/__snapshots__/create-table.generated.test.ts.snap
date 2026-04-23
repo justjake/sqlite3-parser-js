@@ -1,0 +1,375 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/create-table.sqllogictest #1 statement ok: CREATE TABLE to1(a INTEGER PRIMARY KEY) WITHOUT ROWID, STRI… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "to1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 65668
+      (ColumnDefinition :flags 13
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement false))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #2 statement ok: CREATE TABLE to2(a INTEGER) STRICT 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "to2"))
+    (ColumnsAndConstraintsCreateTableBody :flags 65536
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #3 statement ok: CREATE TABLE notype(a, b, c) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "notype"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 0
+        (Name :text "a"))
+      (ColumnDefinition :flags 0
+        (Name :text "b"))
+      (ColumnDefinition :flags 0
+        (Name :text "c")))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #4 statement ok: CREATE TABLE types1( a DECIMAL(10, 2), b NUMERIC(+5, -2), c… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "types1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "DECIMAL"
+          (TypeSizeTypeSize
+            (NumericLiteral :value "10")
+            (NumericLiteral :value "2"))))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "NUMERIC"
+          (TypeSizeTypeSize
+            (UnaryExpr :op "Positive"
+              (NumericLiteral :value "5"))
+            (UnaryExpr :op "Negative"
+              (NumericLiteral :value "2")))))
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "UNSIGNED BIG INT")))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #5 statement ok: CREATE TABLE ct1( a INTEGER CONSTRAINT pk_a PRIMARY KEY, b… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "ct1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (Name :text "pk_a")
+          (PrimaryKeyColumnConstraint :autoIncrement false)))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (NotNullColumnConstraint :nullable false))
+        (NamedColumnConstraint
+          (DefaultColumnConstraint
+            (NumericLiteral :value "0"))))
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (Name :text "c_null")
+          (NotNullColumnConstraint :nullable true :conflictClause "Ignore")))
+      (ColumnDefinition :flags 516
+        (Name :text "d")
+        (Type :name "TEXT")
+        (NamedColumnConstraint
+          (CollateColumnConstraint
+            (Name :text "NOCASE")))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #6 statement ok: CREATE TABLE ct2( a INTEGER DEFAULT (1 + 2), b INTEGER DEFA… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "ct2"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (DefaultColumnConstraint
+            (ParenthesizedExpr
+              (BinaryExpr :op "Add"
+                (NumericLiteral :value "1")
+                (NumericLiteral :value "2"))))))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (DefaultColumnConstraint
+            (UnaryExpr :op "Positive"
+              (NumericLiteral :value "5")))))
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (DefaultColumnConstraint
+            (UnaryExpr :op "Negative"
+              (NumericLiteral :value "5"))))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #7 statement ok: CREATE TABLE ct3( a INTEGER CHECK (a > 0) ) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "ct3"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (CheckColumnConstraint
+            (BinaryExpr :op "Greater"
+              (Id :name "a")
+              (NumericLiteral :value "0"))))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #8 statement ok: CREATE TABLE parent(id INTEGER PRIMARY KEY) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "parent"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "id")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement false))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #9 statement ok: CREATE TABLE fk1( x INTEGER REFERENCES parent(id) MATCH FUL… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "fk1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (ForeignKeyColumnConstraint
+            (ForeignKeyClause
+              (Name :text "parent")
+              (IndexedColumn
+                (Name :text "id"))
+              (MatchRefArg
+                (Name :text "FULL"))
+              (OnInsertRefArg :action "SetNull")
+              (OnUpdateRefArg :action "SetDefault")
+              (OnDeleteRefArg :action "Restrict"))))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #10 statement ok: CREATE TABLE fk2( x INTEGER REFERENCES parent(id) ON DELETE… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "fk2"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (ForeignKeyColumnConstraint
+            (ForeignKeyClause
+              (Name :text "parent")
+              (IndexedColumn
+                (Name :text "id"))
+              (OnDeleteRefArg :action "NoAction"))))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #11 statement ok: CREATE TABLE fk3( x INTEGER REFERENCES parent(id) NOT DEFER… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "fk3"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (ForeignKeyColumnConstraint
+            (ForeignKeyClause
+              (Name :text "parent")
+              (IndexedColumn
+                (Name :text "id")))))
+        (NamedColumnConstraint
+          (DeferColumnConstraint
+            (DeferSubclause :deferrable false)))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #12 statement ok: CREATE TABLE fk4( x INTEGER REFERENCES parent(id) DEFERRABL… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "fk4"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (ForeignKeyColumnConstraint
+            (ForeignKeyClause
+              (Name :text "parent")
+              (IndexedColumn
+                (Name :text "id")))))
+        (NamedColumnConstraint
+          (DeferColumnConstraint
+            (DeferSubclause :deferrable true)))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #13 statement ok: CREATE TABLE fk5( x INTEGER REFERENCES parent(id) DEFERRABL… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "fk5"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (ForeignKeyColumnConstraint
+            (ForeignKeyClause
+              (Name :text "parent")
+              (IndexedColumn
+                (Name :text "id")))))
+        (NamedColumnConstraint
+          (DeferColumnConstraint
+            (DeferSubclause :deferrable true :initDeferred "InitiallyDeferred")))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #14 statement ok: CREATE TABLE fk6( x INTEGER REFERENCES parent(id) DEFERRABL… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "fk6"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (ForeignKeyColumnConstraint
+            (ForeignKeyClause
+              (Name :text "parent")
+              (IndexedColumn
+                (Name :text "id")))))
+        (NamedColumnConstraint
+          (DeferColumnConstraint
+            (DeferSubclause :deferrable true :initDeferred "InitiallyImmediate")))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #15 statement ok: CREATE TABLE gen1( a INTEGER, b INTEGER GENERATED ALWAYS AS… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "gen1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 36
+        (Name :text "b")
+        (Type :name "INTEGER GENERATED ALWAYS")
+        (NamedColumnConstraint
+          (GeneratedColumnConstraint
+            (BinaryExpr :op "Add"
+              (Id :name "a")
+              (NumericLiteral :value "1")))))
+      (ColumnDefinition :flags 36
+        (Name :text "c")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (GeneratedColumnConstraint
+            (BinaryExpr :op "Multiply"
+              (Id :name "a")
+              (NumericLiteral :value "2")))))
+      (ColumnDefinition :flags 100
+        (Name :text "d")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (GeneratedColumnConstraint
+            (BinaryExpr :op "Subtract"
+              (Id :name "a")
+              (NumericLiteral :value "1"))
+            (Id :name "STORED"))))
+      (ColumnDefinition :flags 36
+        (Name :text "e")
+        (Type :name "INTEGER GENERATED ALWAYS")
+        (NamedColumnConstraint
+          (GeneratedColumnConstraint
+            (BinaryExpr :op "Add"
+              (Id :name "a")
+              (NumericLiteral :value "5"))
+            (Id :name "VIRTUAL")))))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #16 statement ok: CREATE TABLE ai1( a INTEGER PRIMARY KEY AUTOINCREMENT, b TE… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "ai1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement true)))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "TEXT")))))"
+`;
+
+exports[`test/examples/create-table.sqllogictest #17 statement ok: CREATE TABLE tc1( a INTEGER, b INTEGER, CONSTRAINT pk PRIMA… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "tc1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER"))
+      (NamedTableConstraint
+        (Name :text "pk")
+        (PrimaryKeyTableConstraint :autoIncrement false :conflictClause "Ignore"
+          (SortedColumn
+            (Id :name "a"))
+          (SortedColumn
+            (Id :name "b"))))
+      (NamedTableConstraint
+        (Name :text "chk1")
+        (CheckTableConstraint :conflictClause "Rollback"
+          (BinaryExpr :op "Greater"
+            (Id :name "a")
+            (NumericLiteral :value "0"))))
+      (NamedTableConstraint
+        (ForeignKeyTableConstraint
+          (IndexedColumn
+            (Name :text "a"))
+          (ForeignKeyClause
+            (Name :text "parent")
+            (IndexedColumn
+              (Name :text "id")))
+          (DeferSubclause :deferrable false))))))"
+`;

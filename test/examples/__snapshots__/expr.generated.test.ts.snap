@@ -1,0 +1,697 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/expr.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEGER, b INTEGER, c INTEGER, d TEXT, e… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "d")
+        (Type :name "TEXT"))
+      (ColumnDefinition :flags 4
+        (Name :text "e")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #2 statement ok: CREATE TABLE t2(x INTEGER, y INTEGER, g INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t2"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "g")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #3 statement ok: SELECT group_concat(d ORDER BY a DESC) FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "group_concat")
+            (Id :name "d")
+            (SortListFunctionCallOrder
+              (SortedColumn :order "Desc"
+                (Id :name "a")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #4 statement ok: SELECT group_concat(DISTINCT d ORDER BY a) FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr :distinctness "Distinct"
+            (Id :name "group_concat")
+            (Id :name "d")
+            (SortListFunctionCallOrder
+              (SortedColumn
+                (Id :name "a")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #5 statement ok: SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY a) FROM… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "percentile_cont")
+            (NumericLiteral :value "0.5")
+            (WithinGroupFunctionCallOrder
+              (Id :name "a"))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #6 statement ok: SELECT group_concat(d ORDER BY a) FILTER (WHERE a > 0) FROM… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "group_concat")
+            (Id :name "d")
+            (SortListFunctionCallOrder
+              (SortedColumn
+                (Id :name "a")))
+            (FunctionTail
+              (BinaryExpr :op "Greater"
+                (Id :name "a")
+                (NumericLiteral :value "0")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #7 statement ok: SELECT group_concat(d ORDER BY a) OVER (PARTITION BY b) FRO… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "group_concat")
+            (Id :name "d")
+            (SortListFunctionCallOrder
+              (SortedColumn
+                (Id :name "a")))
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (Id :name "b"))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #8 statement ok: SELECT count(*) OVER (ORDER BY a) FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a")))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #9 statement ok: SELECT count(*) FILTER (WHERE a > 0) OVER (PARTITION BY b)… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")
+            (FunctionTail
+              (BinaryExpr :op "Greater"
+                (Id :name "a")
+                (NumericLiteral :value "0"))
+              (WindowOver
+                (Window
+                  (Id :name "b"))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #10 statement ok: SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY a) OVER… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "percentile_cont")
+            (NumericLiteral :value "0.5")
+            (WithinGroupFunctionCallOrder
+              (Id :name "a"))
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (Id :name "b"))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #11 statement ok: SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY a) FILTE… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "percentile_cont")
+            (NumericLiteral :value "0.5")
+            (WithinGroupFunctionCallOrder
+              (Id :name "a"))
+            (FunctionTail
+              (BinaryExpr :op "Greater"
+                (Id :name "a")
+                (NumericLiteral :value "0")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #12 statement ok: SELECT (1, 2, 3) FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (ParenthesizedExpr
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #13 statement ok: SELECT x FROM t1 WHERE (a, b) IN (SELECT x, y FROM t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (InSelectExpr :not false
+          (ParenthesizedExpr
+            (Id :name "a")
+            (Id :name "b"))
+          (Select
+            (SelectFrom
+              (ExprResultColumn
+                (Id :name "x"))
+              (ExprResultColumn
+                (Id :name "y"))
+              (FromClause
+                (TableSelectTable
+                  (QualifiedName
+                    (Name :text "t2")))))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #14 statement ok: SELECT x FROM t1 WHERE (a, b) = (1, 2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (ParenthesizedExpr
+            (Id :name "a")
+            (Id :name "b"))
+          (ParenthesizedExpr
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #15 statement ok: SELECT a FROM t1 WHERE d NOT LIKE '%abc%' 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (LikeExpr :not true :op "Like"
+          (Id :name "d")
+          (StringLiteral :value "%abc%"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #16 statement ok: SELECT a FROM t1 WHERE d NOT GLOB 'foo*' 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (LikeExpr :not true :op "Glob"
+          (Id :name "d")
+          (StringLiteral :value "foo*"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #17 statement ok: SELECT a FROM t1 WHERE d NOT REGEXP '[a-z]+' 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (LikeExpr :not true :op "Regexp"
+          (Id :name "d")
+          (StringLiteral :value "[a-z]+"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #18 statement ok: SELECT a FROM t1 WHERE d NOT MATCH 'bar' 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (LikeExpr :not true :op "Match"
+          (Id :name "d")
+          (StringLiteral :value "bar"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #19 statement ok: SELECT a FROM t1 WHERE a IS NOT DISTINCT FROM b 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Is"
+          (Id :name "a")
+          (Id :name "b"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #20 statement ok: SELECT a FROM t1 WHERE a IS DISTINCT FROM b 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "IsNot"
+          (Id :name "a")
+          (Id :name "b"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #21 statement ok: SELECT a FROM t1 WHERE a IN t2(x, y) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (InTableExpr :not false
+          (Id :name "a")
+          (QualifiedName
+            (Name :text "t2"))
+          (Id :name "x")
+          (Id :name "y"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #22 statement ok: SELECT a FROM t1 WHERE a NOT IN t2(x, y) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (InTableExpr :not true
+          (Id :name "a")
+          (QualifiedName
+            (Name :text "t2"))
+          (Id :name "x")
+          (Id :name "y"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #23 statement ok: SELECT a FROM t1 ORDER BY d COLLATE NOCASE 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1")))))
+      (SortedColumn
+        (CollateExpr :collation "NOCASE"
+          (Id :name "d"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #24 statement ok: SELECT a FROM t1 WHERE d COLLATE BINARY = 'foo' 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (CollateExpr :collation "BINARY"
+            (Id :name "d"))
+          (StringLiteral :value "foo"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #25 statement ok: CREATE TRIGGER trig_ignore BEFORE INSERT ON t1 BEGIN SELECT… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "trig_ignore"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (RaiseExpr :resolve "Ignore")))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #26 statement ok: SELECT "123" FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "123"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #27 statement ok: SELECT CURRENT_TIMESTAMP FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (CurrentTimestampLiteral))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #28 statement ok: SELECT CURRENT_DATE, CURRENT_TIME FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (CurrentDateLiteral))
+        (ExprResultColumn
+          (CurrentTimeLiteral))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #29 statement ok: SELECT x'deadbeef' FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (BlobLiteral :bytes #x"deadbeef"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #30 statement ok: SELECT a FROM t1 WHERE a BETWEEN 1 AND 10 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BetweenExpr :not false
+          (Id :name "a")
+          (NumericLiteral :value "1")
+          (NumericLiteral :value "10"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #31 statement ok: SELECT a FROM t1 WHERE a NOT BETWEEN 1 AND 10 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BetweenExpr :not true
+          (Id :name "a")
+          (NumericLiteral :value "1")
+          (NumericLiteral :value "10"))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #32 statement ok: SELECT CASE WHEN a > 0 THEN 'pos' WHEN a < 0 THEN 'neg' ELS… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (CaseExpr
+            (WhenThen
+              (BinaryExpr :op "Greater"
+                (Id :name "a")
+                (NumericLiteral :value "0"))
+              (StringLiteral :value "pos"))
+            (WhenThen
+              (BinaryExpr :op "Less"
+                (Id :name "a")
+                (NumericLiteral :value "0"))
+              (StringLiteral :value "neg"))
+            (StringLiteral :value "zero")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #33 statement ok: SELECT CASE a WHEN 1 THEN 'one' WHEN 2 THEN 'two' END FROM… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (CaseExpr
+            (Id :name "a")
+            (WhenThen
+              (NumericLiteral :value "1")
+              (StringLiteral :value "one"))
+            (WhenThen
+              (NumericLiteral :value "2")
+              (StringLiteral :value "two"))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #34 statement ok: SELECT a || d FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (BinaryExpr :op "Concat"
+            (Id :name "a")
+            (Id :name "d")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #35 statement ok: SELECT a + b * c - d FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (BinaryExpr :op "Subtract"
+            (BinaryExpr :op "Add"
+              (Id :name "a")
+              (BinaryExpr :op "Multiply"
+                (Id :name "b")
+                (Id :name "c")))
+            (Id :name "d")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #36 statement ok: SELECT a & b | c << 2 >> 1 FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (BinaryExpr :op "RightShift"
+            (BinaryExpr :op "LeftShift"
+              (BinaryExpr :op "BitwiseOr"
+                (BinaryExpr :op "BitwiseAnd"
+                  (Id :name "a")
+                  (Id :name "b"))
+                (Id :name "c"))
+              (NumericLiteral :value "2"))
+            (NumericLiteral :value "1")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #37 statement ok: SELECT ~a FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (UnaryExpr :op "BitwiseNot"
+            (Id :name "a")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #38 statement ok: SELECT NOT a FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (UnaryExpr :op "Not"
+            (Id :name "a")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/expr.sqllogictest #39 statement ok: SELECT -a, +b FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (UnaryExpr :op "Negative"
+            (Id :name "a")))
+        (ExprResultColumn
+          (UnaryExpr :op "Positive"
+            (Id :name "b")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;

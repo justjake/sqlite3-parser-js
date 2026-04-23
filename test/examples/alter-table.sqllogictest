@@ -1,0 +1,33 @@
+# ALTER TABLE variants the upstream corpus doesn't exercise.
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER, b INTEGER, CONSTRAINT c1 CHECK (a > 0))
+
+# #330 cmd ::= ALTER TABLE fullname DROP CONSTRAINT nm
+statement ok
+ALTER TABLE t1 DROP CONSTRAINT c1
+
+# #331 cmd ::= ALTER TABLE fullname ALTER kwcolumn_opt nm DROP NOT NULL
+# #405 kwcolumn_opt ::= (empty)
+statement ok
+ALTER TABLE t1 ALTER a DROP NOT NULL
+
+statement ok
+ALTER TABLE t1 ALTER COLUMN a DROP NOT NULL
+
+# #332 cmd ::= ALTER TABLE fullname ALTER kwcolumn_opt nm SET NOT NULL onconf
+statement ok
+ALTER TABLE t1 ALTER b SET NOT NULL
+
+statement ok
+ALTER TABLE t1 ALTER COLUMN b SET NOT NULL ON CONFLICT ROLLBACK
+
+# #333 cmd ::= ALTER TABLE fullname ADD CONSTRAINT nm CHECK LP expr RP onconf
+statement ok
+ALTER TABLE t1 ADD CONSTRAINT c2 CHECK (b > 0) ON CONFLICT ABORT
+
+# #334 cmd ::= ALTER TABLE fullname ADD CHECK LP expr RP onconf
+statement ok
+ALTER TABLE t1 ADD CHECK (a + b > 0) ON CONFLICT FAIL

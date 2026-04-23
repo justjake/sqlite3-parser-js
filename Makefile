@@ -44,7 +44,8 @@ GEN_TARGETS := \
   $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts) \
   generated/current.ts \
   test/readme.generated.test.ts \
-  sqllogictest-corpus
+  sqllogictest-corpus \
+  examples-corpus
 
 # sqllogictest submodule paths.  The corpus has two layers:
 #   * evidence/ — 12 hand-curated per-feature tests from SQLite.
@@ -282,6 +283,33 @@ sqllogictest-corpus:
 	@printf 'warning: %s not initialised; skipping sqllogictest corpus\n' $(SQLLOGICTEST_SUBMODULE) >&2
 	@printf '         run: git submodule update --init %s\n' $(SQLLOGICTEST_SUBMODULE) >&2
 endif
+
+# ---------------------------------------------------------------------------
+# Hand-authored fixtures in sqllogictest format under test/examples/.
+# Each <name>.sqllogictest targets a specific cluster of grammar rules
+# the upstream corpus doesn't reach (see test/examples/expr.sqllogictest
+# for the format — it's the same one the upstream submodule uses).
+# The generated .test.ts files live next to their inputs so they
+# import the driver through the same two-deep relative path.
+# ---------------------------------------------------------------------------
+EXAMPLES_SOURCES := $(wildcard test/examples/*.sqllogictest)
+EXAMPLES_OUTPUTS := $(patsubst test/examples/%.sqllogictest,test/examples/%.generated.test.ts,$(EXAMPLES_SOURCES))
+
+test/examples/%.generated.test.ts: \
+    test/examples/%.sqllogictest \
+    bin/sqllogictest-parser.ts \
+    src/sqllogictest/drivers.ts \
+    src/sqllogictest/public.ts \
+    src/sqllogictest/testparser.ts \
+    src/sqllogictest/ts-test-emitter.ts
+	@mkdir -p $(dir $@)
+	bun bin/sqllogictest-parser.ts --ts \
+	  --ts-driver 'SQLite3ParserTestDriver:../../src/sqllogictest/public.ts' \
+	  $< > $@
+	bun run fmt $@
+
+.PHONY: examples-corpus
+examples-corpus: $(EXAMPLES_OUTPUTS)
 
 # ---------------------------------------------------------------------------
 # AST layer helpers.  The AST code itself is version-agnostic (see

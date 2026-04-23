@@ -1,0 +1,76 @@
+# CREATE TRIGGER arms: INSTEAD OF, UPDATE OF columns, FOR EACH ROW,
+# WHEN predicate, multi-statement body, INDEXED BY / NOT INDEXED in
+# UPDATE inside trigger, RAISE(ROLLBACK|ABORT|FAIL, ...), and the
+# `insert_cmd INTO xfullname idlist_opt select upsert` / `DELETE FROM
+# … tridxby …` trigger-cmd shapes.
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER PRIMARY KEY, b INTEGER, c INTEGER)
+
+statement ok
+CREATE TABLE log(ts TEXT, msg TEXT)
+
+statement ok
+CREATE VIEW v1 AS SELECT * FROM t1
+
+# #294 trigger_time ::= INSTEAD OF
+# #301 foreach_clause ::= FOR EACH ROW
+# #303 when_clause ::= WHEN expr
+# #304 trigger_cmd_list ::= trigger_cmd_list trigger_cmd SEMI
+#   (multi-statement body — the second stmt is the recursive reduction)
+# #309 trigger_cmd ::= insert_cmd INTO xfullname idlist_opt select upsert
+statement ok
+CREATE TRIGGER tr_instead INSTEAD OF INSERT ON v1
+FOR EACH ROW
+WHEN new.a > 0
+BEGIN
+  INSERT INTO t1(a, b) VALUES (new.a, new.b);
+  INSERT INTO log(msg) SELECT 'inserted ' || new.a;
+END
+
+# #299 trigger_event ::= UPDATE OF idlist
+statement ok
+CREATE TRIGGER tr_update_of AFTER UPDATE OF b, c ON t1
+BEGIN
+  INSERT INTO log(msg) VALUES ('b or c changed');
+END
+
+# #306 tridxby ::= INDEXED BY nm
+# #307 tridxby ::= NOT INDEXED
+# #310 trigger_cmd ::= DELETE FROM xfullname tridxby where_opt
+statement ok
+CREATE INDEX t1_b ON t1(b)
+
+statement ok
+CREATE TRIGGER tr_del_indexed BEFORE INSERT ON t1
+BEGIN
+  DELETE FROM t1 INDEXED BY t1_b WHERE b = new.b;
+END
+
+statement ok
+CREATE TRIGGER tr_del_notindexed BEFORE INSERT ON t1
+BEGIN
+  DELETE FROM t1 NOT INDEXED WHERE b = new.b;
+END
+
+# #314 raisetype ::= ROLLBACK (and ABORT — covered already)
+# #316 raisetype ::= FAIL
+statement ok
+CREATE TRIGGER tr_raise_rollback BEFORE INSERT ON t1
+BEGIN
+  SELECT RAISE(ROLLBACK, 'nope');
+END
+
+statement ok
+CREATE TRIGGER tr_raise_fail BEFORE INSERT ON t1
+BEGIN
+  SELECT RAISE(FAIL, 'bad');
+END
+
+statement ok
+CREATE TRIGGER tr_raise_abort BEFORE INSERT ON t1
+BEGIN
+  SELECT RAISE(ABORT, 'abort');
+END

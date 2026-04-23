@@ -1,0 +1,95 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/alter-table.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEGER, b INTEGER, CONSTRAINT c1 CHECK (… 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER"))
+      (NamedTableConstraint
+        (Name :text "c1")
+        (CheckTableConstraint
+          (BinaryExpr :op "Greater"
+            (Id :name "a")
+            (NumericLiteral :value "0")))))))"
+`;
+
+exports[`test/examples/alter-table.sqllogictest #2 statement ok: ALTER TABLE t1 DROP CONSTRAINT c1 1`] = `
+"(CmdList
+  (AlterTableStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (DropConstraintAlterTableBody
+      (Name :text "c1"))))"
+`;
+
+exports[`test/examples/alter-table.sqllogictest #3 statement ok: ALTER TABLE t1 ALTER a DROP NOT NULL 1`] = `
+"(CmdList
+  (AlterTableStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (DropColumnNotNullAlterTableBody
+      (Name :text "a"))))"
+`;
+
+exports[`test/examples/alter-table.sqllogictest #4 statement ok: ALTER TABLE t1 ALTER COLUMN a DROP NOT NULL 1`] = `
+"(CmdList
+  (AlterTableStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (DropColumnNotNullAlterTableBody
+      (Name :text "a"))))"
+`;
+
+exports[`test/examples/alter-table.sqllogictest #5 statement ok: ALTER TABLE t1 ALTER b SET NOT NULL 1`] = `
+"(CmdList
+  (AlterTableStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetColumnNotNullAlterTableBody
+      (Name :text "b"))))"
+`;
+
+exports[`test/examples/alter-table.sqllogictest #6 statement ok: ALTER TABLE t1 ALTER COLUMN b SET NOT NULL ON CONFLICT ROLL… 1`] = `
+"(CmdList
+  (AlterTableStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetColumnNotNullAlterTableBody :onConflict "Rollback"
+      (Name :text "b"))))"
+`;
+
+exports[`test/examples/alter-table.sqllogictest #7 statement ok: ALTER TABLE t1 ADD CONSTRAINT c2 CHECK (b > 0) ON CONFLICT… 1`] = `
+"(CmdList
+  (AlterTableStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (AddConstraintAlterTableBody
+      (NamedTableConstraint
+        (Name :text "c2")
+        (CheckTableConstraint :conflictClause "Abort"
+          (BinaryExpr :op "Greater"
+            (Id :name "b")
+            (NumericLiteral :value "0")))))))"
+`;
+
+exports[`test/examples/alter-table.sqllogictest #8 statement ok: ALTER TABLE t1 ADD CHECK (a + b > 0) ON CONFLICT FAIL 1`] = `
+"(CmdList
+  (AlterTableStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (AddConstraintAlterTableBody
+      (NamedTableConstraint
+        (CheckTableConstraint :conflictClause "Fail"
+          (BinaryExpr :op "Greater"
+            (BinaryExpr :op "Add"
+              (Id :name "a")
+              (Id :name "b"))
+            (NumericLiteral :value "0")))))))"
+`;

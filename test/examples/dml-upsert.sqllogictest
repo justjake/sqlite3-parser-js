@@ -1,0 +1,57 @@
+# INSERT DEFAULT VALUES, UPSERT arms, RETURNING, setlist with
+# (col1, col2) = (expr1, expr2) tuple-assignment shapes.
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER PRIMARY KEY, b INTEGER, c INTEGER)
+
+# #184 cmd ::= with insert_cmd INTO xfullname idlist_opt DEFAULT VALUES returning
+statement ok
+INSERT INTO t1 DEFAULT VALUES
+
+statement ok
+INSERT INTO t1(a, b) DEFAULT VALUES
+
+# #191 returning ::= RETURNING selcollist
+# #176 where_opt_ret ::= RETURNING selcollist (DELETE / UPDATE with RETURNING)
+statement ok
+INSERT INTO t1(b, c) VALUES (1, 2) RETURNING a, b
+
+statement ok
+DELETE FROM t1 WHERE a = 1 RETURNING a
+
+statement ok
+UPDATE t1 SET b = 5 WHERE a = 1 RETURNING a, b
+
+# #188 upsert ::= ON CONFLICT LP sortlist RP where_opt DO NOTHING upsert
+# Two chained ON CONFLICT targets — the second upsert is the second
+# clause in the chain.
+statement ok
+INSERT INTO t1(a, b) VALUES (1, 2)
+  ON CONFLICT (a) DO NOTHING
+  ON CONFLICT (b) DO NOTHING
+
+# #189 upsert ::= ON CONFLICT DO NOTHING returning
+# Untargeted DO NOTHING with RETURNING.
+statement ok
+INSERT INTO t1(a, b) VALUES (1, 2)
+  ON CONFLICT DO NOTHING
+  RETURNING a
+
+# #190 upsert ::= ON CONFLICT DO UPDATE SET setlist where_opt returning
+# Untargeted DO UPDATE.
+statement ok
+INSERT INTO t1(a, b) VALUES (1, 2)
+  ON CONFLICT DO UPDATE SET b = b + 1 WHERE a > 0
+  RETURNING a, b
+
+# #180 setlist ::= setlist COMMA LP idlist RP EQ expr
+# #182 setlist ::= LP idlist RP EQ expr
+# Tuple-assignment in UPDATE SET: `SET (col1, col2) = (e1, e2)` and
+# followed by comma chaining.
+statement ok
+UPDATE t1 SET (b, c) = (10, 20) WHERE a = 1
+
+statement ok
+UPDATE t1 SET a = 1, (b, c) = (2, 3) WHERE a = 1

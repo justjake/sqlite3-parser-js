@@ -1,0 +1,346 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/window.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEGER, b INTEGER, g INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "g")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/window.sqllogictest #2 statement ok: SELECT a, sum(b) OVER w FROM t1 WINDOW w AS (ORDER BY a) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (NameOver
+                (Name :text "w")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (WindowDef
+          (Name :text "w")
+          (Window
+            (SortedColumn
+              (Id :name "a"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #3 statement ok: SELECT a, sum(b) OVER w1, avg(b) OVER w2 FROM t1 WINDOW w1… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (NameOver
+                (Name :text "w1")))))
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "avg")
+            (Id :name "b")
+            (FunctionTail
+              (NameOver
+                (Name :text "w2")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (WindowDef
+          (Name :text "w1")
+          (Window
+            (Id :name "g")))
+        (WindowDef
+          (Name :text "w2")
+          (Window
+            (SortedColumn
+              (Id :name "a"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #4 statement ok: SELECT a, sum(b) OVER w_inherit FROM t1 WINDOW w_base AS (O… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (NameOver
+                (Name :text "w_inherit")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (WindowDef
+          (Name :text "w_base")
+          (Window
+            (SortedColumn
+              (Id :name "a"))))
+        (WindowDef
+          (Name :text "w_inherit")
+          (Window
+            (Name :text "w_base")
+            (Id :name "g")))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #5 statement ok: SELECT a, sum(b) OVER w_ord FROM t1 WINDOW w_base2 AS (PART… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (NameOver
+                (Name :text "w_ord")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (WindowDef
+          (Name :text "w_base2")
+          (Window
+            (Id :name "g")))
+        (WindowDef
+          (Name :text "w_ord")
+          (Window
+            (Name :text "w_base2")
+            (SortedColumn :order "Desc"
+              (Id :name "a"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #6 statement ok: SELECT sum(b) OVER (ORDER BY a RANGE UNBOUNDED PRECEDING) F… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Range"
+                    (UnboundedPrecedingFrameBound)))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #7 statement ok: SELECT sum(b) OVER (ORDER BY a ROWS 3 PRECEDING) FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Rows"
+                    (PrecedingFrameBound
+                      (NumericLiteral :value "3"))))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #8 statement ok: SELECT sum(b) OVER (ORDER BY a GROUPS CURRENT ROW) FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Groups"
+                    (CurrentRowFrameBound)))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #9 statement ok: SELECT sum(b) OVER ( ORDER BY a ROWS BETWEEN 5 PRECEDING AN… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Rows"
+                    (PrecedingFrameBound
+                      (NumericLiteral :value "5"))
+                    (FollowingFrameBound
+                      (NumericLiteral :value "5"))))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #10 statement ok: SELECT sum(b) OVER ( ORDER BY a RANGE BETWEEN UNBOUNDED PRE… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Range"
+                    (UnboundedPrecedingFrameBound)
+                    (UnboundedFollowingFrameBound)))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #11 statement ok: SELECT sum(b) OVER ( ORDER BY a ROWS BETWEEN UNBOUNDED PREC… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Rows" :exclude "NoOthers"
+                    (UnboundedPrecedingFrameBound)
+                    (CurrentRowFrameBound)))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #12 statement ok: SELECT sum(b) OVER ( ORDER BY a ROWS BETWEEN UNBOUNDED PREC… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Rows" :exclude "CurrentRow"
+                    (UnboundedPrecedingFrameBound)
+                    (CurrentRowFrameBound)))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #13 statement ok: SELECT sum(b) OVER ( ORDER BY a ROWS BETWEEN UNBOUNDED PREC… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Rows" :exclude "Group"
+                    (UnboundedPrecedingFrameBound)
+                    (CurrentRowFrameBound)))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/window.sqllogictest #14 statement ok: SELECT sum(b) OVER ( ORDER BY a ROWS BETWEEN UNBOUNDED PREC… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (WindowOver
+                (Window
+                  (SortedColumn
+                    (Id :name "a"))
+                  (FrameClause :mode "Rows" :exclude "Ties"
+                    (UnboundedPrecedingFrameBound)
+                    (CurrentRowFrameBound)))))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;

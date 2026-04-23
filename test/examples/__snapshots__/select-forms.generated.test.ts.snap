@@ -1,0 +1,240 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/select-forms.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEGER, b INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #2 statement ok: CREATE TABLE t2(x INTEGER, y INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t2"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #3 statement ok: CREATE INDEX t1_a ON t1(a) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1_a"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "a"))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #4 statement ok: SELECT t1.* FROM t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (TableStarResultColumn
+          (Name :text "t1"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #5 statement ok: SELECT t1.*, t2.x FROM t1, t2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (TableStarResultColumn
+          (Name :text "t1"))
+        (ExprResultColumn
+          (QualifiedExpr
+            (Name :text "t2")
+            (Name :text "x")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1")))
+          (JoinedSelectTable
+            (CommaJoinOperator)
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t2")))))))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #6 statement ok: SELECT * FROM json_each('[1, 2, 3]') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (StarResultColumn)
+        (FromClause
+          (TableCallSelectTable
+            (QualifiedName
+              (Name :text "json_each"))
+            (StringLiteral :value "[1, 2, 3]")))))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #7 statement ok: SELECT * FROM json_tree('{}', '$') AS jt 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (StarResultColumn)
+        (FromClause
+          (TableCallSelectTable
+            (QualifiedName
+              (Name :text "json_tree"))
+            (StringLiteral :value "{}")
+            (StringLiteral :value "$")
+            (AsAs
+              (Name :text "jt"))))))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #8 statement ok: CREATE INDEX main.ix_t1_b ON t1(b) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "main")
+      (Name :text "ix_t1_b"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "b"))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #9 statement ok: INSERT INTO t1 AS alias1(a, b) VALUES (1, 2) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1")
+      (Name :text "alias1"))
+    (Name :text "a")
+    (Name :text "b")
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")))))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #10 statement ok: INSERT INTO main.t1 AS alias2(a, b) VALUES (3, 4) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "main")
+      (Name :text "t1")
+      (Name :text "alias2"))
+    (Name :text "a")
+    (Name :text "b")
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #12 statement ok: SELECT a FROM t1 INDEXED BY t1_a WHERE a > 0 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))
+            (IndexedByIndexed
+              (Name :text "t1_a"))))
+        (BinaryExpr :op "Greater"
+          (Id :name "a")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #13 statement ok: SELECT a FROM t1 ORDER BY b ASC NULLS FIRST 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1")))))
+      (SortedColumn :order "Asc" :nulls "First"
+        (Id :name "b")))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #14 statement ok: SELECT a FROM t1 ORDER BY b DESC NULLS LAST 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1")))))
+      (SortedColumn :order "Desc" :nulls "Last"
+        (Id :name "b")))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #15 statement ok: SELECT a FROM t1 LIMIT 5, 10 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1")))))
+      (Limit
+        (NumericLiteral :value "10")
+        (NumericLiteral :value "5")))))"
+`;
+
+exports[`test/examples/select-forms.sqllogictest #16 statement ok: SELECT a, sum(b) OVER w FROM t1 GROUP BY a HAVING a > 0 WIN… 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "a"))
+        (ExprResultColumn
+          (FunctionCallExpr
+            (Id :name "sum")
+            (Id :name "b")
+            (FunctionTail
+              (NameOver
+                (Name :text "w")))))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (Id :name "a")
+        (BinaryExpr :op "Greater"
+          (Id :name "a")
+          (NumericLiteral :value "0"))
+        (WindowDef
+          (Name :text "w")
+          (Window
+            (SortedColumn
+              (Id :name "a"))))))))"
+`;

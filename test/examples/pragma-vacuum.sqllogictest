@@ -1,0 +1,66 @@
+# PRAGMA variants, VACUUM INTO, REINDEX, ANALYZE, ATTACH … KEY.
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER)
+
+# #276 cmd ::= VACUUM nm vinto
+# #278 vinto ::= (empty)
+statement ok
+VACUUM main
+
+# VACUUM with INTO target — existing tests may cover VACUUM INTO, but
+# these exercise the `VACUUM <db>` variant followed by `INTO <expr>`.
+statement ok
+VACUUM main INTO 'backup.db'
+
+# #279 cmd ::= PRAGMA fullname (bare, no argument)
+statement ok
+PRAGMA foreign_keys
+
+# #282 cmd ::= PRAGMA fullname EQ minus_num
+# #283 cmd ::= PRAGMA fullname LP minus_num RP
+# #288 plus_num ::= PLUS INTEGER|FLOAT
+# #290 minus_num ::= MINUS INTEGER|FLOAT
+statement ok
+PRAGMA cache_size = -2000
+
+statement ok
+PRAGMA cache_size(-4000)
+
+statement ok
+PRAGMA cache_size = +4000
+
+# #285 nmnum ::= ON
+# #286 nmnum ::= DELETE
+# #287 nmnum ::= DEFAULT
+# #401 nmnum ::= plus_num
+statement ok
+PRAGMA foreign_keys = ON
+
+statement ok
+PRAGMA secure_delete = DELETE
+
+statement ok
+PRAGMA encoding = DEFAULT
+
+statement ok
+PRAGMA busy_timeout = +5000
+
+# #321 key_opt ::= KEY expr
+# ATTACH with KEY is the only grammar path that triggers key_opt.
+statement ok
+ATTACH DATABASE 'other.db' AS other KEY 'secretpass'
+
+# #322 cmd ::= REINDEX (bare)
+statement ok
+REINDEX
+
+# #324 cmd ::= ANALYZE (bare)
+statement ok
+ANALYZE
+
+# #404 database_kw_opt ::= (empty) — exercise DETACH without DATABASE keyword.
+statement ok
+DETACH other

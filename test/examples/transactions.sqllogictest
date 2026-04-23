@@ -1,0 +1,38 @@
+# Transaction control rules: trans_opt (TRANSACTION <name>) and
+# transtype (DEFERRED / IMMEDIATE / EXCLUSIVE).
+
+hash-threshold 8
+
+# #8 trans_opt ::= TRANSACTION nm
+statement ok
+BEGIN TRANSACTION tx1
+
+statement ok
+COMMIT TRANSACTION tx1
+
+statement ok
+BEGIN TRANSACTION tx2
+
+statement ok
+ROLLBACK TRANSACTION tx2
+
+# #10 transtype ::= DEFERRED
+statement ok
+BEGIN DEFERRED TRANSACTION
+
+statement ok
+COMMIT
+
+# #11 transtype ::= IMMEDIATE
+statement ok
+BEGIN IMMEDIATE TRANSACTION
+
+statement ok
+COMMIT
+
+# #12 transtype ::= EXCLUSIVE
+statement ok
+BEGIN EXCLUSIVE TRANSACTION
+
+statement ok
+COMMIT

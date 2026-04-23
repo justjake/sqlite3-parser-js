@@ -1,0 +1,194 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/dml-upsert.sqllogictest #1 statement ok: CREATE TABLE t1(a INTEGER PRIMARY KEY, b INTEGER, c INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement false)))
+      (ColumnDefinition :flags 4
+        (Name :text "b")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #2 statement ok: INSERT INTO t1 DEFAULT VALUES 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (DefaultValuesInsertBody)))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #3 statement ok: INSERT INTO t1(a, b) DEFAULT VALUES 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (Name :text "a")
+    (Name :text "b")
+    (DefaultValuesInsertBody)))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #4 statement ok: INSERT INTO t1(b, c) VALUES (1, 2) RETURNING a, b 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (Name :text "b")
+    (Name :text "c")
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")))))
+    (ExprResultColumn
+      (Id :name "a"))
+    (ExprResultColumn
+      (Id :name "b"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #5 statement ok: DELETE FROM t1 WHERE a = 1 RETURNING a 1`] = `
+"(CmdList
+  (DeleteStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (BinaryExpr :op "Equals"
+      (Id :name "a")
+      (NumericLiteral :value "1"))
+    (ExprResultColumn
+      (Id :name "a"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #6 statement ok: UPDATE t1 SET b = 5 WHERE a = 1 RETURNING a, b 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "b")
+      (NumericLiteral :value "5"))
+    (BinaryExpr :op "Equals"
+      (Id :name "a")
+      (NumericLiteral :value "1"))
+    (ExprResultColumn
+      (Id :name "a"))
+    (ExprResultColumn
+      (Id :name "b"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #7 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT (a) DO NOTHI… 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (Name :text "a")
+    (Name :text "b")
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2"))))
+      (Upsert
+        (UpsertIndex
+          (SortedColumn
+            (Id :name "a")))
+        (NothingUpsertDo)
+        (Upsert
+          (UpsertIndex
+            (SortedColumn
+              (Id :name "b")))
+          (NothingUpsertDo))))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #8 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT DO NOTHING R… 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (Name :text "a")
+    (Name :text "b")
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2"))))
+      (Upsert
+        (NothingUpsertDo)))
+    (ExprResultColumn
+      (Id :name "a"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #9 statement ok: INSERT INTO t1(a, b) VALUES (1, 2) ON CONFLICT DO UPDATE SE… 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (Name :text "a")
+    (Name :text "b")
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2"))))
+      (Upsert
+        (SetUpsertDo
+          (SetAssignment
+            (Name :text "b")
+            (BinaryExpr :op "Add"
+              (Id :name "b")
+              (NumericLiteral :value "1")))
+          (BinaryExpr :op "Greater"
+            (Id :name "a")
+            (NumericLiteral :value "0")))))
+    (ExprResultColumn
+      (Id :name "a"))
+    (ExprResultColumn
+      (Id :name "b"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #10 statement ok: UPDATE t1 SET (b, c) = (10, 20) WHERE a = 1 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "b")
+      (Name :text "c")
+      (ParenthesizedExpr
+        (NumericLiteral :value "10")
+        (NumericLiteral :value "20")))
+    (BinaryExpr :op "Equals"
+      (Id :name "a")
+      (NumericLiteral :value "1"))))"
+`;
+
+exports[`test/examples/dml-upsert.sqllogictest #11 statement ok: UPDATE t1 SET a = 1, (b, c) = (2, 3) WHERE a = 1 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "a")
+      (NumericLiteral :value "1"))
+    (SetAssignment
+      (Name :text "b")
+      (Name :text "c")
+      (ParenthesizedExpr
+        (NumericLiteral :value "2")
+        (NumericLiteral :value "3")))
+    (BinaryExpr :op "Equals"
+      (Id :name "a")
+      (NumericLiteral :value "1"))))"
+`;

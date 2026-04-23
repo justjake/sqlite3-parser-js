@@ -1,0 +1,55 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`test/examples/transactions.sqllogictest #1 statement ok: BEGIN TRANSACTION tx1 1`] = `
+"(CmdList
+  (BeginStmt
+    (Name :text "tx1")))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #2 statement ok: COMMIT TRANSACTION tx1 1`] = `
+"(CmdList
+  (CommitStmt
+    (Name :text "tx1")))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #3 statement ok: BEGIN TRANSACTION tx2 1`] = `
+"(CmdList
+  (BeginStmt
+    (Name :text "tx2")))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #4 statement ok: ROLLBACK TRANSACTION tx2 1`] = `
+"(CmdList
+  (RollbackStmt
+    (Name :text "tx2")))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #5 statement ok: BEGIN DEFERRED TRANSACTION 1`] = `
+"(CmdList
+  (BeginStmt :tx "Deferred"))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #6 statement ok: COMMIT 1`] = `
+"(CmdList
+  (CommitStmt))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #7 statement ok: BEGIN IMMEDIATE TRANSACTION 1`] = `
+"(CmdList
+  (BeginStmt :tx "Immediate"))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #8 statement ok: COMMIT 1`] = `
+"(CmdList
+  (CommitStmt))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #9 statement ok: BEGIN EXCLUSIVE TRANSACTION 1`] = `
+"(CmdList
+  (BeginStmt :tx "Exclusive"))"
+`;
+
+exports[`test/examples/transactions.sqllogictest #10 statement ok: COMMIT 1`] = `
+"(CmdList
+  (CommitStmt))"
+`;

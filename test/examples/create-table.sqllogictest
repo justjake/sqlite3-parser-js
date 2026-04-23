@@ -1,0 +1,151 @@
+# CREATE TABLE covers the long tail of column-constraint rules
+# (ccons), table-constraint rules (tcons), FK reference-action rules
+# (refact / refarg), defer_subclause, init_deferred_pred_opt,
+# autoinc, generated columns, typetoken variants, table_option (WITHOUT
+# ROWID / STRICT), onconf resolvetype.
+
+hash-threshold 8
+
+# #26 table_option_set ::= table_option_set COMMA table_option
+# #27 table_option ::= WITHOUT nm
+# #28 table_option ::= nm (STRICT)
+# #394 table_option_set ::= table_option
+statement ok
+CREATE TABLE to1(a INTEGER PRIMARY KEY) WITHOUT ROWID, STRICT
+
+statement ok
+CREATE TABLE to2(a INTEGER) STRICT
+
+# #34 typetoken ::= (empty) — column with no type
+statement ok
+CREATE TABLE notype(a, b, c)
+
+# #37 typetoken ::= typename LP signed COMMA signed RP — DECIMAL(10,2)
+# #39 typename ::= typename (two-word type, e.g. UNSIGNED BIG INT)
+# #395 signed ::= plus_num
+# #396 signed ::= minus_num
+statement ok
+CREATE TABLE types1(
+  a DECIMAL(10, 2),
+  b NUMERIC(+5, -2),
+  c UNSIGNED BIG INT
+)
+
+# #42 ccons ::= CONSTRAINT nm (named column constraint)
+# #47 ccons ::= DEFAULT <signed-number>
+# #48 ccons ::= NULL onconf
+# #55 ccons ::= COLLATE ids
+statement ok
+CREATE TABLE ct1(
+  a INTEGER CONSTRAINT pk_a PRIMARY KEY,
+  b INTEGER NOT NULL DEFAULT 0,
+  c INTEGER CONSTRAINT c_null NULL ON CONFLICT IGNORE,
+  d TEXT COLLATE NOCASE
+)
+
+# #44 ccons ::= DEFAULT LP expr RP
+# #45 ccons ::= DEFAULT PLUS term
+# #46 ccons ::= DEFAULT MINUS term
+statement ok
+CREATE TABLE ct2(
+  a INTEGER DEFAULT (1 + 2),
+  b INTEGER DEFAULT +5,
+  c INTEGER DEFAULT -5
+)
+
+# #52 ccons ::= CHECK LP expr RP
+statement ok
+CREATE TABLE ct3(
+  a INTEGER CHECK (a > 0)
+)
+
+# #53 ccons ::= REFERENCES nm eidlist_opt refargs
+# #64 refarg ::= MATCH nm
+# #65 refarg ::= ON INSERT refact (not actually supported by SQLite's action table but parsed)
+# #67 refarg ::= ON UPDATE refact
+# #68 refact ::= SET NULL
+# #69 refact ::= SET DEFAULT
+# #71 refact ::= RESTRICT
+# #72 refact ::= NO ACTION
+statement ok
+CREATE TABLE parent(id INTEGER PRIMARY KEY)
+
+statement ok
+CREATE TABLE fk1(
+  x INTEGER REFERENCES parent(id)
+    MATCH FULL
+    ON INSERT SET NULL
+    ON UPDATE SET DEFAULT
+    ON DELETE RESTRICT
+)
+
+statement ok
+CREATE TABLE fk2(
+  x INTEGER REFERENCES parent(id) ON DELETE NO ACTION
+)
+
+# #54 ccons ::= defer_subclause
+# #73 defer_subclause ::= NOT DEFERRABLE init_deferred_pred_opt
+# #74 defer_subclause ::= DEFERRABLE init_deferred_pred_opt
+# #75 init_deferred_pred_opt ::= (empty)
+# #76 init_deferred_pred_opt ::= INITIALLY DEFERRED
+# #77 init_deferred_pred_opt ::= INITIALLY IMMEDIATE
+statement ok
+CREATE TABLE fk3(
+  x INTEGER REFERENCES parent(id) NOT DEFERRABLE
+)
+
+statement ok
+CREATE TABLE fk4(
+  x INTEGER REFERENCES parent(id) DEFERRABLE
+)
+
+statement ok
+CREATE TABLE fk5(
+  x INTEGER REFERENCES parent(id) DEFERRABLE INITIALLY DEFERRED
+)
+
+statement ok
+CREATE TABLE fk6(
+  x INTEGER REFERENCES parent(id) DEFERRABLE INITIALLY IMMEDIATE
+)
+
+# #56 ccons ::= GENERATED ALWAYS AS generated
+# #57 ccons ::= AS generated
+# #58 generated ::= LP expr RP
+# #59 generated ::= LP expr RP ID (VIRTUAL / STORED)
+statement ok
+CREATE TABLE gen1(
+  a INTEGER,
+  b INTEGER GENERATED ALWAYS AS (a + 1),
+  c INTEGER AS (a * 2),
+  d INTEGER AS (a - 1) STORED,
+  e INTEGER GENERATED ALWAYS AS (a + 5) VIRTUAL
+)
+
+# #61 autoinc ::= AUTOINCR
+statement ok
+CREATE TABLE ai1(
+  a INTEGER PRIMARY KEY AUTOINCREMENT,
+  b TEXT
+)
+
+# #83 tcons ::= CONSTRAINT nm (named table constraint)
+# #86 tcons ::= CHECK LP expr RP onconf
+# #89 defer_subclause_opt ::= defer_subclause
+# #91 onconf ::= ON CONFLICT resolvetype
+# #94 resolvetype ::= IGNORE
+# #397 tconscomma ::= (empty)  (fires when a named constraint has no
+#                               trailing comma before the next constraint)
+# #398 resolvetype ::= raisetype
+statement ok
+CREATE TABLE tc1(
+  a INTEGER,
+  b INTEGER,
+  CONSTRAINT pk PRIMARY KEY (a, b) ON CONFLICT IGNORE,
+  CONSTRAINT chk1 CHECK (a > 0) ON CONFLICT ROLLBACK,
+  FOREIGN KEY (a) REFERENCES parent(id) NOT DEFERRABLE
+)
+
+# #330 cmd ::= ALTER TABLE fullname DROP CONSTRAINT nm — in create-table block for adjacency
+# handled in alter-table.sqllogictest

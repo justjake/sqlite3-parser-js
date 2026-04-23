@@ -1,0 +1,110 @@
+# Window functions: every permutation of windowdefn / PARTITION BY /
+# ORDER BY / frame_opt / RANGE|ROWS|GROUPS frame mode / BETWEEN /
+# UNBOUNDED / CURRENT ROW / PRECEDING / FOLLOWING / EXCLUDE.
+
+hash-threshold 8
+
+statement ok
+CREATE TABLE t1(a INTEGER, b INTEGER, g INTEGER)
+
+# #351 windowdefn_list ::= windowdefn
+# #353 windowdefn ::= nm AS LP window RP
+# #359 window ::= nm frame_opt (window reference + frame)
+# #379 window_clause ::= WINDOW windowdefn_list
+# #384 over_clause ::= OVER nm (named window)
+statement ok
+SELECT a, sum(b) OVER w FROM t1 WINDOW w AS (ORDER BY a)
+
+# #352 windowdefn_list ::= windowdefn_list COMMA windowdefn
+# Multiple windows in one WINDOW clause.
+statement ok
+SELECT a,
+  sum(b) OVER w1,
+  avg(b) OVER w2
+FROM t1
+WINDOW
+  w1 AS (PARTITION BY g),
+  w2 AS (ORDER BY a)
+
+# #355 window ::= nm PARTITION BY nexprlist orderby_opt frame_opt
+# A named window that inherits from another and adds PARTITION BY.
+statement ok
+SELECT a, sum(b) OVER w_inherit FROM t1
+WINDOW
+  w_base AS (ORDER BY a),
+  w_inherit AS (w_base PARTITION BY g)
+
+# #357 window ::= nm ORDER BY sortlist frame_opt (inherit + ORDER BY)
+statement ok
+SELECT a, sum(b) OVER w_ord FROM t1
+WINDOW
+  w_base2 AS (PARTITION BY g),
+  w_ord AS (w_base2 ORDER BY a DESC)
+
+# #361 frame_opt ::= range_or_rows frame_bound_s frame_exclude_opt
+#   Single-bound frame (implicit BETWEEN <bound> AND CURRENT ROW).
+# #367 frame_bound_s ::= UNBOUNDED PRECEDING
+# #373 frame_exclude_opt ::= (empty)
+# #363 range_or_rows ::= RANGE
+statement ok
+SELECT sum(b) OVER (ORDER BY a RANGE UNBOUNDED PRECEDING) FROM t1
+
+# #364 range_or_rows ::= ROWS
+# #366 frame_bound_s ::= frame_bound
+# #370 frame_bound ::= expr PRECEDING
+statement ok
+SELECT sum(b) OVER (ORDER BY a ROWS 3 PRECEDING) FROM t1
+
+# #365 range_or_rows ::= GROUPS
+# #371 frame_bound ::= CURRENT ROW (as frame_bound; shared with frame_exclude)
+statement ok
+SELECT sum(b) OVER (ORDER BY a GROUPS CURRENT ROW) FROM t1
+
+# #362 frame_opt ::= range_or_rows BETWEEN frame_bound_s AND frame_bound_e frame_exclude_opt
+# #368 frame_bound_e ::= frame_bound
+# #369 frame_bound_e ::= UNBOUNDED FOLLOWING
+# #372 frame_bound ::= expr FOLLOWING
+statement ok
+SELECT sum(b) OVER (
+  ORDER BY a
+  ROWS BETWEEN 5 PRECEDING AND 5 FOLLOWING
+) FROM t1
+
+statement ok
+SELECT sum(b) OVER (
+  ORDER BY a
+  RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+) FROM t1
+
+# #374 frame_exclude_opt ::= EXCLUDE frame_exclude
+# #375 frame_exclude ::= NO OTHERS
+# #376 frame_exclude ::= CURRENT ROW
+# #377 frame_exclude ::= GROUP
+# #378 frame_exclude ::= TIES
+statement ok
+SELECT sum(b) OVER (
+  ORDER BY a
+  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  EXCLUDE NO OTHERS
+) FROM t1
+
+statement ok
+SELECT sum(b) OVER (
+  ORDER BY a
+  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  EXCLUDE CURRENT ROW
+) FROM t1
+
+statement ok
+SELECT sum(b) OVER (
+  ORDER BY a
+  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  EXCLUDE GROUP
+) FROM t1
+
+statement ok
+SELECT sum(b) OVER (
+  ORDER BY a
+  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  EXCLUDE TIES
+) FROM t1
