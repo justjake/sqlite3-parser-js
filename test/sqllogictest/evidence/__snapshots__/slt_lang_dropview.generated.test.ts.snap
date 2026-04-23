@@ -1,0 +1,159 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #1 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) ) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "VARCHAR"
+          (MaxSizeTypeSize
+            (NumericLiteral :value "8")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #2 statement ok: INSERT INTO t1 VALUES(1,'true') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (StringLiteral :value "true")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #3 statement ok: INSERT INTO t1 VALUES(0,'false') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "0")
+            (StringLiteral :value "false")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #4 statement ok: INSERT INTO t1 VALUES(NULL,'NULL') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NullLiteral)
+            (StringLiteral :value "NULL")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #5 statement ok: CREATE INDEX t1i1 ON t1(x) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1i1"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "x"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #6 statement ok: CREATE VIEW view1 AS SELECT x FROM t1 WHERE x>0 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "view1"))
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Greater"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #7 statement ok: DROP VIEW view1 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "view1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #8 statement error: DROP VIEW view1 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "view1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #9 statement error: DROP VIEW viewX 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "viewX"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #10 statement ok: CREATE VIEW view2 AS SELECT x FROM t1 WHERE x=0 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "view2"))
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #11 query I rowsort label-0: SELECT x FROM view2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "view2"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #12 statement ok: DROP VIEW view2 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "view2"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_dropview.test #13 query I rowsort label-0: SELECT x FROM t1 WHERE x=0 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;

@@ -1,0 +1,301 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #1 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) ) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "VARCHAR"
+          (MaxSizeTypeSize
+            (NumericLiteral :value "8")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #2 statement ok: INSERT INTO t1 VALUES(1,'true') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (StringLiteral :value "true")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #3 statement ok: INSERT INTO t1 VALUES(0,'false') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "0")
+            (StringLiteral :value "false")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #4 statement ok: INSERT INTO t1 VALUES(NULL,'NULL') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NullLiteral)
+            (StringLiteral :value "NULL")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #5 statement ok: CREATE INDEX t1i1 ON t1(x) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1i1"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "x"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #6 statement ok: CREATE VIEW view1 AS SELECT x FROM t1 WHERE x>0 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "view1"))
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Greater"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #7 statement error: CREATE VIEW view1 AS SELECT x FROM t1 WHERE x>0 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "view1"))
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Greater"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #8 query I rowsort label-0: SELECT x FROM t1 WHERE x>0 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Greater"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #9 query I rowsort label-0: SELECT x FROM view1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "view1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #10 statement ok: CREATE TEMP VIEW view2 AS SELECT x FROM t1 WHERE x>0 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary true :ifNotExists false
+    (QualifiedName
+      (Name :text "view2"))
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Greater"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #11 statement ok: CREATE TEMPORARY VIEW view3 AS SELECT x FROM t1 WHERE x>0 1`] = `
+"(CmdList
+  (CreateViewStmt :temporary true :ifNotExists false
+    (QualifiedName
+      (Name :text "view3"))
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Greater"
+          (Id :name "x")
+          (NumericLiteral :value "0"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #12 statement error: DELETE FROM view1 WHERE x>0 1`] = `
+"(CmdList
+  (DeleteStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #13 statement ok: DELETE FROM view1 WHERE x>0 1`] = `
+"(CmdList
+  (DeleteStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #14 statement error: INSERT INTO view1 VALUES(2,'unknown') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "2")
+            (StringLiteral :value "unknown")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #15 statement error: UPDATE view1 SET x=2 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "2"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #16 statement ok: UPDATE view1 SET x=2 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "2"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #17 statement error: DELETE FROM view1 WHERE x>0 1`] = `
+"(CmdList
+  (DeleteStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #18 statement error: INSERT INTO view1 VALUES(2,'unknown') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "2")
+            (StringLiteral :value "unknown")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #19 statement error: INSERT OR REPLACE INTO view1 VALUES(2,'unknown') 1`] = `
+"(CmdList
+  (InsertStmt :orConflict "Replace"
+    (QualifiedName
+      (Name :text "view1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "2")
+            (StringLiteral :value "unknown")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #20 statement error: UPDATE view1 SET x=2 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "view1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "2"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #21 statement ok: DROP VIEW view1 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "view1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #22 statement ok: DROP VIEW view2 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "view2"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #23 statement ok: DROP VIEW view3 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "view3"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #24 statement error: DROP VIEW view1 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "view1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test #25 statement error: DROP VIEW viewX 1`] = `
+"(CmdList
+  (DropViewStmt :ifExists false
+    (QualifiedName
+      (Name :text "viewX"))))"
+`;

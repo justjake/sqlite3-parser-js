@@ -1,0 +1,3065 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #1 query I nosort: SELECT 1 IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #2 query I nosort: SELECT 1 IN (2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #3 query I nosort: SELECT 1 IN (2,3,4,5,6,7,8,9) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NumericLiteral :value "5")
+            (NumericLiteral :value "6")
+            (NumericLiteral :value "7")
+            (NumericLiteral :value "8")
+            (NumericLiteral :value "9")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #4 query I nosort: SELECT 1 NOT IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #5 query I nosort: SELECT 1 NOT IN (2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #6 query I nosort: SELECT 1 NOT IN (2,3,4,5,6,7,8,9) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NumericLiteral :value "5")
+            (NumericLiteral :value "6")
+            (NumericLiteral :value "7")
+            (NumericLiteral :value "8")
+            (NumericLiteral :value "9")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #7 query I nosort: SELECT null IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #8 query I nosort: SELECT null NOT IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #9 statement ok: CREATE TABLE t1(x INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #10 query I nosort label-1: SELECT 1 IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #11 query I nosort label-1: SELECT 1 IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #12 query I nosort label-2: SELECT 1 NOT IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #13 query I nosort label-2: SELECT 1 NOT IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #14 query I nosort label-3: SELECT null IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #15 query I nosort label-3: SELECT null IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #16 query I nosort label-4: SELECT null NOT IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #17 query I nosort label-4: SELECT null NOT IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #18 statement ok: CREATE TABLE t2(y INTEGER PRIMARY KEY) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t2"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "y")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement false))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #19 query I nosort label-5: SELECT 1 IN t2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t2"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #20 query I nosort label-5: SELECT 1 IN (SELECT * FROM t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t2"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #21 query I nosort label-6: SELECT 1 NOT IN t2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t2"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #22 query I nosort label-6: SELECT 1 NOT IN (SELECT * FROM t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t2"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #23 query I nosort label-7: SELECT null IN t2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t2"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #24 query I nosort label-7: SELECT null IN (SELECT * FROM t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t2"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #25 query I nosort label-8: SELECT null NOT IN t2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t2"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #26 query I nosort label-8: SELECT null NOT IN (SELECT * FROM t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t2"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #27 statement ok: CREATE TABLE t3(z INTEGER UNIQUE) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t3"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 12
+        (Name :text "z")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (UniqueColumnConstraint))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #28 query I nosort label-9: SELECT 1 IN t3 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t3"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #29 query I nosort label-9: SELECT 1 IN (SELECT * FROM t3) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t3"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #30 query I nosort label-10: SELECT 1 NOT IN t3 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t3"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #31 query I nosort label-10: SELECT 1 NOT IN (SELECT * FROM t3) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t3"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #32 query I nosort label-11: SELECT null IN t3 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t3"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #33 query I nosort label-11: SELECT null IN (SELECT * FROM t3) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t3"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #34 query I nosort label-12: SELECT null NOT IN t3 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t3"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #35 query I nosort label-12: SELECT null NOT IN (SELECT * FROM t3) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t3"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #36 query I nosort: SELECT 1 IN (SELECT x+y FROM t1, t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (ExprResultColumn
+                  (BinaryExpr :op "Add"
+                    (Id :name "x")
+                    (Id :name "y")))
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1")))
+                  (JoinedSelectTable
+                    (CommaJoinOperator)
+                    (TableSelectTable
+                      (QualifiedName
+                        (Name :text "t2")))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #37 query I nosort: SELECT 1 NOT IN (SELECT x+y FROM t1,t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (ExprResultColumn
+                  (BinaryExpr :op "Add"
+                    (Id :name "x")
+                    (Id :name "y")))
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1")))
+                  (JoinedSelectTable
+                    (CommaJoinOperator)
+                    (TableSelectTable
+                      (QualifiedName
+                        (Name :text "t2")))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #38 query I nosort: SELECT null IN (SELECT x+y FROM t1,t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (ExprResultColumn
+                  (BinaryExpr :op "Add"
+                    (Id :name "x")
+                    (Id :name "y")))
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1")))
+                  (JoinedSelectTable
+                    (CommaJoinOperator)
+                    (TableSelectTable
+                      (QualifiedName
+                        (Name :text "t2")))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #39 query I nosort: SELECT null NOT IN (SELECT x+y FROM t1,t2) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (ExprResultColumn
+                  (BinaryExpr :op "Add"
+                    (Id :name "x")
+                    (Id :name "y")))
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1")))
+                  (JoinedSelectTable
+                    (CommaJoinOperator)
+                    (TableSelectTable
+                      (QualifiedName
+                        (Name :text "t2")))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #40 query I nosort: SELECT 1.23 IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "1.23")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #41 query I nosort: SELECT 1.23 NOT IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "1.23")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #42 query I nosort label-13: SELECT 1.23 IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1.23")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #43 query I nosort label-13: SELECT 1.23 IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1.23")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #44 query I nosort label-14: SELECT 1.23 NOT IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "1.23")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #45 query I nosort label-14: SELECT 1.23 NOT IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1.23")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #46 query I nosort: SELECT 'hello' IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (StringLiteral :value "hello")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #47 query I nosort: SELECT 'hello' NOT IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (StringLiteral :value "hello")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #48 query I nosort label-15: SELECT 'hello' IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "hello")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #49 query I nosort label-15: SELECT 'hello' IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "hello")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #50 query I nosort label-16: SELECT 'hello' NOT IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "hello")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #51 query I nosort label-16: SELECT 'hello' NOT IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "hello")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #52 query I nosort: SELECT x'303132' IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (BlobLiteral :bytes #x"303132")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #53 query I nosort: SELECT x'303132' NOT IN () 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (BlobLiteral :bytes #x"303132")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #54 query I nosort label-17: SELECT x'303132' IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (BlobLiteral :bytes #x"303132")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #55 query I nosort label-17: SELECT x'303132' IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (BlobLiteral :bytes #x"303132")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #56 query I nosort label-18: SELECT x'303132' NOT IN t1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (BlobLiteral :bytes #x"303132")
+            (QualifiedName
+              (Name :text "t1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #57 query I nosort label-18: SELECT x'303132' NOT IN (SELECT * FROM t1) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (BlobLiteral :bytes #x"303132")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t1"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #58 query I nosort: SELECT 1 IN (2,3,4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #59 query I nosort: SELECT 1 NOT IN (2,3,4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #60 query I nosort: SELECT 'a' IN ('b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (StringLiteral :value "a")
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #61 query I nosort: SELECT 'a' NOT IN ('b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (StringLiteral :value "a")
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #62 statement ok: CREATE TABLE t4(a INTEGER UNIQUE) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t4"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 12
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (UniqueColumnConstraint))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #63 statement ok: CREATE TABLE t5(b INTEGER PRIMARY KEY) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t5"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "b")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement false))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #64 statement ok: CREATE TABLE t6(c INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t6"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #65 statement ok: INSERT INTO t4 VALUES(2) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t4"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "2")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #66 statement ok: INSERT INTO t4 VALUES(3) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t4"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "3")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #67 statement ok: INSERT INTO t4 VALUES(4) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t4"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #68 statement ok: INSERT INTO t5 SELECT * FROM t4 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t5"))
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (StarResultColumn)
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t4")))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #69 statement ok: INSERT INTO t6 SELECT * FROM t4 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t6"))
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (StarResultColumn)
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t4")))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #70 statement ok: CREATE TABLE t4n(a INTEGER UNIQUE) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t4n"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 12
+        (Name :text "a")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (UniqueColumnConstraint))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #71 statement ok: CREATE TABLE t6n(c INTEGER) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t6n"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "INTEGER")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #72 statement ok: INSERT INTO t4n SELECT * FROM t4 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t4n"))
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (StarResultColumn)
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t4")))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #73 statement ok: INSERT INTO t4n VALUES(null) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t4n"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #74 statement ok: INSERT INTO t6n SELECT * FROM t4n 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t6n"))
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (StarResultColumn)
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t4n")))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #75 statement ok: CREATE TABLE t7(a TEXT UNIQUE) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t7"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 12
+        (Name :text "a")
+        (Type :name "TEXT")
+        (NamedColumnConstraint
+          (UniqueColumnConstraint))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #76 statement ok: CREATE TABLE t7(a TEXT, UNIQUE (a(1))) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t7"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "TEXT"))
+      (NamedTableConstraint
+        (UniqueTableConstraint
+          (SortedColumn
+            (FunctionCallExpr
+              (Id :name "a")
+              (NumericLiteral :value "1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #77 statement ok: CREATE TABLE t8(c TEXT) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t8"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "TEXT")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #78 statement ok: INSERT INTO t7 VALUES('b') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t7"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (StringLiteral :value "b")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #79 statement ok: INSERT INTO t7 VALUES('c') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t7"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (StringLiteral :value "c")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #80 statement ok: INSERT INTO t7 VALUES('d') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t7"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #81 statement ok: INSERT INTO t8 SELECT * FROM t7 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t8"))
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (StarResultColumn)
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t7")))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #82 statement ok: CREATE TABLE t7n(a TEXT UNIQUE) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t7n"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 12
+        (Name :text "a")
+        (Type :name "TEXT")
+        (NamedColumnConstraint
+          (UniqueColumnConstraint))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #83 statement ok: CREATE TABLE t7n(a TEXT, UNIQUE (a(1))) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t7n"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "a")
+        (Type :name "TEXT"))
+      (NamedTableConstraint
+        (UniqueTableConstraint
+          (SortedColumn
+            (FunctionCallExpr
+              (Id :name "a")
+              (NumericLiteral :value "1"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #84 statement ok: CREATE TABLE t8n(c TEXT) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t8n"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "c")
+        (Type :name "TEXT")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #85 statement ok: INSERT INTO t7n SELECT * FROM t7 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t7n"))
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (StarResultColumn)
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t7")))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #86 statement ok: INSERT INTO t7n VALUES(null) 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t7n"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #87 statement ok: INSERT INTO t8n SELECT * FROM t7n 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t8n"))
+    (SelectInsertBody
+      (Select
+        (SelectFrom
+          (StarResultColumn)
+          (FromClause
+            (TableSelectTable
+              (QualifiedName
+                (Name :text "t7n")))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #88 query I nosort label-19: SELECT 1 IN t4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t4"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #89 query I nosort label-19: SELECT 1 IN (SELECT * FROM t4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #90 query I nosort label-20: SELECT 1 NOT IN t4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t4"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #91 query I nosort label-20: SELECT 1 NOT IN (SELECT * FROM t4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #92 query I nosort label-21: SELECT 1 IN t5 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t5"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #93 query I nosort label-21: SELECT 1 IN (SELECT * FROM t5) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t5"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #94 query I nosort label-22: SELECT 1 NOT IN t5 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t5"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #95 query I nosort label-22: SELECT 1 NOT IN (SELECT * FROM t5) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t5"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #96 query I nosort label-23: SELECT 1 IN t6 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t6"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #97 query I nosort label-23: SELECT 1 IN (SELECT * FROM t6) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #98 query I nosort label-24: SELECT 1 NOT IN t6 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t6"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #99 query I nosort label-24: SELECT 1 NOT IN (SELECT * FROM t6) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #100 query I nosort label-25: SELECT 'a' IN t7 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "a")
+            (QualifiedName
+              (Name :text "t7"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #101 query I nosort label-25: SELECT 'a' IN (SELECT * FROM t7) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "a")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #102 query I nosort label-26: SELECT 'a' NOT IN t7 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "a")
+            (QualifiedName
+              (Name :text "t7"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #103 query I nosort label-26: SELECT 'a' NOT IN (SELECT * FROM t7) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "a")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #104 query I nosort label-27: SELECT 'a' IN t8 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "a")
+            (QualifiedName
+              (Name :text "t8"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #105 query I nosort label-27: SELECT 'a' IN (SELECT * FROM t8) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "a")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #106 query I nosort label-28: SELECT 'a' NOT IN t8 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "a")
+            (QualifiedName
+              (Name :text "t8"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #107 query I nosort label-28: SELECT 'a' NOT IN (SELECT * FROM t8) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "a")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #108 query I nosort: SELECT 2 IN (2,3,4,null) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #109 query I nosort: SELECT 3 NOT IN (2,3,4,null) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #110 query I nosort: SELECT 4 IN (2,3,4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "4")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #111 query I nosort: SELECT 2 NOT IN (2,3,4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #112 query I nosort: SELECT 'b' IN ('b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (StringLiteral :value "b")
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #113 query I nosort: SELECT 'c' NOT IN ('b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (StringLiteral :value "c")
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #114 query I nosort: SELECT 'd' IN ('b','c',null,'d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (StringLiteral :value "d")
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (NullLiteral)
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #115 query I nosort: SELECT 'b' NOT IN (null,'b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (StringLiteral :value "b")
+            (NullLiteral)
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #116 query I nosort label-29: SELECT 2 IN t4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "2")
+            (QualifiedName
+              (Name :text "t4"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #117 query I nosort label-29: SELECT 2 IN (SELECT * FROM t4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "2")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #118 query I nosort label-30: SELECT 3 NOT IN t4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "3")
+            (QualifiedName
+              (Name :text "t4"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #119 query I nosort label-30: SELECT 3 NOT IN (SELECT * FROM t4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "3")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #120 query I nosort label-31: SELECT 4 IN t4n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "4")
+            (QualifiedName
+              (Name :text "t4n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #121 query I nosort label-31: SELECT 4 IN (SELECT * FROM t4n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "4")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #122 query I nosort label-32: SELECT 2 NOT IN t4n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "2")
+            (QualifiedName
+              (Name :text "t4n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #123 query I nosort label-32: SELECT 2 NOT IN (SELECT * FROM t4n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "2")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #124 query I nosort label-33: SELECT 2 IN t5 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "2")
+            (QualifiedName
+              (Name :text "t5"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #125 query I nosort label-33: SELECT 2 IN (SELECT * FROM t5) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "2")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t5"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #126 query I nosort label-34: SELECT 3 NOT IN t5 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "3")
+            (QualifiedName
+              (Name :text "t5"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #127 query I nosort label-34: SELECT 3 NOT IN (SELECT * FROM t5) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "3")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t5"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #128 query I nosort label-35: SELECT 2 IN t6 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "2")
+            (QualifiedName
+              (Name :text "t6"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #129 query I nosort label-35: SELECT 2 IN (SELECT * FROM t6) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "2")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #130 query I nosort label-36: SELECT 3 NOT IN t6 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "3")
+            (QualifiedName
+              (Name :text "t6"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #131 query I nosort label-36: SELECT 3 NOT IN (SELECT * FROM t6) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "3")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #132 query I nosort label-37: SELECT 4 IN t6n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "4")
+            (QualifiedName
+              (Name :text "t6n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #133 query I nosort label-37: SELECT 4 IN (SELECT * FROM t6n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "4")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #134 query I nosort label-38: SELECT 2 NOT IN t6n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "2")
+            (QualifiedName
+              (Name :text "t6n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #135 query I nosort label-38: SELECT 2 NOT IN (SELECT * FROM t6n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "2")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #136 query I nosort label-39: SELECT 'b' IN t7 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "b")
+            (QualifiedName
+              (Name :text "t7"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #137 query I nosort label-39: SELECT 'b' IN (SELECT * FROM t7) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "b")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #138 query I nosort label-40: SELECT 'c' NOT IN t7 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "c")
+            (QualifiedName
+              (Name :text "t7"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #139 query I nosort label-40: SELECT 'c' NOT IN (SELECT * FROM t7) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "c")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #140 query I nosort label-41: SELECT 'c' IN t7n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "c")
+            (QualifiedName
+              (Name :text "t7n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #141 query I nosort label-41: SELECT 'c' IN (SELECT * FROM t7n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "c")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #142 query I nosort label-42: SELECT 'd' NOT IN t7n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "d")
+            (QualifiedName
+              (Name :text "t7n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #143 query I nosort label-42: SELECT 'd' NOT IN (SELECT * FROM t7n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "d")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #144 query I nosort label-43: SELECT 'b' IN t8 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "b")
+            (QualifiedName
+              (Name :text "t8"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #145 query I nosort label-43: SELECT 'b' IN (SELECT * FROM t8) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "b")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #146 query I nosort label-44: SELECT 'c' NOT IN t8 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "c")
+            (QualifiedName
+              (Name :text "t8"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #147 query I nosort label-44: SELECT 'c' NOT IN (SELECT * FROM t8) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "c")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #148 query I nosort label-45: SELECT 'c' IN t8n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "c")
+            (QualifiedName
+              (Name :text "t8n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #149 query I nosort label-45: SELECT 'c' IN (SELECT * FROM t8n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "c")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #150 query I nosort label-46: SELECT 'd' NOT IN t8n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "d")
+            (QualifiedName
+              (Name :text "t8n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #151 query I nosort label-46: SELECT 'd' NOT IN (SELECT * FROM t8n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "d")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #152 query I nosort: SELECT 1 IN (2,3,4,null) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #153 query I nosort: SELECT 1 NOT IN (2,3,4,null) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NumericLiteral :value "1")
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #154 query I nosort: SELECT 'a' IN ('b','c',null,'d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (StringLiteral :value "a")
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (NullLiteral)
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #155 query I nosort: SELECT 'a' NOT IN (null,'b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (StringLiteral :value "a")
+            (NullLiteral)
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #156 query I nosort label-47: SELECT 1 IN t4n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "1")
+            (QualifiedName
+              (Name :text "t4n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #157 query I nosort label-47: SELECT 1 IN (SELECT * FROM t4n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "1")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #158 query I nosort label-48: SELECT 5 NOT IN t4n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "5")
+            (QualifiedName
+              (Name :text "t4n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #159 query I nosort label-48: SELECT 5 NOT IN (SELECT * FROM t4n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "5")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #160 query I nosort label-49: SELECT 6 IN t6n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NumericLiteral :value "6")
+            (QualifiedName
+              (Name :text "t6n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #161 query I nosort label-49: SELECT 6 IN (SELECT * FROM t6n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NumericLiteral :value "6")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #162 query I nosort label-50: SELECT 7 NOT IN t6n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NumericLiteral :value "7")
+            (QualifiedName
+              (Name :text "t6n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #163 query I nosort label-50: SELECT 7 NOT IN (SELECT * FROM t6n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NumericLiteral :value "7")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #164 query I nosort label-51: SELECT 'a' IN t7n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "a")
+            (QualifiedName
+              (Name :text "t7n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #165 query I nosort label-51: SELECT 'a' IN (SELECT * FROM t7n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "a")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #166 query I nosort label-52: SELECT 'e' NOT IN t7n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "e")
+            (QualifiedName
+              (Name :text "t7n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #167 query I nosort label-52: SELECT 'e' NOT IN (SELECT * FROM t7n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "e")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #168 query I nosort label-53: SELECT 'f' IN t8n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (StringLiteral :value "f")
+            (QualifiedName
+              (Name :text "t8n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #169 query I nosort label-53: SELECT 'f' IN (SELECT * FROM t8n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (StringLiteral :value "f")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #170 query I nosort label-54: SELECT 'g' NOT IN t8n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (StringLiteral :value "g")
+            (QualifiedName
+              (Name :text "t8n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #171 query I nosort label-54: SELECT 'g' NOT IN (SELECT * FROM t8n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (StringLiteral :value "g")
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #172 query I nosort: SELECT null IN (2,3,4,null) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NullLiteral)
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #173 query I nosort: SELECT null NOT IN (2,3,4,null) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NullLiteral)
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")
+            (NullLiteral)))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #174 query I nosort: SELECT null IN (2,3,4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NullLiteral)
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #175 query I nosort: SELECT null NOT IN (2,3,4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NullLiteral)
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #176 query I nosort: SELECT null IN ('b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NullLiteral)
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #177 query I nosort: SELECT null NOT IN ('b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NullLiteral)
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #178 query I nosort: SELECT null IN ('b','c',null,'d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NullLiteral)
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (NullLiteral)
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #179 query I nosort: SELECT null NOT IN (null,'b','c','d') 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not true
+            (NullLiteral)
+            (NullLiteral)
+            (StringLiteral :value "b")
+            (StringLiteral :value "c")
+            (StringLiteral :value "d")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #180 query I nosort label-55: SELECT null IN t4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t4"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #181 query I nosort label-55: SELECT null IN (SELECT * FROM t4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #182 query I nosort label-55: SELECT null IN (2,3,4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InListExpr :not false
+            (NullLiteral)
+            (NumericLiteral :value "2")
+            (NumericLiteral :value "3")
+            (NumericLiteral :value "4")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #183 query I nosort label-56: SELECT null NOT IN t4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t4"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #184 query I nosort label-56: SELECT null NOT IN (SELECT * FROM t4) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #185 query I nosort label-57: SELECT null IN t4n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t4n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #186 query I nosort label-57: SELECT null IN (SELECT * FROM t4n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #187 query I nosort label-58: SELECT null NOT IN t4n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t4n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #188 query I nosort label-58: SELECT null NOT IN (SELECT * FROM t4n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t4n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #189 query I nosort label-59: SELECT null IN t5 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t5"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #190 query I nosort label-59: SELECT null IN (SELECT * FROM t5) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t5"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #191 query I nosort label-60: SELECT null NOT IN t5 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t5"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #192 query I nosort label-60: SELECT null NOT IN (SELECT * FROM t5) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t5"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #193 query I nosort label-61: SELECT null IN t6 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t6"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #194 query I nosort label-61: SELECT null IN (SELECT * FROM t6) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #195 query I nosort label-62: SELECT null NOT IN t6 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t6"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #196 query I nosort label-62: SELECT null NOT IN (SELECT * FROM t6) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #197 query I nosort label-63: SELECT null IN t6n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t6n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #198 query I nosort label-63: SELECT null IN (SELECT * FROM t6n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #199 query I nosort label-64: SELECT null NOT IN t6n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t6n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #200 query I nosort label-64: SELECT null NOT IN (SELECT * FROM t6n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t6n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #201 query I nosort label-65: SELECT null IN t7 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t7"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #202 query I nosort label-65: SELECT null IN (SELECT * FROM t7) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #203 query I nosort label-66: SELECT null NOT IN t7 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t7"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #204 query I nosort label-66: SELECT null NOT IN (SELECT * FROM t7) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #205 query I nosort label-67: SELECT null IN t7n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t7n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #206 query I nosort label-67: SELECT null IN (SELECT * FROM t7n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #207 query I nosort label-68: SELECT null NOT IN t7n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t7n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #208 query I nosort label-68: SELECT null NOT IN (SELECT * FROM t7n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t7n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #209 query I nosort label-69: SELECT null IN t8 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t8"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #210 query I nosort label-69: SELECT null IN (SELECT * FROM t8) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #211 query I nosort label-70: SELECT null NOT IN t8 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t8"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #212 query I nosort label-70: SELECT null NOT IN (SELECT * FROM t8) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #213 query I nosort label-71: SELECT null IN t8n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not false
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t8n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #214 query I nosort label-71: SELECT null IN (SELECT * FROM t8n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not false
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8n"))))))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #215 query I nosort label-72: SELECT null NOT IN t8n 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InTableExpr :not true
+            (NullLiteral)
+            (QualifiedName
+              (Name :text "t8n"))))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/in1.test #216 query I nosort label-72: SELECT null NOT IN (SELECT * FROM t8n) 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (InSelectExpr :not true
+            (NullLiteral)
+            (Select
+              (SelectFrom
+                (StarResultColumn)
+                (FromClause
+                  (TableSelectTable
+                    (QualifiedName
+                      (Name :text "t8n"))))))))))))"
+`;

@@ -43,7 +43,17 @@ GEN_VERSIONS := $(notdir $(patsubst %/,%,$(wildcard vendor/patched/*/)))
 GEN_TARGETS := \
   $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts) \
   generated/current.ts \
-  test/readme.generated.test.ts
+  test/readme.generated.test.ts \
+  sqllogictest-corpus
+
+# sqllogictest submodule paths.  The corpus is generated from the
+# per-feature evidence/ tests; the full submodule (`random/`,
+# `index/`, 600+ files) is intentionally out of scope — revisit with a
+# greedy picker once this corpus stabilises.
+SQLLOGICTEST_SUBMODULE := vendor/submodule/sqllogictest
+SQLLOGICTEST_EVIDENCE := $(SQLLOGICTEST_SUBMODULE)/test/evidence
+SQLLOGICTEST_SOURCES := $(wildcard $(SQLLOGICTEST_EVIDENCE)/*.test)
+SQLLOGICTEST_OUTPUTS := $(patsubst $(SQLLOGICTEST_EVIDENCE)/%.test,test/sqllogictest/evidence/%.generated.test.ts,$(SQLLOGICTEST_SOURCES))
 
 help:
 	@printf '%s\n' \
@@ -226,6 +236,39 @@ current: generated/current.ts
 test/readme.generated.test.ts: scripts/md-to-test.ts README.md
 	bun scripts/md-to-test.ts README.md > $@
 	bun run fmt $@
+
+# ---------------------------------------------------------------------------
+# sqllogictest corpus.  Each .test file under
+# vendor/submodule/sqllogictest/test/evidence/ becomes a bun:test
+# module that drives `SQLite3ParserTestDriver` over the parsed
+# records.  The driver lives in src/sqllogictest/drivers.ts and
+# snapshots each statement's s-expression.
+#
+# The submodule is optional: if it isn't initialised, the
+# `sqllogictest-corpus` phony prints a warning and no-ops so fresh
+# clones still `make gen` without running `git submodule update`.
+# ---------------------------------------------------------------------------
+test/sqllogictest/evidence/%.generated.test.ts: \
+    $(SQLLOGICTEST_EVIDENCE)/%.test \
+    bin/sqllogictest-parser.ts \
+    src/sqllogictest/drivers.ts \
+    src/sqllogictest/public.ts \
+    src/sqllogictest/testparser.ts \
+    src/sqllogictest/ts-test-emitter.ts
+	@mkdir -p $(dir $@)
+	bun bin/sqllogictest-parser.ts --ts \
+	  --ts-driver 'SQLite3ParserTestDriver:../../../src/sqllogictest/public.ts' \
+	  $< > $@
+	bun run fmt $@
+
+.PHONY: sqllogictest-corpus
+ifneq ($(wildcard $(SQLLOGICTEST_EVIDENCE)/.),)
+sqllogictest-corpus: $(SQLLOGICTEST_OUTPUTS)
+else
+sqllogictest-corpus:
+	@printf 'warning: %s not initialised; skipping sqllogictest corpus\n' $(SQLLOGICTEST_SUBMODULE) >&2
+	@printf '         run: git submodule update --init %s\n' $(SQLLOGICTEST_SUBMODULE) >&2
+endif
 
 # ---------------------------------------------------------------------------
 # AST layer helpers.  The AST code itself is version-agnostic (see

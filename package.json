@@ -47,6 +47,10 @@
     "./sqlite-*": {
       "types": "./dist/generated/*/index.d.ts",
       "default": "./dist/generated/*/index.js"
+    },
+    "./sqllogictest": {
+      "types": "./dist/src/sqllogictest/public.d.ts",
+      "default": "./dist/src/sqllogictest/public.js"
     }
   },
   "scripts": {

@@ -1,0 +1,301 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #1 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) ) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "VARCHAR"
+          (MaxSizeTypeSize
+            (NumericLiteral :value "8")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #2 statement ok: INSERT INTO t1 VALUES(1,'true') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (StringLiteral :value "true")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #3 statement ok: INSERT INTO t1 VALUES(0,'false') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "0")
+            (StringLiteral :value "false")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #4 statement ok: INSERT INTO t1 VALUES(NULL,'NULL') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NullLiteral)
+            (StringLiteral :value "NULL")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #5 statement ok: CREATE INDEX t1i1 ON t1(x) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1i1"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "x"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #6 statement ok: CREATE TRIGGER t1r1 UPDATE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :forEachRow false
+    (QualifiedName
+      (Name :text "t1r1"))
+    (UpdateTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #7 statement error: CREATE TRIGGER t1r1 UPDATE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :forEachRow false
+    (QualifiedName
+      (Name :text "t1r1"))
+    (UpdateTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #8 statement ok: CREATE TRIGGER t1r2 DELETE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :forEachRow false
+    (QualifiedName
+      (Name :text "t1r2"))
+    (DeleteTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #9 statement ok: CREATE TRIGGER t1r3 INSERT ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :forEachRow false
+    (QualifiedName
+      (Name :text "t1r3"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #10 statement ok: CREATE TRIGGER t1r4 UPDATE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :forEachRow false
+    (QualifiedName
+      (Name :text "t1r4"))
+    (UpdateTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #11 statement ok: CREATE TRIGGER t1r5 AFTER DELETE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "After" :forEachRow false
+    (QualifiedName
+      (Name :text "t1r5"))
+    (DeleteTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #12 statement ok: CREATE TRIGGER t1r6 AFTER INSERT ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "After" :forEachRow false
+    (QualifiedName
+      (Name :text "t1r6"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #13 statement ok: CREATE TRIGGER t1r7 AFTER UPDATE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "After" :forEachRow false
+    (QualifiedName
+      (Name :text "t1r7"))
+    (UpdateTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #14 statement ok: CREATE TRIGGER t1r8 BEFORE DELETE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "t1r8"))
+    (DeleteTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #15 statement ok: CREATE TRIGGER t1r9 BEFORE INSERT ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "t1r9"))
+    (InsertTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #16 statement ok: CREATE TRIGGER t1r10 BEFORE UPDATE ON t1 BEGIN SELECT 1; EN… 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :time "Before" :forEachRow false
+    (QualifiedName
+      (Name :text "t1r10"))
+    (UpdateTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #17 statement ok: DROP TRIGGER t1r1 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #18 statement ok: DROP TRIGGER t1r2 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r2"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #19 statement ok: DROP TRIGGER t1r3 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r3"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #20 statement ok: DROP TRIGGER t1r4 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r4"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #21 statement ok: DROP TRIGGER t1r5 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r5"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #22 statement ok: DROP TRIGGER t1r6 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r6"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #23 statement ok: DROP TRIGGER t1r7 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r7"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #24 statement ok: DROP TRIGGER t1r8 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r8"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #25 statement ok: DROP TRIGGER t1r9 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r9"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_createtrigger.test #26 statement ok: DROP TRIGGER t1r10 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r10"))))"
+`;

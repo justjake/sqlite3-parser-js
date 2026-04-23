@@ -64,6 +64,7 @@ import { runScript } from "./utils.ts"
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname), "..")
 const GENERATED = join(ROOT, "generated")
 const BIN = join(ROOT, "bin")
+const SRC = join(ROOT, "src")
 const DIST = join(ROOT, "dist")
 
 /**
@@ -71,6 +72,13 @@ const DIST = join(ROOT, "dist")
  * Paths are relative to BIN; outputs land at dist/bin/<name>.js.
  */
 const BIN_ENTRIES = ["sqlite3-parser.ts", "sqlite3-tokenizer.ts", "sqllogictest-parser.ts"]
+
+/**
+ * Non-CLI library entrypoints exposed through package.json `exports`.
+ * Each is bundled separately so it lands at a predictable `dist/src/…`
+ * path that the `exports` field can point at.
+ */
+const LIB_ENTRIES = ["sqllogictest/public.ts"]
 
 function log(msg: string): void {
   console.log(`[build] ${msg}`)
@@ -112,6 +120,7 @@ async function buildJs(versions: string[]): Promise<void> {
     join(GENERATED, "current.ts"),
     ...versions.map((v) => join(GENERATED, v, "index.ts")),
     ...BIN_ENTRIES.map((f) => join(BIN, f)),
+    ...LIB_ENTRIES.map((f) => join(SRC, f)),
   ]
   log(`bundling ${entries.length} entrypoint(s) with bun…`)
 

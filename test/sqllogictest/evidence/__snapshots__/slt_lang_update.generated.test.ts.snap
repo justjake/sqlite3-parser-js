@@ -1,0 +1,380 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #1 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) ) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "VARCHAR"
+          (MaxSizeTypeSize
+            (NumericLiteral :value "8")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #2 statement ok: INSERT INTO t1 VALUES(1,'true') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (StringLiteral :value "true")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #3 statement ok: INSERT INTO t1 VALUES(0,'false') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "0")
+            (StringLiteral :value "false")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #4 statement ok: INSERT INTO t1 VALUES(NULL,'NULL') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NullLiteral)
+            (StringLiteral :value "NULL")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #5 statement ok: CREATE INDEX t1i1 ON t1(x) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1i1"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "x"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #6 statement ok: UPDATE t1 SET x=1 WHERE x>0 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "1"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #7 statement ok: UPDATE t1 SET x=2 WHERE x>0 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "2"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #8 statement ok: UPDATE t1 SET y='true' WHERE x>0 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "y")
+      (StringLiteral :value "true"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #9 statement ok: UPDATE t1 SET y='unknown' WHERE x>0 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "y")
+      (StringLiteral :value "unknown"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #10 statement error: UPDATE t1 SET z='foo' 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "z")
+      (StringLiteral :value "foo"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #11 statement error: UPDATE t1 SET z='foo' WHERE x>0 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "z")
+      (StringLiteral :value "foo"))
+    (BinaryExpr :op "Greater"
+      (Id :name "x")
+      (NumericLiteral :value "0"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #12 statement ok: UPDATE t1 SET x=3 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "3"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #13 query I rowsort: SELECT count(*) FROM t1 WHERE x=3 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "3"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #14 statement ok: UPDATE t1 SET x=1 WHERE y='unknown' 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "1"))
+    (BinaryExpr :op "Equals"
+      (Id :name "y")
+      (StringLiteral :value "unknown"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #15 query I rowsort: SELECT count(*) FROM t1 WHERE x=1 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "1"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #16 statement ok: UPDATE t1 SET x=1 WHERE y='foo' 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "1"))
+    (BinaryExpr :op "Equals"
+      (Id :name "y")
+      (StringLiteral :value "foo"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #17 statement ok: UPDATE t1 SET x=3+1 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (BinaryExpr :op "Add"
+        (NumericLiteral :value "3")
+        (NumericLiteral :value "1")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #18 query I rowsort: SELECT count(*) FROM t1 WHERE x=4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "4"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #19 statement ok: UPDATE t1 SET x=3, x=4, x=5 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "3"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "4"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "5"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #20 query I rowsort: SELECT count(*) FROM t1 WHERE x=3 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "3"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #21 query I rowsort: SELECT count(*) FROM t1 WHERE x=4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "4"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #22 query I rowsort: SELECT count(*) FROM t1 WHERE x=5 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "5"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #23 query I rowsort: SELECT count(*) FROM t1 WHERE y='unknown' 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "y")
+          (StringLiteral :value "unknown"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #24 statement ok: UPDATE t1 SET x=2 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (NumericLiteral :value "2"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #25 query I rowsort: SELECT count(*) FROM t1 WHERE y='unknown' 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "y")
+          (StringLiteral :value "unknown"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #26 statement ok: UPDATE t1 SET x=x+2 1`] = `
+"(CmdList
+  (UpdateStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SetAssignment
+      (Name :text "x")
+      (BinaryExpr :op "Add"
+        (Id :name "x")
+        (NumericLiteral :value "2")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #27 query I rowsort: SELECT count(*) FROM t1 WHERE x=4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (FunctionCallStarExpr
+            (Id :name "count")))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "4"))))))"
+`;

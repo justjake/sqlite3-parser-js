@@ -1,0 +1,131 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #1 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) ) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 0
+      (ColumnDefinition :flags 4
+        (Name :text "x")
+        (Type :name "INTEGER"))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "VARCHAR"
+          (MaxSizeTypeSize
+            (NumericLiteral :value "8")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #2 statement ok: INSERT INTO t1 VALUES(1,'true') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (StringLiteral :value "true")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #3 statement ok: INSERT INTO t1 VALUES(0,'false') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "0")
+            (StringLiteral :value "false")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #4 statement ok: INSERT INTO t1 VALUES(NULL,'NULL') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NullLiteral)
+            (StringLiteral :value "NULL")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #5 statement ok: CREATE INDEX t1i1 ON t1(x) 1`] = `
+"(CmdList
+  (CreateIndexStmt :unique false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1i1"))
+    (Name :text "t1")
+    (SortedColumn
+      (Id :name "x"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #6 statement ok: CREATE TRIGGER t1r1 UPDATE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :forEachRow false
+    (QualifiedName
+      (Name :text "t1r1"))
+    (UpdateTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #7 statement ok: DROP TRIGGER t1r1 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #8 statement error: DROP TRIGGER t1r1 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #9 statement error: DROP TRIGGER tXrX 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "tXrX"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #10 statement ok: CREATE TRIGGER t1r1 UPDATE ON t1 BEGIN SELECT 1; END; 1`] = `
+"(CmdList
+  (CreateTriggerStmt :temporary false :ifNotExists false :forEachRow false
+    (QualifiedName
+      (Name :text "t1r1"))
+    (UpdateTriggerEvent)
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectTriggerCmd
+      (Select
+        (SelectFrom
+          (ExprResultColumn
+            (NumericLiteral :value "1")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #11 statement ok: DROP TABLE t1 1`] = `
+"(CmdList
+  (DropTableStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1"))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_droptrigger.test #12 statement error: DROP TRIGGER t1r1 1`] = `
+"(CmdList
+  (DropTriggerStmt :ifExists false
+    (QualifiedName
+      (Name :text "t1r1"))))"
+`;

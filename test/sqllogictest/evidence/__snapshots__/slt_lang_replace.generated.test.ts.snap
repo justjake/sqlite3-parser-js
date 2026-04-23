@@ -1,0 +1,218 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #1 statement ok: CREATE TABLE t1( x INTEGER PRIMARY KEY, y VARCHAR(16) ) 1`] = `
+"(CmdList
+  (CreateTableStmt :temporary false :ifNotExists false
+    (QualifiedName
+      (Name :text "t1"))
+    (ColumnsAndConstraintsCreateTableBody :flags 4
+      (ColumnDefinition :flags 13
+        (Name :text "x")
+        (Type :name "INTEGER")
+        (NamedColumnConstraint
+          (PrimaryKeyColumnConstraint :autoIncrement false)))
+      (ColumnDefinition :flags 4
+        (Name :text "y")
+        (Type :name "VARCHAR"
+          (MaxSizeTypeSize
+            (NumericLiteral :value "16")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #2 statement ok: INSERT INTO t1 VALUES(1, 'true') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "1")
+            (StringLiteral :value "true")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #3 statement ok: INSERT INTO t1 VALUES(0, 'false') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "0")
+            (StringLiteral :value "false")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #4 query IT rowsort: SELECT x, y FROM t1 WHERE x=2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (ExprResultColumn
+          (Id :name "y"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "2"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #5 statement ok: INSERT INTO t1 VALUES(2, 'insert') 1`] = `
+"(CmdList
+  (InsertStmt
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "2")
+            (StringLiteral :value "insert")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #6 query IT rowsort: SELECT x, y FROM t1 WHERE x=2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (ExprResultColumn
+          (Id :name "y"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "2"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #7 statement ok: INSERT OR REPLACE INTO t1 VALUES(2, 'insert or replace') 1`] = `
+"(CmdList
+  (InsertStmt :orConflict "Replace"
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "2")
+            (StringLiteral :value "insert or replace")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #8 query IT rowsort: SELECT x, y FROM t1 WHERE x=2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (ExprResultColumn
+          (Id :name "y"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "2"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #9 statement ok: REPLACE INTO t1 VALUES(2, 'replace') 1`] = `
+"(CmdList
+  (InsertStmt :orConflict "Replace"
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "2")
+            (StringLiteral :value "replace")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #10 query IT rowsort: SELECT x, y FROM t1 WHERE x=2 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (ExprResultColumn
+          (Id :name "y"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "2"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #11 statement ok: INSERT OR REPLACE INTO t1 VALUES(3, 'insert or replace (new… 1`] = `
+"(CmdList
+  (InsertStmt :orConflict "Replace"
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "3")
+            (StringLiteral :value "insert or replace (new)")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #12 query IT rowsort: SELECT x, y FROM t1 WHERE x=3 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (ExprResultColumn
+          (Id :name "y"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "3"))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #13 statement ok: REPLACE INTO t1 VALUES(4, 'replace (new)') 1`] = `
+"(CmdList
+  (InsertStmt :orConflict "Replace"
+    (QualifiedName
+      (Name :text "t1"))
+    (SelectInsertBody
+      (Select
+        (SelectValues
+          (ValuesRow
+            (NumericLiteral :value "4")
+            (StringLiteral :value "replace (new)")))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_replace.test #14 query IT rowsort: SELECT x, y FROM t1 WHERE x=4 1`] = `
+"(CmdList
+  (SelectStmt
+    (Select
+      (SelectFrom
+        (ExprResultColumn
+          (Id :name "x"))
+        (ExprResultColumn
+          (Id :name "y"))
+        (FromClause
+          (TableSelectTable
+            (QualifiedName
+              (Name :text "t1"))))
+        (BinaryExpr :op "Equals"
+          (Id :name "x")
+          (NumericLiteral :value "4"))))))"
+`;
