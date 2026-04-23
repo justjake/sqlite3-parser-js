@@ -151,20 +151,19 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #12 st
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #13 query I rowsort: SELECT count(*) FROM t1 WHERE x=3 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "x")
-          (NumericLiteral :value "3"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "x")
+        (NumericLiteral :value "3")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #14 statement ok: UPDATE t1 SET x=1 WHERE y='unknown' 1`] = `
@@ -181,20 +180,19 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #14 st
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #15 query I rowsort: SELECT count(*) FROM t1 WHERE x=1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "x")
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "x")
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #16 statement ok: UPDATE t1 SET x=1 WHERE y='foo' 1`] = `
@@ -223,20 +221,19 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #17 st
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #18 query I rowsort: SELECT count(*) FROM t1 WHERE x=4 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "x")
-          (NumericLiteral :value "4"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "x")
+        (NumericLiteral :value "4")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #19 statement ok: UPDATE t1 SET x=3, x=4, x=5 1`] = `
@@ -256,71 +253,67 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #19 st
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #20 query I rowsort: SELECT count(*) FROM t1 WHERE x=3 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "x")
-          (NumericLiteral :value "3"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "x")
+        (NumericLiteral :value "3")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #21 query I rowsort: SELECT count(*) FROM t1 WHERE x=4 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "x")
-          (NumericLiteral :value "4"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "x")
+        (NumericLiteral :value "4")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #22 query I rowsort: SELECT count(*) FROM t1 WHERE x=5 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "x")
-          (NumericLiteral :value "5"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "x")
+        (NumericLiteral :value "5")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #23 query I rowsort: SELECT count(*) FROM t1 WHERE y='unknown' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "unknown"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "unknown")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #24 statement ok: UPDATE t1 SET x=2 1`] = `
@@ -334,20 +327,19 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #24 st
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #25 query I rowsort: SELECT count(*) FROM t1 WHERE y='unknown' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "unknown"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "unknown")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #26 statement ok: UPDATE t1 SET x=x+2 1`] = `
@@ -363,18 +355,17 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #26 st
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_update.test #27 query I rowsort: SELECT count(*) FROM t1 WHERE x=4 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "x")
-          (NumericLiteral :value "4"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "x")
+        (NumericLiteral :value "4")))))"
 `;

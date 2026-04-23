@@ -66,109 +66,102 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #5 st
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #6 query I nosort: SELECT count(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "count")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "count")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #7 query I nosort: SELECT avg(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "avg")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "avg")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #8 query I nosort: SELECT sum(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #9 query I nosort: SELECT total(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #10 query I nosort: SELECT min(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "min")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "min")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #11 query I nosort: SELECT max(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "max")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "max")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #12 query T nosort: SELECT group_concat(DISTINCT x) FROM t1 NOT INDEXED 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "group_concat")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))
-            (NotIndexedIndexed)))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "group_concat")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))
+          (NotIndexedIndexed))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #13 statement ok: INSERT INTO t1 VALUES(2,'true') 1`] = `
@@ -198,871 +191,835 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #14 s
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #15 query I nosort: SELECT count(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "count")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "count")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #16 query I nosort: SELECT avg(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "avg")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "avg")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #17 query I nosort: SELECT count(y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "count")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "count")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #18 query I nosort: SELECT avg(y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "avg")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "avg")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #19 query I nosort: SELECT sum(y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "sum")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "sum")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #20 query I nosort: SELECT total(y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "total")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "total")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #21 query I nosort: SELECT min(y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "min")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "min")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #22 query I nosort: SELECT max(y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "max")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "max")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #23 query T nosort: SELECT group_concat(y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "group_concat")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "group_concat")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #24 query I nosort: SELECT count(DISTINCT y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "count")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "count")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #25 query I nosort: SELECT avg(DISTINCT y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "avg")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "avg")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #26 query I nosort: SELECT sum(DISTINCT y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "sum")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "sum")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #27 query I nosort: SELECT total(DISTINCT y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "total")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "total")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #28 query I nosort: SELECT min(DISTINCT y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "min")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "min")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #29 query I nosort: SELECT max(DISTINCT y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "max")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "max")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #30 query T nosort: SELECT group_concat(DISTINCT y) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "group_concat")
-            (Id :name "y")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "group_concat")
+          (Id :name "y")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #31 query R nosort: SELECT avg(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "avg")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "avg")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #32 query R nosort: SELECT avg(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "avg")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "avg")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #33 query I nosort label-NULL: SELECT avg(x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "avg")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "avg")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #34 query I nosort label-NULL: SELECT avg(DISTINCT x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "avg")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "avg")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #35 query I nosort: SELECT count(x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "count")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "count")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #36 query I nosort: SELECT count(DISTINCT x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "count")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "count")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #37 query I nosort: SELECT count(x) FROM t1 WHERE y='false' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "count")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "false"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "count")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "false")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #38 query I nosort: SELECT count(DISTINCT x) FROM t1 WHERE y='false' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "count")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "false"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "count")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "false")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #39 query I nosort: SELECT count(*) FROM t1 WHERE y='false' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallStarExpr
-            (Id :name "count")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "false"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallStarExpr
+          (Id :name "count")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "false")))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #40 statement error: SELECT count(DISTINCT *) FROM t1 WHERE y='false' 1`] = `
+"near "*": syntax error
+
+At 1:22:
+   1│ SELECT count(DISTINCT *) FROM t1 WHERE y='false'
+    │                       ^
+
+  hint: expected ) or order"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #41 query T nosort: SELECT group_concat(x) FROM t1 NOT INDEXED 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "group_concat")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))
-            (NotIndexedIndexed)))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "group_concat")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))
+          (NotIndexedIndexed))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #42 query T nosort: SELECT group_concat(DISTINCT x) FROM t1 NOT INDEXED 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "group_concat")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))
-            (NotIndexedIndexed)))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "group_concat")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))
+          (NotIndexedIndexed))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #43 query T nosort: SELECT group_concat(x,':') FROM t1 NOT INDEXED 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "group_concat")
-            (Id :name "x")
-            (StringLiteral :value ":")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))
-            (NotIndexedIndexed)))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "group_concat")
+          (Id :name "x")
+          (StringLiteral :value ":")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))
+          (NotIndexedIndexed))))))"
+`;
+
+exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #44 statement error: SELECT group_concat(DISTINCT x,':') FROM t1 1`] = `
+"DISTINCT aggregates must have exactly one argument
+
+At 1:7:
+   1│ SELECT group_concat(DISTINCT x,':') FROM t1
+    │        ^^^^^^^^^^^^"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #45 query T nosort: SELECT group_concat(x) FROM t1 NOT INDEXED 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "group_concat")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))
-            (NotIndexedIndexed)))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "group_concat")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))
+          (NotIndexedIndexed))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #46 query T nosort: SELECT group_concat(DISTINCT x) FROM t1 NOT INDEXED 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "group_concat")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))
-            (NotIndexedIndexed)))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "group_concat")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))
+          (NotIndexedIndexed))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #47 query I nosort: SELECT max(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "max")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "max")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #48 query I nosort: SELECT max(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "max")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "max")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #49 query I nosort: SELECT x FROM t1 WHERE x NOT NULL ORDER BY x 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (Id :name "x"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (NotNullExpr
-          (Id :name "x")))
-      (SortedColumn
-        (Id :name "x")))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (Id :name "x"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (NotNullExpr
+        (Id :name "x")))
+    (SortedColumn
+      (Id :name "x"))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #50 query I nosort: SELECT DISTINCT x FROM t1 WHERE x NOT NULL ORDER BY x 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom :distinctness "Distinct"
-        (ExprResultColumn
-          (Id :name "x"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (NotNullExpr
-          (Id :name "x")))
-      (SortedColumn
-        (Id :name "x")))))"
+"(SelectStmt
+  (Select
+    (SelectFrom :distinctness "Distinct"
+      (ExprResultColumn
+        (Id :name "x"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (NotNullExpr
+        (Id :name "x")))
+    (SortedColumn
+      (Id :name "x"))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #51 query I nosort label-NULL: SELECT max(x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "max")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "max")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #52 query I nosort label-NULL: SELECT max(DISTINCT x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "max")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "max")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #53 query I nosort: SELECT min(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "min")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "min")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #54 query I nosort: SELECT min(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "min")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "min")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #55 query I nosort: SELECT x FROM t1 WHERE x NOT NULL ORDER BY x 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (Id :name "x"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (NotNullExpr
-          (Id :name "x")))
-      (SortedColumn
-        (Id :name "x")))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (Id :name "x"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (NotNullExpr
+        (Id :name "x")))
+    (SortedColumn
+      (Id :name "x"))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #56 query I nosort: SELECT DISTINCT x FROM t1 WHERE x NOT NULL ORDER BY x 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom :distinctness "Distinct"
-        (ExprResultColumn
-          (Id :name "x"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (NotNullExpr
-          (Id :name "x")))
-      (SortedColumn
-        (Id :name "x")))))"
+"(SelectStmt
+  (Select
+    (SelectFrom :distinctness "Distinct"
+      (ExprResultColumn
+        (Id :name "x"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (NotNullExpr
+        (Id :name "x")))
+    (SortedColumn
+      (Id :name "x"))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #57 query I nosort label-NULL: SELECT min(x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "min")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "min")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #58 query I nosort label-NULL: SELECT min(DISTINCT x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "min")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "min")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #59 query I nosort label-sum: SELECT sum(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #60 query I nosort label-sum: SELECT total(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #61 query I nosort label-sum-distinct: SELECT sum(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #62 query I nosort label-sum-distinct: SELECT total(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #63 query I nosort label-NULL: SELECT sum(x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #64 query I nosort label-NULL: SELECT sum(DISTINCT x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #65 query I nosort label-zero: SELECT total(x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #66 query I nosort label-zero: SELECT total(DISTINCT x) FROM t1 WHERE y='null' 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (BinaryExpr :op "Equals"
-          (Id :name "y")
-          (StringLiteral :value "null"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (BinaryExpr :op "Equals"
+        (Id :name "y")
+        (StringLiteral :value "null")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #67 query R nosort: SELECT total(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #68 query R nosort: SELECT total(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #69 query I nosort label-sum: SELECT sum(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #70 query I nosort label-sum-distinct: SELECT sum(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #71 statement ok: INSERT INTO t1 VALUES(4.0,'true') 1`] = `
@@ -1079,33 +1036,31 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #71 s
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #72 query R nosort: SELECT sum(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #73 query R nosort: SELECT sum(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #74 statement ok: INSERT INTO t1 VALUES(1<<63,'true'); 1`] = `
@@ -1156,61 +1111,57 @@ exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #76 s
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #77 query R nosort: SELECT sum(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #78 query R nosort: SELECT sum(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "sum")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "sum")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #79 query R nosort: SELECT total(x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/slt_lang_aggfunc.test #80 query R nosort: SELECT total(DISTINCT x) FROM t1 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (FunctionCallExpr :distinctness "Distinct"
-            (Id :name "total")
-            (Id :name "x")))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (FunctionCallExpr :distinctness "Distinct"
+          (Id :name "total")
+          (Id :name "x")))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1")))))))"
 `;

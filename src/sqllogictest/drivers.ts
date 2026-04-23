@@ -6,7 +6,13 @@
 // `query` it asserts the parse succeeds (via `parseOrThrow`) and
 // snapshots the resulting s-expression through the runner's `expect`.
 
-import { parseOrThrow } from "../../generated/current.ts"
+import {
+  parseStmtOrThrow,
+  Sqlite3ParserDiagnosticError,
+  ParseStmtOk,
+  ParseOk,
+  parseOrThrow,
+} from "../../generated/current.ts"
 import { toSexpr } from "../ast/traverse.ts"
 import type { TestRecord } from "./nodes.ts"
 
@@ -54,8 +60,23 @@ export const SQLite3ParserTestDriver = {
     return {
       runRecord(record: TestRecord): void {
         if (record.type !== "statement" && record.type !== "query") return
-        const result = parseOrThrow(record.sql)
-        expect(toSexpr(result.root)).toMatchSnapshot()
+        const errorAllowed = record.type === "statement" && record.expect === "error"
+        let result: ParseOk | ParseStmtOk | undefined
+        try {
+          if (record.type === "statement") {
+            result = parseOrThrow(record.sql)
+          } else {
+            result = parseStmtOrThrow(record.sql)
+          }
+        } catch (e) {
+          if (!errorAllowed || !(e instanceof Sqlite3ParserDiagnosticError)) {
+            throw e
+          }
+          expect(e.errors.join("\n")).toMatchSnapshot()
+        }
+        if (result) {
+          expect(toSexpr(result.root)).toMatchSnapshot()
+        }
       },
     }
   },

@@ -29,6 +29,7 @@ import _keywordDefs from "../generated/3.53.0/keywords.prod.json" with { type: "
 import type { KeywordDefs } from "../src/tokenize.ts"
 import type { ParseState } from "../src/ast/parseState.ts"
 import type { LalrPopped, RuleId } from "../src/lempar.ts"
+import type { Span } from "../src/tokenize.ts"
 
 const SUBMODULE_ROOT = rootPath("vendor", "submodule", "sqllogictest", "test")
 const MANIFEST_PATH = rootPath("test", "sqllogictest", "corpus.txt")
@@ -44,9 +45,14 @@ const BASELINE_PATH = rootPath("coverage", "rules.json")
 let currentHits: Set<number> | undefined
 const origReduce = parserDefs.reduce
 
-function trackingReduce(state: ParseState, ruleId: RuleId, popped: LalrPopped<unknown>[]): unknown {
+function trackingReduce(
+  state: ParseState,
+  ruleId: RuleId,
+  popped: LalrPopped<unknown>[],
+  ruleSpan: Span,
+): unknown {
   if (currentHits !== undefined) currentHits.add(ruleId as unknown as number)
-  return origReduce(state, ruleId, popped)
+  return origReduce(state, ruleId, popped, ruleSpan)
 }
 
 const mod = parserModuleForGrammar(

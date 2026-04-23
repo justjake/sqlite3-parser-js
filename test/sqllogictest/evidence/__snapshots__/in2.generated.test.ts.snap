@@ -14,22 +14,6 @@ exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #1 statement ok: C
         (Type :name "TEXT")))))"
 `;
 
-exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #2 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) ) 1`] = `
-"(CmdList
-  (CreateTableStmt :temporary false :ifNotExists false
-    (QualifiedName
-      (Name :text "t1"))
-    (ColumnsAndConstraintsCreateTableBody :flags 0
-      (ColumnDefinition :flags 4
-        (Name :text "x")
-        (Type :name "INTEGER"))
-      (ColumnDefinition :flags 4
-        (Name :text "y")
-        (Type :name "VARCHAR"
-          (MaxSizeTypeSize
-            (NumericLiteral :value "8")))))))"
-`;
-
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #3 statement ok: INSERT INTO t1 VALUES(1,'true') 1`] = `
 "(CmdList
   (InsertStmt
@@ -70,736 +54,691 @@ exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #5 statement ok: I
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #6 query I nosort: SELECT 1 FROM t1 WHERE 1 IN (2) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1")
-          (NumericLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1")
+        (NumericLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #7 query I nosort: SELECT 1 FROM t1 WHERE 1.0 IN (2.0) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1.0")
-          (NumericLiteral :value "2.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1.0")
+        (NumericLiteral :value "2.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #8 query I nosort: SELECT 1 FROM t1 WHERE '1' IN ('2') 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (StringLiteral :value "1")
-          (StringLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (StringLiteral :value "1")
+        (StringLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #9 query I nosort: SELECT 1 FROM t1 WHERE 1 NOT IN (2) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1")
-          (NumericLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1")
+        (NumericLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #10 query I nosort: SELECT 1 FROM t1 WHERE 1.0 NOT IN (2.0) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1.0")
-          (NumericLiteral :value "2.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1.0")
+        (NumericLiteral :value "2.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #11 query I nosort: SELECT 1 FROM t1 WHERE '1' NOT IN ('2') 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (StringLiteral :value "1")
-          (StringLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (StringLiteral :value "1")
+        (StringLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #12 query I nosort: SELECT 1 FROM t1 WHERE 1 IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #13 query I nosort: SELECT 1 FROM t1 WHERE 1.0 IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #14 query I nosort: SELECT 1 FROM t1 WHERE '1' IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #15 query I nosort: SELECT 1 FROM t1 WHERE NULL IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NullLiteral))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NullLiteral)))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #16 query I nosort: SELECT 1 FROM t1 WHERE 1 NOT IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #17 query I nosort: SELECT 1 FROM t1 WHERE 1.0 NOT IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #18 query I nosort: SELECT 1 FROM t1 WHERE '1' NOT IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #19 query I nosort: SELECT 1 FROM t1 WHERE NULL NOT IN () 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NullLiteral))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NullLiteral)))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #20 query I nosort: SELECT 1 FROM t1 WHERE 1 IN ( NULL, 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1")
-          (NullLiteral)
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1")
+        (NullLiteral)
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #21 query I nosort: SELECT 1 FROM t1 WHERE 1.0 IN ( NULL, 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1.0")
-          (NullLiteral)
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1.0")
+        (NullLiteral)
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #22 query I nosort: SELECT 1 FROM t1 WHERE '1' IN ( NULL, '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (StringLiteral :value "1")
-          (NullLiteral)
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (StringLiteral :value "1")
+        (NullLiteral)
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #23 query I nosort: SELECT 1 FROM t1 WHERE 1 NOT IN ( NULL, 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1")
-          (NullLiteral)
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1")
+        (NullLiteral)
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #24 query I nosort: SELECT 1 FROM t1 WHERE 1.0 NOT IN ( NULL, 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1.0")
-          (NullLiteral)
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1.0")
+        (NullLiteral)
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #25 query I nosort: SELECT 1 FROM t1 WHERE '1' NOT IN ( NULL, '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (StringLiteral :value "1")
-          (NullLiteral)
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (StringLiteral :value "1")
+        (NullLiteral)
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #26 query I nosort: SELECT 1 FROM t1 WHERE 1 IN ( 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1")
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1")
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #27 query I nosort: SELECT 1 FROM t1 WHERE 1.0 IN ( 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1.0")
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1.0")
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #28 query I nosort: SELECT 1 FROM t1 WHERE '1' IN ( '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (StringLiteral :value "1")
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (StringLiteral :value "1")
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #29 query I nosort: SELECT 1 FROM t1 WHERE 1 NOT IN ( 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1")
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1")
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #30 query I nosort: SELECT 1 FROM t1 WHERE 1.0 NOT IN ( 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1.0")
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1.0")
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #31 query I nosort: SELECT 1 FROM t1 WHERE '1' NOT IN ( '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (StringLiteral :value "1")
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (StringLiteral :value "1")
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #32 query I nosort: SELECT 1 FROM t1 WHERE 1 IN ( NULL, 2 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1")
-          (NullLiteral)
-          (NumericLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1")
+        (NullLiteral)
+        (NumericLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #33 query I nosort: SELECT 1 FROM t1 WHERE 1.0 IN ( NULL, 2.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NumericLiteral :value "1.0")
-          (NullLiteral)
-          (NumericLiteral :value "2.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NumericLiteral :value "1.0")
+        (NullLiteral)
+        (NumericLiteral :value "2.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #34 query I nosort: SELECT 1 FROM t1 WHERE '1' IN ( NULL, '2' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (StringLiteral :value "1")
-          (NullLiteral)
-          (StringLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (StringLiteral :value "1")
+        (NullLiteral)
+        (StringLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #35 query I nosort: SELECT 1 FROM t1 WHERE 1 NOT IN ( NULL, 2 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1")
-          (NullLiteral)
-          (NumericLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1")
+        (NullLiteral)
+        (NumericLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #36 query I nosort: SELECT 1 FROM t1 WHERE 1.0 NOT IN ( NULL, 2.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NumericLiteral :value "1.0")
-          (NullLiteral)
-          (NumericLiteral :value "2.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NumericLiteral :value "1.0")
+        (NullLiteral)
+        (NumericLiteral :value "2.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #37 query I nosort: SELECT 1 FROM t1 WHERE '1' NOT IN ( NULL, '2' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (StringLiteral :value "1")
-          (NullLiteral)
-          (StringLiteral :value "2"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (StringLiteral :value "1")
+        (NullLiteral)
+        (StringLiteral :value "2")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #38 query I nosort: SELECT 1 FROM t1 WHERE NULL IN ( 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NullLiteral)
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NullLiteral)
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #39 query I nosort: SELECT 1 FROM t1 WHERE NULL IN ( 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NullLiteral)
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NullLiteral)
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #40 query I nosort: SELECT 1 FROM t1 WHERE NULL IN ( '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NullLiteral)
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NullLiteral)
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #41 query I nosort: SELECT 1 FROM t1 WHERE NULL NOT IN ( 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NullLiteral)
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NullLiteral)
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #42 query I nosort: SELECT 1 FROM t1 WHERE NULL NOT IN ( 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NullLiteral)
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NullLiteral)
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #43 query I nosort: SELECT 1 FROM t1 WHERE NULL NOT IN ( '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NullLiteral)
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NullLiteral)
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #44 query I nosort: SELECT 1 FROM t1 WHERE NULL IN ( NULL, 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NullLiteral)
-          (NullLiteral)
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NullLiteral)
+        (NullLiteral)
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #45 query I nosort: SELECT 1 FROM t1 WHERE NULL IN ( NULL, 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NullLiteral)
-          (NullLiteral)
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NullLiteral)
+        (NullLiteral)
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #46 query I nosort: SELECT 1 FROM t1 WHERE NULL IN ( NULL, '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not false
-          (NullLiteral)
-          (NullLiteral)
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not false
+        (NullLiteral)
+        (NullLiteral)
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #47 query I nosort: SELECT 1 FROM t1 WHERE NULL NOT IN ( NULL, 1 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NullLiteral)
-          (NullLiteral)
-          (NumericLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NullLiteral)
+        (NullLiteral)
+        (NumericLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #48 query I nosort: SELECT 1 FROM t1 WHERE NULL NOT IN ( NULL, 1.0 ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NullLiteral)
-          (NullLiteral)
-          (NumericLiteral :value "1.0"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NullLiteral)
+        (NullLiteral)
+        (NumericLiteral :value "1.0")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #49 query I nosort: SELECT 1 FROM t1 WHERE NULL NOT IN ( NULL, '1' ) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InListExpr :not true
-          (NullLiteral)
-          (NullLiteral)
-          (StringLiteral :value "1"))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InListExpr :not true
+        (NullLiteral)
+        (NullLiteral)
+        (StringLiteral :value "1")))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #50 query I nosort: SELECT 1 FROM t1 WHERE 1 IN (SELECT 1) 1`] = `
-"(CmdList
-  (SelectStmt
-    (Select
-      (SelectFrom
-        (ExprResultColumn
-          (NumericLiteral :value "1"))
-        (FromClause
-          (TableSelectTable
-            (QualifiedName
-              (Name :text "t1"))))
-        (InSelectExpr :not false
-          (NumericLiteral :value "1")
-          (Select
-            (SelectFrom
-              (ExprResultColumn
-                (NumericLiteral :value "1")))))))))"
+"(SelectStmt
+  (Select
+    (SelectFrom
+      (ExprResultColumn
+        (NumericLiteral :value "1"))
+      (FromClause
+        (TableSelectTable
+          (QualifiedName
+            (Name :text "t1"))))
+      (InSelectExpr :not false
+        (NumericLiteral :value "1")
+        (Select
+          (SelectFrom
+            (ExprResultColumn
+              (NumericLiteral :value "1"))))))))"
 `;
 
 exports[`vendor/submodule/sqllogictest/test/evidence/in2.test #51 statement error: SELECT 1 FROM t1 WHERE 1 IN (SELECT 1,2) 1`] = `

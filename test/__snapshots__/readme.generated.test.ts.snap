@@ -87,7 +87,7 @@ At 1:7:
 }
 `;
 
-exports[`README.md code blocks Traversing the AST (ts) 1`] = `
+exports[`README.md code blocks AST Traversal (ts) 1`] = `
 {
   "stderr": [],
   "stdout": [
