@@ -30,7 +30,8 @@
   },
   "bin": {
     "sqlite3-parser": "dist/bin/sqlite3-parser.js",
-    "sqlite3-tokenizer": "dist/bin/sqlite3-tokenizer.js"
+    "sqlite3-tokenizer": "dist/bin/sqlite3-tokenizer.js",
+    "sqllogictest-parser": "dist/bin/sqllogictest-parser.js"
   },
   "files": [
     "dist"
