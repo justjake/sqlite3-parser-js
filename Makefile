@@ -46,14 +46,20 @@ GEN_TARGETS := \
   test/readme.generated.test.ts \
   sqllogictest-corpus
 
-# sqllogictest submodule paths.  The corpus is generated from the
-# per-feature evidence/ tests; the full submodule (`random/`,
-# `index/`, 600+ files) is intentionally out of scope — revisit with a
-# greedy picker once this corpus stabilises.
+# sqllogictest submodule paths.  The corpus has two layers:
+#   * evidence/ — 12 hand-curated per-feature tests from SQLite.
+#   * picked    — additional files chosen by the greedy coverage picker
+#                 (scripts/pick-sqllogictest-corpus.ts); the manifest
+#                 lives at test/sqllogictest/corpus.txt and is
+#                 regenerated manually, not per `make gen`.
+# Output paths mirror the submodule's subdir layout under
+# test/sqllogictest/ so evidence/, random/*, index/* all coexist.
 SQLLOGICTEST_SUBMODULE := vendor/submodule/sqllogictest
-SQLLOGICTEST_EVIDENCE := $(SQLLOGICTEST_SUBMODULE)/test/evidence
-SQLLOGICTEST_SOURCES := $(wildcard $(SQLLOGICTEST_EVIDENCE)/*.test)
-SQLLOGICTEST_OUTPUTS := $(patsubst $(SQLLOGICTEST_EVIDENCE)/%.test,test/sqllogictest/evidence/%.generated.test.ts,$(SQLLOGICTEST_SOURCES))
+SQLLOGICTEST_TEST_ROOT := $(SQLLOGICTEST_SUBMODULE)/test
+SQLLOGICTEST_EVIDENCE_SOURCES := $(wildcard $(SQLLOGICTEST_TEST_ROOT)/evidence/*.test)
+SQLLOGICTEST_PICKED_SOURCES := $(shell [ -f test/sqllogictest/corpus.txt ] && cat test/sqllogictest/corpus.txt)
+SQLLOGICTEST_SOURCES := $(sort $(SQLLOGICTEST_EVIDENCE_SOURCES) $(SQLLOGICTEST_PICKED_SOURCES))
+SQLLOGICTEST_OUTPUTS := $(patsubst $(SQLLOGICTEST_TEST_ROOT)/%.test,test/sqllogictest/%.generated.test.ts,$(SQLLOGICTEST_SOURCES))
 
 help:
 	@printf '%s\n' \
@@ -248,21 +254,28 @@ test/readme.generated.test.ts: scripts/md-to-test.ts README.md
 # `sqllogictest-corpus` phony prints a warning and no-ops so fresh
 # clones still `make gen` without running `git submodule update`.
 # ---------------------------------------------------------------------------
-test/sqllogictest/evidence/%.generated.test.ts: \
-    $(SQLLOGICTEST_EVIDENCE)/%.test \
+# General pattern rule: any `.test` under the submodule maps to a
+# mirrored `.generated.test.ts` under test/sqllogictest/.  The relative
+# `--ts-driver` path depends on output depth, so it's computed at
+# recipe time from the `%` stem (count slashes, prepend that many
+# `../` plus the two for `test/sqllogictest/`).
+test/sqllogictest/%.generated.test.ts: \
+    $(SQLLOGICTEST_TEST_ROOT)/%.test \
     bin/sqllogictest-parser.ts \
     src/sqllogictest/drivers.ts \
     src/sqllogictest/public.ts \
     src/sqllogictest/testparser.ts \
     src/sqllogictest/ts-test-emitter.ts
 	@mkdir -p $(dir $@)
-	bun bin/sqllogictest-parser.ts --ts \
-	  --ts-driver 'SQLite3ParserTestDriver:../../../src/sqllogictest/public.ts' \
-	  $< > $@
+	@slashes=$$(printf '%s' '$*' | tr -cd /); \
+	  ups=$$(printf '../%.0s' $$(seq 1 $$(($${#slashes} + 2)))); \
+	  bun bin/sqllogictest-parser.ts --ts \
+	    --ts-driver "SQLite3ParserTestDriver:$${ups}src/sqllogictest/public.ts" \
+	    $< > $@
 	bun run fmt $@
 
 .PHONY: sqllogictest-corpus
-ifneq ($(wildcard $(SQLLOGICTEST_EVIDENCE)/.),)
+ifneq ($(wildcard $(SQLLOGICTEST_TEST_ROOT)/.),)
 sqllogictest-corpus: $(SQLLOGICTEST_OUTPUTS)
 else
 sqllogictest-corpus:

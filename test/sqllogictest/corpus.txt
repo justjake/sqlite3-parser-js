@@ -1,0 +1,4 @@
+vendor/submodule/sqllogictest/test/random/groupby/slt_good_1.test
+vendor/submodule/sqllogictest/test/select4.test
+vendor/submodule/sqllogictest/test/random/aggregates/slt_good_14.test
+vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test
