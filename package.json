@@ -50,6 +50,7 @@
     }
   },
   "scripts": {
+    "prepare": "git config --local core.hooksPath .githooks 2>/dev/null || true",
     "build": "bun run build:gen && bun run build:bundle",
     "build:gen": "make gen",
     "build:bundle": "bun scripts/build.ts",

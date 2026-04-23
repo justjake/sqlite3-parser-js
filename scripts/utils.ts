@@ -12,7 +12,7 @@
 
 import * as t from "typebox"
 import * as s from "typebox/schema"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync, statSync } from "node:fs"
 import { dirname, relative, resolve } from "node:path"
 import { parseArgs, type ParseArgsOptionsConfig } from "node:util"
 import type { ParseArgsConfig, ParseArgsOptionDescriptor } from "node:util"
@@ -63,6 +63,60 @@ function formatUsage(cfg: ParseArgsConfig & { usage: string }): string {
       return `  --${key}${value.short ? ` -${value.short}` : ""} ${value.type === "boolean" ? "" : `<value>`}`
     }),
   ].join("\n")
+}
+
+export interface CliInput {
+  readonly source: string
+  readonly filename: string | undefined
+}
+
+/** Drain process.stdin to a UTF-8 string. */
+export async function readStdin(): Promise<string> {
+  let data = ""
+  process.stdin.setEncoding("utf8")
+  for await (const chunk of process.stdin) data += chunk
+  return data
+}
+
+/**
+ * Resolve CLI positional args into `{ source, filename }` for any bin/*
+ * that consumes a single blob of text (SQL, a sqllogictest script, …):
+ *
+ * - `"-"` as the sole positional → read stdin, filename `/dev/stdin`.
+ * - A single positional that names an existing regular file → read that
+ *   file, filename is the path.  The arg must plausibly look like a path
+ *   (short, no newlines / null bytes) before we stat it, so SQL
+ *   containing the word `SELECT` doesn't accidentally hit the disk.
+ * - Otherwise → `positionals.join(" ")`, filename `undefined`.
+ * - No positionals + non-TTY stdin → read stdin, filename `/dev/stdin`.
+ * - No positionals + TTY stdin → throw {@link CliUsageError}.
+ */
+export async function resolveCliInput(positionals: readonly string[]): Promise<CliInput> {
+  const first = positionals[0]
+  if (first === "-") {
+    return { source: await readStdin(), filename: "/dev/stdin" }
+  }
+  if (
+    positionals.length === 1 &&
+    first !== undefined &&
+    looksLikeFilename(first) &&
+    existsSync(first) &&
+    statSync(first).isFile()
+  ) {
+    return { source: readFileSync(first, "utf8"), filename: first }
+  }
+  if (positionals.length === 0) {
+    if (!process.stdin.isTTY) {
+      return { source: await readStdin(), filename: "/dev/stdin" }
+    }
+    throw new CliUsageError("missing input: pass inline text, a file path, or '-' to read stdin")
+  }
+  return { source: positionals.join(" "), filename: undefined }
+}
+
+function looksLikeFilename(s: string): boolean {
+  if (s.length === 0 || s.length > 4096) return false
+  return !/[\n\r\0]/.test(s)
 }
 
 export class CliUsageError extends Error {

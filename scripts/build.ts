@@ -70,7 +70,7 @@ const DIST = join(ROOT, "dist")
  * Source CLIs that should be bundled and shipped as executables.
  * Paths are relative to BIN; outputs land at dist/bin/<name>.js.
  */
-const BIN_ENTRIES = ["sqlite3-parser.ts", "sqlite3-tokenizer.ts"]
+const BIN_ENTRIES = ["sqlite3-parser.ts", "sqlite3-tokenizer.ts", "sqllogictest-parser.ts"]
 
 function log(msg: string): void {
   console.log(`[build] ${msg}`)

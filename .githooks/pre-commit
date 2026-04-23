@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Pre-commit hook: verify formatting with oxfmt.
+#
+# Installed via the `prepare` script in package.json, which sets
+# `core.hooksPath` to this directory on `bun install`.
+#
+# Fails the commit if any tracked file is unformatted; run `bun fmt` to
+# fix, then re-stage.
+
+set -e
+exec bun run fmt -- --check

@@ -67,10 +67,7 @@ function loadRules(version: string): Rule[] {
 // each file section.
 // -------------------------------------------------------------------
 
-function loadLcovHits(
-  lcovPath: string,
-  targetRel: string,
-): Map<number, number> | undefined {
+function loadLcovHits(lcovPath: string, targetRel: string): Map<number, number> | undefined {
   if (!existsSync(lcovPath)) return undefined
   const raw = readFileSync(lcovPath, "utf8")
   const hits = new Map<number, number>()
@@ -145,7 +142,11 @@ interface PerRule {
   hits: number
 }
 
-function buildReport(rules: Rule[], labels: Map<number, number>, hits: Map<number, number>): PerRule[] {
+function buildReport(
+  rules: Rule[],
+  labels: Map<number, number>,
+  hits: Map<number, number>,
+): PerRule[] {
   return rules.map((rule) => {
     const caseLine = labels.get(rule.id)
     const count = caseLine !== undefined ? (hits.get(caseLine) ?? 0) : 0
@@ -160,8 +161,7 @@ function buildReport(rules: Rule[], labels: Map<number, number>, hits: Map<numbe
 await runScript(
   import.meta.main,
   {
-    usage:
-      "usage: bun scripts/rule-coverage.ts [--list] [--json <path>] [--no-fail]",
+    usage: "usage: bun scripts/rule-coverage.ts [--list] [--json <path>] [--no-fail]",
     options: {
       list: { type: "boolean" },
       json: { type: "string" },
