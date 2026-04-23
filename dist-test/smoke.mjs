@@ -111,6 +111,43 @@ test("parser CLI runs under node", () => {
   assert.match(output, /"type": "CmdList"/)
 })
 
+test("sqllogictest subpath exposes parseTest + driver", async () => {
+  const slt = await import("sqlite3-parser/sqllogictest")
+  const source = "statement ok\nSELECT 1\n\nquery I nosort\nSELECT 2\n----\n2\n"
+  const result = slt.parseTest({ source, filename: "<inline>" })
+
+  assert.equal(result.errors.length, 0)
+  const stmts = result.records.filter((r) => r.type === "statement")
+  const queries = result.records.filter((r) => r.type === "query")
+  assert.equal(stmts.length, 1)
+  assert.equal(stmts[0].sql, "SELECT 1")
+  assert.equal(queries.length, 1)
+  assert.equal(queries[0].sql, "SELECT 2")
+  assert.equal(typeof slt.SQLite3ParserTestDriver.setup, "function")
+})
+
+test("sqllogictest-parser CLI runs under node", () => {
+  const cli = join(
+    process.cwd(),
+    "node_modules",
+    "sqlite3-parser",
+    "dist",
+    "bin",
+    "sqllogictest-parser.js",
+  )
+  const output = execFileSync(process.execPath, [cli, "-"], {
+    encoding: "utf8",
+    input: "statement ok\nSELECT 1\n\nquery I nosort\nSELECT 2\n----\n2\n",
+  })
+  const records = JSON.parse(output)
+
+  assert.ok(Array.isArray(records))
+  const stmt = records.find((r) => r.type === "statement")
+  const query = records.find((r) => r.type === "query")
+  assert.equal(stmt.sql, "SELECT 1")
+  assert.equal(query.sql, "SELECT 2")
+})
+
 test("tokenizer CLI runs under node", () => {
   const cli = join(
     process.cwd(),
