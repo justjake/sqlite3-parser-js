@@ -68,6 +68,8 @@
 // have a raw number (test fixtures, REPL poking) — production code
 // should let the interface types propagate.
 // ---------------------------------------------------------------------------
+import type { Span } from "./tokenize"
+
 declare const __symbolIdBrand: unique symbol
 declare const __tokenIdBrand: unique symbol
 declare const __ruleIdBrand: unique symbol
@@ -207,14 +209,18 @@ export interface ParserDefs<Ctx = unknown, V = unknown> {
 
 /**
  * One LR-stack entry.  Mirrors lempar.c's `struct yyStackEntry`:
- * `{ stateno, major, minor }`.  The sentinel at index 0 has
- * `stateno: 0` and an undefined `minor`; the engine never pops it, so
- * the caller's reducer never observes the cast.
+ * `{ stateno, major, minor }`, with an added `span` field tracking the
+ * input range this entry covers (a single token on shift, the union of
+ * popped children on reduce).  The sentinel at index 0 has
+ * `stateno: 0`, an undefined `minor`, and a zero-length span at offset
+ * 0; the engine never pops it, so the caller's reducer never observes
+ * the cast.
  */
 export interface yyStackEntry<V> {
   readonly stateno: number
   readonly major: SymbolId
   readonly minor: V
+  readonly span: Span
 }
 
 /**
@@ -226,15 +232,23 @@ export interface yyStackEntry<V> {
 export interface LalrPopped<V> {
   readonly major: SymbolId
   readonly minor: V
+  readonly span: Span
 }
 
 /**
  * Called once per reduction.  The engine has already popped the RHS
  * entries off the stack and reversed them into source order before
- * calling you.  Your return value is pushed back as the LHS entry's
- * `minor`.
+ * calling you.  `ruleSpan` is the input range covering every popped
+ * entry; for an empty production it is a zero-length span at the
+ * current input cursor.  Your return value is pushed back as the LHS
+ * entry's `minor`.
  */
-export type LalrReduce<Ctx, V> = (ctx: Ctx, ruleId: RuleId, popped: LalrPopped<V>[]) => V
+export type LalrReduce<Ctx, V> = (
+  ctx: Ctx,
+  ruleId: RuleId,
+  popped: LalrPopped<V>[],
+  ruleSpan: Span,
+) => V
 
 /** A single parse error reported by the engine. */
 export interface LalrError<V> {
@@ -288,7 +302,7 @@ export interface LalrEngine<Ctx, V> {
    * After a terminal outcome (`accepted` or `error`), further calls
    * are no-ops — stack is not mutated, state does not change.
    */
-  next(yymajor: TokenId, yyminor: V): void
+  next(yymajor: TokenId, yyminor: V, yyminorSpan: Span): void
   /** The current state of the parser. */
   readonly phase: LalrSessionPhase
   /** The final top-of-stack value when accepted. */
@@ -415,7 +429,12 @@ export function engineModuleForGrammar<Ctx, V>(defs: ParserDefs<Ctx, V>): Create
     // sentinel's `minor` is synthesised as `undefined as V`; because we
     // never pop it, the caller's reducer never observes the cast.
     readonly #yystack: yyStackEntry<V>[] = [
-      { stateno: 0, major: 0 as SymbolId, minor: undefined as V },
+      {
+        stateno: 0,
+        major: 0 as SymbolId,
+        minor: undefined as V,
+        span: { offset: 0, length: 0, line: 1, col: 0 },
+      },
     ]
     readonly #errors: LalrError<V>[] = []
     #phase: LalrSessionPhase = "running"
@@ -462,7 +481,7 @@ export function engineModuleForGrammar<Ctx, V>(defs: ParserDefs<Ctx, V>): Create
      *
      * The caller should check `this.state` after each call.
      */
-    next(yymajor: TokenId, yyminor: V): void {
+    next(yymajor: TokenId, yyminor: V, yyminorSpan: Span): void {
       if (this.#phase !== "running") return
 
       // Hoist the stack field into a local so the hot loop reads a
@@ -497,7 +516,12 @@ export function engineModuleForGrammar<Ctx, V>(defs: ParserDefs<Ctx, V>): Create
           if (newState > K.YY_MAX_SHIFT) {
             newState += K.YY_MIN_REDUCE - K.YY_MIN_SHIFTREDUCE
           }
-          yystack.push({ stateno: newState, major: yymajor, minor: yyminor })
+          yystack.push({
+            stateno: newState,
+            major: yymajor,
+            minor: yyminor,
+            span: yyminorSpan,
+          })
           this.#inputIndex++
           return
         }
@@ -548,16 +572,38 @@ export function engineModuleForGrammar<Ctx, V>(defs: ParserDefs<Ctx, V>): Create
       const popped: LalrPopped<V>[] = []
       for (let i = 0; i < nrhs; i++) {
         const e = yystack.pop()!
-        popped.push({ major: e.major, minor: e.minor })
+        popped.push({ major: e.major, minor: e.minor, span: e.span })
       }
       popped.reverse()
 
-      const minor = this.#reducer(this.#state, yyruleno, popped)
+      // Rule span: union of the popped entries' spans, or a zero-length
+      // span at the end of the last consumed token for empty productions.
+      let ruleSpan: Span
+      if (popped.length === 0) {
+        const top = yystack[yystack.length - 1]!.span
+        ruleSpan = {
+          offset: top.offset + top.length,
+          length: 0,
+          line: top.line,
+          col: top.col,
+        }
+      } else {
+        const first = popped[0]!.span
+        const last = popped[popped.length - 1]!.span
+        ruleSpan = {
+          offset: first.offset,
+          length: last.offset + last.length - first.offset,
+          line: first.line,
+          col: first.col,
+        }
+      }
+
+      const minor = this.#reducer(this.#state, yyruleno, popped, ruleSpan)
 
       // GOTO — see lempar.c:774 yyact = yy_find_reduce_action(...).
       const baseState = yystack[yystack.length - 1]!.stateno
       const act = yy_find_reduce_action(baseState, lhs)
-      yystack.push({ stateno: act, major: lhs, minor })
+      yystack.push({ stateno: act, major: lhs, minor, span: ruleSpan })
     }
   }
 

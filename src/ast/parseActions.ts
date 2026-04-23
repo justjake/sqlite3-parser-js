@@ -103,14 +103,36 @@ export function spanFromPopped(popped: readonly { readonly minor: unknown }[]): 
   return spanOver(first, last)
 }
 
-/** Span covering `[first.offset, last.offset + last.length)`. */
+/**
+ * Span covering `[first.offset, last.offset + last.length)`.
+ *
+ * Either argument may be ZERO_SPAN — the sentinel the codegen emits
+ * for optional RHS positions that are undefined at runtime — in which
+ * case it is dropped and the other argument is returned unchanged.
+ * Without this, `spanOver(real, ZERO_SPAN)` produces a length of
+ * `-real.offset` (a negative-length span past the start of input),
+ * which the codegen hits whenever an optional tail non-terminal is
+ * absent (e.g. `selcollist ::= sclp expr as` with no alias).
+ */
 export function spanOver(first: Span, last: Span): Span {
+  const firstZero = isZeroSpan(first)
+  const lastZero = isZeroSpan(last)
+  if (firstZero && lastZero) return ZERO_SPAN
+  if (firstZero) return last
+  if (lastZero) return first
   return {
     offset: first.offset,
     length: last.offset + last.length - first.offset,
     line: first.line,
     col: first.col,
   }
+}
+
+// Sentinel check: a ZERO_SPAN is zero in all four fields.  Real
+// tokenizer spans always have `line >= 1`, so the line-zero test is
+// unambiguous — no legitimate span collides with this shape.
+function isZeroSpan(s: Span): boolean {
+  return s.line === 0 && s.offset === 0 && s.length === 0
 }
 
 // The `typeof === "object"` / `"span" in` gauntlet is intentionally

@@ -298,181 +298,12 @@ function typeForSymbol(dump: RawDump, sym: RawSymbol): string {
   return "unknown"
 }
 
-// ---------------------------------------------------------------------------
-// Spanful-type analysis. Used to decide, per rule, whether the emitter
-// can replace `nodeSpan()` with a direct `(popped[i].minor as T).span`
-// access (skipping the runtime extractSpan + spanFromPopped path) or
-// must fall back to the runtime helper for safety.
-//
-// Types listed here are non-spanful: primitives, plus the string-literal
-// unions and number aliases in src/ast/nodes.ts. Anything else that's a
-// PascalCase identifier is assumed to be an AST node interface and thus
-// spanful. Object literal types are inspected for an explicit `span:`
-// field. Add new entries here when introducing additional enum-shaped
-// types in nodes.ts; a wrong "always"/"maybe" classification would
-// silently produce wrong spans, so the spanShape() function is biased
-// toward "unknown" (→ runtime helper) when in doubt.
-// ---------------------------------------------------------------------------
-
-const NON_SPANFUL_TYPES: ReadonlySet<string> = new Set([
-  "boolean",
-  "string",
-  "number",
-  "void",
-  "any",
-  "unknown",
-  "undefined",
-  "null",
-  "never",
-  // From src/ast/nodes.ts: `export type X = "Lit" | "Lit" | ...` and
-  // `export type X = number`. Keep in sync if new ones are added.
-  "LikeOperator",
-  "Operator",
-  "UnaryOperator",
-  "CompoundOperator",
-  "Distinctness",
-  "JoinType",
-  "TabFlags",
-  "ColFlags",
-  "SortOrder",
-  "NullsOrder",
-  "RefAct",
-  "InitDeferredPred",
-  "TriggerTime",
-  "ResolveType",
-  "Materialized",
-  "TransactionType",
-  "FrameMode",
-  "FrameExclude",
-  // Scratch / intermediate types from src/ast/parseActions.ts; not
-  // AST nodes (no `type`, no `span`).
-  "FromClauseMut",
-  "JoinedSelectTableMut",
-  "SelectBody",
-])
-
-type SpanShape = "always" | "maybe" | "never" | "unknown"
-
-/** Split a TS union at top-level `|`, respecting `{}`/`()`/`<>`/`[]` nesting. */
-function splitTopLevelUnion(t: string): string[] {
-  const out: string[] = []
-  let depth = 0
-  let last = 0
-  for (let i = 0; i < t.length; i++) {
-    const c = t[i]
-    if (c === "{" || c === "(" || c === "<" || c === "[") depth++
-    else if (c === "}" || c === ")" || c === ">" || c === "]") depth--
-    else if (c === "|" && depth === 0) {
-      out.push(t.slice(last, i).trim())
-      last = i + 1
-    }
-  }
-  out.push(t.slice(last).trim())
-  return out
-}
-
-/**
- * Classify a TS type expression by whether values of that type carry a
- * `.span: Span` field.
- *
- *   "always"  — every value of this type has `.span`.
- *   "maybe"   — `T | undefined` where T has `.span`.
- *   "never"   — no `.span`: primitive, array, enum union.
- *   "unknown" — can't decide; caller falls back to runtime extractSpan.
- */
-function spanShape(typeStr: string): SpanShape {
-  const t = typeStr.trim()
-  if (t === "") return "never"
-
-  // Object literal type — explicit `span:` field decides. The field may
-  // be `span: Span` (always) or `span: Span | undefined` (maybe). Anything
-  // else (no span field, or a more exotic type) is treated as never so we
-  // don't blindly reach for `.span` on a value that might not have one.
-  if (t.startsWith("{") && t.endsWith("}")) {
-    if (/\bspan\s*:\s*Span\s*\|\s*undefined\b/.test(t)) return "maybe"
-    if (/\bspan\s*:\s*Span\b(?!\s*\|)/.test(t)) return "always"
-    return "never"
-  }
-
-  // Union — recurse on each branch.
-  if (t.includes("|") && !t.startsWith("(")) {
-    const parts = splitTopLevelUnion(t)
-    if (parts.length > 1) {
-      let always = false
-      let maybe = false
-      let never = false
-      let nullish = false
-      let unknown = false
-      for (const p of parts) {
-        if (p === "undefined" || p === "null") {
-          nullish = true
-          continue
-        }
-        const s = spanShape(p)
-        if (s === "always") always = true
-        else if (s === "maybe") maybe = true
-        else if (s === "unknown") unknown = true
-        else never = true
-      }
-      if (unknown || never) return "unknown"
-      if (always || maybe) return nullish || maybe ? "maybe" : "always"
-      return "never"
-    }
-  }
-
-  // Array (`T[]`, `Array<T>`, `readonly T[]`, `ReadonlyArray<T>`).
-  if (t.endsWith("[]") || /^Array</.test(t) || /^ReadonlyArray</.test(t) || /^readonly\s/.test(t)) {
-    return "never"
-  }
-
-  // Known non-spanful primitives + enum aliases.
-  if (NON_SPANFUL_TYPES.has(t)) return "never"
-
-  // Bare PascalCase identifier — assume AST node interface.
-  if (/^[A-Z][A-Za-z0-9_]*$/.test(t)) return "always"
-
-  return "unknown"
-}
-
-/**
- * Build the per-rule expression that replaces a `nodeSpan()` call site
- * — the inlined version of `spanFromPopped(popped)`. When the first
- * and last RHS positions can be statically classified as spanful the
- * emitter inlines `spanOver(...)` over direct `.span` reads, skipping
- * the runtime extractSpan/spanFromPopped path. Otherwise it falls back
- * to `spanFromPopped(popped)` so we never read `.span` off a value
- * whose type might not have one.
- */
-function buildSpanExpr(dump: RawDump, rule: RawRule): string {
-  if (rule.nrhs === 0) return "ZERO_SPAN"
-
-  type Pos = { i: number; ty: string; shape: SpanShape }
-  const positions: Pos[] = []
-  for (let i = 0; i < rule.nrhs; i++) {
-    const p = rule.rhs[i]!
-    const sym =
-      "symbol" in p
-        ? dump.symbols[p.symbol]
-        : p.multi[0]
-          ? dump.symbols[p.multi[0].symbol]
-          : undefined
-    const ty = sym ? typeForSymbol(dump, sym) : "unknown"
-    positions.push({ i, ty, shape: spanShape(ty) })
-  }
-
-  const isSpanful = (p: Pos): boolean => p.shape === "always" || p.shape === "maybe"
-  const first = positions.find(isSpanful)
-  const last = [...positions].reverse().find(isSpanful)
-  if (!first || !last) return "spanFromPopped(popped)"
-
-  const access = (p: Pos): string =>
-    p.shape === "maybe"
-      ? `((popped[${p.i}].minor as ${p.ty})?.span ?? ZERO_SPAN)`
-      : `(popped[${p.i}].minor as ${p.ty}).span`
-
-  if (first.i === last.i) return access(first)
-  return `spanOver(${access(first)}, ${access(last)})`
-}
+// Spanful-type analysis used to live here — a per-rule inliner that
+// replaced `nodeSpan()` with a static expression reading `.span` off
+// specific popped positions.  It got dropped when the engine started
+// tracking input spans on every stack entry (see lempar.ts's
+// `ruleSpan` argument to LalrReduce); `nodeSpan()` now rewrites
+// directly to `ruleSpan`, regardless of RHS shapes.
 
 /**
  * Emit the reducer's body for one rule, split into a header comment and
@@ -539,14 +370,14 @@ function emitReducerCase(dump: RawDump, rule: RawRule): { header: string; body: 
       .map((l) => (l.length > 0 ? "      " + l : l))
       .join("\n")
       .trimEnd()
-    // If the action references nodeSpan(), emit a per-case `_span`
-    // local computed from this rule's RHS positions and rewrite the
-    // call sites to read the local. The closure-cached `nodeSpan`
-    // that used to live at the top of `reduce` is gone; rules that
-    // never reference it pay nothing.
+    // Rewrite `nodeSpan()` call sites to read the engine-supplied
+    // `ruleSpan` parameter directly.  The engine tracks input spans on
+    // every stack entry and computes the rule's covering span as the
+    // union of popped children (or a zero-length span at the input
+    // cursor for empty productions); action bodies no longer need any
+    // per-rule .span-wrangling.
     if (body.includes("nodeSpan(")) {
-      lines.push(`      const _span: Span = ${buildSpanExpr(dump, rule)}`)
-      body = body.replace(/nodeSpan\(\)/g, "_span")
+      body = body.replace(/nodeSpan\(\)/g, "ruleSpan")
     }
     lines.push(body)
   }
@@ -589,7 +420,7 @@ function emitReducer(dump: RawDump): string {
 /**
  * Reducer function that dispatches the actions defined for each rule in the grammar to build the AST.
  */
-export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped) => {
+export const reduce: LalrReduce<ParseState, unknown> = (state, ruleId, popped, ruleSpan) => {
   const err = (message: string, span: Span, ...hints: { message: string, span: Span | undefined }[]) => {
     state.errors.push({ message, span, hints });
   }

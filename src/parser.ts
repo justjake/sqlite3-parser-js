@@ -125,7 +125,7 @@ export interface ParserModule {
   /** Parse a SQL string into an AST. */
   parse(source: string, opts?: ParseOptions): ParseResult
   /** Parse a SQL string into an AST, or throw if parse errors occur. */
-  parseOrThrow(source: string, opts?: ParseOptions): { root: CmdList; tokens?: Token[] }
+  parseOrThrow(source: string, opts?: ParseOptions): ParseOk
   /**
    * Parse exactly one top-level SQL statement from `source`.
    *
@@ -137,10 +137,7 @@ export interface ParserModule {
    * Parse exactly one top-level SQL statement from `source`, see {@link parseStmt} for more details.
    * Throws if parse errors occur.
    */
-  parseStmtOrThrow(
-    source: string,
-    opts?: ParseStmtOptions,
-  ): { root: Stmt; tail: number; tokens?: Token[] }
+  parseStmtOrThrow(source: string, opts?: ParseStmtOptions): ParseStmtOk
   /** Tokenize a SQL string into a stream of tokens. */
   tokenize(source: string, opts?: TokenizeOptions): TokenIterator
   /** Look up the display name of a token-id, e.g. `TokenId(1) → "SEMI"`. */
@@ -311,7 +308,7 @@ export function parserModuleForGrammar(
       }
 
       tokens?.push(tok)
-      session.next(tok.type, tok)
+      session.next(tok.type, tok, tok.span)
 
       // `state.cmds` only bumps past 0 once the `ecmd ::= cmdx SEMI`
       // reduction actually fires — which LALR defers until it sees the
@@ -377,7 +374,7 @@ export function parserModuleForGrammar(
           synthetic: true,
         }
         tokens?.push(semiToken)
-        session.next(SEMI, semiToken)
+        session.next(SEMI, semiToken, endSpan)
         if (session.errors.length > 0) return syntaxErrorResult(semiToken)
       }
 
@@ -389,7 +386,7 @@ export function parserModuleForGrammar(
           synthetic: true,
         }
         tokens?.push(eofToken)
-        session.next(EOF, eofToken)
+        session.next(EOF, eofToken, endSpan)
         if (session.errors.length > 0) return syntaxErrorResult(eofToken)
       }
     }
