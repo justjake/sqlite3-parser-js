@@ -72,9 +72,25 @@ const sqlParserTsPkg = JSON.parse(
 // `.js`-extension imports that Node's resolver can't rewrite.  Skip it
 // under Node; include it only when running on Bun.  bench-compare gives
 // useful numbers either way — liteparser just pins our "vs WASM" delta.
+//
+// The specifier is built at runtime (not a static string literal) so
+// TypeScript doesn't statically resolve and typecheck the vendored
+// submodule: `vendor/liteparser/wasm/src/liteparser.ts` carries an
+// `@ts-expect-error` that TS 6 flags as unused, and we don't control
+// that tree.  `exclude` in tsconfig doesn't cover files reached via
+// import; `any`-typing the dynamic import does.
+interface LiteParserHandle {
+  parse(sql: string): unknown
+  destroy(): void
+}
 const isBun = typeof (globalThis as { Bun?: unknown }).Bun !== "undefined"
-const liteparser = isBun
-  ? await (await import("../vendor/liteparser/wasm/src/index.ts")).createLiteParser()
+const liteparserIndexUrl = "../vendor/liteparser/wasm/src/index" + ".ts"
+const liteparser: LiteParserHandle | undefined = isBun
+  ? await (
+      (await import(liteparserIndexUrl)) as {
+        createLiteParser(): Promise<LiteParserHandle>
+      }
+    ).createLiteParser()
   : undefined
 const liteparserPkg = isBun
   ? ((await import("../vendor/liteparser/wasm/package.json", { with: { type: "json" } }))
