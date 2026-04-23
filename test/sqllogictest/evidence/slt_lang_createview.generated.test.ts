@@ -2,7 +2,7 @@
 // by bin/sqllogictest-parser. Do not edit by hand.
 
 import { describe, test, expect, beforeEach, afterEach } from "bun:test"
-import { SQLite3ParserTestDriver } from "../../../src/sqllogictest/public.ts"
+import { SQLite3ParserTestDriver } from "/Users/jitl/src/sqlite3-parser-js/src/sqllogictest/public.ts"
 
 describe("vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test", () => {
   const driver = SQLite3ParserTestDriver.setup({ describe, test, expect, beforeEach, afterEach })
@@ -150,7 +150,7 @@ describe("vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test",
     })
   })
   // onlyif mssql
-  test("#13 statement ok: DELETE FROM view1 WHERE x>0", () => {
+  test.skip("#13 statement ok: DELETE FROM view1 WHERE x>0", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -191,7 +191,7 @@ describe("vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test",
     })
   })
   // onlyif mssql
-  test("#16 statement ok: UPDATE view1 SET x=2", () => {
+  test.skip("#16 statement ok: UPDATE view1 SET x=2", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",

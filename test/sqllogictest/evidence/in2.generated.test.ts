@@ -2,7 +2,7 @@
 // by bin/sqllogictest-parser. Do not edit by hand.
 
 import { describe, test, expect, beforeEach, afterEach } from "bun:test"
-import { SQLite3ParserTestDriver } from "../../../src/sqllogictest/public.ts"
+import { SQLite3ParserTestDriver } from "/Users/jitl/src/sqlite3-parser-js/src/sqllogictest/public.ts"
 
 describe("vendor/submodule/sqllogictest/test/evidence/in2.test", () => {
   const driver = SQLite3ParserTestDriver.setup({ describe, test, expect, beforeEach, afterEach })
@@ -24,7 +24,7 @@ describe("vendor/submodule/sqllogictest/test/evidence/in2.test", () => {
     })
   })
   // onlyif oracle
-  test("#2 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) )", () => {
+  test.skip("#2 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) )", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",

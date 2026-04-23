@@ -268,11 +268,9 @@ test/sqllogictest/%.generated.test.ts: \
     src/sqllogictest/testparser.ts \
     src/sqllogictest/ts-test-emitter.ts
 	@mkdir -p $(dir $@)
-	@slashes=$$(printf '%s' '$*' | tr -cd /); \
-	  ups=$$(printf '../%.0s' $$(seq 1 $$(($${#slashes} + 2)))); \
-	  bun bin/sqllogictest-parser.ts --ts \
-	    --ts-driver "SQLite3ParserTestDriver:$${ups}src/sqllogictest/public.ts" \
-	    $< > $@
+	bun bin/sqllogictest-parser.ts --ts \
+		--skip-if-dbname "sqlite" \
+		$< > $@
 	bun run fmt $@
 
 .PHONY: sqllogictest-corpus

@@ -2,7 +2,7 @@
 // by bin/sqllogictest-parser. Do not edit by hand.
 
 import { describe, test, expect, beforeEach, afterEach } from "bun:test"
-import { SQLite3ParserTestDriver } from "../../../src/sqllogictest/public.ts"
+import { SQLite3ParserTestDriver } from "/Users/jitl/src/sqlite3-parser-js/src/sqllogictest/public.ts"
 
 describe("vendor/submodule/sqllogictest/test/evidence/in1.test", () => {
   const driver = SQLite3ParserTestDriver.setup({ describe, test, expect, beforeEach, afterEach })
@@ -1216,7 +1216,7 @@ describe("vendor/submodule/sqllogictest/test/evidence/in1.test", () => {
     })
   })
   // onlyif mysql
-  test("#76 statement ok: CREATE TABLE t7(a TEXT, UNIQUE (a(1)))", () => {
+  test.skip("#76 statement ok: CREATE TABLE t7(a TEXT, UNIQUE (a(1)))", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -1293,7 +1293,7 @@ describe("vendor/submodule/sqllogictest/test/evidence/in1.test", () => {
     })
   })
   // onlyif mysql
-  test("#83 statement ok: CREATE TABLE t7n(a TEXT, UNIQUE (a(1)))", () => {
+  test.skip("#83 statement ok: CREATE TABLE t7n(a TEXT, UNIQUE (a(1)))", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",

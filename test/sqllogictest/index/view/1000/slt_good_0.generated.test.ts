@@ -2,7 +2,7 @@
 // by bin/sqllogictest-parser. Do not edit by hand.
 
 import { describe, test, expect, beforeEach, afterEach } from "bun:test"
-import { SQLite3ParserTestDriver } from "../../../../../src/sqllogictest/public.ts"
+import { SQLite3ParserTestDriver } from "/Users/jitl/src/sqlite3-parser-js/src/sqllogictest/public.ts"
 
 describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", () => {
   const driver = SQLite3ParserTestDriver.setup({ describe, test, expect, beforeEach, afterEach })
@@ -9229,7 +9229,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1024 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1024 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9261,7 +9261,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1026 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1026 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9293,7 +9293,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1028 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1028 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9550,7 +9550,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1047 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1047 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9582,7 +9582,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1049 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1049 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9614,7 +9614,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1051 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1051 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9871,7 +9871,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1070 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1070 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9903,7 +9903,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1072 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1072 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -9935,7 +9935,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1074 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1074 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10192,7 +10192,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1093 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1093 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10224,7 +10224,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1095 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1095 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10256,7 +10256,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1097 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1097 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10513,7 +10513,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1116 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1116 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10545,7 +10545,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1118 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1118 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10577,7 +10577,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1120 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1120 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10834,7 +10834,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1139 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1139 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10866,7 +10866,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1141 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1141 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -10898,7 +10898,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1143 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1143 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11160,7 +11160,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1162 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1162 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11192,7 +11192,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1164 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1164 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11224,7 +11224,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1166 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1166 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11486,7 +11486,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1185 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1185 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11518,7 +11518,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1187 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1187 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11550,7 +11550,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1189 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1189 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11812,7 +11812,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1208 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1208 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11844,7 +11844,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1210 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1210 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -11876,7 +11876,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1212 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1212 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12138,7 +12138,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1231 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1231 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12170,7 +12170,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1233 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1233 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12202,7 +12202,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1235 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1235 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12464,7 +12464,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1254 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1254 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12496,7 +12496,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1256 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1256 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12528,7 +12528,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1258 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1258 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12790,7 +12790,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1277 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1277 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12822,7 +12822,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1279 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1279 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -12854,7 +12854,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1281 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1281 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13116,7 +13116,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1300 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1300 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13148,7 +13148,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1302 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1302 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13180,7 +13180,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1304 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1304 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13442,7 +13442,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1323 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1323 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13474,7 +13474,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1325 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1325 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13506,7 +13506,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1327 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1327 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13768,7 +13768,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1346 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1346 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13800,7 +13800,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1348 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1348 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -13832,7 +13832,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1350 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1350 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14094,7 +14094,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1369 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1369 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14126,7 +14126,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1371 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1371 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14158,7 +14158,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1373 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1373 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14420,7 +14420,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1392 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1392 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14452,7 +14452,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1394 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1394 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14484,7 +14484,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1396 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1396 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14746,7 +14746,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1415 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1415 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14778,7 +14778,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1417 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1417 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -14810,7 +14810,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1419 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1419 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15072,7 +15072,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1438 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1438 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15104,7 +15104,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1440 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1440 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15136,7 +15136,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1442 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1442 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15398,7 +15398,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1461 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1461 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15430,7 +15430,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1463 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1463 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15462,7 +15462,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1465 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1465 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15724,7 +15724,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1484 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1484 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15756,7 +15756,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1486 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1486 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -15788,7 +15788,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1488 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1488 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16050,7 +16050,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1507 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1507 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16082,7 +16082,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1509 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1509 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16114,7 +16114,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1511 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1511 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16376,7 +16376,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1530 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1530 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16408,7 +16408,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1532 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1532 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16440,7 +16440,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1534 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1534 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16702,7 +16702,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1553 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1553 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16734,7 +16734,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1555 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1555 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -16766,7 +16766,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1557 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1557 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17028,7 +17028,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1576 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1576 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17060,7 +17060,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1578 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1578 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17092,7 +17092,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1580 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1580 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17354,7 +17354,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1599 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1599 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17386,7 +17386,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1601 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1601 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17418,7 +17418,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1603 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1603 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17680,7 +17680,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1622 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1622 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17712,7 +17712,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1624 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1624 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -17744,7 +17744,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1626 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1626 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18006,7 +18006,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1645 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1645 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18038,7 +18038,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1647 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1647 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18070,7 +18070,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1649 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1649 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18332,7 +18332,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1668 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1668 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18364,7 +18364,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1670 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1670 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18396,7 +18396,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1672 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1672 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18658,7 +18658,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1691 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1691 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18690,7 +18690,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1693 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1693 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18722,7 +18722,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1695 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1695 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -18984,7 +18984,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1714 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1714 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19016,7 +19016,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1716 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1716 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19048,7 +19048,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1718 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1718 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19310,7 +19310,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1737 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1737 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19342,7 +19342,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1739 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1739 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19374,7 +19374,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1741 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1741 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19636,7 +19636,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1760 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1760 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19668,7 +19668,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1762 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1762 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19700,7 +19700,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1764 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1764 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19962,7 +19962,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1783 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1783 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -19994,7 +19994,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1785 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1785 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20026,7 +20026,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1787 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1787 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20288,7 +20288,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1806 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1806 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20320,7 +20320,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1808 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1808 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20352,7 +20352,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1810 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1810 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20614,7 +20614,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1829 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1829 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20646,7 +20646,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1831 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1831 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20678,7 +20678,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1833 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1833 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20935,7 +20935,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1852 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1852 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20967,7 +20967,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1854 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1854 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -20999,7 +20999,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1856 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1856 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21256,7 +21256,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1875 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1875 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21288,7 +21288,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1877 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1877 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21320,7 +21320,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1879 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1879 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21577,7 +21577,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1898 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1898 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21609,7 +21609,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1900 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1900 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21641,7 +21641,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1902 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1902 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21898,7 +21898,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1921 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1921 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21930,7 +21930,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1923 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1923 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -21962,7 +21962,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1925 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1925 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22219,7 +22219,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1944 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1944 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22251,7 +22251,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1946 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1946 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22283,7 +22283,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1948 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1948 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22545,7 +22545,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1967 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1967 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22577,7 +22577,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1969 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1969 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22609,7 +22609,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1971 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1971 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22871,7 +22871,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1990 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1990 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22903,7 +22903,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1992 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1992 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -22935,7 +22935,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#1994 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#1994 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23197,7 +23197,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2013 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2013 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23229,7 +23229,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2015 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2015 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23261,7 +23261,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2017 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2017 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23523,7 +23523,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2036 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2036 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23555,7 +23555,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2038 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2038 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23587,7 +23587,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2040 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2040 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23849,7 +23849,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2059 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2059 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23881,7 +23881,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2061 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2061 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -23913,7 +23913,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2063 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2063 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24175,7 +24175,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2082 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2082 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24207,7 +24207,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2084 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2084 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24239,7 +24239,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2086 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2086 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24501,7 +24501,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2105 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2105 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24533,7 +24533,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2107 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2107 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24565,7 +24565,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2109 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2109 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24827,7 +24827,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2128 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2128 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24859,7 +24859,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2130 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2130 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -24891,7 +24891,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2132 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2132 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25153,7 +25153,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2151 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2151 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25185,7 +25185,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2153 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2153 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25217,7 +25217,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2155 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2155 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25479,7 +25479,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2174 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2174 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25511,7 +25511,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2176 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2176 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25543,7 +25543,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2178 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2178 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25803,7 +25803,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2197 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2197 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25835,7 +25835,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2199 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2199 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -25867,7 +25867,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2201 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2201 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26127,7 +26127,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2220 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2220 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26159,7 +26159,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2222 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2222 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26191,7 +26191,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2224 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2224 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26451,7 +26451,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2243 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2243 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26483,7 +26483,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2245 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2245 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26515,7 +26515,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2247 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2247 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26775,7 +26775,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2266 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2266 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26807,7 +26807,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2268 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2268 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -26839,7 +26839,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2270 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2270 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27099,7 +27099,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2289 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2289 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27131,7 +27131,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2291 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2291 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27163,7 +27163,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2293 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2293 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27425,7 +27425,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2312 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2312 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27457,7 +27457,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2314 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2314 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27489,7 +27489,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2316 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2316 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27751,7 +27751,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2335 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2335 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27783,7 +27783,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2337 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2337 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -27815,7 +27815,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2339 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2339 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28077,7 +28077,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2358 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2358 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28109,7 +28109,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2360 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2360 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28141,7 +28141,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2362 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2362 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28403,7 +28403,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2381 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2381 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28435,7 +28435,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2383 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2383 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28467,7 +28467,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2385 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2385 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28729,7 +28729,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2404 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2404 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28761,7 +28761,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2406 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2406 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -28793,7 +28793,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2408 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2408 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29055,7 +29055,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2427 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2427 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29087,7 +29087,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2429 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2429 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29119,7 +29119,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2431 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2431 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29381,7 +29381,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2450 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2450 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29413,7 +29413,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2452 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2452 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29445,7 +29445,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2454 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2454 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29707,7 +29707,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2473 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2473 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29739,7 +29739,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2475 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2475 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -29771,7 +29771,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2477 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2477 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30033,7 +30033,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2496 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2496 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30065,7 +30065,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2498 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2498 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30097,7 +30097,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2500 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2500 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30359,7 +30359,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2519 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2519 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30391,7 +30391,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2521 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2521 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30423,7 +30423,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2523 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2523 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30685,7 +30685,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2542 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2542 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30717,7 +30717,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2544 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2544 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -30749,7 +30749,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2546 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2546 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31011,7 +31011,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2565 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2565 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31043,7 +31043,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2567 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2567 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31075,7 +31075,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2569 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2569 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31337,7 +31337,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2588 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2588 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31369,7 +31369,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2590 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2590 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31401,7 +31401,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2592 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2592 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31663,7 +31663,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2611 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2611 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31695,7 +31695,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2613 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2613 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31727,7 +31727,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2615 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2615 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -31989,7 +31989,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2634 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2634 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32021,7 +32021,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2636 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2636 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32053,7 +32053,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2638 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2638 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32310,7 +32310,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2657 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2657 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32342,7 +32342,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2659 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2659 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32374,7 +32374,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2661 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2661 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32631,7 +32631,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2680 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2680 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32663,7 +32663,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2682 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2682 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32695,7 +32695,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2684 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2684 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32952,7 +32952,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2703 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2703 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -32984,7 +32984,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2705 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2705 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33016,7 +33016,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2707 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2707 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33273,7 +33273,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2726 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2726 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33305,7 +33305,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2728 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2728 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33337,7 +33337,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2730 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2730 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33594,7 +33594,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2749 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2749 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33626,7 +33626,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2751 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2751 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33658,7 +33658,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2753 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2753 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33920,7 +33920,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2772 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2772 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33952,7 +33952,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2774 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2774 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -33984,7 +33984,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2776 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2776 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34246,7 +34246,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2795 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2795 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34278,7 +34278,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2797 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2797 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34310,7 +34310,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2799 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2799 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34572,7 +34572,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2818 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2818 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34604,7 +34604,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2820 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2820 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34636,7 +34636,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2822 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2822 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34898,7 +34898,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2841 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2841 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34930,7 +34930,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2843 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2843 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -34962,7 +34962,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2845 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2845 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35224,7 +35224,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2864 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2864 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35256,7 +35256,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2866 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2866 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35288,7 +35288,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2868 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2868 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35550,7 +35550,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2887 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2887 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35582,7 +35582,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2889 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2889 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35614,7 +35614,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2891 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2891 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35876,7 +35876,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2910 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2910 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35908,7 +35908,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2912 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2912 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -35940,7 +35940,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2914 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2914 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36202,7 +36202,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2933 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2933 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36234,7 +36234,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2935 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2935 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36266,7 +36266,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2937 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2937 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36528,7 +36528,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2956 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2956 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36560,7 +36560,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2958 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2958 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36592,7 +36592,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2960 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2960 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36854,7 +36854,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2979 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2979 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36886,7 +36886,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2981 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2981 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -36918,7 +36918,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#2983 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#2983 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37180,7 +37180,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3002 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3002 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37212,7 +37212,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3004 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3004 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37244,7 +37244,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3006 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3006 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37506,7 +37506,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3025 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3025 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37538,7 +37538,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3027 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3027 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37570,7 +37570,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3029 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3029 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37832,7 +37832,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3048 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3048 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37864,7 +37864,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3050 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3050 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -37896,7 +37896,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3052 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3052 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38158,7 +38158,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3071 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3071 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38190,7 +38190,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3073 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3073 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38222,7 +38222,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3075 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3075 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38484,7 +38484,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3094 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3094 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38516,7 +38516,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3096 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3096 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38548,7 +38548,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3098 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3098 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38810,7 +38810,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3117 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3117 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38842,7 +38842,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3119 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3119 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -38874,7 +38874,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3121 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3121 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39136,7 +39136,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3140 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3140 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39168,7 +39168,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3142 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3142 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39200,7 +39200,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3144 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3144 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39462,7 +39462,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3163 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3163 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39494,7 +39494,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3165 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3165 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39526,7 +39526,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3167 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3167 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39788,7 +39788,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3186 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3186 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39820,7 +39820,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3188 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3188 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -39852,7 +39852,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3190 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3190 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40114,7 +40114,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3209 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3209 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40146,7 +40146,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3211 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3211 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40178,7 +40178,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3213 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3213 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40440,7 +40440,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3232 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3232 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40472,7 +40472,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3234 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3234 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40504,7 +40504,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3236 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3236 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40766,7 +40766,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3255 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3255 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40798,7 +40798,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3257 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3257 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -40830,7 +40830,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3259 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3259 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41092,7 +41092,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3278 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3278 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41124,7 +41124,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3280 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3280 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41156,7 +41156,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3282 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3282 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41418,7 +41418,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3301 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3301 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41450,7 +41450,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3303 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3303 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41482,7 +41482,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3305 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3305 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41744,7 +41744,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3324 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3324 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41776,7 +41776,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3326 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3326 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -41808,7 +41808,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3328 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3328 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42070,7 +42070,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3347 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3347 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42102,7 +42102,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3349 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3349 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42134,7 +42134,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3351 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3351 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42396,7 +42396,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3370 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3370 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42428,7 +42428,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3372 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3372 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42460,7 +42460,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3374 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3374 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42722,7 +42722,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3393 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3393 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42754,7 +42754,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3395 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3395 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -42786,7 +42786,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3397 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3397 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43048,7 +43048,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3416 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3416 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43080,7 +43080,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3418 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3418 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43112,7 +43112,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3420 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3420 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43374,7 +43374,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3439 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3439 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43406,7 +43406,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3441 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3441 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43438,7 +43438,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3443 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3443 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43695,7 +43695,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3462 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3462 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43727,7 +43727,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3464 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3464 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -43759,7 +43759,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3466 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3466 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44016,7 +44016,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3485 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3485 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44048,7 +44048,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3487 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3487 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44080,7 +44080,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3489 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3489 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44337,7 +44337,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3508 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3508 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44369,7 +44369,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3510 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3510 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44401,7 +44401,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3512 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3512 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44658,7 +44658,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3531 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3531 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44690,7 +44690,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3533 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3533 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44722,7 +44722,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3535 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3535 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -44979,7 +44979,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3554 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3554 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45011,7 +45011,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3556 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3556 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45043,7 +45043,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3558 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3558 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45305,7 +45305,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3577 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3577 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45337,7 +45337,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3579 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3579 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45369,7 +45369,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3581 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3581 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45631,7 +45631,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3600 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3600 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45663,7 +45663,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3602 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3602 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45695,7 +45695,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3604 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3604 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45957,7 +45957,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3623 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3623 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -45989,7 +45989,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3625 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3625 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46021,7 +46021,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3627 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3627 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46283,7 +46283,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3646 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3646 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46315,7 +46315,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3648 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3648 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46347,7 +46347,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3650 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3650 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46609,7 +46609,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3669 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3669 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46641,7 +46641,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3671 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3671 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46673,7 +46673,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3673 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3673 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46935,7 +46935,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3692 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3692 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46967,7 +46967,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3694 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3694 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -46999,7 +46999,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3696 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3696 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47261,7 +47261,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3715 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3715 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47293,7 +47293,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3717 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3717 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47325,7 +47325,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3719 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3719 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47587,7 +47587,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3738 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3738 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47619,7 +47619,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3740 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3740 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47651,7 +47651,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3742 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3742 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47913,7 +47913,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3761 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3761 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47945,7 +47945,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3763 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3763 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -47977,7 +47977,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3765 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3765 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48239,7 +48239,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3784 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3784 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48271,7 +48271,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3786 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3786 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48303,7 +48303,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3788 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3788 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48560,7 +48560,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3807 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3807 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48592,7 +48592,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3809 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3809 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48624,7 +48624,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3811 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3811 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48881,7 +48881,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3830 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3830 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48913,7 +48913,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3832 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3832 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -48945,7 +48945,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3834 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3834 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49202,7 +49202,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3853 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3853 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49234,7 +49234,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3855 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3855 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49266,7 +49266,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3857 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3857 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49523,7 +49523,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3876 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3876 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49555,7 +49555,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3878 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3878 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49587,7 +49587,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3880 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3880 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49844,7 +49844,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3899 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3899 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49876,7 +49876,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3901 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3901 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -49908,7 +49908,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3903 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3903 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50165,7 +50165,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3922 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3922 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50197,7 +50197,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3924 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3924 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50229,7 +50229,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3926 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3926 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50486,7 +50486,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3945 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3945 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50518,7 +50518,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3947 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3947 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50550,7 +50550,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3949 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3949 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50807,7 +50807,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3968 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3968 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50839,7 +50839,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3970 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3970 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -50871,7 +50871,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3972 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3972 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51128,7 +51128,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3991 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3991 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51160,7 +51160,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3993 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3993 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51192,7 +51192,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#3995 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#3995 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51449,7 +51449,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4014 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4014 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51481,7 +51481,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4016 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4016 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51513,7 +51513,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4018 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4018 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51775,7 +51775,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4037 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4037 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51807,7 +51807,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4039 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4039 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -51839,7 +51839,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4041 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4041 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52101,7 +52101,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4060 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4060 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52133,7 +52133,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4062 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4062 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52165,7 +52165,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4064 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4064 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52427,7 +52427,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4083 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4083 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52459,7 +52459,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4085 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4085 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52491,7 +52491,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4087 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4087 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52753,7 +52753,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4106 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4106 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52785,7 +52785,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4108 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4108 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -52817,7 +52817,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4110 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4110 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53079,7 +53079,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4129 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4129 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53111,7 +53111,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4131 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4131 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53143,7 +53143,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4133 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4133 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53400,7 +53400,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4152 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4152 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53432,7 +53432,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4154 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4154 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53464,7 +53464,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4156 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4156 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53721,7 +53721,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4175 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4175 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53753,7 +53753,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4177 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4177 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -53785,7 +53785,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4179 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4179 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54042,7 +54042,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4198 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4198 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54074,7 +54074,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4200 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4200 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54106,7 +54106,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4202 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4202 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54363,7 +54363,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4221 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4221 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54395,7 +54395,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4223 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4223 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54427,7 +54427,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4225 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4225 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54684,7 +54684,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4244 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4244 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54716,7 +54716,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4246 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4246 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -54748,7 +54748,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4248 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4248 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55010,7 +55010,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4267 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4267 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55042,7 +55042,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4269 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4269 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55074,7 +55074,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4271 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4271 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55336,7 +55336,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4290 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4290 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55368,7 +55368,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4292 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4292 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55400,7 +55400,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4294 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4294 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55662,7 +55662,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4313 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4313 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55694,7 +55694,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4315 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4315 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55726,7 +55726,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4317 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4317 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -55988,7 +55988,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4336 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4336 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56020,7 +56020,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4338 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4338 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56052,7 +56052,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4340 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4340 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56314,7 +56314,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4359 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4359 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56346,7 +56346,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4361 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4361 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56378,7 +56378,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4363 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4363 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56635,7 +56635,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4382 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4382 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56667,7 +56667,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4384 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4384 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56699,7 +56699,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4386 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4386 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56956,7 +56956,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4405 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4405 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -56988,7 +56988,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4407 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4407 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57020,7 +57020,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4409 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4409 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57277,7 +57277,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4428 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4428 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57309,7 +57309,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4430 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4430 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57341,7 +57341,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4432 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4432 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57598,7 +57598,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4451 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4451 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57630,7 +57630,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4453 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4453 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57662,7 +57662,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4455 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4455 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57919,7 +57919,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4474 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4474 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57951,7 +57951,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4476 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4476 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -57983,7 +57983,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4478 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4478 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58245,7 +58245,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4497 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4497 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58277,7 +58277,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4499 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4499 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58309,7 +58309,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4501 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4501 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58571,7 +58571,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4520 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4520 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58603,7 +58603,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4522 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4522 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58635,7 +58635,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4524 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4524 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58897,7 +58897,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4543 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4543 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58929,7 +58929,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4545 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4545 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -58961,7 +58961,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4547 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4547 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59223,7 +59223,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4566 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4566 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59255,7 +59255,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4568 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4568 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59287,7 +59287,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4570 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4570 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59549,7 +59549,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4589 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4589 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59581,7 +59581,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4591 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4591 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59613,7 +59613,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4593 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4593 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59870,7 +59870,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4612 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4612 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59902,7 +59902,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4614 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4614 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -59934,7 +59934,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4616 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4616 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60191,7 +60191,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4635 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4635 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60223,7 +60223,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4637 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4637 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60255,7 +60255,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4639 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4639 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60512,7 +60512,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4658 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4658 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60544,7 +60544,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4660 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4660 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60576,7 +60576,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4662 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4662 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60833,7 +60833,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4681 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4681 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60865,7 +60865,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4683 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4683 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -60897,7 +60897,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4685 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4685 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61154,7 +61154,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4704 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4704 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61186,7 +61186,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4706 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4706 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61218,7 +61218,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4708 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4708 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61480,7 +61480,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4727 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4727 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61512,7 +61512,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4729 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4729 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61544,7 +61544,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4731 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4731 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61806,7 +61806,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4750 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4750 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61838,7 +61838,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4752 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4752 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -61870,7 +61870,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4754 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4754 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62132,7 +62132,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4773 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4773 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62164,7 +62164,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4775 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4775 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62196,7 +62196,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4777 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4777 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62458,7 +62458,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4796 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4796 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62490,7 +62490,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4798 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4798 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62522,7 +62522,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4800 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4800 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62784,7 +62784,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4819 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4819 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62816,7 +62816,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4821 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4821 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -62848,7 +62848,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4823 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4823 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63110,7 +63110,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4842 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4842 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63142,7 +63142,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4844 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4844 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63174,7 +63174,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4846 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4846 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63436,7 +63436,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4865 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4865 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63468,7 +63468,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4867 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4867 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63500,7 +63500,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4869 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4869 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63762,7 +63762,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4888 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4888 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63794,7 +63794,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4890 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4890 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -63826,7 +63826,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4892 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4892 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64088,7 +64088,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4911 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4911 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64120,7 +64120,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4913 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4913 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64152,7 +64152,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4915 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4915 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64414,7 +64414,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4934 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4934 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64446,7 +64446,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4936 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4936 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64478,7 +64478,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4938 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4938 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64740,7 +64740,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4957 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4957 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64772,7 +64772,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4959 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4959 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -64804,7 +64804,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4961 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4961 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65066,7 +65066,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4980 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4980 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65098,7 +65098,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4982 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4982 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65130,7 +65130,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#4984 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#4984 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65392,7 +65392,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5003 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5003 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65424,7 +65424,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5005 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5005 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65456,7 +65456,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5007 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5007 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65718,7 +65718,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5026 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5026 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65750,7 +65750,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5028 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5028 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -65782,7 +65782,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5030 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5030 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66044,7 +66044,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5049 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5049 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66076,7 +66076,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5051 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5051 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66108,7 +66108,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5053 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5053 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66370,7 +66370,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5072 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5072 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66402,7 +66402,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5074 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5074 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66434,7 +66434,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5076 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5076 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66696,7 +66696,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5095 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5095 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66728,7 +66728,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5097 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5097 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -66760,7 +66760,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5099 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5099 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67022,7 +67022,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5118 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5118 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67054,7 +67054,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5120 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5120 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67086,7 +67086,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5122 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5122 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67348,7 +67348,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5141 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5141 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67380,7 +67380,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5143 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5143 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67412,7 +67412,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5145 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5145 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67674,7 +67674,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5164 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5164 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67706,7 +67706,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5166 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5166 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67738,7 +67738,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5168 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5168 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -67995,7 +67995,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5187 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5187 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68027,7 +68027,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5189 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5189 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68059,7 +68059,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5191 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5191 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68316,7 +68316,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5210 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5210 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68348,7 +68348,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5212 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5212 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68380,7 +68380,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5214 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5214 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68637,7 +68637,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5233 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5233 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68669,7 +68669,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5235 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5235 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68701,7 +68701,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5237 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5237 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68958,7 +68958,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5256 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5256 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -68990,7 +68990,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5258 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5258 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69022,7 +69022,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5260 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5260 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69279,7 +69279,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5279 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5279 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69311,7 +69311,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5281 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5281 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69343,7 +69343,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5283 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5283 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69605,7 +69605,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5302 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5302 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69637,7 +69637,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5304 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5304 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69669,7 +69669,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5306 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5306 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69931,7 +69931,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5325 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5325 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69963,7 +69963,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5327 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5327 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -69995,7 +69995,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5329 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5329 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70257,7 +70257,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5348 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5348 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70289,7 +70289,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5350 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5350 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70321,7 +70321,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5352 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5352 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70583,7 +70583,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5371 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5371 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70615,7 +70615,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5373 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5373 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70647,7 +70647,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5375 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5375 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70909,7 +70909,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5394 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5394 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70941,7 +70941,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5396 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5396 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -70973,7 +70973,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5398 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5398 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71235,7 +71235,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5417 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5417 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71267,7 +71267,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5419 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5419 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71299,7 +71299,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5421 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5421 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71561,7 +71561,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5440 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5440 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71593,7 +71593,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5442 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5442 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71625,7 +71625,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5444 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5444 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71887,7 +71887,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5463 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5463 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71919,7 +71919,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5465 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5465 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -71951,7 +71951,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5467 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5467 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72213,7 +72213,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5486 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5486 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72245,7 +72245,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5488 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5488 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72277,7 +72277,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5490 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5490 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72539,7 +72539,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5509 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5509 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72571,7 +72571,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5511 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5511 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72603,7 +72603,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5513 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5513 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72865,7 +72865,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5532 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5532 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72897,7 +72897,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5534 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5534 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -72929,7 +72929,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5536 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5536 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73191,7 +73191,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5555 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5555 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73223,7 +73223,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5557 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5557 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73255,7 +73255,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5559 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5559 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73517,7 +73517,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5578 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5578 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73549,7 +73549,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5580 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5580 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73581,7 +73581,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5582 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5582 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73843,7 +73843,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5601 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5601 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73875,7 +73875,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5603 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5603 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -73907,7 +73907,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5605 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5605 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74169,7 +74169,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5624 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5624 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74201,7 +74201,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5626 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5626 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74233,7 +74233,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5628 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5628 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74495,7 +74495,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5647 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5647 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74527,7 +74527,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5649 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5649 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74559,7 +74559,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5651 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5651 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74821,7 +74821,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5670 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5670 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74853,7 +74853,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5672 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5672 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -74885,7 +74885,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5674 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5674 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75147,7 +75147,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5693 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5693 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75179,7 +75179,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5695 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5695 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75211,7 +75211,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5697 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5697 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75473,7 +75473,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5716 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5716 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75505,7 +75505,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5718 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5718 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75537,7 +75537,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5720 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5720 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75799,7 +75799,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5739 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5739 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75831,7 +75831,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5741 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5741 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -75863,7 +75863,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5743 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5743 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76125,7 +76125,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5762 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5762 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76157,7 +76157,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5764 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5764 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76189,7 +76189,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5766 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5766 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76451,7 +76451,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5785 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5785 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76483,7 +76483,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5787 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5787 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76515,7 +76515,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5789 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5789 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76777,7 +76777,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5808 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5808 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76809,7 +76809,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5810 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5810 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -76841,7 +76841,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5812 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5812 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77103,7 +77103,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5831 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5831 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77135,7 +77135,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5833 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5833 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77167,7 +77167,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5835 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5835 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77429,7 +77429,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5854 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5854 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77461,7 +77461,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5856 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5856 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77493,7 +77493,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5858 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5858 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77750,7 +77750,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5877 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5877 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77782,7 +77782,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5879 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5879 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -77814,7 +77814,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5881 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5881 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78071,7 +78071,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5900 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5900 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78103,7 +78103,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5902 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5902 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78135,7 +78135,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5904 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5904 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78392,7 +78392,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5923 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5923 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78424,7 +78424,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5925 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5925 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78456,7 +78456,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5927 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5927 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78713,7 +78713,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5946 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5946 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78745,7 +78745,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5948 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5948 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -78777,7 +78777,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5950 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5950 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79034,7 +79034,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5969 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5969 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79066,7 +79066,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5971 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5971 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79098,7 +79098,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5973 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5973 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79360,7 +79360,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5992 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5992 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79392,7 +79392,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5994 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5994 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79424,7 +79424,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#5996 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#5996 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79686,7 +79686,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6015 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6015 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79718,7 +79718,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6017 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6017 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -79750,7 +79750,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6019 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6019 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80012,7 +80012,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6038 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6038 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80044,7 +80044,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6040 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6040 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80076,7 +80076,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6042 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6042 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80338,7 +80338,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6061 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6061 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80370,7 +80370,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6063 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6063 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80402,7 +80402,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6065 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6065 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80664,7 +80664,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6084 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6084 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80696,7 +80696,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6086 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6086 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80728,7 +80728,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6088 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6088 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -80990,7 +80990,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6107 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6107 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81022,7 +81022,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6109 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6109 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81054,7 +81054,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6111 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6111 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81316,7 +81316,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6130 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6130 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81348,7 +81348,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6132 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6132 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81380,7 +81380,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6134 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6134 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81642,7 +81642,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6153 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6153 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81674,7 +81674,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6155 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6155 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81706,7 +81706,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6157 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6157 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -81968,7 +81968,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6176 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6176 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82000,7 +82000,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6178 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6178 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82032,7 +82032,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6180 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6180 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82294,7 +82294,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6199 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6199 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82326,7 +82326,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6201 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6201 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82358,7 +82358,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6203 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6203 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82620,7 +82620,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6222 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6222 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82652,7 +82652,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6224 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6224 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82684,7 +82684,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6226 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6226 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82946,7 +82946,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6245 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6245 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -82978,7 +82978,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6247 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6247 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83010,7 +83010,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6249 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6249 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83272,7 +83272,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6268 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6268 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83304,7 +83304,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6270 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6270 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83336,7 +83336,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6272 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6272 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83598,7 +83598,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6291 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6291 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83630,7 +83630,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6293 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6293 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83662,7 +83662,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6295 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6295 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83924,7 +83924,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6314 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6314 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83956,7 +83956,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6316 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6316 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -83988,7 +83988,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6318 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6318 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84250,7 +84250,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6337 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6337 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84282,7 +84282,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6339 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6339 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84314,7 +84314,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6341 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6341 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84576,7 +84576,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6360 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6360 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84608,7 +84608,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6362 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6362 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84640,7 +84640,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6364 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6364 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84902,7 +84902,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6383 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6383 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84934,7 +84934,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6385 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6385 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -84966,7 +84966,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6387 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6387 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85228,7 +85228,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6406 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6406 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85260,7 +85260,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6408 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6408 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85292,7 +85292,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6410 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6410 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85554,7 +85554,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6429 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6429 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85586,7 +85586,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6431 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6431 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85618,7 +85618,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6433 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6433 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85878,7 +85878,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6452 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6452 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85910,7 +85910,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6454 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6454 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -85942,7 +85942,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6456 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6456 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86202,7 +86202,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6475 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6475 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86234,7 +86234,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6477 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6477 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86266,7 +86266,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6479 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6479 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86526,7 +86526,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6498 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6498 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86558,7 +86558,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6500 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6500 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86590,7 +86590,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6502 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6502 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86850,7 +86850,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6521 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6521 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86882,7 +86882,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6523 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6523 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -86914,7 +86914,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6525 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6525 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87174,7 +87174,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6544 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6544 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87206,7 +87206,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6546 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6546 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87238,7 +87238,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6548 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6548 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87500,7 +87500,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6567 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6567 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87532,7 +87532,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6569 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6569 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87564,7 +87564,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6571 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6571 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87826,7 +87826,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6590 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6590 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87858,7 +87858,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6592 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6592 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -87890,7 +87890,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6594 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6594 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88152,7 +88152,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6613 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6613 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88184,7 +88184,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6615 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6615 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88216,7 +88216,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6617 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6617 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88478,7 +88478,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6636 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6636 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88510,7 +88510,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6638 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6638 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88542,7 +88542,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6640 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6640 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88804,7 +88804,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6659 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6659 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88836,7 +88836,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6661 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6661 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -88868,7 +88868,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6663 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6663 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89130,7 +89130,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6682 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6682 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89162,7 +89162,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6684 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6684 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89194,7 +89194,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6686 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6686 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89456,7 +89456,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6705 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6705 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89488,7 +89488,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6707 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6707 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89520,7 +89520,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6709 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6709 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89782,7 +89782,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6728 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6728 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89814,7 +89814,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6730 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6730 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -89846,7 +89846,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6732 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6732 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90108,7 +90108,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6751 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6751 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90140,7 +90140,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6753 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6753 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90172,7 +90172,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6755 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6755 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90434,7 +90434,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6774 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6774 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90466,7 +90466,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6776 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6776 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90498,7 +90498,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6778 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6778 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90760,7 +90760,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6797 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6797 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90792,7 +90792,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6799 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6799 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -90824,7 +90824,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6801 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6801 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91086,7 +91086,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6820 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6820 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91118,7 +91118,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6822 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6822 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91150,7 +91150,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6824 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6824 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91412,7 +91412,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6843 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6843 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91444,7 +91444,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6845 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6845 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91476,7 +91476,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6847 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6847 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91738,7 +91738,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6866 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6866 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91770,7 +91770,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6868 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6868 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -91802,7 +91802,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6870 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6870 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92064,7 +92064,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6889 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6889 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92096,7 +92096,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6891 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6891 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92128,7 +92128,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6893 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6893 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92390,7 +92390,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6912 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6912 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92422,7 +92422,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6914 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6914 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92454,7 +92454,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6916 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6916 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92716,7 +92716,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6935 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6935 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92748,7 +92748,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6937 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6937 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -92780,7 +92780,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6939 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6939 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93042,7 +93042,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6958 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6958 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93074,7 +93074,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6960 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6960 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93106,7 +93106,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6962 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6962 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93368,7 +93368,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6981 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6981 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93400,7 +93400,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6983 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6983 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93432,7 +93432,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#6985 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#6985 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93694,7 +93694,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7004 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7004 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93726,7 +93726,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7006 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7006 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -93758,7 +93758,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7008 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7008 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94020,7 +94020,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7027 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7027 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94052,7 +94052,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7029 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7029 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94084,7 +94084,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7031 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7031 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94346,7 +94346,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7050 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7050 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94378,7 +94378,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7052 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7052 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94410,7 +94410,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7054 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7054 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94672,7 +94672,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7073 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7073 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94704,7 +94704,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7075 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7075 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94736,7 +94736,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7077 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7077 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -94998,7 +94998,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7096 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7096 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95030,7 +95030,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7098 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7098 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95062,7 +95062,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7100 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7100 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95324,7 +95324,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7119 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7119 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95356,7 +95356,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7121 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7121 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95388,7 +95388,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7123 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7123 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95650,7 +95650,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7142 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7142 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95682,7 +95682,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7144 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7144 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95714,7 +95714,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7146 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7146 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -95976,7 +95976,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7165 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7165 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96008,7 +96008,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7167 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7167 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96040,7 +96040,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7169 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7169 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96302,7 +96302,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7188 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7188 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96334,7 +96334,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7190 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7190 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96366,7 +96366,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7192 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7192 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96628,7 +96628,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7211 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7211 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96660,7 +96660,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7213 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7213 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96692,7 +96692,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7215 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7215 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96954,7 +96954,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7234 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7234 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -96986,7 +96986,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7236 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7236 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97018,7 +97018,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7238 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7238 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97280,7 +97280,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7257 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7257 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97312,7 +97312,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7259 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7259 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97344,7 +97344,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7261 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7261 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97606,7 +97606,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7280 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7280 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97638,7 +97638,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7282 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7282 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97670,7 +97670,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7284 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7284 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97932,7 +97932,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7303 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7303 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97964,7 +97964,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7305 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7305 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -97996,7 +97996,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7307 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7307 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98258,7 +98258,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7326 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7326 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98290,7 +98290,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7328 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7328 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98322,7 +98322,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7330 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7330 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98584,7 +98584,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7349 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7349 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98616,7 +98616,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7351 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7351 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98648,7 +98648,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7353 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7353 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98905,7 +98905,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7372 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7372 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98937,7 +98937,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7374 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7374 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -98969,7 +98969,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7376 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7376 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99226,7 +99226,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7395 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7395 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99258,7 +99258,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7397 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7397 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99290,7 +99290,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7399 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7399 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99547,7 +99547,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7418 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7418 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99579,7 +99579,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7420 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7420 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99611,7 +99611,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7422 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7422 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99868,7 +99868,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7441 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7441 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99900,7 +99900,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7443 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7443 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -99932,7 +99932,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7445 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7445 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100189,7 +100189,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7464 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7464 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100221,7 +100221,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7466 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7466 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100253,7 +100253,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7468 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7468 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100515,7 +100515,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7487 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7487 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100547,7 +100547,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7489 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7489 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100579,7 +100579,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7491 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7491 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100841,7 +100841,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7510 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7510 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100873,7 +100873,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7512 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7512 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -100905,7 +100905,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7514 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7514 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101167,7 +101167,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7533 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7533 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101199,7 +101199,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7535 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7535 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101231,7 +101231,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7537 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7537 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101493,7 +101493,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7556 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7556 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101525,7 +101525,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7558 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7558 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101557,7 +101557,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7560 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7560 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101819,7 +101819,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7579 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7579 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101851,7 +101851,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7581 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7581 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -101883,7 +101883,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7583 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7583 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102140,7 +102140,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7602 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7602 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102172,7 +102172,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7604 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7604 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102204,7 +102204,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7606 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7606 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102461,7 +102461,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7625 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7625 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102493,7 +102493,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7627 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7627 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102525,7 +102525,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7629 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7629 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102782,7 +102782,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7648 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7648 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102814,7 +102814,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7650 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7650 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -102846,7 +102846,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7652 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7652 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -103103,7 +103103,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7671 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7671 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -103135,7 +103135,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7673 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7673 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
@@ -103167,7 +103167,7 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
     })
   })
   // onlyif mssql
-  test("#7675 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
+  test.skip("#7675 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",

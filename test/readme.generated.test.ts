@@ -272,7 +272,7 @@ describe("README.md code blocks", () => {
     }).toMatchSnapshot()
   })
 
-  test("Traversing the AST (ts)", () => {
+  test("AST Traversal (ts)", () => {
     const { captured: __captured, restore: __restore } = captureConsole()
     let __threw: unknown
     try {
