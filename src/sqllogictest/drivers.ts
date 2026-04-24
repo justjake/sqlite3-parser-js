@@ -9,8 +9,8 @@
 import {
   parseStmtOrThrow,
   Sqlite3ParserDiagnosticError,
-  ParseStmtOk,
-  ParseOk,
+  type ParseStmtOk,
+  type ParseOk,
   parseOrThrow,
 } from "../../generated/current.ts"
 import { toSexpr } from "../ast/traverse.ts"

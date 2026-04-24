@@ -76,7 +76,7 @@ function currentModule(current: string): string {
 // To depend on a specific version, import from the versioned subpath
 // instead: \`${PACKAGE_JSON.name}/sqlite-<version>\`.
 
-export * from "./${current}/index"
+export * from "./${current}/index.ts"
 `
 }
 

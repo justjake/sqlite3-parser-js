@@ -11,19 +11,18 @@
  * with non-default options (flag set, digit separator, …).
  */
 
-import { ParserModule, parserModuleForGrammar } from "../../src/parser"
-import type { KeywordDefs } from "../../src/tokenize"
-import * as _parserDefs from "./parse"
-import * as _keywordDefs from "./keywords.prod.json" with { type: "json" }
+import { type ParserModule, parserModuleForGrammar } from "../../src/parser.ts"
+import * as _parserDefs from "./parse.ts"
+import { KEYWORDS_DEFS as _keywordDefs } from "./keywords.ts"
 
-export type * from "../../src/parser"
-export type * from "../../src/tokenize"
-export type * from "../../src/lempar"
-export type * from "../../src/ast/nodes"
-export type * from "../../src/diagnostics"
+export type * from "../../src/parser.ts"
+export type * from "../../src/tokenize.ts"
+export type * from "../../src/lempar.ts"
+export type * from "../../src/ast/nodes.ts"
+export type * from "../../src/diagnostics.ts"
 
-export * from "../../src/ast/traverse"
-export * from "../../src/errors"
+export * from "../../src/ast/traverse.ts"
+export * from "../../src/errors.ts"
 
 // Make specific diagnostics APIs public.
 export {
@@ -32,12 +31,12 @@ export {
   createParseDiagnosticArray,
   lineColAt,
   renderCodeBlock,
-} from "../../src/diagnostics"
+} from "../../src/diagnostics.ts"
 
 /** The specific SQLite version this bundle was generated from. */
 export const SQLITE_VERSION = "__VERSION__" as const
 
-const mod = parserModuleForGrammar(_parserDefs, _keywordDefs as KeywordDefs, {})
+const mod = parserModuleForGrammar(_parserDefs, _keywordDefs, {})
 
 /**
  * Parse a SQL string into an AST.

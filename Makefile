@@ -70,6 +70,7 @@ help:
 	  '  make generated/<ver>/parser.dev.json    # full parser dump (for debugging / upgrade diff)' \
 	  '  make generated/<ver>/keywords.prod.json # slim keyword list' \
 	  '  make generated/<ver>/keywords.dev.json  # full keyword list' \
+	  '  make generated/<ver>/keywords.ts        # keywords.prod.json as a TS module' \
 	  '  make generated/<ver>/index.ts           # per-version TS wrapper' \
 	  '  make build/lemon-<ver>                  # patched lemon compiled' \
 	  '  make build/mkkeywordhash-<ver>          # patched mkkeywordhash' \
@@ -203,9 +204,22 @@ generated/%/keywords.prod.json: generated/%/keywords.dev.json scripts/slim-dump.
 	bun run fmt $@
 
 # ---------------------------------------------------------------------------
+# Per-version keywords TS module.  Wraps keywords.prod.json as a typed
+# const so the runtime version index can import it without JSON-module
+# resolution — lets the shipped dist/ tree stay pure JavaScript.
+# ---------------------------------------------------------------------------
+VERSION_KEYWORDS_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/keywords.ts)
+
+$(VERSION_KEYWORDS_TS): generated/%/keywords.ts: \
+    scripts/emit-keywords-module.ts \
+    generated/%/keywords.prod.json
+	bun scripts/emit-keywords-module.ts generated/$*/keywords.prod.json > $@
+	bun run fmt $@
+
+# ---------------------------------------------------------------------------
 # Per-version TS wrapper.  Codegened from scripts/emit-version-modules.ts.
-# Depends on the emitted parse.ts (runtime parser tables) and the slim
-# keywords prod dump so the wrapper's imports resolve.
+# Depends on the emitted parse.ts (runtime parser tables) and the
+# keywords TS module so the wrapper's imports resolve.
 # ---------------------------------------------------------------------------
 VERSION_INDEX_TS := $(foreach v,$(GEN_VERSIONS),generated/$(v)/index.ts)
 
@@ -216,7 +230,7 @@ $(VERSION_INDEX_TS): generated/%/index.ts: \
     scripts/emit-version-modules.ts \
     generated/template/index.ts \
     generated/%/parse.ts \
-    generated/%/keywords.prod.json
+    generated/%/keywords.ts
 	bun scripts/emit-version-modules.ts version $* generated/template/index.ts > $@
 	bun run fmt $@
 

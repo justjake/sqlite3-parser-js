@@ -6,9 +6,10 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "strict": true,
+    "verbatimModuleSyntax": true,
     "noUncheckedIndexedAccess": false,
     "allowJs": true,
-    "checkJs": false,
+    "checkJs": true,
     "noEmit": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -17,6 +18,13 @@
     "lib": ["ES2022"],
     "types": ["bun"]
   },
-  "include": ["src/**/*", "test/**/*", "bin/**/*.ts", "scripts/**/*.ts", "generated/**/*.ts"],
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "bin/**/*.ts",
+    "scripts/**/*.ts",
+    "scripts/**/*.mjs",
+    "generated/**/*.ts"
+  ],
   "exclude": ["node_modules", "vendor/**/*"]
 }

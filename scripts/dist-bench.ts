@@ -4,7 +4,7 @@
 // under either Bun or Node.
 //
 // Setup that this script guarantees before invoking the target:
-//   1. dist/ is built (runs build:bundle + build:types if missing).
+//   1. dist/ is built (runs build:dist if missing).
 //   2. dist-test/node_modules/sqlite3-parser is a symlink to REPO_ROOT,
 //      so the dist-test bench files resolve the package the way
 //      consumers would — through node_modules — while reading the

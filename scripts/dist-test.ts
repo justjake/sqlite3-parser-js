@@ -41,10 +41,10 @@ await runScript(
   },
   async ({ values }) => {
     if (values.build) {
-      run("bun", ["run", "build:bundle"], REPO_ROOT)
+      run("bun", ["run", "build:dist"], REPO_ROOT)
     } else if (!existsSync(join(REPO_ROOT, "dist"))) {
       throw new CliUsageError(
-        "dist/ is missing. Run `bun dist-test --build` or `bun run build:bundle` first.",
+        "dist/ is missing. Run `bun dist-test --build` or `bun run build:dist` first.",
       )
     }
 

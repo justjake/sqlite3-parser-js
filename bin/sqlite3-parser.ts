@@ -12,9 +12,8 @@
 // (`import { parse } from 'sqlite3-parser'`) in real code.  This CLI
 // is pinned to whatever `vendor/manifest.json` marks as `current`.
 
-import { parse, parseStmt, withOptions } from "../generated/current.ts"
-import { toSexpr } from "../src/ast/traverse.ts"
-import { resolveCliInput, runScript } from "../scripts/utils.ts"
+import { parse, parseStmt, toSexpr, withOptions } from "../generated/current.ts"
+import { resolveCliInput, runScript } from "../src/cli/run.ts"
 
 await runScript(
   import.meta.main,

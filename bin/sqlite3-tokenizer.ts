@@ -12,7 +12,7 @@
 // (`import { withOptions } from 'sqlite3-parser'`) for real use.
 
 import { withOptions } from "../generated/current.ts"
-import { resolveCliInput, runScript } from "../scripts/utils.ts"
+import { resolveCliInput, runScript } from "../src/cli/run.ts"
 
 await runScript(
   import.meta.main,

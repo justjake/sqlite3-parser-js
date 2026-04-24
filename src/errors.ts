@@ -1,4 +1,4 @@
-import type { ParseDiagnostic } from "./diagnostics"
+import type { ParseDiagnostic } from "./diagnostics.ts"
 
 const Sqlite3ParserErrorSymbol = Symbol("Sqlite3ParserError")
 

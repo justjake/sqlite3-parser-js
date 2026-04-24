@@ -68,7 +68,7 @@
 // have a raw number (test fixtures, REPL poking) — production code
 // should let the interface types propagate.
 // ---------------------------------------------------------------------------
-import type { Span } from "./tokenize"
+import type { Span } from "./tokenize.ts"
 
 declare const __symbolIdBrand: unique symbol
 declare const __tokenIdBrand: unique symbol

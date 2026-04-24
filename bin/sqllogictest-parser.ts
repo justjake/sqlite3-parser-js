@@ -26,16 +26,14 @@ import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "no
 import { dirname, resolve } from "node:path"
 import { pathToFileURL } from "node:url"
 
-import { parseTest } from "../src/sqllogictest/testparser.ts"
-import { shouldSkipForDbname } from "../src/sqllogictest/drivers.ts"
-import type { TestRecord } from "../src/sqllogictest/nodes.ts"
-import { emitTsTestModule, type TsTestDriverImport } from "../src/sqllogictest/ts-test-emitter.ts"
 import {
-  CliUsageError,
-  resolveCliInput,
-  resolvePackageImport,
-  runScript,
-} from "../scripts/utils.ts"
+  emitTsTestModule,
+  parseTest,
+  shouldSkipForDbname,
+  type TestRecord,
+  type TsTestDriverImport,
+} from "../src/sqllogictest/public.ts"
+import { CliUsageError, resolveCliInput, resolvePackageImport, runScript } from "../src/cli/run.ts"
 
 const DEFAULT_TS_RUNNER = "bun:test"
 const DEFAULT_TS_DRIVER = "SQLite3ParserTestDriver:sqlite3-parser/sqllogictest"
