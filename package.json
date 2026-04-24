@@ -1,6 +1,6 @@
 {
   "name": "sqlite3-parser",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Parse SQLite query syntax using a LALR(1) parser derived from SQLite's parse.y grammar. 1.5x-200x faster than other JavaScript SQL parsers.",
   "keywords": [
     "sql",
