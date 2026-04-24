@@ -7,7 +7,7 @@ Parse SQLite query syntax.
 - **Faithful**: The parser based on [SQLite's `parse.y` grammar file](https://github.com/sqlite/sqlite/blob/master/src/parse.y) using a [patched version](https://github.com/justjake/sqlite3-parser-js/blob/main/vendor/patched/3.53.0/tool/lemon.c#L5231-L5238) of the [Lemon parser generator](https://sqlite.org/lemon.html) to emit [TypeScript code](https://github.com/justjake/sqlite3-parser-js/blob/main/generated/3.53.0/parse.ts).
 - **Helpful**: Improved error messages, extending the canonical `near "X": syntax error` wording with source location, a list of terminals that would have been accepted, and a grammar-aware hint for common mistakes (unclosed groups with a pointer at the opener, trailing commas, keywords-used-as-identifiers, FILTER-before-OVER, etc.).
 
-[![npm](https://img.shields.io/npm/v/sqlite3-parser?label=npm&logo=npm)](https://www.npmjs.com/package/sqlite3-parser) [![CI](https://img.shields.io/github/actions/workflow/status/justjake/sqlite3-parser-js/ci.yml?branch=main&label=CI&logo=github)](https://github.com/justjake/sqlite3-parser-js/actions/workflows/ci.yml?query=branch%3Amain)
+[![bundlejs](https://deno.bundlejs.com/?q=sqlite3-parser&badge=detailed)](https://bundlejs.com/?q=sqlite3-parser) [![npm](https://img.shields.io/npm/v/sqlite3-parser?label=npm&logo=npm)](https://www.npmjs.com/package/sqlite3-parser) [![CI](https://img.shields.io/github/actions/workflow/status/justjake/sqlite3-parser-js/ci.yml?branch=main&label=CI&logo=github)](https://github.com/justjake/sqlite3-parser-js/actions/workflows/ci.yml?query=branch%3Amain)
 
 ## Usage
 
@@ -339,17 +339,22 @@ To implement a SQLite parser in another language you need roughly:
 │   ├── parser.ts               AST-building parser layered on lempar
 │   ├── tokenize.ts             lexer — port of sqlite/src/tokenize.c
 │   ├── util.ts                 pure helpers from sqlite/src/util.c, string unquoting
-│   ├── errors.ts               Diagnostic / ParseError API + grammar-aware hints
-│   ├── traverse.ts             ESTree-style AST walker + helpers
-│   └── ast/                    AST definitions + helpers
-│       ├── nodes.ts            every node interface, plus `AstNode` / `AstNodeMap`
-│       ├── parseActions.ts     node constructors invoked from grammar actions
-│       └── parseState.ts       per-parse mutable state threaded to the reducer
+│   ├── diagnostics.ts          Diagnostics, hints
+│   ├── errors.ts               Error subclasses
+│   ├── ast/                    AST definitions + helpers
+│   │   ├── nodes.ts            every node interface, plus `AstNode` / `AstNodeMap`
+│   │   ├── parseActions.ts     node constructors invoked from grammar actions
+│   │   ├── parseState.ts       per-parse mutable state threaded to the reducer
+│   │   └── traverse.ts         ESTree-style AST walker + helpers
+│   ├── cli/                    shared runner used by the bin/ entry points
+│   └── sqllogictest/           sqllogictest reader + test emitter (sqlite3-parser/sqllogictest)
 ├── generated/                  codegen + tables (checked into git)
 │   ├── current.ts              re-export shim for the default version
+│   ├── template/               per-version source templates (e.g. `index.ts`) consumed by codegen
 │   ├── <version>/              one directory per tracked SQLite release
 │   │   ├── index.ts            per-version TS wrapper (codegen)
 │   │   ├── parse.ts            LALR tables + per-rule reducer (codegen)
+│   │   ├── keywords.ts         keyword table (codegen)
 │   │   ├── parser.dev.json     full grammar dump (debug/introspection)
 │   │   └── keywords.{dev,prod}.json
 │   └── json-schema/v1/         formal JSON Schemas for the dumps
@@ -358,37 +363,47 @@ To implement a SQLite parser in another language you need roughly:
 │   ├── upstream/<version>/     pristine SQLite sources
 │   ├── patched/<version>/      our patched lemon.c + mkkeywordhash.c + parse.y
 │   └── README.md               details on the vendor tree
-├── scripts/                    build + maintenance tooling
-│   ├── build.ts                bun build + tsc → dist/
-│   ├── vendor.ts               onboard a new SQLite version
-│   ├── emit-ts-parser.ts       parser.dev.json → generated/<ver>/parse.ts
-│   ├── emit-version-modules.ts codegen the per-version TS wrappers
-│   ├── slim-dump.ts            slim keywords.dev.json → keywords.prod.json
-│   ├── json-schemas.ts         emit the JSON Schemas
-│   ├── validate-json.ts        validate a dump against its schema
-│   ├── diff-ast.ts             grammar-shape diff across two parser.dev dumps
-│   ├── ast-coverage.ts         unhit-rule report for the AST layer
-│   ├── bench.ts                micro-benchmarks (tokenize, parse, errors)
-│   └── bench-compare.ts        Compare performance against other libraries
-├── test/                       test suites
-├── bin/                        standalone CLIs (sqlite3-parser, sqlite3-tokenizer)
+├── test/                       test suites (see Testing, below)
+│   ├── examples/               curated SQL corpora (`.sqllogictest`) + generated AST snapshot tests
+│   ├── sqlite/                 tokenizer, lexer, literal, and keyword tests ported from SQLite
+│   └── sqllogictest/           large external sqllogictest corpora (evidence, index, random)
+├── scripts/                    build, codegen, bench, and profiling tooling
+├── bin/                        standalone CLI entry points
 └── Makefile                    pattern rules for the per-version build graph
 ```
 
 Development commands:
 
-| Command                  | Purpose                                                                |
-| ------------------------ | ---------------------------------------------------------------------- |
-| `bun run test`           | Run the full test suite.                                               |
-| `bun run build`          | Produce `dist/` (bundled JS + colocated `.d.ts`).                      |
-| `bun run typecheck`      | `tsc --noEmit` over source + tests + scripts.                          |
-| `bun run bench`          | Run the internal benchmarks (tokenize, parse, error path).             |
-| `bun run bench:compare`  | Compare performance against other libraries.                           |
-| `bun run vendor <ref>`   | Onboard a new SQLite version (see below).                              |
-| `make generated/<ver>/…` | Regenerate a specific output without re-running the whole vendor flow. |
-| `make help`              | List every pattern target Make knows about.                            |
+| Command                  | Purpose                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------ |
+| `bun run test`           | Run the full test suite.                                                                         |
+| `bun run typecheck`      | `tsc --noEmit` over source + tests + scripts.                                                    |
+| `bun run lint`           | Run `oxlint`.                                                                                    |
+| `bun run fmt`            | Run `oxfmt` (formatter).                                                                         |
+| `bun run coverage`       | Run the suite with lcov coverage, then `bun run coverage:rules` for the grammar rule-hit report. |
+| `bun run build`          | Full build: `build:gen` then `build:dist`.                                                       |
+| `bun run build:gen`      | Codegen only — alias for `make gen` (regenerate everything under `generated/`).                  |
+| `bun run build:dist`     | Dist only — `tsc -p tsconfig.build.json` emits a 1:1 JS mirror of the source tree into `dist/`.  |
+| `bun run bench`          | Run the internal benchmarks (tokenize, parse, error path). `:node` runs under Node.              |
+| `bun run bench:compare`  | Compare performance against other libraries. `:node` runs under Node.                            |
+| `bun run bench:dist`     | Run `bench` against the built `dist/` (rather than source). `:compare` / `:node` variants exist. |
+| `bun run prof`           | CPU-profile the parser hot loop. `:node` runs under Node.                                        |
+| `bun run prof:report`    | Render the most recent `bun run prof` run into a text report.                                    |
+| `bun run dist-test`      | Run the external-consumer smoke tests against the built `dist/` (use `:build` to rebuild first). |
+| `bun run vendor <ref>`   | Onboard a new SQLite version (see below).                                                        |
+| `make gen`               | Regenerate all per-version outputs under `generated/` (same as `build:gen`).                     |
+| `make generated/<ver>/…` | Regenerate a specific output without re-running the whole vendor flow.                           |
+| `make help`              | List every pattern target Make knows about.                                                      |
 
 Anything touching the vendored SQLite sources is explained in [`vendor/README.md`](./vendor/README.md).
+
+### Testing
+
+`bun run test` runs the full suite. Tests are organized into three clusters:
+
+- `test/examples/` — curated SQL corpora (`.sqllogictest`) paired with generated AST snapshot tests. Good place to add regression coverage for a new grammar case.
+- `test/sqlite/` — tokenizer, lexer, literal, and keyword tests ported from SQLite's own test vectors.
+- `test/sqllogictest/` — large external sqllogictest corpora for broad acceptance coverage.
 
 ### Adding new SQLite versions
 
@@ -407,6 +422,14 @@ This:
 After the script reports success, review the merged patches, run `bun test`, and commit. The script never auto-commits — it's easy to bury a silent regression otherwise.
 
 Flags: `--no-submodule --from <path>` bring your own SQLite source tree (useful for building against an unreleased development snapshot), `--commit <sha>` overrides the commit hash recorded in the manifest.
+
+### Releases
+
+Every push to `main` is automatically published to npm by CI via GitHub OIDC trusted publishing.
+
+- New `package.json` versions publish as "latest" dist-tag; default for `npm install` (stable)
+- Existing versions publish as `${version}-next.<sha>` to the "next" dist-tag; use `npm install <pkg>@next` to install (preview)
+- [See all published versions](https://www.npmjs.com/package/sqlite3-parser?activeTab=versions)
 
 ## Stability
 
