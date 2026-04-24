@@ -8,6 +8,11 @@ import { readFileSync } from "node:fs"
 import { parseArgs } from "node:util"
 import { run, bench, group, summary, do_not_optimize } from "mitata"
 import * as ours from "sqlite3-parser"
+import {
+  printAggregateTable,
+  printParserHeader,
+  printReadmeSummaryTable,
+} from "../scripts/bench-report.mjs"
 // `sqlite-parser` and `@appland/sql-parser` don't publish types; import
 // bare since this file is already .mjs (no type checking).
 import sqliteParser from "sqlite-parser"
@@ -120,115 +125,28 @@ const { values } = parseArgs({
   strict: false,
 })
 
-if (values.md) printParserHeader(competitors)
+const md = Boolean(values.md)
+if (md) printParserHeader(competitors)
+
+// Capture mitata's per-line output via its `print` hook so we can emit
+// a README-compatible summary table FIRST. Without the reorder the
+// summary would land below the five per-input tables in the CI job
+// summary, defeating the copy-paste-into-README workflow.
+const captured = []
 const result = await run({
   ...(values.filter ? { filter: new RegExp(values.filter) } : {}),
-  ...(values.md ? { format: "markdown", colors: false } : {}),
+  ...(md
+    ? {
+        format: "markdown",
+        colors: false,
+        print: (s) => captured.push(s),
+      }
+    : {}),
 })
-printAggregateTable(result.benchmarks, Boolean(values.md))
 
-function printAggregateTable(benchmarks, md = false) {
-  const trials = benchmarks
-    .map((t) => {
-      const idx = t.alias.lastIndexOf(" / ")
-      if (idx < 0) return undefined
-      const avg = t.runs[0]?.stats?.avg
-      if (avg === undefined) return undefined
-      return { label: t.alias.slice(0, idx), competitor: t.alias.slice(idx + 3), avg }
-    })
-    .filter(Boolean)
-
-  if (trials.length === 0) return
-
-  const labels = [...new Set(trials.map((t) => t.label))]
-  const cols_ = [...new Set(trials.map((t) => t.competitor))]
-  const byKey = new Map()
-  for (const t of trials) byKey.set(`${t.label}\0${t.competitor}`, t.avg)
-
-  const BASELINE = "ours"
-  const cols = [{ header: "input", cell: (l) => l }]
-  for (const c of cols_) {
-    cols.push({ header: c, cell: (l) => formatAvg(byKey.get(`${l}\0${c}`)) })
-    if (c !== BASELINE) {
-      cols.push({ header: `vs ${BASELINE}`, cell: (l) => formatRatio(byKey, l, c, BASELINE) })
-    }
-  }
-
-  const print = (s) => process.stdout.write(s + "\n")
-  print("")
-  if (md) {
-    print("### aggregate (avg / iter)")
-    print("")
-    print("| " + cols.map((c) => c.header).join(" | ") + " |")
-    print("| " + cols.map(() => "---").join(" | ") + " |")
-    for (const l of labels) print("| " + cols.map((c) => c.cell(l)).join(" | ") + " |")
-    return
-  }
-
-  const widths = cols.map((c) =>
-    Math.max(c.header.length, ...labels.map((l) => stripAnsi(c.cell(l)).length)),
-  )
-  const rule = widths.map((w) => "─".repeat(w)).join("─┼─")
-  const join = (parts) => parts.map((p, i) => padEnd(p, widths[i])).join(" │ ")
-
-  print("aggregate (avg / iter)")
-  print(join(cols.map((c) => c.header)))
-  print(rule)
-  for (const l of labels) print(join(cols.map((c) => c.cell(l))))
+if (md) {
+  printReadmeSummaryTable(result.benchmarks)
+  process.stdout.write("\n")
+  for (const line of captured) process.stdout.write(line + "\n")
 }
-
-function formatAvg(avg) {
-  if (avg === undefined) return "—"
-  if (avg < 1_000) return `${avg.toFixed(1)} ns`
-  if (avg < 1_000_000) return `${(avg / 1_000).toFixed(2)} µs`
-  if (avg < 1_000_000_000) return `${(avg / 1_000_000).toFixed(2)} ms`
-  return `${(avg / 1_000_000_000).toFixed(2)} s`
-}
-
-function formatRatio(byKey, label, competitor, baseline) {
-  const a = byKey.get(`${label}\0${competitor}`)
-  const b = byKey.get(`${label}\0${baseline}`)
-  if (a === undefined || b === undefined) return "—"
-  if (a >= b) return `${(a / b).toFixed(2)}× slower`
-  return `${(b / a).toFixed(2)}× faster`
-}
-
-function printParserHeader(parsers) {
-  const print = (s) => process.stdout.write(s + "\n")
-  print("## parsers under test")
-  print("")
-  for (const c of parsers) {
-    const pkg = c.pkg
-    const version = pkg.version ? ` \`${pkg.version}\`` : ""
-    const link = packageLink(pkg)
-    const name = link ? `[\`${pkg.name}\`](${link})` : `\`${pkg.name}\``
-    const desc = pkg.description ? ` — ${pkg.description}` : ""
-    print(`- **${c.label}**: ${name}${version}${desc}`)
-  }
-  print("")
-}
-
-function packageLink(pkg) {
-  if (pkg.homepage) return pkg.homepage
-  const repo = pkg.repository
-  if (!repo) return undefined
-  const raw = typeof repo === "string" ? repo : repo.url
-  if (!raw) return undefined
-  return normalizeRepoUrl(raw)
-}
-
-function normalizeRepoUrl(raw) {
-  let url = raw.replace(/^git\+/, "").replace(/\.git$/, "")
-  const sshMatch = url.match(/^git@([^:]+):(.+)$/)
-  if (sshMatch) url = `https://${sshMatch[1]}/${sshMatch[2]}`
-  return url
-}
-
-function stripAnsi(s) {
-  return s.replace(/\x1b\[[0-9;]*m/g, "")
-}
-
-function padEnd(s, w) {
-  const visible = stripAnsi(s).length
-  return visible >= w ? s : s + " ".repeat(w - visible)
-}
+printAggregateTable(result.benchmarks, md)
