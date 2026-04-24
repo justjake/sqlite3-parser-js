@@ -4,6 +4,7 @@ const Sqlite3ParserErrorSymbol = Symbol("Sqlite3ParserError")
 
 /** Base class for semantic errors thrown by this package. */
 export class Sqlite3ParserError extends Error {
+  name = "Sqlite3ParserError"
   static wrap<E extends Error>(error: E): Sqlite3ParserError {
     if (error instanceof Sqlite3ParserError) {
       return error
@@ -31,6 +32,7 @@ export class Sqlite3ParserError extends Error {
 
 /** Error thrown by `parseOrThrow` / `parseStmtOrThrow` when the parse produces one or more diagnostics. */
 export class Sqlite3ParserDiagnosticError extends Sqlite3ParserError {
+  name = "Sqlite3ParserDiagnosticError"
   /** Individual diagnostics that contributed to this error. */
   declare readonly errors: readonly ParseDiagnostic[]
 
