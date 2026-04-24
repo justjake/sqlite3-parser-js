@@ -142,6 +142,13 @@ async function buildJs(versions: string[]): Promise<void> {
     // identifiers.  Sourcemaps are emitted alongside so debuggers and
     // error reporters can still show original symbol names.
     minify: true,
+    // Stamp `__BUNDLED__ = true` into the output. `scripts/utils.ts`'
+    // `isRunningFromSource()` reads this to distinguish a published
+    // bundle from an in-repo checkout; in source the identifier is
+    // undeclared and `typeof` returns "undefined" without throwing.
+    define: {
+      __BUNDLED__: "true",
+    },
     // Return {success,logs} instead of throwing an AggregateError on
     // failure — otherwise bun's per-file BuildMessages get swallowed
     // behind the generic "Bundle failed" top-level message.

@@ -269,6 +269,7 @@ test/sqllogictest/%.generated.test.ts: \
     src/sqllogictest/ts-test-emitter.ts
 	@mkdir -p $(dir $@)
 	bun bin/sqllogictest-parser.ts --ts \
+		--out $@ \
 		--skip-if-dbname "sqlite" \
 		$< > $@
 	bun run fmt $@
@@ -301,9 +302,7 @@ test/examples/%.generated.test.ts: \
     src/sqllogictest/testparser.ts \
     src/sqllogictest/ts-test-emitter.ts
 	@mkdir -p $(dir $@)
-	bun bin/sqllogictest-parser.ts --ts \
-	  --ts-driver 'SQLite3ParserTestDriver:../../src/sqllogictest/public.ts' \
-	  $< > $@
+	bun bin/sqllogictest-parser.ts --ts --out $@ $< > $@
 	bun run fmt $@
 
 .PHONY: examples-corpus

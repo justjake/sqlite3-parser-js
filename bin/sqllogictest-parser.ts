@@ -22,7 +22,9 @@
 // `<Name>:<specifier>` pair, and rewriting a `<packageName>/…` driver
 // specifier to a source-tree path when running from a checkout.
 
-import { existsSync, readFileSync, statSync } from "node:fs"
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
+import { dirname, resolve } from "node:path"
+import { pathToFileURL } from "node:url"
 
 import { parseTest } from "../src/sqllogictest/testparser.ts"
 import { shouldSkipForDbname } from "../src/sqllogictest/drivers.ts"
@@ -30,23 +32,13 @@ import type { TestRecord } from "../src/sqllogictest/nodes.ts"
 import { emitTsTestModule, type TsTestDriverImport } from "../src/sqllogictest/ts-test-emitter.ts"
 import {
   CliUsageError,
-  PACKAGE_JSON_PATH,
   resolveCliInput,
-  rootPath,
+  resolvePackageImport,
   runScript,
 } from "../scripts/utils.ts"
 
 const DEFAULT_TS_RUNNER = "bun:test"
 const DEFAULT_TS_DRIVER = "SQLite3ParserTestDriver:sqlite3-parser/sqllogictest"
-
-// Full package.json — used to rewrite `<name>/<subpath>` driver
-// specifiers through the `exports` field when we're running from
-// source. `scripts/utils.ts` only surfaces `name` / `version` from its
-// validated view, so we re-read the file here to see the whole shape.
-const RAW_PACKAGE_JSON = JSON.parse(readFileSync(PACKAGE_JSON_PATH, "utf8")) as {
-  readonly name?: string
-  readonly exports?: Record<string, unknown>
-}
 
 await runScript(
   import.meta.main,
@@ -80,6 +72,11 @@ await runScript(
       "                         inclusive range N..M. Numbering is 1-based and\n" +
       "                         matches the `#N` labels in --ts output; trivia\n" +
       "                         and control records are always skipped.\n" +
+      "  --out <path>           Write output to <path> instead of stdout.  When\n" +
+      "                         --ts is active and --ts-driver resolves to a\n" +
+      "                         source-tree path, the emitted import is made\n" +
+      "                         relative to <path>'s directory so the generated\n" +
+      "                         file is portable across checkouts.\n" +
       "  <input>                sqllogictest source, a path to a `.test` file, or\n" +
       "                         '-' for stdin.",
     options: {
@@ -91,6 +88,7 @@ await runScript(
       "ts-driver": { type: "string", default: DEFAULT_TS_DRIVER },
       "skip-if-dbname": { type: "string" },
       idx: { type: "string" },
+      out: { type: "string" },
     },
   },
   async ({ values, positionals }) => {
@@ -104,7 +102,8 @@ await runScript(
     const idxRange = parseIdxRange(values["idx"])
     const tsRunner = values["ts-runner"] ?? DEFAULT_TS_RUNNER
     const tsImports = resolveTsImports(values["ts-imports"])
-    const tsDriver = resolveTsDriver(values["ts-driver"] ?? DEFAULT_TS_DRIVER)
+    const outPath = values["out"]
+    const tsDriver = resolveTsDriver(values["ts-driver"] ?? DEFAULT_TS_DRIVER, outPath)
 
     const { source, filename } = await resolveCliInput(positionals)
     const result = parseTest({
@@ -117,17 +116,16 @@ await runScript(
 
     const records = idxRange ? sliceByIndex(result.records, idxRange) : result.records
 
+    let output: string
     if (tsMode) {
-      console.log(
-        emitTsTestModule(records, {
-          title: result.filename,
-          runner: tsRunner,
-          driver: tsDriver,
-          imports: tsImports,
-          dbname,
-          startIndex: idxRange?.lo,
-        }),
-      )
+      output = emitTsTestModule(records, {
+        title: result.filename,
+        runner: tsRunner,
+        driver: tsDriver,
+        imports: tsImports,
+        dbname,
+        startIndex: idxRange?.lo,
+      })
     } else if (sqlMode) {
       const bodies: string[] = []
       for (const rec of records) {
@@ -135,11 +133,19 @@ await runScript(
         if (dbname !== undefined && shouldSkipForDbname(rec, dbname)) continue
         bodies.push(`${rec.sql};`)
       }
-      console.log(bodies.join("\n"))
+      output = bodies.join("\n")
     } else {
       const filtered =
         dbname !== undefined ? records.filter((r) => !shouldSkipForDbname(r, dbname)) : records
-      console.log(JSON.stringify(filtered, undefined, 2))
+      output = JSON.stringify(filtered, undefined, 2)
+    }
+
+    if (outPath !== undefined) {
+      const abs = resolve(outPath)
+      mkdirSync(dirname(abs), { recursive: true })
+      writeFileSync(abs, output.endsWith("\n") ? output : `${output}\n`)
+    } else {
+      console.log(output)
     }
 
     if (result.errors.length > 0) process.exit(1)
@@ -197,74 +203,20 @@ function resolveTsImports(raw: string | undefined): string | undefined {
 }
 
 // Parse `--ts-driver` (`<Name>:<specifier>` or bare `<specifier>`) and
-// rewrite the specifier to a source-tree path when running from a
-// checkout, so emitted tests resolve without a prior `bun run build`.
-function resolveTsDriver(raw: string): TsTestDriverImport {
+// resolve the specifier through package.json `exports` when running
+// from source, so emitted tests import the in-repo source file rather
+// than a missing `dist/` entry. The resolved path is made relative to
+// the output file's location (or the current working directory, when
+// --out is absent) so the generated file is portable across checkouts.
+function resolveTsDriver(raw: string, outPath: string | undefined): TsTestDriverImport {
   const colonIdx = raw.indexOf(":")
   const isNamedImport = colonIdx > 0 && /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(raw.slice(0, colonIdx))
   const importName = isNamedImport ? raw.slice(0, colonIdx) : undefined
-  const specifier = isNamedImport ? raw.slice(colonIdx + 1) : raw
-  return { importName, specifier: rewriteSpecifierForSource(specifier) }
-}
-
-// When running from source (the CLI lives in a checkout rather than
-// under node_modules/), rewrite `<packageName>/<subpath>` driver
-// specifiers to absolute paths into the source tree, using the
-// `exports` field of package.json. Specifiers that don't match the
-// package name, or subpaths that don't map, are returned unchanged.
-function rewriteSpecifierForSource(spec: string): string {
-  if (!isRunningFromSource()) return spec
-  const pkgName = RAW_PACKAGE_JSON.name
-  const exports = RAW_PACKAGE_JSON.exports
-  if (!pkgName || !exports) return spec
-  if (spec !== pkgName && !spec.startsWith(`${pkgName}/`)) return spec
-  const subpath = spec === pkgName ? "." : `./${spec.slice(pkgName.length + 1)}`
-  const distPath = resolveExportSubpath(exports, subpath)
-  if (!distPath) return spec
-  const sourcePath = distPathToSource(distPath)
-  if (!sourcePath) return spec
-  const abs = rootPath(sourcePath)
-  return existsSync(abs) ? abs : spec
-}
-
-function isRunningFromSource(): boolean {
-  return existsSync(rootPath("src")) && existsSync(rootPath("bin"))
-}
-
-function resolveExportSubpath(
-  exports: Record<string, unknown>,
-  subpath: string,
-): string | undefined {
-  const exact = exports[subpath]
-  if (exact !== undefined) return exportEntryDefault(exact)
-  for (const [pattern, entry] of Object.entries(exports)) {
-    const starIdx = pattern.indexOf("*")
-    if (starIdx < 0) continue
-    const prefix = pattern.slice(0, starIdx)
-    const suffix = pattern.slice(starIdx + 1)
-    if (!subpath.startsWith(prefix) || !subpath.endsWith(suffix)) continue
-    const star = subpath.slice(prefix.length, subpath.length - suffix.length)
-    const entryDefault = exportEntryDefault(entry)
-    if (entryDefault !== undefined) return entryDefault.replace("*", star)
-  }
-  return undefined
-}
-
-function exportEntryDefault(entry: unknown): string | undefined {
-  if (typeof entry === "string") return entry
-  if (entry && typeof entry === "object") {
-    const obj = entry as Record<string, unknown>
-    const cand = obj["default"] ?? obj["import"]
-    if (typeof cand === "string") return cand
-  }
-  return undefined
-}
-
-// Package `exports` point at the built `./dist/...` layout, which
-// mirrors the source tree under `dist/`. Stripping the `./dist/`
-// prefix and swapping `.js` for `.ts` takes us back to the authoring
-// path. Specifiers that don't fit the pattern are left unmapped.
-function distPathToSource(distPath: string): string | undefined {
-  if (!distPath.startsWith("./dist/")) return undefined
-  return distPath.replace(/^\.\/dist\//, "./").replace(/\.js$/, ".ts")
+  const rawSpec = isNamedImport ? raw.slice(colonIdx + 1) : raw
+  // `resolvePackageImport` takes a file URL and strips to its dirname.
+  // With no --out we don't have a real file path to anchor on, so
+  // synthesize a faux child of the cwd so its dirname is the cwd.
+  const outFilePath = outPath !== undefined ? resolve(outPath) : resolve(process.cwd(), "stdout")
+  const callerUrl = pathToFileURL(outFilePath).href
+  return { importName, specifier: resolvePackageImport(rawSpec, callerUrl) }
 }
