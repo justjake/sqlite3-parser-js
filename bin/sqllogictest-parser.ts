@@ -64,8 +64,11 @@ await runScript(
       "                         so the emitted tests resolve to the source tree.\n" +
       "  --skip-if-dbname <db>  Set the runner's database name. Records whose\n" +
       "                         skipif/onlyif modifiers would skip for that name\n" +
-      "                         are omitted from JSON output, or emitted as\n" +
-      "                         test.skip under --ts.\n" +
+      "                         are omitted from JSON, --sql, and --ts output.\n" +
+      "                         Pass --ts-emit-skipped with --ts to keep them\n" +
+      "                         as test.skip(...) calls instead.\n" +
+      "  --ts-emit-skipped      Emit skipped records as test.skip(...) under --ts\n" +
+      "                         instead of dropping them. Requires --skip-if-dbname.\n" +
       "  --idx <N>[:<M>]        Emit only the Nth statement/query record, or the\n" +
       "                         inclusive range N..M. Numbering is 1-based and\n" +
       "                         matches the `#N` labels in --ts output; trivia\n" +
@@ -84,6 +87,7 @@ await runScript(
       "ts-imports": { type: "string" },
       "ts-runner": { type: "string", default: DEFAULT_TS_RUNNER },
       "ts-driver": { type: "string", default: DEFAULT_TS_DRIVER },
+      "ts-emit-skipped": { type: "boolean" },
       "skip-if-dbname": { type: "string" },
       idx: { type: "string" },
       out: { type: "string" },
@@ -97,6 +101,13 @@ await runScript(
       throw new CliUsageError("--sql and --ts are mutually exclusive")
     }
     const dbname = values["skip-if-dbname"]
+    const emitSkipped = Boolean(values["ts-emit-skipped"])
+    if (emitSkipped && !tsMode) {
+      throw new CliUsageError("--ts-emit-skipped requires --ts")
+    }
+    if (emitSkipped && dbname === undefined) {
+      throw new CliUsageError("--ts-emit-skipped requires --skip-if-dbname")
+    }
     const idxRange = parseIdxRange(values["idx"])
     const tsRunner = values["ts-runner"] ?? DEFAULT_TS_RUNNER
     const tsImports = resolveTsImports(values["ts-imports"])
@@ -122,6 +133,7 @@ await runScript(
         driver: tsDriver,
         imports: tsImports,
         dbname,
+        emitSkipped,
         startIndex: idxRange?.lo,
       })
     } else if (sqlMode) {

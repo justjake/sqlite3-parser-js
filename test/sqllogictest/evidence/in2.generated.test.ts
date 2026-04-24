@@ -23,22 +23,6 @@ describe("vendor/submodule/sqllogictest/test/evidence/in2.test", () => {
       ],
     })
   })
-  // onlyif oracle
-  test.skip("#2 statement ok: CREATE TABLE t1( x INTEGER, y VARCHAR(8) )", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "CREATE TABLE t1( x INTEGER, y VARCHAR(8) )",
-      line: 28,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "oracle",
-          line: 27,
-        },
-      ],
-    })
-  })
   test("#3 statement ok: INSERT INTO t1 VALUES(1,'true')", () => {
     driver.runRecord({
       type: "statement",

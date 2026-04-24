@@ -1215,22 +1215,6 @@ describe("vendor/submodule/sqllogictest/test/evidence/in1.test", () => {
       ],
     })
   })
-  // onlyif mysql
-  test.skip("#76 statement ok: CREATE TABLE t7(a TEXT, UNIQUE (a(1)))", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "CREATE TABLE t7(a TEXT, UNIQUE (a(1)))",
-      line: 403,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mysql",
-          line: 402,
-        },
-      ],
-    })
-  })
   test("#77 statement ok: CREATE TABLE t8(c TEXT)", () => {
     driver.runRecord({
       type: "statement",
@@ -1288,22 +1272,6 @@ describe("vendor/submodule/sqllogictest/test/evidence/in1.test", () => {
           kind: "skipif",
           engine: "mysql",
           line: 421,
-        },
-      ],
-    })
-  })
-  // onlyif mysql
-  test.skip("#83 statement ok: CREATE TABLE t7n(a TEXT, UNIQUE (a(1)))", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "CREATE TABLE t7n(a TEXT, UNIQUE (a(1)))",
-      line: 426,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mysql",
-          line: 425,
         },
       ],
     })

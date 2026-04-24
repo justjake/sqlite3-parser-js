@@ -52,10 +52,18 @@ export interface EmitTsTestModuleOptions {
   readonly imports?: string
   /**
    * When set, records whose `skipif` / `onlyif` modifiers would skip
-   * for this dbname are emitted as `test.skip(...)` instead of `test(...)`.
-   * Omit to run every record unconditionally.
+   * for this dbname are dropped from the emitted module — their leading
+   * modifier / comment trivia is dropped with them. Set {@link emitSkipped}
+   * to keep them as `test.skip(...)` instead. Omit to run every record
+   * unconditionally.
    */
   readonly dbname?: string
+  /**
+   * When `true`, records that would be skipped per {@link dbname} are
+   * emitted as `test.skip(...)` instead of being dropped. Has no effect
+   * unless {@link dbname} is set. Defaults to `false`.
+   */
+  readonly emitSkipped?: boolean
   /**
    * Starting value for the `#N` counter in `test(...)` titles. Defaults
    * to 1. Set this when {@link records} is a slice of a larger run so
@@ -75,7 +83,7 @@ export function emitTsTestModule(
   records: readonly TestRecord[],
   options: EmitTsTestModuleOptions,
 ): string {
-  const { title, runner, driver, imports, dbname, startIndex = 1 } = options
+  const { title, runner, driver, imports, dbname, emitSkipped = false, startIndex = 1 } = options
   const namespaceBinding = driver.importName ?? defaultNamespaceBinding(driver.specifier)
   const driverBinding = driver.importName ?? namespaceBinding
 
@@ -105,7 +113,7 @@ export function emitTsTestModule(
   let nextTestIndex = startIndex
   for (const rec of records) {
     const index = rec.type === "statement" || rec.type === "query" ? nextTestIndex++ : undefined
-    emitTestRecord(out, rec, dbname, "  ", index)
+    emitTestRecord(out, rec, dbname, emitSkipped, "  ", index)
   }
 
   out.push(`})`)
@@ -117,6 +125,7 @@ function emitTestRecord(
   out: string[],
   rec: TestRecord,
   dbname: string | undefined,
+  emitSkipped: boolean,
   indent: string,
   index: number | undefined,
 ): void {
@@ -126,6 +135,13 @@ function emitTestRecord(
   }
   if (rec.type === "blank") {
     for (let k = 0; k < rec.count; k++) out.push("")
+    return
+  }
+
+  const skipped = dbname !== undefined && shouldSkipForDbname(rec, dbname)
+  // Drop the whole block (modifiers + comments + test call) for skipped
+  // records unless the caller explicitly wants them rendered as test.skip.
+  if (skipped && !emitSkipped && (rec.type === "statement" || rec.type === "query")) {
     return
   }
 
@@ -151,7 +167,6 @@ function emitTestRecord(
     return
   }
 
-  const skipped = dbname !== undefined && shouldSkipForDbname(rec, dbname)
   const testFn = skipped ? "test.skip" : "test"
   const title = recordTitle(rec, index ?? 0)
 

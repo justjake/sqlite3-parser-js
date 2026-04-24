@@ -149,22 +149,6 @@ describe("vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test",
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#13 statement ok: DELETE FROM view1 WHERE x>0", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "DELETE FROM view1 WHERE x>0",
-      line: 73,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 72,
-        },
-      ],
-    })
-  })
   test("#14 statement error: INSERT INTO view1 VALUES(2,'unknown')", () => {
     driver.runRecord({
       type: "statement",
@@ -186,22 +170,6 @@ describe("vendor/submodule/sqllogictest/test/evidence/slt_lang_createview.test",
           kind: "skipif",
           engine: "mssql",
           line: 79,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#16 statement ok: UPDATE view1 SET x=2", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "UPDATE view1 SET x=2",
-      line: 84,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 83,
         },
       ],
     })

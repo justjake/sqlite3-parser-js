@@ -9228,22 +9228,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1024 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_737') DROP VIEW view_1_tab0_737",
-      line: 3076,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3075,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1025 statement ok: DROP VIEW IF EXISTS view_1_tab0_737", () => {
     driver.runRecord({
@@ -9260,22 +9244,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1026 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_737') DROP VIEW view_2_tab0_737",
-      line: 3084,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3083,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1027 statement ok: DROP VIEW IF EXISTS view_2_tab0_737", () => {
     driver.runRecord({
@@ -9288,22 +9256,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3087,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1028 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_737') DROP VIEW view_3_tab0_737",
-      line: 3092,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3091,
         },
       ],
     })
@@ -9549,22 +9501,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1047 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_737') DROP VIEW view_1_tab1_737",
-      line: 3168,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3167,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1048 statement ok: DROP VIEW IF EXISTS view_1_tab1_737", () => {
     driver.runRecord({
@@ -9581,22 +9517,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1049 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_737') DROP VIEW view_2_tab1_737",
-      line: 3176,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3175,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1050 statement ok: DROP VIEW IF EXISTS view_2_tab1_737", () => {
     driver.runRecord({
@@ -9609,22 +9529,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3179,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1051 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_737') DROP VIEW view_3_tab1_737",
-      line: 3184,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3183,
         },
       ],
     })
@@ -9870,22 +9774,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1070 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_737') DROP VIEW view_1_tab2_737",
-      line: 3260,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3259,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1071 statement ok: DROP VIEW IF EXISTS view_1_tab2_737", () => {
     driver.runRecord({
@@ -9902,22 +9790,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1072 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_737') DROP VIEW view_2_tab2_737",
-      line: 3268,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3267,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1073 statement ok: DROP VIEW IF EXISTS view_2_tab2_737", () => {
     driver.runRecord({
@@ -9930,22 +9802,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3271,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1074 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_737') DROP VIEW view_3_tab2_737",
-      line: 3276,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3275,
         },
       ],
     })
@@ -10191,22 +10047,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1093 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_737') DROP VIEW view_1_tab3_737",
-      line: 3352,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3351,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1094 statement ok: DROP VIEW IF EXISTS view_1_tab3_737", () => {
     driver.runRecord({
@@ -10223,22 +10063,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1095 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_737') DROP VIEW view_2_tab3_737",
-      line: 3360,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3359,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1096 statement ok: DROP VIEW IF EXISTS view_2_tab3_737", () => {
     driver.runRecord({
@@ -10251,22 +10075,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3363,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1097 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_737') DROP VIEW view_3_tab3_737",
-      line: 3368,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3367,
         },
       ],
     })
@@ -10512,22 +10320,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1116 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_737') DROP VIEW view_1_tab4_737",
-      line: 3444,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3443,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1117 statement ok: DROP VIEW IF EXISTS view_1_tab4_737", () => {
     driver.runRecord({
@@ -10544,22 +10336,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1118 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_737') DROP VIEW view_2_tab4_737",
-      line: 3452,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3451,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1119 statement ok: DROP VIEW IF EXISTS view_2_tab4_737", () => {
     driver.runRecord({
@@ -10572,22 +10348,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3455,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1120 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_737') DROP VIEW view_3_tab4_737",
-      line: 3460,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3459,
         },
       ],
     })
@@ -10833,22 +10593,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1139 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_739') DROP VIEW view_1_tab0_739",
-      line: 3536,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3535,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1140 statement ok: DROP VIEW IF EXISTS view_1_tab0_739", () => {
     driver.runRecord({
@@ -10865,22 +10609,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1141 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_739') DROP VIEW view_2_tab0_739",
-      line: 3544,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3543,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1142 statement ok: DROP VIEW IF EXISTS view_2_tab0_739", () => {
     driver.runRecord({
@@ -10893,22 +10621,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3547,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1143 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_739') DROP VIEW view_3_tab0_739",
-      line: 3552,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3551,
         },
       ],
     })
@@ -11159,22 +10871,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1162 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_739') DROP VIEW view_1_tab1_739",
-      line: 3633,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3632,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1163 statement ok: DROP VIEW IF EXISTS view_1_tab1_739", () => {
     driver.runRecord({
@@ -11191,22 +10887,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1164 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_739') DROP VIEW view_2_tab1_739",
-      line: 3641,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3640,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1165 statement ok: DROP VIEW IF EXISTS view_2_tab1_739", () => {
     driver.runRecord({
@@ -11219,22 +10899,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3644,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1166 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_739') DROP VIEW view_3_tab1_739",
-      line: 3649,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3648,
         },
       ],
     })
@@ -11485,22 +11149,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1185 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_739') DROP VIEW view_1_tab2_739",
-      line: 3730,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3729,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1186 statement ok: DROP VIEW IF EXISTS view_1_tab2_739", () => {
     driver.runRecord({
@@ -11517,22 +11165,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1187 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_739') DROP VIEW view_2_tab2_739",
-      line: 3738,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3737,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1188 statement ok: DROP VIEW IF EXISTS view_2_tab2_739", () => {
     driver.runRecord({
@@ -11545,22 +11177,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3741,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1189 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_739') DROP VIEW view_3_tab2_739",
-      line: 3746,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3745,
         },
       ],
     })
@@ -11811,22 +11427,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1208 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_739') DROP VIEW view_1_tab3_739",
-      line: 3827,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3826,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1209 statement ok: DROP VIEW IF EXISTS view_1_tab3_739", () => {
     driver.runRecord({
@@ -11843,22 +11443,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1210 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_739') DROP VIEW view_2_tab3_739",
-      line: 3835,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3834,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1211 statement ok: DROP VIEW IF EXISTS view_2_tab3_739", () => {
     driver.runRecord({
@@ -11871,22 +11455,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3838,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1212 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_739') DROP VIEW view_3_tab3_739",
-      line: 3843,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3842,
         },
       ],
     })
@@ -12137,22 +11705,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1231 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_739') DROP VIEW view_1_tab4_739",
-      line: 3924,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3923,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1232 statement ok: DROP VIEW IF EXISTS view_1_tab4_739", () => {
     driver.runRecord({
@@ -12169,22 +11721,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1233 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_739') DROP VIEW view_2_tab4_739",
-      line: 3932,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3931,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1234 statement ok: DROP VIEW IF EXISTS view_2_tab4_739", () => {
     driver.runRecord({
@@ -12197,22 +11733,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 3935,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1235 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_739') DROP VIEW view_3_tab4_739",
-      line: 3940,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 3939,
         },
       ],
     })
@@ -12463,22 +11983,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1254 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_740') DROP VIEW view_1_tab0_740",
-      line: 4021,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4020,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1255 statement ok: DROP VIEW IF EXISTS view_1_tab0_740", () => {
     driver.runRecord({
@@ -12495,22 +11999,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1256 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_740') DROP VIEW view_2_tab0_740",
-      line: 4029,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4028,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1257 statement ok: DROP VIEW IF EXISTS view_2_tab0_740", () => {
     driver.runRecord({
@@ -12523,22 +12011,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4032,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1258 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_740') DROP VIEW view_3_tab0_740",
-      line: 4037,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4036,
         },
       ],
     })
@@ -12789,22 +12261,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1277 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_740') DROP VIEW view_1_tab1_740",
-      line: 4118,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4117,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1278 statement ok: DROP VIEW IF EXISTS view_1_tab1_740", () => {
     driver.runRecord({
@@ -12821,22 +12277,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1279 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_740') DROP VIEW view_2_tab1_740",
-      line: 4126,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4125,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1280 statement ok: DROP VIEW IF EXISTS view_2_tab1_740", () => {
     driver.runRecord({
@@ -12849,22 +12289,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4129,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1281 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_740') DROP VIEW view_3_tab1_740",
-      line: 4134,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4133,
         },
       ],
     })
@@ -13115,22 +12539,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1300 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_740') DROP VIEW view_1_tab2_740",
-      line: 4215,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4214,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1301 statement ok: DROP VIEW IF EXISTS view_1_tab2_740", () => {
     driver.runRecord({
@@ -13147,22 +12555,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1302 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_740') DROP VIEW view_2_tab2_740",
-      line: 4223,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4222,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1303 statement ok: DROP VIEW IF EXISTS view_2_tab2_740", () => {
     driver.runRecord({
@@ -13175,22 +12567,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4226,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1304 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_740') DROP VIEW view_3_tab2_740",
-      line: 4231,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4230,
         },
       ],
     })
@@ -13441,22 +12817,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1323 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_740') DROP VIEW view_1_tab3_740",
-      line: 4312,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4311,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1324 statement ok: DROP VIEW IF EXISTS view_1_tab3_740", () => {
     driver.runRecord({
@@ -13473,22 +12833,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1325 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_740') DROP VIEW view_2_tab3_740",
-      line: 4320,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4319,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1326 statement ok: DROP VIEW IF EXISTS view_2_tab3_740", () => {
     driver.runRecord({
@@ -13501,22 +12845,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4323,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1327 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_740') DROP VIEW view_3_tab3_740",
-      line: 4328,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4327,
         },
       ],
     })
@@ -13767,22 +13095,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1346 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_740') DROP VIEW view_1_tab4_740",
-      line: 4409,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4408,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1347 statement ok: DROP VIEW IF EXISTS view_1_tab4_740", () => {
     driver.runRecord({
@@ -13799,22 +13111,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1348 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_740') DROP VIEW view_2_tab4_740",
-      line: 4417,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4416,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1349 statement ok: DROP VIEW IF EXISTS view_2_tab4_740", () => {
     driver.runRecord({
@@ -13827,22 +13123,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4420,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1350 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_740') DROP VIEW view_3_tab4_740",
-      line: 4425,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4424,
         },
       ],
     })
@@ -14093,22 +13373,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1369 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_741') DROP VIEW view_1_tab0_741",
-      line: 4506,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4505,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1370 statement ok: DROP VIEW IF EXISTS view_1_tab0_741", () => {
     driver.runRecord({
@@ -14125,22 +13389,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1371 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_741') DROP VIEW view_2_tab0_741",
-      line: 4514,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4513,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1372 statement ok: DROP VIEW IF EXISTS view_2_tab0_741", () => {
     driver.runRecord({
@@ -14153,22 +13401,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4517,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1373 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_741') DROP VIEW view_3_tab0_741",
-      line: 4522,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4521,
         },
       ],
     })
@@ -14419,22 +13651,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1392 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_741') DROP VIEW view_1_tab1_741",
-      line: 4603,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4602,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1393 statement ok: DROP VIEW IF EXISTS view_1_tab1_741", () => {
     driver.runRecord({
@@ -14451,22 +13667,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1394 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_741') DROP VIEW view_2_tab1_741",
-      line: 4611,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4610,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1395 statement ok: DROP VIEW IF EXISTS view_2_tab1_741", () => {
     driver.runRecord({
@@ -14479,22 +13679,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4614,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1396 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_741') DROP VIEW view_3_tab1_741",
-      line: 4619,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4618,
         },
       ],
     })
@@ -14745,22 +13929,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1415 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_741') DROP VIEW view_1_tab2_741",
-      line: 4700,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4699,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1416 statement ok: DROP VIEW IF EXISTS view_1_tab2_741", () => {
     driver.runRecord({
@@ -14777,22 +13945,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1417 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_741') DROP VIEW view_2_tab2_741",
-      line: 4708,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4707,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1418 statement ok: DROP VIEW IF EXISTS view_2_tab2_741", () => {
     driver.runRecord({
@@ -14805,22 +13957,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4711,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1419 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_741') DROP VIEW view_3_tab2_741",
-      line: 4716,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4715,
         },
       ],
     })
@@ -15071,22 +14207,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1438 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_741') DROP VIEW view_1_tab3_741",
-      line: 4797,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4796,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1439 statement ok: DROP VIEW IF EXISTS view_1_tab3_741", () => {
     driver.runRecord({
@@ -15103,22 +14223,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1440 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_741') DROP VIEW view_2_tab3_741",
-      line: 4805,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4804,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1441 statement ok: DROP VIEW IF EXISTS view_2_tab3_741", () => {
     driver.runRecord({
@@ -15131,22 +14235,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4808,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1442 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_741') DROP VIEW view_3_tab3_741",
-      line: 4813,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4812,
         },
       ],
     })
@@ -15397,22 +14485,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1461 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_741') DROP VIEW view_1_tab4_741",
-      line: 4894,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4893,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1462 statement ok: DROP VIEW IF EXISTS view_1_tab4_741", () => {
     driver.runRecord({
@@ -15429,22 +14501,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1463 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_741') DROP VIEW view_2_tab4_741",
-      line: 4902,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4901,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1464 statement ok: DROP VIEW IF EXISTS view_2_tab4_741", () => {
     driver.runRecord({
@@ -15457,22 +14513,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 4905,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1465 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_741') DROP VIEW view_3_tab4_741",
-      line: 4910,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4909,
         },
       ],
     })
@@ -15723,22 +14763,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1484 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_742') DROP VIEW view_1_tab0_742",
-      line: 4991,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4990,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1485 statement ok: DROP VIEW IF EXISTS view_1_tab0_742", () => {
     driver.runRecord({
@@ -15755,22 +14779,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1486 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_742') DROP VIEW view_2_tab0_742",
-      line: 4999,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 4998,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1487 statement ok: DROP VIEW IF EXISTS view_2_tab0_742", () => {
     driver.runRecord({
@@ -15783,22 +14791,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5002,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1488 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_742') DROP VIEW view_3_tab0_742",
-      line: 5007,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5006,
         },
       ],
     })
@@ -16049,22 +15041,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1507 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_742') DROP VIEW view_1_tab1_742",
-      line: 5088,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5087,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1508 statement ok: DROP VIEW IF EXISTS view_1_tab1_742", () => {
     driver.runRecord({
@@ -16081,22 +15057,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1509 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_742') DROP VIEW view_2_tab1_742",
-      line: 5096,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5095,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1510 statement ok: DROP VIEW IF EXISTS view_2_tab1_742", () => {
     driver.runRecord({
@@ -16109,22 +15069,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5099,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1511 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_742') DROP VIEW view_3_tab1_742",
-      line: 5104,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5103,
         },
       ],
     })
@@ -16375,22 +15319,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1530 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_742') DROP VIEW view_1_tab2_742",
-      line: 5185,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5184,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1531 statement ok: DROP VIEW IF EXISTS view_1_tab2_742", () => {
     driver.runRecord({
@@ -16407,22 +15335,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1532 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_742') DROP VIEW view_2_tab2_742",
-      line: 5193,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5192,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1533 statement ok: DROP VIEW IF EXISTS view_2_tab2_742", () => {
     driver.runRecord({
@@ -16435,22 +15347,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5196,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1534 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_742') DROP VIEW view_3_tab2_742",
-      line: 5201,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5200,
         },
       ],
     })
@@ -16701,22 +15597,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1553 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_742') DROP VIEW view_1_tab3_742",
-      line: 5282,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5281,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1554 statement ok: DROP VIEW IF EXISTS view_1_tab3_742", () => {
     driver.runRecord({
@@ -16733,22 +15613,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1555 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_742') DROP VIEW view_2_tab3_742",
-      line: 5290,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5289,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1556 statement ok: DROP VIEW IF EXISTS view_2_tab3_742", () => {
     driver.runRecord({
@@ -16761,22 +15625,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5293,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1557 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_742') DROP VIEW view_3_tab3_742",
-      line: 5298,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5297,
         },
       ],
     })
@@ -17027,22 +15875,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1576 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_742') DROP VIEW view_1_tab4_742",
-      line: 5379,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5378,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1577 statement ok: DROP VIEW IF EXISTS view_1_tab4_742", () => {
     driver.runRecord({
@@ -17059,22 +15891,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1578 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_742') DROP VIEW view_2_tab4_742",
-      line: 5387,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5386,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1579 statement ok: DROP VIEW IF EXISTS view_2_tab4_742", () => {
     driver.runRecord({
@@ -17087,22 +15903,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5390,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1580 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_742') DROP VIEW view_3_tab4_742",
-      line: 5395,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5394,
         },
       ],
     })
@@ -17353,22 +16153,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1599 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_743') DROP VIEW view_1_tab0_743",
-      line: 5476,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5475,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1600 statement ok: DROP VIEW IF EXISTS view_1_tab0_743", () => {
     driver.runRecord({
@@ -17385,22 +16169,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1601 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_743') DROP VIEW view_2_tab0_743",
-      line: 5484,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5483,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1602 statement ok: DROP VIEW IF EXISTS view_2_tab0_743", () => {
     driver.runRecord({
@@ -17413,22 +16181,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5487,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1603 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_743') DROP VIEW view_3_tab0_743",
-      line: 5492,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5491,
         },
       ],
     })
@@ -17679,22 +16431,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1622 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_743') DROP VIEW view_1_tab1_743",
-      line: 5573,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5572,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1623 statement ok: DROP VIEW IF EXISTS view_1_tab1_743", () => {
     driver.runRecord({
@@ -17711,22 +16447,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1624 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_743') DROP VIEW view_2_tab1_743",
-      line: 5581,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5580,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1625 statement ok: DROP VIEW IF EXISTS view_2_tab1_743", () => {
     driver.runRecord({
@@ -17739,22 +16459,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5584,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1626 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_743') DROP VIEW view_3_tab1_743",
-      line: 5589,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5588,
         },
       ],
     })
@@ -18005,22 +16709,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1645 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_743') DROP VIEW view_1_tab2_743",
-      line: 5670,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5669,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1646 statement ok: DROP VIEW IF EXISTS view_1_tab2_743", () => {
     driver.runRecord({
@@ -18037,22 +16725,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1647 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_743') DROP VIEW view_2_tab2_743",
-      line: 5678,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5677,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1648 statement ok: DROP VIEW IF EXISTS view_2_tab2_743", () => {
     driver.runRecord({
@@ -18065,22 +16737,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5681,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1649 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_743') DROP VIEW view_3_tab2_743",
-      line: 5686,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5685,
         },
       ],
     })
@@ -18331,22 +16987,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1668 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_743') DROP VIEW view_1_tab3_743",
-      line: 5767,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5766,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1669 statement ok: DROP VIEW IF EXISTS view_1_tab3_743", () => {
     driver.runRecord({
@@ -18363,22 +17003,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1670 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_743') DROP VIEW view_2_tab3_743",
-      line: 5775,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5774,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1671 statement ok: DROP VIEW IF EXISTS view_2_tab3_743", () => {
     driver.runRecord({
@@ -18391,22 +17015,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5778,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1672 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_743') DROP VIEW view_3_tab3_743",
-      line: 5783,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5782,
         },
       ],
     })
@@ -18657,22 +17265,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1691 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_743') DROP VIEW view_1_tab4_743",
-      line: 5864,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5863,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1692 statement ok: DROP VIEW IF EXISTS view_1_tab4_743", () => {
     driver.runRecord({
@@ -18689,22 +17281,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1693 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_743') DROP VIEW view_2_tab4_743",
-      line: 5872,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5871,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1694 statement ok: DROP VIEW IF EXISTS view_2_tab4_743", () => {
     driver.runRecord({
@@ -18717,22 +17293,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5875,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1695 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_743') DROP VIEW view_3_tab4_743",
-      line: 5880,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5879,
         },
       ],
     })
@@ -18983,22 +17543,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1714 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_744') DROP VIEW view_1_tab0_744",
-      line: 5961,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5960,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1715 statement ok: DROP VIEW IF EXISTS view_1_tab0_744", () => {
     driver.runRecord({
@@ -19015,22 +17559,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1716 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_744') DROP VIEW view_2_tab0_744",
-      line: 5969,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5968,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1717 statement ok: DROP VIEW IF EXISTS view_2_tab0_744", () => {
     driver.runRecord({
@@ -19043,22 +17571,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 5972,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1718 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_744') DROP VIEW view_3_tab0_744",
-      line: 5977,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 5976,
         },
       ],
     })
@@ -19309,22 +17821,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1737 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_744') DROP VIEW view_1_tab1_744",
-      line: 6058,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6057,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1738 statement ok: DROP VIEW IF EXISTS view_1_tab1_744", () => {
     driver.runRecord({
@@ -19341,22 +17837,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1739 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_744') DROP VIEW view_2_tab1_744",
-      line: 6066,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6065,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1740 statement ok: DROP VIEW IF EXISTS view_2_tab1_744", () => {
     driver.runRecord({
@@ -19369,22 +17849,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6069,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1741 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_744') DROP VIEW view_3_tab1_744",
-      line: 6074,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6073,
         },
       ],
     })
@@ -19635,22 +18099,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1760 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_744') DROP VIEW view_1_tab2_744",
-      line: 6155,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6154,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1761 statement ok: DROP VIEW IF EXISTS view_1_tab2_744", () => {
     driver.runRecord({
@@ -19667,22 +18115,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1762 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_744') DROP VIEW view_2_tab2_744",
-      line: 6163,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6162,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1763 statement ok: DROP VIEW IF EXISTS view_2_tab2_744", () => {
     driver.runRecord({
@@ -19695,22 +18127,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6166,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1764 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_744') DROP VIEW view_3_tab2_744",
-      line: 6171,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6170,
         },
       ],
     })
@@ -19961,22 +18377,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1783 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_744') DROP VIEW view_1_tab3_744",
-      line: 6252,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6251,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1784 statement ok: DROP VIEW IF EXISTS view_1_tab3_744", () => {
     driver.runRecord({
@@ -19993,22 +18393,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1785 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_744') DROP VIEW view_2_tab3_744",
-      line: 6260,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6259,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1786 statement ok: DROP VIEW IF EXISTS view_2_tab3_744", () => {
     driver.runRecord({
@@ -20021,22 +18405,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6263,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1787 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_744') DROP VIEW view_3_tab3_744",
-      line: 6268,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6267,
         },
       ],
     })
@@ -20287,22 +18655,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1806 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_744') DROP VIEW view_1_tab4_744",
-      line: 6349,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6348,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1807 statement ok: DROP VIEW IF EXISTS view_1_tab4_744", () => {
     driver.runRecord({
@@ -20319,22 +18671,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1808 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_744') DROP VIEW view_2_tab4_744",
-      line: 6357,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6356,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1809 statement ok: DROP VIEW IF EXISTS view_2_tab4_744", () => {
     driver.runRecord({
@@ -20347,22 +18683,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6360,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1810 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_744') DROP VIEW view_3_tab4_744",
-      line: 6365,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6364,
         },
       ],
     })
@@ -20613,22 +18933,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1829 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_745') DROP VIEW view_1_tab0_745",
-      line: 6446,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6445,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1830 statement ok: DROP VIEW IF EXISTS view_1_tab0_745", () => {
     driver.runRecord({
@@ -20645,22 +18949,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1831 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_745') DROP VIEW view_2_tab0_745",
-      line: 6454,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6453,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1832 statement ok: DROP VIEW IF EXISTS view_2_tab0_745", () => {
     driver.runRecord({
@@ -20673,22 +18961,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6457,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1833 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_745') DROP VIEW view_3_tab0_745",
-      line: 6462,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6461,
         },
       ],
     })
@@ -20934,22 +19206,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1852 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_745') DROP VIEW view_1_tab1_745",
-      line: 6545,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6544,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1853 statement ok: DROP VIEW IF EXISTS view_1_tab1_745", () => {
     driver.runRecord({
@@ -20966,22 +19222,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1854 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_745') DROP VIEW view_2_tab1_745",
-      line: 6553,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6552,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1855 statement ok: DROP VIEW IF EXISTS view_2_tab1_745", () => {
     driver.runRecord({
@@ -20994,22 +19234,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6556,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1856 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_745') DROP VIEW view_3_tab1_745",
-      line: 6561,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6560,
         },
       ],
     })
@@ -21255,22 +19479,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1875 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_745') DROP VIEW view_1_tab2_745",
-      line: 6644,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6643,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1876 statement ok: DROP VIEW IF EXISTS view_1_tab2_745", () => {
     driver.runRecord({
@@ -21287,22 +19495,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1877 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_745') DROP VIEW view_2_tab2_745",
-      line: 6652,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6651,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1878 statement ok: DROP VIEW IF EXISTS view_2_tab2_745", () => {
     driver.runRecord({
@@ -21315,22 +19507,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6655,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1879 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_745') DROP VIEW view_3_tab2_745",
-      line: 6660,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6659,
         },
       ],
     })
@@ -21576,22 +19752,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1898 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_745') DROP VIEW view_1_tab3_745",
-      line: 6743,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6742,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1899 statement ok: DROP VIEW IF EXISTS view_1_tab3_745", () => {
     driver.runRecord({
@@ -21608,22 +19768,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1900 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_745') DROP VIEW view_2_tab3_745",
-      line: 6751,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6750,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1901 statement ok: DROP VIEW IF EXISTS view_2_tab3_745", () => {
     driver.runRecord({
@@ -21636,22 +19780,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6754,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1902 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_745') DROP VIEW view_3_tab3_745",
-      line: 6759,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6758,
         },
       ],
     })
@@ -21897,22 +20025,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1921 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_745') DROP VIEW view_1_tab4_745",
-      line: 6842,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6841,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1922 statement ok: DROP VIEW IF EXISTS view_1_tab4_745", () => {
     driver.runRecord({
@@ -21929,22 +20041,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1923 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_745') DROP VIEW view_2_tab4_745",
-      line: 6850,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6849,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1924 statement ok: DROP VIEW IF EXISTS view_2_tab4_745", () => {
     driver.runRecord({
@@ -21957,22 +20053,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6853,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1925 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_745') DROP VIEW view_3_tab4_745",
-      line: 6858,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6857,
         },
       ],
     })
@@ -22218,22 +20298,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1944 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_746') DROP VIEW view_1_tab0_746",
-      line: 6941,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6940,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1945 statement ok: DROP VIEW IF EXISTS view_1_tab0_746", () => {
     driver.runRecord({
@@ -22250,22 +20314,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1946 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_746') DROP VIEW view_2_tab0_746",
-      line: 6949,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6948,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1947 statement ok: DROP VIEW IF EXISTS view_2_tab0_746", () => {
     driver.runRecord({
@@ -22278,22 +20326,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 6952,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1948 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_746') DROP VIEW view_3_tab0_746",
-      line: 6957,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 6956,
         },
       ],
     })
@@ -22544,22 +20576,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1967 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_746') DROP VIEW view_1_tab1_746",
-      line: 7038,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7037,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1968 statement ok: DROP VIEW IF EXISTS view_1_tab1_746", () => {
     driver.runRecord({
@@ -22576,22 +20592,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1969 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_746') DROP VIEW view_2_tab1_746",
-      line: 7046,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7045,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1970 statement ok: DROP VIEW IF EXISTS view_2_tab1_746", () => {
     driver.runRecord({
@@ -22604,22 +20604,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7049,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1971 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_746') DROP VIEW view_3_tab1_746",
-      line: 7054,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7053,
         },
       ],
     })
@@ -22870,22 +20854,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#1990 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_746') DROP VIEW view_1_tab2_746",
-      line: 7135,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7134,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1991 statement ok: DROP VIEW IF EXISTS view_1_tab2_746", () => {
     driver.runRecord({
@@ -22902,22 +20870,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#1992 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_746') DROP VIEW view_2_tab2_746",
-      line: 7143,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7142,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#1993 statement ok: DROP VIEW IF EXISTS view_2_tab2_746", () => {
     driver.runRecord({
@@ -22930,22 +20882,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7146,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#1994 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_746') DROP VIEW view_3_tab2_746",
-      line: 7151,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7150,
         },
       ],
     })
@@ -23196,22 +21132,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2013 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_746') DROP VIEW view_1_tab3_746",
-      line: 7232,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7231,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2014 statement ok: DROP VIEW IF EXISTS view_1_tab3_746", () => {
     driver.runRecord({
@@ -23228,22 +21148,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2015 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_746') DROP VIEW view_2_tab3_746",
-      line: 7240,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7239,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2016 statement ok: DROP VIEW IF EXISTS view_2_tab3_746", () => {
     driver.runRecord({
@@ -23256,22 +21160,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7243,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2017 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_746') DROP VIEW view_3_tab3_746",
-      line: 7248,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7247,
         },
       ],
     })
@@ -23522,22 +21410,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2036 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_746') DROP VIEW view_1_tab4_746",
-      line: 7329,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7328,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2037 statement ok: DROP VIEW IF EXISTS view_1_tab4_746", () => {
     driver.runRecord({
@@ -23554,22 +21426,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2038 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_746') DROP VIEW view_2_tab4_746",
-      line: 7337,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7336,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2039 statement ok: DROP VIEW IF EXISTS view_2_tab4_746", () => {
     driver.runRecord({
@@ -23582,22 +21438,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7340,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2040 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_746') DROP VIEW view_3_tab4_746",
-      line: 7345,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7344,
         },
       ],
     })
@@ -23848,22 +21688,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2059 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_747') DROP VIEW view_1_tab0_747",
-      line: 7426,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7425,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2060 statement ok: DROP VIEW IF EXISTS view_1_tab0_747", () => {
     driver.runRecord({
@@ -23880,22 +21704,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2061 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_747') DROP VIEW view_2_tab0_747",
-      line: 7434,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7433,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2062 statement ok: DROP VIEW IF EXISTS view_2_tab0_747", () => {
     driver.runRecord({
@@ -23908,22 +21716,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7437,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2063 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_747') DROP VIEW view_3_tab0_747",
-      line: 7442,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7441,
         },
       ],
     })
@@ -24174,22 +21966,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2082 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_747') DROP VIEW view_1_tab1_747",
-      line: 7523,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7522,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2083 statement ok: DROP VIEW IF EXISTS view_1_tab1_747", () => {
     driver.runRecord({
@@ -24206,22 +21982,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2084 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_747') DROP VIEW view_2_tab1_747",
-      line: 7531,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7530,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2085 statement ok: DROP VIEW IF EXISTS view_2_tab1_747", () => {
     driver.runRecord({
@@ -24234,22 +21994,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7534,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2086 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_747') DROP VIEW view_3_tab1_747",
-      line: 7539,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7538,
         },
       ],
     })
@@ -24500,22 +22244,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2105 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_747') DROP VIEW view_1_tab2_747",
-      line: 7620,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7619,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2106 statement ok: DROP VIEW IF EXISTS view_1_tab2_747", () => {
     driver.runRecord({
@@ -24532,22 +22260,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2107 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_747') DROP VIEW view_2_tab2_747",
-      line: 7628,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7627,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2108 statement ok: DROP VIEW IF EXISTS view_2_tab2_747", () => {
     driver.runRecord({
@@ -24560,22 +22272,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7631,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2109 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_747') DROP VIEW view_3_tab2_747",
-      line: 7636,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7635,
         },
       ],
     })
@@ -24826,22 +22522,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2128 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_747') DROP VIEW view_1_tab3_747",
-      line: 7717,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7716,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2129 statement ok: DROP VIEW IF EXISTS view_1_tab3_747", () => {
     driver.runRecord({
@@ -24858,22 +22538,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2130 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_747') DROP VIEW view_2_tab3_747",
-      line: 7725,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7724,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2131 statement ok: DROP VIEW IF EXISTS view_2_tab3_747", () => {
     driver.runRecord({
@@ -24886,22 +22550,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7728,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2132 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_747') DROP VIEW view_3_tab3_747",
-      line: 7733,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7732,
         },
       ],
     })
@@ -25152,22 +22800,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2151 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_747') DROP VIEW view_1_tab4_747",
-      line: 7814,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7813,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2152 statement ok: DROP VIEW IF EXISTS view_1_tab4_747", () => {
     driver.runRecord({
@@ -25184,22 +22816,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2153 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_747') DROP VIEW view_2_tab4_747",
-      line: 7822,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7821,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2154 statement ok: DROP VIEW IF EXISTS view_2_tab4_747", () => {
     driver.runRecord({
@@ -25212,22 +22828,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7825,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2155 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_747') DROP VIEW view_3_tab4_747",
-      line: 7830,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7829,
         },
       ],
     })
@@ -25478,22 +23078,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2174 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_748') DROP VIEW view_1_tab0_748",
-      line: 7911,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7910,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2175 statement ok: DROP VIEW IF EXISTS view_1_tab0_748", () => {
     driver.runRecord({
@@ -25510,22 +23094,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2176 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_748') DROP VIEW view_2_tab0_748",
-      line: 7919,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7918,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2177 statement ok: DROP VIEW IF EXISTS view_2_tab0_748", () => {
     driver.runRecord({
@@ -25538,22 +23106,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 7922,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2178 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_748') DROP VIEW view_3_tab0_748",
-      line: 7927,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 7926,
         },
       ],
     })
@@ -25802,22 +23354,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2197 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_748') DROP VIEW view_1_tab1_748",
-      line: 8006,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8005,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2198 statement ok: DROP VIEW IF EXISTS view_1_tab1_748", () => {
     driver.runRecord({
@@ -25834,22 +23370,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2199 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_748') DROP VIEW view_2_tab1_748",
-      line: 8014,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8013,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2200 statement ok: DROP VIEW IF EXISTS view_2_tab1_748", () => {
     driver.runRecord({
@@ -25862,22 +23382,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8017,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2201 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_748') DROP VIEW view_3_tab1_748",
-      line: 8022,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8021,
         },
       ],
     })
@@ -26126,22 +23630,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2220 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_748') DROP VIEW view_1_tab2_748",
-      line: 8101,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8100,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2221 statement ok: DROP VIEW IF EXISTS view_1_tab2_748", () => {
     driver.runRecord({
@@ -26158,22 +23646,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2222 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_748') DROP VIEW view_2_tab2_748",
-      line: 8109,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8108,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2223 statement ok: DROP VIEW IF EXISTS view_2_tab2_748", () => {
     driver.runRecord({
@@ -26186,22 +23658,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8112,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2224 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_748') DROP VIEW view_3_tab2_748",
-      line: 8117,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8116,
         },
       ],
     })
@@ -26450,22 +23906,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2243 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_748') DROP VIEW view_1_tab3_748",
-      line: 8196,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8195,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2244 statement ok: DROP VIEW IF EXISTS view_1_tab3_748", () => {
     driver.runRecord({
@@ -26482,22 +23922,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2245 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_748') DROP VIEW view_2_tab3_748",
-      line: 8204,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8203,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2246 statement ok: DROP VIEW IF EXISTS view_2_tab3_748", () => {
     driver.runRecord({
@@ -26510,22 +23934,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8207,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2247 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_748') DROP VIEW view_3_tab3_748",
-      line: 8212,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8211,
         },
       ],
     })
@@ -26774,22 +24182,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2266 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_748') DROP VIEW view_1_tab4_748",
-      line: 8291,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8290,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2267 statement ok: DROP VIEW IF EXISTS view_1_tab4_748", () => {
     driver.runRecord({
@@ -26806,22 +24198,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2268 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_748') DROP VIEW view_2_tab4_748",
-      line: 8299,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8298,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2269 statement ok: DROP VIEW IF EXISTS view_2_tab4_748", () => {
     driver.runRecord({
@@ -26834,22 +24210,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8302,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2270 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_748') DROP VIEW view_3_tab4_748",
-      line: 8307,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8306,
         },
       ],
     })
@@ -27098,22 +24458,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2289 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_749') DROP VIEW view_1_tab0_749",
-      line: 8386,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8385,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2290 statement ok: DROP VIEW IF EXISTS view_1_tab0_749", () => {
     driver.runRecord({
@@ -27130,22 +24474,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2291 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_749') DROP VIEW view_2_tab0_749",
-      line: 8394,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8393,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2292 statement ok: DROP VIEW IF EXISTS view_2_tab0_749", () => {
     driver.runRecord({
@@ -27158,22 +24486,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8397,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2293 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_749') DROP VIEW view_3_tab0_749",
-      line: 8402,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8401,
         },
       ],
     })
@@ -27424,22 +24736,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2312 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_749') DROP VIEW view_1_tab1_749",
-      line: 8483,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8482,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2313 statement ok: DROP VIEW IF EXISTS view_1_tab1_749", () => {
     driver.runRecord({
@@ -27456,22 +24752,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2314 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_749') DROP VIEW view_2_tab1_749",
-      line: 8491,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8490,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2315 statement ok: DROP VIEW IF EXISTS view_2_tab1_749", () => {
     driver.runRecord({
@@ -27484,22 +24764,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8494,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2316 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_749') DROP VIEW view_3_tab1_749",
-      line: 8499,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8498,
         },
       ],
     })
@@ -27750,22 +25014,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2335 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_749') DROP VIEW view_1_tab2_749",
-      line: 8580,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8579,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2336 statement ok: DROP VIEW IF EXISTS view_1_tab2_749", () => {
     driver.runRecord({
@@ -27782,22 +25030,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2337 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_749') DROP VIEW view_2_tab2_749",
-      line: 8588,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8587,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2338 statement ok: DROP VIEW IF EXISTS view_2_tab2_749", () => {
     driver.runRecord({
@@ -27810,22 +25042,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8591,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2339 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_749') DROP VIEW view_3_tab2_749",
-      line: 8596,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8595,
         },
       ],
     })
@@ -28076,22 +25292,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2358 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_749') DROP VIEW view_1_tab3_749",
-      line: 8677,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8676,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2359 statement ok: DROP VIEW IF EXISTS view_1_tab3_749", () => {
     driver.runRecord({
@@ -28108,22 +25308,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2360 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_749') DROP VIEW view_2_tab3_749",
-      line: 8685,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8684,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2361 statement ok: DROP VIEW IF EXISTS view_2_tab3_749", () => {
     driver.runRecord({
@@ -28136,22 +25320,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8688,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2362 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_749') DROP VIEW view_3_tab3_749",
-      line: 8693,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8692,
         },
       ],
     })
@@ -28402,22 +25570,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2381 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_749') DROP VIEW view_1_tab4_749",
-      line: 8774,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8773,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2382 statement ok: DROP VIEW IF EXISTS view_1_tab4_749", () => {
     driver.runRecord({
@@ -28434,22 +25586,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2383 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_749') DROP VIEW view_2_tab4_749",
-      line: 8782,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8781,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2384 statement ok: DROP VIEW IF EXISTS view_2_tab4_749", () => {
     driver.runRecord({
@@ -28462,22 +25598,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8785,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2385 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_749') DROP VIEW view_3_tab4_749",
-      line: 8790,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8789,
         },
       ],
     })
@@ -28728,22 +25848,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2404 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_750') DROP VIEW view_1_tab0_750",
-      line: 8871,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8870,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2405 statement ok: DROP VIEW IF EXISTS view_1_tab0_750", () => {
     driver.runRecord({
@@ -28760,22 +25864,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2406 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_750') DROP VIEW view_2_tab0_750",
-      line: 8879,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8878,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2407 statement ok: DROP VIEW IF EXISTS view_2_tab0_750", () => {
     driver.runRecord({
@@ -28788,22 +25876,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8882,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2408 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_750') DROP VIEW view_3_tab0_750",
-      line: 8887,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8886,
         },
       ],
     })
@@ -29054,22 +26126,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2427 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_750') DROP VIEW view_1_tab1_750",
-      line: 8968,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8967,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2428 statement ok: DROP VIEW IF EXISTS view_1_tab1_750", () => {
     driver.runRecord({
@@ -29086,22 +26142,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2429 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_750') DROP VIEW view_2_tab1_750",
-      line: 8976,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8975,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2430 statement ok: DROP VIEW IF EXISTS view_2_tab1_750", () => {
     driver.runRecord({
@@ -29114,22 +26154,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 8979,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2431 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_750') DROP VIEW view_3_tab1_750",
-      line: 8984,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 8983,
         },
       ],
     })
@@ -29380,22 +26404,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2450 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_750') DROP VIEW view_1_tab2_750",
-      line: 9065,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9064,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2451 statement ok: DROP VIEW IF EXISTS view_1_tab2_750", () => {
     driver.runRecord({
@@ -29412,22 +26420,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2452 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_750') DROP VIEW view_2_tab2_750",
-      line: 9073,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9072,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2453 statement ok: DROP VIEW IF EXISTS view_2_tab2_750", () => {
     driver.runRecord({
@@ -29440,22 +26432,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9076,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2454 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_750') DROP VIEW view_3_tab2_750",
-      line: 9081,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9080,
         },
       ],
     })
@@ -29706,22 +26682,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2473 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_750') DROP VIEW view_1_tab3_750",
-      line: 9162,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9161,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2474 statement ok: DROP VIEW IF EXISTS view_1_tab3_750", () => {
     driver.runRecord({
@@ -29738,22 +26698,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2475 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_750') DROP VIEW view_2_tab3_750",
-      line: 9170,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9169,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2476 statement ok: DROP VIEW IF EXISTS view_2_tab3_750", () => {
     driver.runRecord({
@@ -29766,22 +26710,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9173,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2477 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_750') DROP VIEW view_3_tab3_750",
-      line: 9178,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9177,
         },
       ],
     })
@@ -30032,22 +26960,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2496 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_750') DROP VIEW view_1_tab4_750",
-      line: 9259,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9258,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2497 statement ok: DROP VIEW IF EXISTS view_1_tab4_750", () => {
     driver.runRecord({
@@ -30064,22 +26976,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2498 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_750') DROP VIEW view_2_tab4_750",
-      line: 9267,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9266,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2499 statement ok: DROP VIEW IF EXISTS view_2_tab4_750", () => {
     driver.runRecord({
@@ -30092,22 +26988,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9270,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2500 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_750') DROP VIEW view_3_tab4_750",
-      line: 9275,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9274,
         },
       ],
     })
@@ -30358,22 +27238,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2519 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_751') DROP VIEW view_1_tab0_751",
-      line: 9356,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9355,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2520 statement ok: DROP VIEW IF EXISTS view_1_tab0_751", () => {
     driver.runRecord({
@@ -30390,22 +27254,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2521 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_751') DROP VIEW view_2_tab0_751",
-      line: 9364,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9363,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2522 statement ok: DROP VIEW IF EXISTS view_2_tab0_751", () => {
     driver.runRecord({
@@ -30418,22 +27266,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9367,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2523 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_751') DROP VIEW view_3_tab0_751",
-      line: 9372,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9371,
         },
       ],
     })
@@ -30684,22 +27516,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2542 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_751') DROP VIEW view_1_tab1_751",
-      line: 9453,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9452,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2543 statement ok: DROP VIEW IF EXISTS view_1_tab1_751", () => {
     driver.runRecord({
@@ -30716,22 +27532,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2544 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_751') DROP VIEW view_2_tab1_751",
-      line: 9461,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9460,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2545 statement ok: DROP VIEW IF EXISTS view_2_tab1_751", () => {
     driver.runRecord({
@@ -30744,22 +27544,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9464,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2546 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_751') DROP VIEW view_3_tab1_751",
-      line: 9469,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9468,
         },
       ],
     })
@@ -31010,22 +27794,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2565 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_751') DROP VIEW view_1_tab2_751",
-      line: 9550,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9549,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2566 statement ok: DROP VIEW IF EXISTS view_1_tab2_751", () => {
     driver.runRecord({
@@ -31042,22 +27810,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2567 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_751') DROP VIEW view_2_tab2_751",
-      line: 9558,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9557,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2568 statement ok: DROP VIEW IF EXISTS view_2_tab2_751", () => {
     driver.runRecord({
@@ -31070,22 +27822,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9561,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2569 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_751') DROP VIEW view_3_tab2_751",
-      line: 9566,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9565,
         },
       ],
     })
@@ -31336,22 +28072,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2588 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_751') DROP VIEW view_1_tab3_751",
-      line: 9647,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9646,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2589 statement ok: DROP VIEW IF EXISTS view_1_tab3_751", () => {
     driver.runRecord({
@@ -31368,22 +28088,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2590 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_751') DROP VIEW view_2_tab3_751",
-      line: 9655,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9654,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2591 statement ok: DROP VIEW IF EXISTS view_2_tab3_751", () => {
     driver.runRecord({
@@ -31396,22 +28100,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9658,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2592 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_751') DROP VIEW view_3_tab3_751",
-      line: 9663,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9662,
         },
       ],
     })
@@ -31662,22 +28350,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2611 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_751') DROP VIEW view_1_tab4_751",
-      line: 9744,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9743,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2612 statement ok: DROP VIEW IF EXISTS view_1_tab4_751", () => {
     driver.runRecord({
@@ -31694,22 +28366,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2613 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_751') DROP VIEW view_2_tab4_751",
-      line: 9752,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9751,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2614 statement ok: DROP VIEW IF EXISTS view_2_tab4_751", () => {
     driver.runRecord({
@@ -31722,22 +28378,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9755,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2615 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_751') DROP VIEW view_3_tab4_751",
-      line: 9760,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9759,
         },
       ],
     })
@@ -31988,22 +28628,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2634 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_752') DROP VIEW view_1_tab0_752",
-      line: 9841,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9840,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2635 statement ok: DROP VIEW IF EXISTS view_1_tab0_752", () => {
     driver.runRecord({
@@ -32020,22 +28644,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2636 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_752') DROP VIEW view_2_tab0_752",
-      line: 9849,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9848,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2637 statement ok: DROP VIEW IF EXISTS view_2_tab0_752", () => {
     driver.runRecord({
@@ -32048,22 +28656,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9852,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2638 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_752') DROP VIEW view_3_tab0_752",
-      line: 9857,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9856,
         },
       ],
     })
@@ -32309,22 +28901,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2657 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_752') DROP VIEW view_1_tab1_752",
-      line: 9933,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9932,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2658 statement ok: DROP VIEW IF EXISTS view_1_tab1_752", () => {
     driver.runRecord({
@@ -32341,22 +28917,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2659 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_752') DROP VIEW view_2_tab1_752",
-      line: 9941,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9940,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2660 statement ok: DROP VIEW IF EXISTS view_2_tab1_752", () => {
     driver.runRecord({
@@ -32369,22 +28929,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 9944,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2661 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_752') DROP VIEW view_3_tab1_752",
-      line: 9949,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 9948,
         },
       ],
     })
@@ -32630,22 +29174,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2680 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_752') DROP VIEW view_1_tab2_752",
-      line: 10025,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10024,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2681 statement ok: DROP VIEW IF EXISTS view_1_tab2_752", () => {
     driver.runRecord({
@@ -32662,22 +29190,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2682 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_752') DROP VIEW view_2_tab2_752",
-      line: 10033,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10032,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2683 statement ok: DROP VIEW IF EXISTS view_2_tab2_752", () => {
     driver.runRecord({
@@ -32690,22 +29202,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10036,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2684 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_752') DROP VIEW view_3_tab2_752",
-      line: 10041,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10040,
         },
       ],
     })
@@ -32951,22 +29447,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2703 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_752') DROP VIEW view_1_tab3_752",
-      line: 10117,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10116,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2704 statement ok: DROP VIEW IF EXISTS view_1_tab3_752", () => {
     driver.runRecord({
@@ -32983,22 +29463,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2705 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_752') DROP VIEW view_2_tab3_752",
-      line: 10125,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10124,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2706 statement ok: DROP VIEW IF EXISTS view_2_tab3_752", () => {
     driver.runRecord({
@@ -33011,22 +29475,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10128,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2707 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_752') DROP VIEW view_3_tab3_752",
-      line: 10133,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10132,
         },
       ],
     })
@@ -33272,22 +29720,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2726 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_752') DROP VIEW view_1_tab4_752",
-      line: 10209,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10208,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2727 statement ok: DROP VIEW IF EXISTS view_1_tab4_752", () => {
     driver.runRecord({
@@ -33304,22 +29736,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2728 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_752') DROP VIEW view_2_tab4_752",
-      line: 10217,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10216,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2729 statement ok: DROP VIEW IF EXISTS view_2_tab4_752", () => {
     driver.runRecord({
@@ -33332,22 +29748,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10220,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2730 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_752') DROP VIEW view_3_tab4_752",
-      line: 10225,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10224,
         },
       ],
     })
@@ -33593,22 +29993,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2749 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_753') DROP VIEW view_1_tab0_753",
-      line: 10301,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10300,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2750 statement ok: DROP VIEW IF EXISTS view_1_tab0_753", () => {
     driver.runRecord({
@@ -33625,22 +30009,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2751 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_753') DROP VIEW view_2_tab0_753",
-      line: 10309,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10308,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2752 statement ok: DROP VIEW IF EXISTS view_2_tab0_753", () => {
     driver.runRecord({
@@ -33653,22 +30021,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10312,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2753 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_753') DROP VIEW view_3_tab0_753",
-      line: 10317,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10316,
         },
       ],
     })
@@ -33919,22 +30271,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2772 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_753') DROP VIEW view_1_tab1_753",
-      line: 10398,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10397,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2773 statement ok: DROP VIEW IF EXISTS view_1_tab1_753", () => {
     driver.runRecord({
@@ -33951,22 +30287,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2774 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_753') DROP VIEW view_2_tab1_753",
-      line: 10406,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10405,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2775 statement ok: DROP VIEW IF EXISTS view_2_tab1_753", () => {
     driver.runRecord({
@@ -33979,22 +30299,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10409,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2776 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_753') DROP VIEW view_3_tab1_753",
-      line: 10414,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10413,
         },
       ],
     })
@@ -34245,22 +30549,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2795 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_753') DROP VIEW view_1_tab2_753",
-      line: 10495,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10494,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2796 statement ok: DROP VIEW IF EXISTS view_1_tab2_753", () => {
     driver.runRecord({
@@ -34277,22 +30565,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2797 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_753') DROP VIEW view_2_tab2_753",
-      line: 10503,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10502,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2798 statement ok: DROP VIEW IF EXISTS view_2_tab2_753", () => {
     driver.runRecord({
@@ -34305,22 +30577,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10506,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2799 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_753') DROP VIEW view_3_tab2_753",
-      line: 10511,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10510,
         },
       ],
     })
@@ -34571,22 +30827,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2818 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_753') DROP VIEW view_1_tab3_753",
-      line: 10592,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10591,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2819 statement ok: DROP VIEW IF EXISTS view_1_tab3_753", () => {
     driver.runRecord({
@@ -34603,22 +30843,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2820 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_753') DROP VIEW view_2_tab3_753",
-      line: 10600,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10599,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2821 statement ok: DROP VIEW IF EXISTS view_2_tab3_753", () => {
     driver.runRecord({
@@ -34631,22 +30855,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10603,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2822 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_753') DROP VIEW view_3_tab3_753",
-      line: 10608,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10607,
         },
       ],
     })
@@ -34897,22 +31105,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2841 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_753') DROP VIEW view_1_tab4_753",
-      line: 10689,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10688,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2842 statement ok: DROP VIEW IF EXISTS view_1_tab4_753", () => {
     driver.runRecord({
@@ -34929,22 +31121,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2843 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_753') DROP VIEW view_2_tab4_753",
-      line: 10697,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10696,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2844 statement ok: DROP VIEW IF EXISTS view_2_tab4_753", () => {
     driver.runRecord({
@@ -34957,22 +31133,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10700,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2845 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_753') DROP VIEW view_3_tab4_753",
-      line: 10705,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10704,
         },
       ],
     })
@@ -35223,22 +31383,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2864 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_754') DROP VIEW view_1_tab0_754",
-      line: 10786,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10785,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2865 statement ok: DROP VIEW IF EXISTS view_1_tab0_754", () => {
     driver.runRecord({
@@ -35255,22 +31399,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2866 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_754') DROP VIEW view_2_tab0_754",
-      line: 10794,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10793,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2867 statement ok: DROP VIEW IF EXISTS view_2_tab0_754", () => {
     driver.runRecord({
@@ -35283,22 +31411,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10797,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2868 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_754') DROP VIEW view_3_tab0_754",
-      line: 10802,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10801,
         },
       ],
     })
@@ -35549,22 +31661,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2887 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_754') DROP VIEW view_1_tab1_754",
-      line: 10883,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10882,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2888 statement ok: DROP VIEW IF EXISTS view_1_tab1_754", () => {
     driver.runRecord({
@@ -35581,22 +31677,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2889 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_754') DROP VIEW view_2_tab1_754",
-      line: 10891,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10890,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2890 statement ok: DROP VIEW IF EXISTS view_2_tab1_754", () => {
     driver.runRecord({
@@ -35609,22 +31689,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10894,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2891 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_754') DROP VIEW view_3_tab1_754",
-      line: 10899,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10898,
         },
       ],
     })
@@ -35875,22 +31939,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2910 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_754') DROP VIEW view_1_tab2_754",
-      line: 10980,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10979,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2911 statement ok: DROP VIEW IF EXISTS view_1_tab2_754", () => {
     driver.runRecord({
@@ -35907,22 +31955,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2912 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_754') DROP VIEW view_2_tab2_754",
-      line: 10988,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10987,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2913 statement ok: DROP VIEW IF EXISTS view_2_tab2_754", () => {
     driver.runRecord({
@@ -35935,22 +31967,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 10991,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2914 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_754') DROP VIEW view_3_tab2_754",
-      line: 10996,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 10995,
         },
       ],
     })
@@ -36201,22 +32217,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2933 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_754') DROP VIEW view_1_tab3_754",
-      line: 11077,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11076,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2934 statement ok: DROP VIEW IF EXISTS view_1_tab3_754", () => {
     driver.runRecord({
@@ -36233,22 +32233,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2935 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_754') DROP VIEW view_2_tab3_754",
-      line: 11085,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11084,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2936 statement ok: DROP VIEW IF EXISTS view_2_tab3_754", () => {
     driver.runRecord({
@@ -36261,22 +32245,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11088,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2937 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_754') DROP VIEW view_3_tab3_754",
-      line: 11093,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11092,
         },
       ],
     })
@@ -36527,22 +32495,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2956 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_754') DROP VIEW view_1_tab4_754",
-      line: 11174,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11173,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2957 statement ok: DROP VIEW IF EXISTS view_1_tab4_754", () => {
     driver.runRecord({
@@ -36559,22 +32511,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2958 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_754') DROP VIEW view_2_tab4_754",
-      line: 11182,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11181,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2959 statement ok: DROP VIEW IF EXISTS view_2_tab4_754", () => {
     driver.runRecord({
@@ -36587,22 +32523,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11185,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2960 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_754') DROP VIEW view_3_tab4_754",
-      line: 11190,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11189,
         },
       ],
     })
@@ -36853,22 +32773,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#2979 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_755') DROP VIEW view_1_tab0_755",
-      line: 11271,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11270,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2980 statement ok: DROP VIEW IF EXISTS view_1_tab0_755", () => {
     driver.runRecord({
@@ -36885,22 +32789,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#2981 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_755') DROP VIEW view_2_tab0_755",
-      line: 11279,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11278,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#2982 statement ok: DROP VIEW IF EXISTS view_2_tab0_755", () => {
     driver.runRecord({
@@ -36913,22 +32801,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11282,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#2983 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_755') DROP VIEW view_3_tab0_755",
-      line: 11287,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11286,
         },
       ],
     })
@@ -37179,22 +33051,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3002 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_755') DROP VIEW view_1_tab1_755",
-      line: 11368,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11367,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3003 statement ok: DROP VIEW IF EXISTS view_1_tab1_755", () => {
     driver.runRecord({
@@ -37211,22 +33067,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3004 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_755') DROP VIEW view_2_tab1_755",
-      line: 11376,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11375,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3005 statement ok: DROP VIEW IF EXISTS view_2_tab1_755", () => {
     driver.runRecord({
@@ -37239,22 +33079,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11379,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3006 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_755') DROP VIEW view_3_tab1_755",
-      line: 11384,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11383,
         },
       ],
     })
@@ -37505,22 +33329,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3025 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_755') DROP VIEW view_1_tab2_755",
-      line: 11465,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11464,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3026 statement ok: DROP VIEW IF EXISTS view_1_tab2_755", () => {
     driver.runRecord({
@@ -37537,22 +33345,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3027 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_755') DROP VIEW view_2_tab2_755",
-      line: 11473,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11472,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3028 statement ok: DROP VIEW IF EXISTS view_2_tab2_755", () => {
     driver.runRecord({
@@ -37565,22 +33357,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11476,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3029 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_755') DROP VIEW view_3_tab2_755",
-      line: 11481,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11480,
         },
       ],
     })
@@ -37831,22 +33607,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3048 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_755') DROP VIEW view_1_tab3_755",
-      line: 11562,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11561,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3049 statement ok: DROP VIEW IF EXISTS view_1_tab3_755", () => {
     driver.runRecord({
@@ -37863,22 +33623,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3050 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_755') DROP VIEW view_2_tab3_755",
-      line: 11570,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11569,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3051 statement ok: DROP VIEW IF EXISTS view_2_tab3_755", () => {
     driver.runRecord({
@@ -37891,22 +33635,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11573,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3052 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_755') DROP VIEW view_3_tab3_755",
-      line: 11578,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11577,
         },
       ],
     })
@@ -38157,22 +33885,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3071 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_755') DROP VIEW view_1_tab4_755",
-      line: 11659,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11658,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3072 statement ok: DROP VIEW IF EXISTS view_1_tab4_755", () => {
     driver.runRecord({
@@ -38189,22 +33901,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3073 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_755') DROP VIEW view_2_tab4_755",
-      line: 11667,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11666,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3074 statement ok: DROP VIEW IF EXISTS view_2_tab4_755", () => {
     driver.runRecord({
@@ -38217,22 +33913,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11670,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3075 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_755') DROP VIEW view_3_tab4_755",
-      line: 11675,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11674,
         },
       ],
     })
@@ -38483,22 +34163,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3094 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_756') DROP VIEW view_1_tab0_756",
-      line: 11756,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11755,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3095 statement ok: DROP VIEW IF EXISTS view_1_tab0_756", () => {
     driver.runRecord({
@@ -38515,22 +34179,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3096 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_756') DROP VIEW view_2_tab0_756",
-      line: 11764,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11763,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3097 statement ok: DROP VIEW IF EXISTS view_2_tab0_756", () => {
     driver.runRecord({
@@ -38543,22 +34191,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11767,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3098 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_756') DROP VIEW view_3_tab0_756",
-      line: 11772,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11771,
         },
       ],
     })
@@ -38809,22 +34441,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3117 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_756') DROP VIEW view_1_tab1_756",
-      line: 11853,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11852,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3118 statement ok: DROP VIEW IF EXISTS view_1_tab1_756", () => {
     driver.runRecord({
@@ -38841,22 +34457,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3119 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_756') DROP VIEW view_2_tab1_756",
-      line: 11861,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11860,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3120 statement ok: DROP VIEW IF EXISTS view_2_tab1_756", () => {
     driver.runRecord({
@@ -38869,22 +34469,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11864,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3121 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_756') DROP VIEW view_3_tab1_756",
-      line: 11869,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11868,
         },
       ],
     })
@@ -39135,22 +34719,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3140 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_756') DROP VIEW view_1_tab2_756",
-      line: 11950,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11949,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3141 statement ok: DROP VIEW IF EXISTS view_1_tab2_756", () => {
     driver.runRecord({
@@ -39167,22 +34735,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3142 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_756') DROP VIEW view_2_tab2_756",
-      line: 11958,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11957,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3143 statement ok: DROP VIEW IF EXISTS view_2_tab2_756", () => {
     driver.runRecord({
@@ -39195,22 +34747,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 11961,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3144 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_756') DROP VIEW view_3_tab2_756",
-      line: 11966,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 11965,
         },
       ],
     })
@@ -39461,22 +34997,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3163 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_756') DROP VIEW view_1_tab3_756",
-      line: 12047,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12046,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3164 statement ok: DROP VIEW IF EXISTS view_1_tab3_756", () => {
     driver.runRecord({
@@ -39493,22 +35013,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3165 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_756') DROP VIEW view_2_tab3_756",
-      line: 12055,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12054,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3166 statement ok: DROP VIEW IF EXISTS view_2_tab3_756", () => {
     driver.runRecord({
@@ -39521,22 +35025,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12058,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3167 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_756') DROP VIEW view_3_tab3_756",
-      line: 12063,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12062,
         },
       ],
     })
@@ -39787,22 +35275,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3186 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_756') DROP VIEW view_1_tab4_756",
-      line: 12144,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12143,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3187 statement ok: DROP VIEW IF EXISTS view_1_tab4_756", () => {
     driver.runRecord({
@@ -39819,22 +35291,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3188 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_756') DROP VIEW view_2_tab4_756",
-      line: 12152,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12151,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3189 statement ok: DROP VIEW IF EXISTS view_2_tab4_756", () => {
     driver.runRecord({
@@ -39847,22 +35303,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12155,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3190 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_756') DROP VIEW view_3_tab4_756",
-      line: 12160,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12159,
         },
       ],
     })
@@ -40113,22 +35553,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3209 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_757') DROP VIEW view_1_tab0_757",
-      line: 12241,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12240,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3210 statement ok: DROP VIEW IF EXISTS view_1_tab0_757", () => {
     driver.runRecord({
@@ -40145,22 +35569,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3211 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_757') DROP VIEW view_2_tab0_757",
-      line: 12249,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12248,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3212 statement ok: DROP VIEW IF EXISTS view_2_tab0_757", () => {
     driver.runRecord({
@@ -40173,22 +35581,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12252,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3213 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_757') DROP VIEW view_3_tab0_757",
-      line: 12257,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12256,
         },
       ],
     })
@@ -40439,22 +35831,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3232 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_757') DROP VIEW view_1_tab1_757",
-      line: 12338,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12337,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3233 statement ok: DROP VIEW IF EXISTS view_1_tab1_757", () => {
     driver.runRecord({
@@ -40471,22 +35847,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3234 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_757') DROP VIEW view_2_tab1_757",
-      line: 12346,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12345,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3235 statement ok: DROP VIEW IF EXISTS view_2_tab1_757", () => {
     driver.runRecord({
@@ -40499,22 +35859,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12349,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3236 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_757') DROP VIEW view_3_tab1_757",
-      line: 12354,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12353,
         },
       ],
     })
@@ -40765,22 +36109,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3255 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_757') DROP VIEW view_1_tab2_757",
-      line: 12435,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12434,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3256 statement ok: DROP VIEW IF EXISTS view_1_tab2_757", () => {
     driver.runRecord({
@@ -40797,22 +36125,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3257 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_757') DROP VIEW view_2_tab2_757",
-      line: 12443,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12442,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3258 statement ok: DROP VIEW IF EXISTS view_2_tab2_757", () => {
     driver.runRecord({
@@ -40825,22 +36137,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12446,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3259 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_757') DROP VIEW view_3_tab2_757",
-      line: 12451,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12450,
         },
       ],
     })
@@ -41091,22 +36387,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3278 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_757') DROP VIEW view_1_tab3_757",
-      line: 12532,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12531,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3279 statement ok: DROP VIEW IF EXISTS view_1_tab3_757", () => {
     driver.runRecord({
@@ -41123,22 +36403,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3280 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_757') DROP VIEW view_2_tab3_757",
-      line: 12540,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12539,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3281 statement ok: DROP VIEW IF EXISTS view_2_tab3_757", () => {
     driver.runRecord({
@@ -41151,22 +36415,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12543,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3282 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_757') DROP VIEW view_3_tab3_757",
-      line: 12548,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12547,
         },
       ],
     })
@@ -41417,22 +36665,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3301 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_757') DROP VIEW view_1_tab4_757",
-      line: 12629,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12628,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3302 statement ok: DROP VIEW IF EXISTS view_1_tab4_757", () => {
     driver.runRecord({
@@ -41449,22 +36681,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3303 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_757') DROP VIEW view_2_tab4_757",
-      line: 12637,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12636,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3304 statement ok: DROP VIEW IF EXISTS view_2_tab4_757", () => {
     driver.runRecord({
@@ -41477,22 +36693,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12640,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3305 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_757') DROP VIEW view_3_tab4_757",
-      line: 12645,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12644,
         },
       ],
     })
@@ -41743,22 +36943,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3324 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_758') DROP VIEW view_1_tab0_758",
-      line: 12726,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12725,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3325 statement ok: DROP VIEW IF EXISTS view_1_tab0_758", () => {
     driver.runRecord({
@@ -41775,22 +36959,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3326 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_758') DROP VIEW view_2_tab0_758",
-      line: 12734,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12733,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3327 statement ok: DROP VIEW IF EXISTS view_2_tab0_758", () => {
     driver.runRecord({
@@ -41803,22 +36971,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12737,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3328 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_758') DROP VIEW view_3_tab0_758",
-      line: 12742,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12741,
         },
       ],
     })
@@ -42069,22 +37221,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3347 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_758') DROP VIEW view_1_tab1_758",
-      line: 12823,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12822,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3348 statement ok: DROP VIEW IF EXISTS view_1_tab1_758", () => {
     driver.runRecord({
@@ -42101,22 +37237,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3349 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_758') DROP VIEW view_2_tab1_758",
-      line: 12831,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12830,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3350 statement ok: DROP VIEW IF EXISTS view_2_tab1_758", () => {
     driver.runRecord({
@@ -42129,22 +37249,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12834,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3351 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_758') DROP VIEW view_3_tab1_758",
-      line: 12839,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12838,
         },
       ],
     })
@@ -42395,22 +37499,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3370 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_758') DROP VIEW view_1_tab2_758",
-      line: 12920,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12919,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3371 statement ok: DROP VIEW IF EXISTS view_1_tab2_758", () => {
     driver.runRecord({
@@ -42427,22 +37515,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3372 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_758') DROP VIEW view_2_tab2_758",
-      line: 12928,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12927,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3373 statement ok: DROP VIEW IF EXISTS view_2_tab2_758", () => {
     driver.runRecord({
@@ -42455,22 +37527,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 12931,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3374 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_758') DROP VIEW view_3_tab2_758",
-      line: 12936,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 12935,
         },
       ],
     })
@@ -42721,22 +37777,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3393 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_758') DROP VIEW view_1_tab3_758",
-      line: 13017,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13016,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3394 statement ok: DROP VIEW IF EXISTS view_1_tab3_758", () => {
     driver.runRecord({
@@ -42753,22 +37793,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3395 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_758') DROP VIEW view_2_tab3_758",
-      line: 13025,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13024,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3396 statement ok: DROP VIEW IF EXISTS view_2_tab3_758", () => {
     driver.runRecord({
@@ -42781,22 +37805,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13028,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3397 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_758') DROP VIEW view_3_tab3_758",
-      line: 13033,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13032,
         },
       ],
     })
@@ -43047,22 +38055,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3416 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_758') DROP VIEW view_1_tab4_758",
-      line: 13114,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13113,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3417 statement ok: DROP VIEW IF EXISTS view_1_tab4_758", () => {
     driver.runRecord({
@@ -43079,22 +38071,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3418 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_758') DROP VIEW view_2_tab4_758",
-      line: 13122,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13121,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3419 statement ok: DROP VIEW IF EXISTS view_2_tab4_758", () => {
     driver.runRecord({
@@ -43107,22 +38083,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13125,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3420 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_758') DROP VIEW view_3_tab4_758",
-      line: 13130,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13129,
         },
       ],
     })
@@ -43373,22 +38333,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3439 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_759') DROP VIEW view_1_tab0_759",
-      line: 13211,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13210,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3440 statement ok: DROP VIEW IF EXISTS view_1_tab0_759", () => {
     driver.runRecord({
@@ -43405,22 +38349,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3441 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_759') DROP VIEW view_2_tab0_759",
-      line: 13219,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13218,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3442 statement ok: DROP VIEW IF EXISTS view_2_tab0_759", () => {
     driver.runRecord({
@@ -43433,22 +38361,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13222,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3443 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_759') DROP VIEW view_3_tab0_759",
-      line: 13227,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13226,
         },
       ],
     })
@@ -43694,22 +38606,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3462 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_759') DROP VIEW view_1_tab1_759",
-      line: 13303,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13302,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3463 statement ok: DROP VIEW IF EXISTS view_1_tab1_759", () => {
     driver.runRecord({
@@ -43726,22 +38622,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3464 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_759') DROP VIEW view_2_tab1_759",
-      line: 13311,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13310,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3465 statement ok: DROP VIEW IF EXISTS view_2_tab1_759", () => {
     driver.runRecord({
@@ -43754,22 +38634,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13314,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3466 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_759') DROP VIEW view_3_tab1_759",
-      line: 13319,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13318,
         },
       ],
     })
@@ -44015,22 +38879,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3485 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_759') DROP VIEW view_1_tab2_759",
-      line: 13395,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13394,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3486 statement ok: DROP VIEW IF EXISTS view_1_tab2_759", () => {
     driver.runRecord({
@@ -44047,22 +38895,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3487 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_759') DROP VIEW view_2_tab2_759",
-      line: 13403,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13402,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3488 statement ok: DROP VIEW IF EXISTS view_2_tab2_759", () => {
     driver.runRecord({
@@ -44075,22 +38907,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13406,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3489 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_759') DROP VIEW view_3_tab2_759",
-      line: 13411,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13410,
         },
       ],
     })
@@ -44336,22 +39152,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3508 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_759') DROP VIEW view_1_tab3_759",
-      line: 13487,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13486,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3509 statement ok: DROP VIEW IF EXISTS view_1_tab3_759", () => {
     driver.runRecord({
@@ -44368,22 +39168,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3510 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_759') DROP VIEW view_2_tab3_759",
-      line: 13495,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13494,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3511 statement ok: DROP VIEW IF EXISTS view_2_tab3_759", () => {
     driver.runRecord({
@@ -44396,22 +39180,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13498,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3512 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_759') DROP VIEW view_3_tab3_759",
-      line: 13503,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13502,
         },
       ],
     })
@@ -44657,22 +39425,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3531 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_759') DROP VIEW view_1_tab4_759",
-      line: 13579,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13578,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3532 statement ok: DROP VIEW IF EXISTS view_1_tab4_759", () => {
     driver.runRecord({
@@ -44689,22 +39441,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3533 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_759') DROP VIEW view_2_tab4_759",
-      line: 13587,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13586,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3534 statement ok: DROP VIEW IF EXISTS view_2_tab4_759", () => {
     driver.runRecord({
@@ -44717,22 +39453,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13590,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3535 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_759') DROP VIEW view_3_tab4_759",
-      line: 13595,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13594,
         },
       ],
     })
@@ -44978,22 +39698,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3554 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_760') DROP VIEW view_1_tab0_760",
-      line: 13671,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13670,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3555 statement ok: DROP VIEW IF EXISTS view_1_tab0_760", () => {
     driver.runRecord({
@@ -45010,22 +39714,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3556 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_760') DROP VIEW view_2_tab0_760",
-      line: 13679,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13678,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3557 statement ok: DROP VIEW IF EXISTS view_2_tab0_760", () => {
     driver.runRecord({
@@ -45038,22 +39726,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13682,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3558 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_760') DROP VIEW view_3_tab0_760",
-      line: 13687,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13686,
         },
       ],
     })
@@ -45304,22 +39976,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3577 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_760') DROP VIEW view_1_tab1_760",
-      line: 13768,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13767,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3578 statement ok: DROP VIEW IF EXISTS view_1_tab1_760", () => {
     driver.runRecord({
@@ -45336,22 +39992,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3579 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_760') DROP VIEW view_2_tab1_760",
-      line: 13776,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13775,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3580 statement ok: DROP VIEW IF EXISTS view_2_tab1_760", () => {
     driver.runRecord({
@@ -45364,22 +40004,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13779,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3581 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_760') DROP VIEW view_3_tab1_760",
-      line: 13784,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13783,
         },
       ],
     })
@@ -45630,22 +40254,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3600 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_760') DROP VIEW view_1_tab2_760",
-      line: 13865,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13864,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3601 statement ok: DROP VIEW IF EXISTS view_1_tab2_760", () => {
     driver.runRecord({
@@ -45662,22 +40270,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3602 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_760') DROP VIEW view_2_tab2_760",
-      line: 13873,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13872,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3603 statement ok: DROP VIEW IF EXISTS view_2_tab2_760", () => {
     driver.runRecord({
@@ -45690,22 +40282,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13876,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3604 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_760') DROP VIEW view_3_tab2_760",
-      line: 13881,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13880,
         },
       ],
     })
@@ -45956,22 +40532,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3623 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_760') DROP VIEW view_1_tab3_760",
-      line: 13962,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13961,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3624 statement ok: DROP VIEW IF EXISTS view_1_tab3_760", () => {
     driver.runRecord({
@@ -45988,22 +40548,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3625 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_760') DROP VIEW view_2_tab3_760",
-      line: 13970,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13969,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3626 statement ok: DROP VIEW IF EXISTS view_2_tab3_760", () => {
     driver.runRecord({
@@ -46016,22 +40560,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 13973,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3627 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_760') DROP VIEW view_3_tab3_760",
-      line: 13978,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 13977,
         },
       ],
     })
@@ -46282,22 +40810,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3646 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_760') DROP VIEW view_1_tab4_760",
-      line: 14059,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14058,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3647 statement ok: DROP VIEW IF EXISTS view_1_tab4_760", () => {
     driver.runRecord({
@@ -46314,22 +40826,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3648 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_760') DROP VIEW view_2_tab4_760",
-      line: 14067,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14066,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3649 statement ok: DROP VIEW IF EXISTS view_2_tab4_760", () => {
     driver.runRecord({
@@ -46342,22 +40838,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14070,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3650 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_760') DROP VIEW view_3_tab4_760",
-      line: 14075,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14074,
         },
       ],
     })
@@ -46608,22 +41088,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3669 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_761') DROP VIEW view_1_tab0_761",
-      line: 14156,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14155,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3670 statement ok: DROP VIEW IF EXISTS view_1_tab0_761", () => {
     driver.runRecord({
@@ -46640,22 +41104,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3671 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_761') DROP VIEW view_2_tab0_761",
-      line: 14164,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14163,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3672 statement ok: DROP VIEW IF EXISTS view_2_tab0_761", () => {
     driver.runRecord({
@@ -46668,22 +41116,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14167,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3673 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_761') DROP VIEW view_3_tab0_761",
-      line: 14172,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14171,
         },
       ],
     })
@@ -46934,22 +41366,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3692 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_761') DROP VIEW view_1_tab1_761",
-      line: 14253,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14252,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3693 statement ok: DROP VIEW IF EXISTS view_1_tab1_761", () => {
     driver.runRecord({
@@ -46966,22 +41382,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3694 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_761') DROP VIEW view_2_tab1_761",
-      line: 14261,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14260,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3695 statement ok: DROP VIEW IF EXISTS view_2_tab1_761", () => {
     driver.runRecord({
@@ -46994,22 +41394,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14264,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3696 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_761') DROP VIEW view_3_tab1_761",
-      line: 14269,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14268,
         },
       ],
     })
@@ -47260,22 +41644,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3715 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_761') DROP VIEW view_1_tab2_761",
-      line: 14350,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14349,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3716 statement ok: DROP VIEW IF EXISTS view_1_tab2_761", () => {
     driver.runRecord({
@@ -47292,22 +41660,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3717 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_761') DROP VIEW view_2_tab2_761",
-      line: 14358,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14357,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3718 statement ok: DROP VIEW IF EXISTS view_2_tab2_761", () => {
     driver.runRecord({
@@ -47320,22 +41672,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14361,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3719 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_761') DROP VIEW view_3_tab2_761",
-      line: 14366,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14365,
         },
       ],
     })
@@ -47586,22 +41922,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3738 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_761') DROP VIEW view_1_tab3_761",
-      line: 14447,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14446,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3739 statement ok: DROP VIEW IF EXISTS view_1_tab3_761", () => {
     driver.runRecord({
@@ -47618,22 +41938,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3740 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_761') DROP VIEW view_2_tab3_761",
-      line: 14455,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14454,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3741 statement ok: DROP VIEW IF EXISTS view_2_tab3_761", () => {
     driver.runRecord({
@@ -47646,22 +41950,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14458,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3742 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_761') DROP VIEW view_3_tab3_761",
-      line: 14463,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14462,
         },
       ],
     })
@@ -47912,22 +42200,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3761 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_761') DROP VIEW view_1_tab4_761",
-      line: 14544,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14543,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3762 statement ok: DROP VIEW IF EXISTS view_1_tab4_761", () => {
     driver.runRecord({
@@ -47944,22 +42216,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3763 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_761') DROP VIEW view_2_tab4_761",
-      line: 14552,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14551,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3764 statement ok: DROP VIEW IF EXISTS view_2_tab4_761", () => {
     driver.runRecord({
@@ -47972,22 +42228,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14555,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3765 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_761') DROP VIEW view_3_tab4_761",
-      line: 14560,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14559,
         },
       ],
     })
@@ -48238,22 +42478,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3784 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_762') DROP VIEW view_1_tab0_762",
-      line: 14641,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14640,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3785 statement ok: DROP VIEW IF EXISTS view_1_tab0_762", () => {
     driver.runRecord({
@@ -48270,22 +42494,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3786 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_762') DROP VIEW view_2_tab0_762",
-      line: 14649,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14648,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3787 statement ok: DROP VIEW IF EXISTS view_2_tab0_762", () => {
     driver.runRecord({
@@ -48298,22 +42506,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14652,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3788 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_762') DROP VIEW view_3_tab0_762",
-      line: 14657,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14656,
         },
       ],
     })
@@ -48559,22 +42751,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3807 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_762') DROP VIEW view_1_tab1_762",
-      line: 14733,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14732,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3808 statement ok: DROP VIEW IF EXISTS view_1_tab1_762", () => {
     driver.runRecord({
@@ -48591,22 +42767,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3809 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_762') DROP VIEW view_2_tab1_762",
-      line: 14741,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14740,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3810 statement ok: DROP VIEW IF EXISTS view_2_tab1_762", () => {
     driver.runRecord({
@@ -48619,22 +42779,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14744,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3811 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_762') DROP VIEW view_3_tab1_762",
-      line: 14749,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14748,
         },
       ],
     })
@@ -48880,22 +43024,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3830 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_762') DROP VIEW view_1_tab2_762",
-      line: 14825,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14824,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3831 statement ok: DROP VIEW IF EXISTS view_1_tab2_762", () => {
     driver.runRecord({
@@ -48912,22 +43040,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3832 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_762') DROP VIEW view_2_tab2_762",
-      line: 14833,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14832,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3833 statement ok: DROP VIEW IF EXISTS view_2_tab2_762", () => {
     driver.runRecord({
@@ -48940,22 +43052,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14836,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3834 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_762') DROP VIEW view_3_tab2_762",
-      line: 14841,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14840,
         },
       ],
     })
@@ -49201,22 +43297,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3853 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_762') DROP VIEW view_1_tab3_762",
-      line: 14917,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14916,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3854 statement ok: DROP VIEW IF EXISTS view_1_tab3_762", () => {
     driver.runRecord({
@@ -49233,22 +43313,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3855 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_762') DROP VIEW view_2_tab3_762",
-      line: 14925,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14924,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3856 statement ok: DROP VIEW IF EXISTS view_2_tab3_762", () => {
     driver.runRecord({
@@ -49261,22 +43325,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 14928,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3857 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_762') DROP VIEW view_3_tab3_762",
-      line: 14933,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 14932,
         },
       ],
     })
@@ -49522,22 +43570,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3876 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_762') DROP VIEW view_1_tab4_762",
-      line: 15009,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15008,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3877 statement ok: DROP VIEW IF EXISTS view_1_tab4_762", () => {
     driver.runRecord({
@@ -49554,22 +43586,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3878 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_762') DROP VIEW view_2_tab4_762",
-      line: 15017,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15016,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3879 statement ok: DROP VIEW IF EXISTS view_2_tab4_762", () => {
     driver.runRecord({
@@ -49582,22 +43598,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15020,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3880 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_762') DROP VIEW view_3_tab4_762",
-      line: 15025,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15024,
         },
       ],
     })
@@ -49843,22 +43843,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3899 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_763') DROP VIEW view_1_tab0_763",
-      line: 15101,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15100,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3900 statement ok: DROP VIEW IF EXISTS view_1_tab0_763", () => {
     driver.runRecord({
@@ -49875,22 +43859,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3901 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_763') DROP VIEW view_2_tab0_763",
-      line: 15109,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15108,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3902 statement ok: DROP VIEW IF EXISTS view_2_tab0_763", () => {
     driver.runRecord({
@@ -49903,22 +43871,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15112,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3903 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_763') DROP VIEW view_3_tab0_763",
-      line: 15117,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15116,
         },
       ],
     })
@@ -50164,22 +44116,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3922 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_763') DROP VIEW view_1_tab1_763",
-      line: 15193,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15192,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3923 statement ok: DROP VIEW IF EXISTS view_1_tab1_763", () => {
     driver.runRecord({
@@ -50196,22 +44132,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3924 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_763') DROP VIEW view_2_tab1_763",
-      line: 15201,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15200,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3925 statement ok: DROP VIEW IF EXISTS view_2_tab1_763", () => {
     driver.runRecord({
@@ -50224,22 +44144,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15204,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3926 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_763') DROP VIEW view_3_tab1_763",
-      line: 15209,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15208,
         },
       ],
     })
@@ -50485,22 +44389,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3945 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_763') DROP VIEW view_1_tab2_763",
-      line: 15285,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15284,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3946 statement ok: DROP VIEW IF EXISTS view_1_tab2_763", () => {
     driver.runRecord({
@@ -50517,22 +44405,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3947 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_763') DROP VIEW view_2_tab2_763",
-      line: 15293,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15292,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3948 statement ok: DROP VIEW IF EXISTS view_2_tab2_763", () => {
     driver.runRecord({
@@ -50545,22 +44417,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15296,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3949 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_763') DROP VIEW view_3_tab2_763",
-      line: 15301,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15300,
         },
       ],
     })
@@ -50806,22 +44662,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3968 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_763') DROP VIEW view_1_tab3_763",
-      line: 15377,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15376,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3969 statement ok: DROP VIEW IF EXISTS view_1_tab3_763", () => {
     driver.runRecord({
@@ -50838,22 +44678,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3970 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_763') DROP VIEW view_2_tab3_763",
-      line: 15385,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15384,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3971 statement ok: DROP VIEW IF EXISTS view_2_tab3_763", () => {
     driver.runRecord({
@@ -50866,22 +44690,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15388,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3972 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_763') DROP VIEW view_3_tab3_763",
-      line: 15393,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15392,
         },
       ],
     })
@@ -51127,22 +44935,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#3991 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_763') DROP VIEW view_1_tab4_763",
-      line: 15469,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15468,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3992 statement ok: DROP VIEW IF EXISTS view_1_tab4_763", () => {
     driver.runRecord({
@@ -51159,22 +44951,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#3993 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_763') DROP VIEW view_2_tab4_763",
-      line: 15477,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15476,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#3994 statement ok: DROP VIEW IF EXISTS view_2_tab4_763", () => {
     driver.runRecord({
@@ -51187,22 +44963,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15480,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#3995 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_763') DROP VIEW view_3_tab4_763",
-      line: 15485,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15484,
         },
       ],
     })
@@ -51448,22 +45208,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4014 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_764') DROP VIEW view_1_tab0_764",
-      line: 15561,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15560,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4015 statement ok: DROP VIEW IF EXISTS view_1_tab0_764", () => {
     driver.runRecord({
@@ -51480,22 +45224,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4016 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_764') DROP VIEW view_2_tab0_764",
-      line: 15569,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15568,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4017 statement ok: DROP VIEW IF EXISTS view_2_tab0_764", () => {
     driver.runRecord({
@@ -51508,22 +45236,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15572,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4018 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_764') DROP VIEW view_3_tab0_764",
-      line: 15577,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15576,
         },
       ],
     })
@@ -51774,22 +45486,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4037 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_764') DROP VIEW view_1_tab1_764",
-      line: 15658,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15657,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4038 statement ok: DROP VIEW IF EXISTS view_1_tab1_764", () => {
     driver.runRecord({
@@ -51806,22 +45502,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4039 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_764') DROP VIEW view_2_tab1_764",
-      line: 15666,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15665,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4040 statement ok: DROP VIEW IF EXISTS view_2_tab1_764", () => {
     driver.runRecord({
@@ -51834,22 +45514,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15669,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4041 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_764') DROP VIEW view_3_tab1_764",
-      line: 15674,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15673,
         },
       ],
     })
@@ -52100,22 +45764,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4060 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_764') DROP VIEW view_1_tab2_764",
-      line: 15755,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15754,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4061 statement ok: DROP VIEW IF EXISTS view_1_tab2_764", () => {
     driver.runRecord({
@@ -52132,22 +45780,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4062 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_764') DROP VIEW view_2_tab2_764",
-      line: 15763,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15762,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4063 statement ok: DROP VIEW IF EXISTS view_2_tab2_764", () => {
     driver.runRecord({
@@ -52160,22 +45792,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15766,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4064 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_764') DROP VIEW view_3_tab2_764",
-      line: 15771,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15770,
         },
       ],
     })
@@ -52426,22 +46042,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4083 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_764') DROP VIEW view_1_tab3_764",
-      line: 15852,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15851,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4084 statement ok: DROP VIEW IF EXISTS view_1_tab3_764", () => {
     driver.runRecord({
@@ -52458,22 +46058,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4085 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_764') DROP VIEW view_2_tab3_764",
-      line: 15860,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15859,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4086 statement ok: DROP VIEW IF EXISTS view_2_tab3_764", () => {
     driver.runRecord({
@@ -52486,22 +46070,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15863,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4087 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_764') DROP VIEW view_3_tab3_764",
-      line: 15868,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15867,
         },
       ],
     })
@@ -52752,22 +46320,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4106 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_764') DROP VIEW view_1_tab4_764",
-      line: 15949,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15948,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4107 statement ok: DROP VIEW IF EXISTS view_1_tab4_764", () => {
     driver.runRecord({
@@ -52784,22 +46336,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4108 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_764') DROP VIEW view_2_tab4_764",
-      line: 15957,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15956,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4109 statement ok: DROP VIEW IF EXISTS view_2_tab4_764", () => {
     driver.runRecord({
@@ -52812,22 +46348,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 15960,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4110 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_764') DROP VIEW view_3_tab4_764",
-      line: 15965,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 15964,
         },
       ],
     })
@@ -53078,22 +46598,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4129 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_765') DROP VIEW view_1_tab0_765",
-      line: 16046,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16045,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4130 statement ok: DROP VIEW IF EXISTS view_1_tab0_765", () => {
     driver.runRecord({
@@ -53110,22 +46614,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4131 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_765') DROP VIEW view_2_tab0_765",
-      line: 16054,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16053,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4132 statement ok: DROP VIEW IF EXISTS view_2_tab0_765", () => {
     driver.runRecord({
@@ -53138,22 +46626,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16057,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4133 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_765') DROP VIEW view_3_tab0_765",
-      line: 16062,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16061,
         },
       ],
     })
@@ -53399,22 +46871,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4152 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_765') DROP VIEW view_1_tab1_765",
-      line: 16145,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16144,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4153 statement ok: DROP VIEW IF EXISTS view_1_tab1_765", () => {
     driver.runRecord({
@@ -53431,22 +46887,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4154 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_765') DROP VIEW view_2_tab1_765",
-      line: 16153,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16152,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4155 statement ok: DROP VIEW IF EXISTS view_2_tab1_765", () => {
     driver.runRecord({
@@ -53459,22 +46899,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16156,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4156 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_765') DROP VIEW view_3_tab1_765",
-      line: 16161,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16160,
         },
       ],
     })
@@ -53720,22 +47144,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4175 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_765') DROP VIEW view_1_tab2_765",
-      line: 16244,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16243,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4176 statement ok: DROP VIEW IF EXISTS view_1_tab2_765", () => {
     driver.runRecord({
@@ -53752,22 +47160,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4177 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_765') DROP VIEW view_2_tab2_765",
-      line: 16252,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16251,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4178 statement ok: DROP VIEW IF EXISTS view_2_tab2_765", () => {
     driver.runRecord({
@@ -53780,22 +47172,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16255,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4179 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_765') DROP VIEW view_3_tab2_765",
-      line: 16260,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16259,
         },
       ],
     })
@@ -54041,22 +47417,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4198 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_765') DROP VIEW view_1_tab3_765",
-      line: 16343,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16342,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4199 statement ok: DROP VIEW IF EXISTS view_1_tab3_765", () => {
     driver.runRecord({
@@ -54073,22 +47433,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4200 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_765') DROP VIEW view_2_tab3_765",
-      line: 16351,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16350,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4201 statement ok: DROP VIEW IF EXISTS view_2_tab3_765", () => {
     driver.runRecord({
@@ -54101,22 +47445,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16354,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4202 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_765') DROP VIEW view_3_tab3_765",
-      line: 16359,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16358,
         },
       ],
     })
@@ -54362,22 +47690,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4221 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_765') DROP VIEW view_1_tab4_765",
-      line: 16442,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16441,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4222 statement ok: DROP VIEW IF EXISTS view_1_tab4_765", () => {
     driver.runRecord({
@@ -54394,22 +47706,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4223 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_765') DROP VIEW view_2_tab4_765",
-      line: 16450,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16449,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4224 statement ok: DROP VIEW IF EXISTS view_2_tab4_765", () => {
     driver.runRecord({
@@ -54422,22 +47718,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16453,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4225 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_765') DROP VIEW view_3_tab4_765",
-      line: 16458,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16457,
         },
       ],
     })
@@ -54683,22 +47963,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4244 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_766') DROP VIEW view_1_tab0_766",
-      line: 16541,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16540,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4245 statement ok: DROP VIEW IF EXISTS view_1_tab0_766", () => {
     driver.runRecord({
@@ -54715,22 +47979,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4246 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_766') DROP VIEW view_2_tab0_766",
-      line: 16549,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16548,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4247 statement ok: DROP VIEW IF EXISTS view_2_tab0_766", () => {
     driver.runRecord({
@@ -54743,22 +47991,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16552,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4248 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_766') DROP VIEW view_3_tab0_766",
-      line: 16557,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16556,
         },
       ],
     })
@@ -55009,22 +48241,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4267 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_766') DROP VIEW view_1_tab1_766",
-      line: 16638,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16637,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4268 statement ok: DROP VIEW IF EXISTS view_1_tab1_766", () => {
     driver.runRecord({
@@ -55041,22 +48257,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4269 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_766') DROP VIEW view_2_tab1_766",
-      line: 16646,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16645,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4270 statement ok: DROP VIEW IF EXISTS view_2_tab1_766", () => {
     driver.runRecord({
@@ -55069,22 +48269,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16649,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4271 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_766') DROP VIEW view_3_tab1_766",
-      line: 16654,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16653,
         },
       ],
     })
@@ -55335,22 +48519,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4290 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_766') DROP VIEW view_1_tab2_766",
-      line: 16735,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16734,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4291 statement ok: DROP VIEW IF EXISTS view_1_tab2_766", () => {
     driver.runRecord({
@@ -55367,22 +48535,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4292 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_766') DROP VIEW view_2_tab2_766",
-      line: 16743,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16742,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4293 statement ok: DROP VIEW IF EXISTS view_2_tab2_766", () => {
     driver.runRecord({
@@ -55395,22 +48547,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16746,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4294 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_766') DROP VIEW view_3_tab2_766",
-      line: 16751,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16750,
         },
       ],
     })
@@ -55661,22 +48797,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4313 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_766') DROP VIEW view_1_tab3_766",
-      line: 16832,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16831,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4314 statement ok: DROP VIEW IF EXISTS view_1_tab3_766", () => {
     driver.runRecord({
@@ -55693,22 +48813,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4315 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_766') DROP VIEW view_2_tab3_766",
-      line: 16840,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16839,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4316 statement ok: DROP VIEW IF EXISTS view_2_tab3_766", () => {
     driver.runRecord({
@@ -55721,22 +48825,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16843,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4317 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_766') DROP VIEW view_3_tab3_766",
-      line: 16848,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16847,
         },
       ],
     })
@@ -55987,22 +49075,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4336 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_766') DROP VIEW view_1_tab4_766",
-      line: 16929,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16928,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4337 statement ok: DROP VIEW IF EXISTS view_1_tab4_766", () => {
     driver.runRecord({
@@ -56019,22 +49091,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4338 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_766') DROP VIEW view_2_tab4_766",
-      line: 16937,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16936,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4339 statement ok: DROP VIEW IF EXISTS view_2_tab4_766", () => {
     driver.runRecord({
@@ -56047,22 +49103,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 16940,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4340 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_766') DROP VIEW view_3_tab4_766",
-      line: 16945,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 16944,
         },
       ],
     })
@@ -56313,22 +49353,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4359 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_767') DROP VIEW view_1_tab0_767",
-      line: 17026,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17025,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4360 statement ok: DROP VIEW IF EXISTS view_1_tab0_767", () => {
     driver.runRecord({
@@ -56345,22 +49369,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4361 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_767') DROP VIEW view_2_tab0_767",
-      line: 17034,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17033,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4362 statement ok: DROP VIEW IF EXISTS view_2_tab0_767", () => {
     driver.runRecord({
@@ -56373,22 +49381,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17037,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4363 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_767') DROP VIEW view_3_tab0_767",
-      line: 17042,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17041,
         },
       ],
     })
@@ -56634,22 +49626,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4382 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_767') DROP VIEW view_1_tab1_767",
-      line: 17118,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17117,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4383 statement ok: DROP VIEW IF EXISTS view_1_tab1_767", () => {
     driver.runRecord({
@@ -56666,22 +49642,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4384 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_767') DROP VIEW view_2_tab1_767",
-      line: 17126,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17125,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4385 statement ok: DROP VIEW IF EXISTS view_2_tab1_767", () => {
     driver.runRecord({
@@ -56694,22 +49654,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17129,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4386 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_767') DROP VIEW view_3_tab1_767",
-      line: 17134,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17133,
         },
       ],
     })
@@ -56955,22 +49899,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4405 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_767') DROP VIEW view_1_tab2_767",
-      line: 17210,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17209,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4406 statement ok: DROP VIEW IF EXISTS view_1_tab2_767", () => {
     driver.runRecord({
@@ -56987,22 +49915,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4407 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_767') DROP VIEW view_2_tab2_767",
-      line: 17218,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17217,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4408 statement ok: DROP VIEW IF EXISTS view_2_tab2_767", () => {
     driver.runRecord({
@@ -57015,22 +49927,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17221,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4409 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_767') DROP VIEW view_3_tab2_767",
-      line: 17226,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17225,
         },
       ],
     })
@@ -57276,22 +50172,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4428 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_767') DROP VIEW view_1_tab3_767",
-      line: 17302,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17301,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4429 statement ok: DROP VIEW IF EXISTS view_1_tab3_767", () => {
     driver.runRecord({
@@ -57308,22 +50188,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4430 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_767') DROP VIEW view_2_tab3_767",
-      line: 17310,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17309,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4431 statement ok: DROP VIEW IF EXISTS view_2_tab3_767", () => {
     driver.runRecord({
@@ -57336,22 +50200,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17313,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4432 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_767') DROP VIEW view_3_tab3_767",
-      line: 17318,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17317,
         },
       ],
     })
@@ -57597,22 +50445,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4451 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_767') DROP VIEW view_1_tab4_767",
-      line: 17394,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17393,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4452 statement ok: DROP VIEW IF EXISTS view_1_tab4_767", () => {
     driver.runRecord({
@@ -57629,22 +50461,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4453 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_767') DROP VIEW view_2_tab4_767",
-      line: 17402,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17401,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4454 statement ok: DROP VIEW IF EXISTS view_2_tab4_767", () => {
     driver.runRecord({
@@ -57657,22 +50473,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17405,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4455 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_767') DROP VIEW view_3_tab4_767",
-      line: 17410,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17409,
         },
       ],
     })
@@ -57918,22 +50718,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4474 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_768') DROP VIEW view_1_tab0_768",
-      line: 17486,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17485,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4475 statement ok: DROP VIEW IF EXISTS view_1_tab0_768", () => {
     driver.runRecord({
@@ -57950,22 +50734,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4476 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_768') DROP VIEW view_2_tab0_768",
-      line: 17494,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17493,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4477 statement ok: DROP VIEW IF EXISTS view_2_tab0_768", () => {
     driver.runRecord({
@@ -57978,22 +50746,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17497,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4478 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_768') DROP VIEW view_3_tab0_768",
-      line: 17502,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17501,
         },
       ],
     })
@@ -58244,22 +50996,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4497 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_768') DROP VIEW view_1_tab1_768",
-      line: 17583,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17582,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4498 statement ok: DROP VIEW IF EXISTS view_1_tab1_768", () => {
     driver.runRecord({
@@ -58276,22 +51012,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4499 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_768') DROP VIEW view_2_tab1_768",
-      line: 17591,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17590,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4500 statement ok: DROP VIEW IF EXISTS view_2_tab1_768", () => {
     driver.runRecord({
@@ -58304,22 +51024,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17594,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4501 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_768') DROP VIEW view_3_tab1_768",
-      line: 17599,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17598,
         },
       ],
     })
@@ -58570,22 +51274,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4520 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_768') DROP VIEW view_1_tab2_768",
-      line: 17680,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17679,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4521 statement ok: DROP VIEW IF EXISTS view_1_tab2_768", () => {
     driver.runRecord({
@@ -58602,22 +51290,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4522 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_768') DROP VIEW view_2_tab2_768",
-      line: 17688,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17687,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4523 statement ok: DROP VIEW IF EXISTS view_2_tab2_768", () => {
     driver.runRecord({
@@ -58630,22 +51302,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17691,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4524 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_768') DROP VIEW view_3_tab2_768",
-      line: 17696,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17695,
         },
       ],
     })
@@ -58896,22 +51552,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4543 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_768') DROP VIEW view_1_tab3_768",
-      line: 17777,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17776,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4544 statement ok: DROP VIEW IF EXISTS view_1_tab3_768", () => {
     driver.runRecord({
@@ -58928,22 +51568,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4545 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_768') DROP VIEW view_2_tab3_768",
-      line: 17785,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17784,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4546 statement ok: DROP VIEW IF EXISTS view_2_tab3_768", () => {
     driver.runRecord({
@@ -58956,22 +51580,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17788,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4547 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_768') DROP VIEW view_3_tab3_768",
-      line: 17793,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17792,
         },
       ],
     })
@@ -59222,22 +51830,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4566 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_768') DROP VIEW view_1_tab4_768",
-      line: 17874,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17873,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4567 statement ok: DROP VIEW IF EXISTS view_1_tab4_768", () => {
     driver.runRecord({
@@ -59254,22 +51846,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4568 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_768') DROP VIEW view_2_tab4_768",
-      line: 17882,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17881,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4569 statement ok: DROP VIEW IF EXISTS view_2_tab4_768", () => {
     driver.runRecord({
@@ -59282,22 +51858,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17885,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4570 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_768') DROP VIEW view_3_tab4_768",
-      line: 17890,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17889,
         },
       ],
     })
@@ -59548,22 +52108,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4589 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_769') DROP VIEW view_1_tab0_769",
-      line: 17971,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17970,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4590 statement ok: DROP VIEW IF EXISTS view_1_tab0_769", () => {
     driver.runRecord({
@@ -59580,22 +52124,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4591 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_769') DROP VIEW view_2_tab0_769",
-      line: 17979,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17978,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4592 statement ok: DROP VIEW IF EXISTS view_2_tab0_769", () => {
     driver.runRecord({
@@ -59608,22 +52136,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 17982,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4593 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_769') DROP VIEW view_3_tab0_769",
-      line: 17987,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 17986,
         },
       ],
     })
@@ -59869,22 +52381,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4612 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_769') DROP VIEW view_1_tab1_769",
-      line: 18063,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18062,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4613 statement ok: DROP VIEW IF EXISTS view_1_tab1_769", () => {
     driver.runRecord({
@@ -59901,22 +52397,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4614 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_769') DROP VIEW view_2_tab1_769",
-      line: 18071,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18070,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4615 statement ok: DROP VIEW IF EXISTS view_2_tab1_769", () => {
     driver.runRecord({
@@ -59929,22 +52409,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18074,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4616 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_769') DROP VIEW view_3_tab1_769",
-      line: 18079,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18078,
         },
       ],
     })
@@ -60190,22 +52654,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4635 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_769') DROP VIEW view_1_tab2_769",
-      line: 18155,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18154,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4636 statement ok: DROP VIEW IF EXISTS view_1_tab2_769", () => {
     driver.runRecord({
@@ -60222,22 +52670,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4637 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_769') DROP VIEW view_2_tab2_769",
-      line: 18163,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18162,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4638 statement ok: DROP VIEW IF EXISTS view_2_tab2_769", () => {
     driver.runRecord({
@@ -60250,22 +52682,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18166,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4639 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_769') DROP VIEW view_3_tab2_769",
-      line: 18171,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18170,
         },
       ],
     })
@@ -60511,22 +52927,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4658 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_769') DROP VIEW view_1_tab3_769",
-      line: 18247,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18246,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4659 statement ok: DROP VIEW IF EXISTS view_1_tab3_769", () => {
     driver.runRecord({
@@ -60543,22 +52943,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4660 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_769') DROP VIEW view_2_tab3_769",
-      line: 18255,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18254,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4661 statement ok: DROP VIEW IF EXISTS view_2_tab3_769", () => {
     driver.runRecord({
@@ -60571,22 +52955,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18258,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4662 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_769') DROP VIEW view_3_tab3_769",
-      line: 18263,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18262,
         },
       ],
     })
@@ -60832,22 +53200,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4681 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_769') DROP VIEW view_1_tab4_769",
-      line: 18339,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18338,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4682 statement ok: DROP VIEW IF EXISTS view_1_tab4_769", () => {
     driver.runRecord({
@@ -60864,22 +53216,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4683 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_769') DROP VIEW view_2_tab4_769",
-      line: 18347,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18346,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4684 statement ok: DROP VIEW IF EXISTS view_2_tab4_769", () => {
     driver.runRecord({
@@ -60892,22 +53228,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18350,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4685 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_769') DROP VIEW view_3_tab4_769",
-      line: 18355,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18354,
         },
       ],
     })
@@ -61153,22 +53473,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4704 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_770') DROP VIEW view_1_tab0_770",
-      line: 18431,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18430,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4705 statement ok: DROP VIEW IF EXISTS view_1_tab0_770", () => {
     driver.runRecord({
@@ -61185,22 +53489,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4706 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_770') DROP VIEW view_2_tab0_770",
-      line: 18439,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18438,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4707 statement ok: DROP VIEW IF EXISTS view_2_tab0_770", () => {
     driver.runRecord({
@@ -61213,22 +53501,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18442,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4708 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_770') DROP VIEW view_3_tab0_770",
-      line: 18447,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18446,
         },
       ],
     })
@@ -61479,22 +53751,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4727 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_770') DROP VIEW view_1_tab1_770",
-      line: 18528,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18527,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4728 statement ok: DROP VIEW IF EXISTS view_1_tab1_770", () => {
     driver.runRecord({
@@ -61511,22 +53767,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4729 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_770') DROP VIEW view_2_tab1_770",
-      line: 18536,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18535,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4730 statement ok: DROP VIEW IF EXISTS view_2_tab1_770", () => {
     driver.runRecord({
@@ -61539,22 +53779,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18539,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4731 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_770') DROP VIEW view_3_tab1_770",
-      line: 18544,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18543,
         },
       ],
     })
@@ -61805,22 +54029,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4750 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_770') DROP VIEW view_1_tab2_770",
-      line: 18625,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18624,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4751 statement ok: DROP VIEW IF EXISTS view_1_tab2_770", () => {
     driver.runRecord({
@@ -61837,22 +54045,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4752 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_770') DROP VIEW view_2_tab2_770",
-      line: 18633,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18632,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4753 statement ok: DROP VIEW IF EXISTS view_2_tab2_770", () => {
     driver.runRecord({
@@ -61865,22 +54057,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18636,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4754 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_770') DROP VIEW view_3_tab2_770",
-      line: 18641,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18640,
         },
       ],
     })
@@ -62131,22 +54307,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4773 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_770') DROP VIEW view_1_tab3_770",
-      line: 18722,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18721,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4774 statement ok: DROP VIEW IF EXISTS view_1_tab3_770", () => {
     driver.runRecord({
@@ -62163,22 +54323,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4775 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_770') DROP VIEW view_2_tab3_770",
-      line: 18730,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18729,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4776 statement ok: DROP VIEW IF EXISTS view_2_tab3_770", () => {
     driver.runRecord({
@@ -62191,22 +54335,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18733,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4777 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_770') DROP VIEW view_3_tab3_770",
-      line: 18738,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18737,
         },
       ],
     })
@@ -62457,22 +54585,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4796 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_770') DROP VIEW view_1_tab4_770",
-      line: 18819,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18818,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4797 statement ok: DROP VIEW IF EXISTS view_1_tab4_770", () => {
     driver.runRecord({
@@ -62489,22 +54601,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4798 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_770') DROP VIEW view_2_tab4_770",
-      line: 18827,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18826,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4799 statement ok: DROP VIEW IF EXISTS view_2_tab4_770", () => {
     driver.runRecord({
@@ -62517,22 +54613,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18830,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4800 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_770') DROP VIEW view_3_tab4_770",
-      line: 18835,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18834,
         },
       ],
     })
@@ -62783,22 +54863,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4819 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_771') DROP VIEW view_1_tab0_771",
-      line: 18916,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18915,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4820 statement ok: DROP VIEW IF EXISTS view_1_tab0_771", () => {
     driver.runRecord({
@@ -62815,22 +54879,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4821 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_771') DROP VIEW view_2_tab0_771",
-      line: 18924,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18923,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4822 statement ok: DROP VIEW IF EXISTS view_2_tab0_771", () => {
     driver.runRecord({
@@ -62843,22 +54891,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 18927,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4823 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_771') DROP VIEW view_3_tab0_771",
-      line: 18932,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 18931,
         },
       ],
     })
@@ -63109,22 +55141,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4842 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_771') DROP VIEW view_1_tab1_771",
-      line: 19013,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19012,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4843 statement ok: DROP VIEW IF EXISTS view_1_tab1_771", () => {
     driver.runRecord({
@@ -63141,22 +55157,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4844 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_771') DROP VIEW view_2_tab1_771",
-      line: 19021,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19020,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4845 statement ok: DROP VIEW IF EXISTS view_2_tab1_771", () => {
     driver.runRecord({
@@ -63169,22 +55169,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19024,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4846 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_771') DROP VIEW view_3_tab1_771",
-      line: 19029,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19028,
         },
       ],
     })
@@ -63435,22 +55419,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4865 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_771') DROP VIEW view_1_tab2_771",
-      line: 19110,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19109,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4866 statement ok: DROP VIEW IF EXISTS view_1_tab2_771", () => {
     driver.runRecord({
@@ -63467,22 +55435,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4867 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_771') DROP VIEW view_2_tab2_771",
-      line: 19118,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19117,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4868 statement ok: DROP VIEW IF EXISTS view_2_tab2_771", () => {
     driver.runRecord({
@@ -63495,22 +55447,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19121,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4869 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_771') DROP VIEW view_3_tab2_771",
-      line: 19126,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19125,
         },
       ],
     })
@@ -63761,22 +55697,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4888 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_771') DROP VIEW view_1_tab3_771",
-      line: 19207,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19206,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4889 statement ok: DROP VIEW IF EXISTS view_1_tab3_771", () => {
     driver.runRecord({
@@ -63793,22 +55713,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4890 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_771') DROP VIEW view_2_tab3_771",
-      line: 19215,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19214,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4891 statement ok: DROP VIEW IF EXISTS view_2_tab3_771", () => {
     driver.runRecord({
@@ -63821,22 +55725,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19218,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4892 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_771') DROP VIEW view_3_tab3_771",
-      line: 19223,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19222,
         },
       ],
     })
@@ -64087,22 +55975,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4911 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_771') DROP VIEW view_1_tab4_771",
-      line: 19304,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19303,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4912 statement ok: DROP VIEW IF EXISTS view_1_tab4_771", () => {
     driver.runRecord({
@@ -64119,22 +55991,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4913 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_771') DROP VIEW view_2_tab4_771",
-      line: 19312,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19311,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4914 statement ok: DROP VIEW IF EXISTS view_2_tab4_771", () => {
     driver.runRecord({
@@ -64147,22 +56003,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19315,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4915 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_771') DROP VIEW view_3_tab4_771",
-      line: 19320,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19319,
         },
       ],
     })
@@ -64413,22 +56253,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4934 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_772') DROP VIEW view_1_tab0_772",
-      line: 19401,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19400,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4935 statement ok: DROP VIEW IF EXISTS view_1_tab0_772", () => {
     driver.runRecord({
@@ -64445,22 +56269,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4936 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_772') DROP VIEW view_2_tab0_772",
-      line: 19409,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19408,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4937 statement ok: DROP VIEW IF EXISTS view_2_tab0_772", () => {
     driver.runRecord({
@@ -64473,22 +56281,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19412,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4938 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_772') DROP VIEW view_3_tab0_772",
-      line: 19417,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19416,
         },
       ],
     })
@@ -64739,22 +56531,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4957 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_772') DROP VIEW view_1_tab1_772",
-      line: 19498,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19497,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4958 statement ok: DROP VIEW IF EXISTS view_1_tab1_772", () => {
     driver.runRecord({
@@ -64771,22 +56547,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4959 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_772') DROP VIEW view_2_tab1_772",
-      line: 19506,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19505,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4960 statement ok: DROP VIEW IF EXISTS view_2_tab1_772", () => {
     driver.runRecord({
@@ -64799,22 +56559,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19509,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4961 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_772') DROP VIEW view_3_tab1_772",
-      line: 19514,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19513,
         },
       ],
     })
@@ -65065,22 +56809,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#4980 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_772') DROP VIEW view_1_tab2_772",
-      line: 19595,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19594,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4981 statement ok: DROP VIEW IF EXISTS view_1_tab2_772", () => {
     driver.runRecord({
@@ -65097,22 +56825,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#4982 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_772') DROP VIEW view_2_tab2_772",
-      line: 19603,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19602,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#4983 statement ok: DROP VIEW IF EXISTS view_2_tab2_772", () => {
     driver.runRecord({
@@ -65125,22 +56837,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19606,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#4984 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_772') DROP VIEW view_3_tab2_772",
-      line: 19611,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19610,
         },
       ],
     })
@@ -65391,22 +57087,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5003 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_772') DROP VIEW view_1_tab3_772",
-      line: 19692,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19691,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5004 statement ok: DROP VIEW IF EXISTS view_1_tab3_772", () => {
     driver.runRecord({
@@ -65423,22 +57103,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5005 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_772') DROP VIEW view_2_tab3_772",
-      line: 19700,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19699,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5006 statement ok: DROP VIEW IF EXISTS view_2_tab3_772", () => {
     driver.runRecord({
@@ -65451,22 +57115,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19703,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5007 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_772') DROP VIEW view_3_tab3_772",
-      line: 19708,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19707,
         },
       ],
     })
@@ -65717,22 +57365,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5026 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_772') DROP VIEW view_1_tab4_772",
-      line: 19789,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19788,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5027 statement ok: DROP VIEW IF EXISTS view_1_tab4_772", () => {
     driver.runRecord({
@@ -65749,22 +57381,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5028 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_772') DROP VIEW view_2_tab4_772",
-      line: 19797,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19796,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5029 statement ok: DROP VIEW IF EXISTS view_2_tab4_772", () => {
     driver.runRecord({
@@ -65777,22 +57393,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19800,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5030 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_772') DROP VIEW view_3_tab4_772",
-      line: 19805,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19804,
         },
       ],
     })
@@ -66043,22 +57643,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5049 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_773') DROP VIEW view_1_tab0_773",
-      line: 19886,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19885,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5050 statement ok: DROP VIEW IF EXISTS view_1_tab0_773", () => {
     driver.runRecord({
@@ -66075,22 +57659,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5051 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_773') DROP VIEW view_2_tab0_773",
-      line: 19894,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19893,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5052 statement ok: DROP VIEW IF EXISTS view_2_tab0_773", () => {
     driver.runRecord({
@@ -66103,22 +57671,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19897,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5053 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_773') DROP VIEW view_3_tab0_773",
-      line: 19902,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19901,
         },
       ],
     })
@@ -66369,22 +57921,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5072 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_773') DROP VIEW view_1_tab1_773",
-      line: 19983,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19982,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5073 statement ok: DROP VIEW IF EXISTS view_1_tab1_773", () => {
     driver.runRecord({
@@ -66401,22 +57937,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5074 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_773') DROP VIEW view_2_tab1_773",
-      line: 19991,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19990,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5075 statement ok: DROP VIEW IF EXISTS view_2_tab1_773", () => {
     driver.runRecord({
@@ -66429,22 +57949,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 19994,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5076 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_773') DROP VIEW view_3_tab1_773",
-      line: 19999,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 19998,
         },
       ],
     })
@@ -66695,22 +58199,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5095 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_773') DROP VIEW view_1_tab2_773",
-      line: 20080,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20079,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5096 statement ok: DROP VIEW IF EXISTS view_1_tab2_773", () => {
     driver.runRecord({
@@ -66727,22 +58215,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5097 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_773') DROP VIEW view_2_tab2_773",
-      line: 20088,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20087,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5098 statement ok: DROP VIEW IF EXISTS view_2_tab2_773", () => {
     driver.runRecord({
@@ -66755,22 +58227,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20091,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5099 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_773') DROP VIEW view_3_tab2_773",
-      line: 20096,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20095,
         },
       ],
     })
@@ -67021,22 +58477,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5118 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_773') DROP VIEW view_1_tab3_773",
-      line: 20177,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20176,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5119 statement ok: DROP VIEW IF EXISTS view_1_tab3_773", () => {
     driver.runRecord({
@@ -67053,22 +58493,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5120 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_773') DROP VIEW view_2_tab3_773",
-      line: 20185,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20184,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5121 statement ok: DROP VIEW IF EXISTS view_2_tab3_773", () => {
     driver.runRecord({
@@ -67081,22 +58505,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20188,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5122 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_773') DROP VIEW view_3_tab3_773",
-      line: 20193,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20192,
         },
       ],
     })
@@ -67347,22 +58755,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5141 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_773') DROP VIEW view_1_tab4_773",
-      line: 20274,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20273,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5142 statement ok: DROP VIEW IF EXISTS view_1_tab4_773", () => {
     driver.runRecord({
@@ -67379,22 +58771,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5143 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_773') DROP VIEW view_2_tab4_773",
-      line: 20282,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20281,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5144 statement ok: DROP VIEW IF EXISTS view_2_tab4_773", () => {
     driver.runRecord({
@@ -67407,22 +58783,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20285,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5145 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_773') DROP VIEW view_3_tab4_773",
-      line: 20290,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20289,
         },
       ],
     })
@@ -67673,22 +59033,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5164 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_774') DROP VIEW view_1_tab0_774",
-      line: 20371,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20370,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5165 statement ok: DROP VIEW IF EXISTS view_1_tab0_774", () => {
     driver.runRecord({
@@ -67705,22 +59049,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5166 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_774') DROP VIEW view_2_tab0_774",
-      line: 20379,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20378,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5167 statement ok: DROP VIEW IF EXISTS view_2_tab0_774", () => {
     driver.runRecord({
@@ -67733,22 +59061,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20382,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5168 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_774') DROP VIEW view_3_tab0_774",
-      line: 20387,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20386,
         },
       ],
     })
@@ -67994,22 +59306,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5187 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_774') DROP VIEW view_1_tab1_774",
-      line: 20470,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20469,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5188 statement ok: DROP VIEW IF EXISTS view_1_tab1_774", () => {
     driver.runRecord({
@@ -68026,22 +59322,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5189 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_774') DROP VIEW view_2_tab1_774",
-      line: 20478,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20477,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5190 statement ok: DROP VIEW IF EXISTS view_2_tab1_774", () => {
     driver.runRecord({
@@ -68054,22 +59334,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20481,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5191 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_774') DROP VIEW view_3_tab1_774",
-      line: 20486,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20485,
         },
       ],
     })
@@ -68315,22 +59579,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5210 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_774') DROP VIEW view_1_tab2_774",
-      line: 20569,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20568,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5211 statement ok: DROP VIEW IF EXISTS view_1_tab2_774", () => {
     driver.runRecord({
@@ -68347,22 +59595,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5212 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_774') DROP VIEW view_2_tab2_774",
-      line: 20577,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20576,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5213 statement ok: DROP VIEW IF EXISTS view_2_tab2_774", () => {
     driver.runRecord({
@@ -68375,22 +59607,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20580,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5214 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_774') DROP VIEW view_3_tab2_774",
-      line: 20585,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20584,
         },
       ],
     })
@@ -68636,22 +59852,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5233 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_774') DROP VIEW view_1_tab3_774",
-      line: 20668,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20667,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5234 statement ok: DROP VIEW IF EXISTS view_1_tab3_774", () => {
     driver.runRecord({
@@ -68668,22 +59868,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5235 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_774') DROP VIEW view_2_tab3_774",
-      line: 20676,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20675,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5236 statement ok: DROP VIEW IF EXISTS view_2_tab3_774", () => {
     driver.runRecord({
@@ -68696,22 +59880,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20679,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5237 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_774') DROP VIEW view_3_tab3_774",
-      line: 20684,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20683,
         },
       ],
     })
@@ -68957,22 +60125,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5256 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_774') DROP VIEW view_1_tab4_774",
-      line: 20767,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20766,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5257 statement ok: DROP VIEW IF EXISTS view_1_tab4_774", () => {
     driver.runRecord({
@@ -68989,22 +60141,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5258 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_774') DROP VIEW view_2_tab4_774",
-      line: 20775,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20774,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5259 statement ok: DROP VIEW IF EXISTS view_2_tab4_774", () => {
     driver.runRecord({
@@ -69017,22 +60153,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20778,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5260 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_774') DROP VIEW view_3_tab4_774",
-      line: 20783,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20782,
         },
       ],
     })
@@ -69278,22 +60398,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5279 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_775') DROP VIEW view_1_tab0_775",
-      line: 20866,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20865,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5280 statement ok: DROP VIEW IF EXISTS view_1_tab0_775", () => {
     driver.runRecord({
@@ -69310,22 +60414,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5281 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_775') DROP VIEW view_2_tab0_775",
-      line: 20874,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20873,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5282 statement ok: DROP VIEW IF EXISTS view_2_tab0_775", () => {
     driver.runRecord({
@@ -69338,22 +60426,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20877,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5283 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_775') DROP VIEW view_3_tab0_775",
-      line: 20882,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20881,
         },
       ],
     })
@@ -69604,22 +60676,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5302 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_775') DROP VIEW view_1_tab1_775",
-      line: 20963,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20962,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5303 statement ok: DROP VIEW IF EXISTS view_1_tab1_775", () => {
     driver.runRecord({
@@ -69636,22 +60692,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5304 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_775') DROP VIEW view_2_tab1_775",
-      line: 20971,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20970,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5305 statement ok: DROP VIEW IF EXISTS view_2_tab1_775", () => {
     driver.runRecord({
@@ -69664,22 +60704,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 20974,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5306 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_775') DROP VIEW view_3_tab1_775",
-      line: 20979,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 20978,
         },
       ],
     })
@@ -69930,22 +60954,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5325 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_775') DROP VIEW view_1_tab2_775",
-      line: 21060,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21059,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5326 statement ok: DROP VIEW IF EXISTS view_1_tab2_775", () => {
     driver.runRecord({
@@ -69962,22 +60970,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5327 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_775') DROP VIEW view_2_tab2_775",
-      line: 21068,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21067,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5328 statement ok: DROP VIEW IF EXISTS view_2_tab2_775", () => {
     driver.runRecord({
@@ -69990,22 +60982,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21071,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5329 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_775') DROP VIEW view_3_tab2_775",
-      line: 21076,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21075,
         },
       ],
     })
@@ -70256,22 +61232,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5348 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_775') DROP VIEW view_1_tab3_775",
-      line: 21157,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21156,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5349 statement ok: DROP VIEW IF EXISTS view_1_tab3_775", () => {
     driver.runRecord({
@@ -70288,22 +61248,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5350 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_775') DROP VIEW view_2_tab3_775",
-      line: 21165,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21164,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5351 statement ok: DROP VIEW IF EXISTS view_2_tab3_775", () => {
     driver.runRecord({
@@ -70316,22 +61260,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21168,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5352 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_775') DROP VIEW view_3_tab3_775",
-      line: 21173,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21172,
         },
       ],
     })
@@ -70582,22 +61510,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5371 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_775') DROP VIEW view_1_tab4_775",
-      line: 21254,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21253,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5372 statement ok: DROP VIEW IF EXISTS view_1_tab4_775", () => {
     driver.runRecord({
@@ -70614,22 +61526,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5373 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_775') DROP VIEW view_2_tab4_775",
-      line: 21262,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21261,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5374 statement ok: DROP VIEW IF EXISTS view_2_tab4_775", () => {
     driver.runRecord({
@@ -70642,22 +61538,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21265,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5375 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_775') DROP VIEW view_3_tab4_775",
-      line: 21270,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21269,
         },
       ],
     })
@@ -70908,22 +61788,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5394 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_776') DROP VIEW view_1_tab0_776",
-      line: 21351,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21350,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5395 statement ok: DROP VIEW IF EXISTS view_1_tab0_776", () => {
     driver.runRecord({
@@ -70940,22 +61804,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5396 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_776') DROP VIEW view_2_tab0_776",
-      line: 21359,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21358,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5397 statement ok: DROP VIEW IF EXISTS view_2_tab0_776", () => {
     driver.runRecord({
@@ -70968,22 +61816,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21362,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5398 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_776') DROP VIEW view_3_tab0_776",
-      line: 21367,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21366,
         },
       ],
     })
@@ -71234,22 +62066,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5417 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_776') DROP VIEW view_1_tab1_776",
-      line: 21448,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21447,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5418 statement ok: DROP VIEW IF EXISTS view_1_tab1_776", () => {
     driver.runRecord({
@@ -71266,22 +62082,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5419 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_776') DROP VIEW view_2_tab1_776",
-      line: 21456,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21455,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5420 statement ok: DROP VIEW IF EXISTS view_2_tab1_776", () => {
     driver.runRecord({
@@ -71294,22 +62094,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21459,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5421 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_776') DROP VIEW view_3_tab1_776",
-      line: 21464,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21463,
         },
       ],
     })
@@ -71560,22 +62344,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5440 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_776') DROP VIEW view_1_tab2_776",
-      line: 21545,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21544,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5441 statement ok: DROP VIEW IF EXISTS view_1_tab2_776", () => {
     driver.runRecord({
@@ -71592,22 +62360,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5442 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_776') DROP VIEW view_2_tab2_776",
-      line: 21553,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21552,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5443 statement ok: DROP VIEW IF EXISTS view_2_tab2_776", () => {
     driver.runRecord({
@@ -71620,22 +62372,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21556,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5444 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_776') DROP VIEW view_3_tab2_776",
-      line: 21561,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21560,
         },
       ],
     })
@@ -71886,22 +62622,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5463 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_776') DROP VIEW view_1_tab3_776",
-      line: 21642,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21641,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5464 statement ok: DROP VIEW IF EXISTS view_1_tab3_776", () => {
     driver.runRecord({
@@ -71918,22 +62638,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5465 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_776') DROP VIEW view_2_tab3_776",
-      line: 21650,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21649,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5466 statement ok: DROP VIEW IF EXISTS view_2_tab3_776", () => {
     driver.runRecord({
@@ -71946,22 +62650,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21653,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5467 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_776') DROP VIEW view_3_tab3_776",
-      line: 21658,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21657,
         },
       ],
     })
@@ -72212,22 +62900,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5486 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_776') DROP VIEW view_1_tab4_776",
-      line: 21739,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21738,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5487 statement ok: DROP VIEW IF EXISTS view_1_tab4_776", () => {
     driver.runRecord({
@@ -72244,22 +62916,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5488 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_776') DROP VIEW view_2_tab4_776",
-      line: 21747,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21746,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5489 statement ok: DROP VIEW IF EXISTS view_2_tab4_776", () => {
     driver.runRecord({
@@ -72272,22 +62928,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21750,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5490 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_776') DROP VIEW view_3_tab4_776",
-      line: 21755,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21754,
         },
       ],
     })
@@ -72538,22 +63178,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5509 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_778') DROP VIEW view_1_tab0_778",
-      line: 21836,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21835,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5510 statement ok: DROP VIEW IF EXISTS view_1_tab0_778", () => {
     driver.runRecord({
@@ -72570,22 +63194,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5511 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_778') DROP VIEW view_2_tab0_778",
-      line: 21844,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21843,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5512 statement ok: DROP VIEW IF EXISTS view_2_tab0_778", () => {
     driver.runRecord({
@@ -72598,22 +63206,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21847,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5513 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_778') DROP VIEW view_3_tab0_778",
-      line: 21852,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21851,
         },
       ],
     })
@@ -72864,22 +63456,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5532 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_778') DROP VIEW view_1_tab1_778",
-      line: 21933,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21932,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5533 statement ok: DROP VIEW IF EXISTS view_1_tab1_778", () => {
     driver.runRecord({
@@ -72896,22 +63472,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5534 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_778') DROP VIEW view_2_tab1_778",
-      line: 21941,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21940,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5535 statement ok: DROP VIEW IF EXISTS view_2_tab1_778", () => {
     driver.runRecord({
@@ -72924,22 +63484,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 21944,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5536 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_778') DROP VIEW view_3_tab1_778",
-      line: 21949,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 21948,
         },
       ],
     })
@@ -73190,22 +63734,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5555 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_778') DROP VIEW view_1_tab2_778",
-      line: 22030,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22029,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5556 statement ok: DROP VIEW IF EXISTS view_1_tab2_778", () => {
     driver.runRecord({
@@ -73222,22 +63750,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5557 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_778') DROP VIEW view_2_tab2_778",
-      line: 22038,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22037,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5558 statement ok: DROP VIEW IF EXISTS view_2_tab2_778", () => {
     driver.runRecord({
@@ -73250,22 +63762,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22041,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5559 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_778') DROP VIEW view_3_tab2_778",
-      line: 22046,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22045,
         },
       ],
     })
@@ -73516,22 +64012,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5578 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_778') DROP VIEW view_1_tab3_778",
-      line: 22127,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22126,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5579 statement ok: DROP VIEW IF EXISTS view_1_tab3_778", () => {
     driver.runRecord({
@@ -73548,22 +64028,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5580 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_778') DROP VIEW view_2_tab3_778",
-      line: 22135,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22134,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5581 statement ok: DROP VIEW IF EXISTS view_2_tab3_778", () => {
     driver.runRecord({
@@ -73576,22 +64040,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22138,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5582 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_778') DROP VIEW view_3_tab3_778",
-      line: 22143,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22142,
         },
       ],
     })
@@ -73842,22 +64290,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5601 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_778') DROP VIEW view_1_tab4_778",
-      line: 22224,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22223,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5602 statement ok: DROP VIEW IF EXISTS view_1_tab4_778", () => {
     driver.runRecord({
@@ -73874,22 +64306,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5603 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_778') DROP VIEW view_2_tab4_778",
-      line: 22232,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22231,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5604 statement ok: DROP VIEW IF EXISTS view_2_tab4_778", () => {
     driver.runRecord({
@@ -73902,22 +64318,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22235,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5605 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_778') DROP VIEW view_3_tab4_778",
-      line: 22240,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22239,
         },
       ],
     })
@@ -74168,22 +64568,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5624 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_779') DROP VIEW view_1_tab0_779",
-      line: 22321,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22320,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5625 statement ok: DROP VIEW IF EXISTS view_1_tab0_779", () => {
     driver.runRecord({
@@ -74200,22 +64584,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5626 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_779') DROP VIEW view_2_tab0_779",
-      line: 22329,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22328,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5627 statement ok: DROP VIEW IF EXISTS view_2_tab0_779", () => {
     driver.runRecord({
@@ -74228,22 +64596,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22332,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5628 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_779') DROP VIEW view_3_tab0_779",
-      line: 22337,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22336,
         },
       ],
     })
@@ -74494,22 +64846,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5647 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_779') DROP VIEW view_1_tab1_779",
-      line: 22418,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22417,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5648 statement ok: DROP VIEW IF EXISTS view_1_tab1_779", () => {
     driver.runRecord({
@@ -74526,22 +64862,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5649 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_779') DROP VIEW view_2_tab1_779",
-      line: 22426,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22425,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5650 statement ok: DROP VIEW IF EXISTS view_2_tab1_779", () => {
     driver.runRecord({
@@ -74554,22 +64874,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22429,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5651 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_779') DROP VIEW view_3_tab1_779",
-      line: 22434,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22433,
         },
       ],
     })
@@ -74820,22 +65124,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5670 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_779') DROP VIEW view_1_tab2_779",
-      line: 22515,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22514,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5671 statement ok: DROP VIEW IF EXISTS view_1_tab2_779", () => {
     driver.runRecord({
@@ -74852,22 +65140,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5672 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_779') DROP VIEW view_2_tab2_779",
-      line: 22523,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22522,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5673 statement ok: DROP VIEW IF EXISTS view_2_tab2_779", () => {
     driver.runRecord({
@@ -74880,22 +65152,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22526,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5674 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_779') DROP VIEW view_3_tab2_779",
-      line: 22531,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22530,
         },
       ],
     })
@@ -75146,22 +65402,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5693 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_779') DROP VIEW view_1_tab3_779",
-      line: 22612,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22611,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5694 statement ok: DROP VIEW IF EXISTS view_1_tab3_779", () => {
     driver.runRecord({
@@ -75178,22 +65418,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5695 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_779') DROP VIEW view_2_tab3_779",
-      line: 22620,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22619,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5696 statement ok: DROP VIEW IF EXISTS view_2_tab3_779", () => {
     driver.runRecord({
@@ -75206,22 +65430,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22623,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5697 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_779') DROP VIEW view_3_tab3_779",
-      line: 22628,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22627,
         },
       ],
     })
@@ -75472,22 +65680,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5716 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_779') DROP VIEW view_1_tab4_779",
-      line: 22709,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22708,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5717 statement ok: DROP VIEW IF EXISTS view_1_tab4_779", () => {
     driver.runRecord({
@@ -75504,22 +65696,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5718 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_779') DROP VIEW view_2_tab4_779",
-      line: 22717,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22716,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5719 statement ok: DROP VIEW IF EXISTS view_2_tab4_779", () => {
     driver.runRecord({
@@ -75532,22 +65708,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22720,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5720 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_779') DROP VIEW view_3_tab4_779",
-      line: 22725,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22724,
         },
       ],
     })
@@ -75798,22 +65958,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5739 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_780') DROP VIEW view_1_tab0_780",
-      line: 22806,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22805,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5740 statement ok: DROP VIEW IF EXISTS view_1_tab0_780", () => {
     driver.runRecord({
@@ -75830,22 +65974,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5741 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_780') DROP VIEW view_2_tab0_780",
-      line: 22814,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22813,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5742 statement ok: DROP VIEW IF EXISTS view_2_tab0_780", () => {
     driver.runRecord({
@@ -75858,22 +65986,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22817,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5743 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_780') DROP VIEW view_3_tab0_780",
-      line: 22822,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22821,
         },
       ],
     })
@@ -76124,22 +66236,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5762 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_780') DROP VIEW view_1_tab1_780",
-      line: 22903,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22902,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5763 statement ok: DROP VIEW IF EXISTS view_1_tab1_780", () => {
     driver.runRecord({
@@ -76156,22 +66252,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5764 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_780') DROP VIEW view_2_tab1_780",
-      line: 22911,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22910,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5765 statement ok: DROP VIEW IF EXISTS view_2_tab1_780", () => {
     driver.runRecord({
@@ -76184,22 +66264,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 22914,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5766 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_780') DROP VIEW view_3_tab1_780",
-      line: 22919,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22918,
         },
       ],
     })
@@ -76450,22 +66514,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5785 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_780') DROP VIEW view_1_tab2_780",
-      line: 23000,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 22999,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5786 statement ok: DROP VIEW IF EXISTS view_1_tab2_780", () => {
     driver.runRecord({
@@ -76482,22 +66530,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5787 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_780') DROP VIEW view_2_tab2_780",
-      line: 23008,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23007,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5788 statement ok: DROP VIEW IF EXISTS view_2_tab2_780", () => {
     driver.runRecord({
@@ -76510,22 +66542,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23011,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5789 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_780') DROP VIEW view_3_tab2_780",
-      line: 23016,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23015,
         },
       ],
     })
@@ -76776,22 +66792,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5808 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_780') DROP VIEW view_1_tab3_780",
-      line: 23097,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23096,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5809 statement ok: DROP VIEW IF EXISTS view_1_tab3_780", () => {
     driver.runRecord({
@@ -76808,22 +66808,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5810 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_780') DROP VIEW view_2_tab3_780",
-      line: 23105,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23104,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5811 statement ok: DROP VIEW IF EXISTS view_2_tab3_780", () => {
     driver.runRecord({
@@ -76836,22 +66820,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23108,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5812 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_780') DROP VIEW view_3_tab3_780",
-      line: 23113,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23112,
         },
       ],
     })
@@ -77102,22 +67070,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5831 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_780') DROP VIEW view_1_tab4_780",
-      line: 23194,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23193,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5832 statement ok: DROP VIEW IF EXISTS view_1_tab4_780", () => {
     driver.runRecord({
@@ -77134,22 +67086,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5833 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_780') DROP VIEW view_2_tab4_780",
-      line: 23202,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23201,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5834 statement ok: DROP VIEW IF EXISTS view_2_tab4_780", () => {
     driver.runRecord({
@@ -77162,22 +67098,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23205,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5835 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_780') DROP VIEW view_3_tab4_780",
-      line: 23210,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23209,
         },
       ],
     })
@@ -77428,22 +67348,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5854 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_781') DROP VIEW view_1_tab0_781",
-      line: 23291,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23290,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5855 statement ok: DROP VIEW IF EXISTS view_1_tab0_781", () => {
     driver.runRecord({
@@ -77460,22 +67364,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5856 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_781') DROP VIEW view_2_tab0_781",
-      line: 23299,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23298,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5857 statement ok: DROP VIEW IF EXISTS view_2_tab0_781", () => {
     driver.runRecord({
@@ -77488,22 +67376,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23302,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5858 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_781') DROP VIEW view_3_tab0_781",
-      line: 23307,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23306,
         },
       ],
     })
@@ -77749,22 +67621,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5877 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_781') DROP VIEW view_1_tab1_781",
-      line: 23383,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23382,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5878 statement ok: DROP VIEW IF EXISTS view_1_tab1_781", () => {
     driver.runRecord({
@@ -77781,22 +67637,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5879 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_781') DROP VIEW view_2_tab1_781",
-      line: 23391,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23390,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5880 statement ok: DROP VIEW IF EXISTS view_2_tab1_781", () => {
     driver.runRecord({
@@ -77809,22 +67649,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23394,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5881 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_781') DROP VIEW view_3_tab1_781",
-      line: 23399,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23398,
         },
       ],
     })
@@ -78070,22 +67894,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5900 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_781') DROP VIEW view_1_tab2_781",
-      line: 23475,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23474,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5901 statement ok: DROP VIEW IF EXISTS view_1_tab2_781", () => {
     driver.runRecord({
@@ -78102,22 +67910,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5902 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_781') DROP VIEW view_2_tab2_781",
-      line: 23483,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23482,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5903 statement ok: DROP VIEW IF EXISTS view_2_tab2_781", () => {
     driver.runRecord({
@@ -78130,22 +67922,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23486,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5904 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_781') DROP VIEW view_3_tab2_781",
-      line: 23491,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23490,
         },
       ],
     })
@@ -78391,22 +68167,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5923 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_781') DROP VIEW view_1_tab3_781",
-      line: 23567,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23566,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5924 statement ok: DROP VIEW IF EXISTS view_1_tab3_781", () => {
     driver.runRecord({
@@ -78423,22 +68183,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5925 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_781') DROP VIEW view_2_tab3_781",
-      line: 23575,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23574,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5926 statement ok: DROP VIEW IF EXISTS view_2_tab3_781", () => {
     driver.runRecord({
@@ -78451,22 +68195,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23578,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5927 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_781') DROP VIEW view_3_tab3_781",
-      line: 23583,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23582,
         },
       ],
     })
@@ -78712,22 +68440,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5946 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_781') DROP VIEW view_1_tab4_781",
-      line: 23659,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23658,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5947 statement ok: DROP VIEW IF EXISTS view_1_tab4_781", () => {
     driver.runRecord({
@@ -78744,22 +68456,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5948 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_781') DROP VIEW view_2_tab4_781",
-      line: 23667,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23666,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5949 statement ok: DROP VIEW IF EXISTS view_2_tab4_781", () => {
     driver.runRecord({
@@ -78772,22 +68468,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23670,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5950 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_781') DROP VIEW view_3_tab4_781",
-      line: 23675,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23674,
         },
       ],
     })
@@ -79033,22 +68713,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5969 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_782') DROP VIEW view_1_tab0_782",
-      line: 23751,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23750,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5970 statement ok: DROP VIEW IF EXISTS view_1_tab0_782", () => {
     driver.runRecord({
@@ -79065,22 +68729,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5971 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_782') DROP VIEW view_2_tab0_782",
-      line: 23759,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23758,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5972 statement ok: DROP VIEW IF EXISTS view_2_tab0_782", () => {
     driver.runRecord({
@@ -79093,22 +68741,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23762,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5973 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_782') DROP VIEW view_3_tab0_782",
-      line: 23767,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23766,
         },
       ],
     })
@@ -79359,22 +68991,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#5992 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_782') DROP VIEW view_1_tab1_782",
-      line: 23848,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23847,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5993 statement ok: DROP VIEW IF EXISTS view_1_tab1_782", () => {
     driver.runRecord({
@@ -79391,22 +69007,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#5994 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_782') DROP VIEW view_2_tab1_782",
-      line: 23856,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23855,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#5995 statement ok: DROP VIEW IF EXISTS view_2_tab1_782", () => {
     driver.runRecord({
@@ -79419,22 +69019,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23859,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#5996 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_782') DROP VIEW view_3_tab1_782",
-      line: 23864,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23863,
         },
       ],
     })
@@ -79685,22 +69269,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6015 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_782') DROP VIEW view_1_tab2_782",
-      line: 23945,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23944,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6016 statement ok: DROP VIEW IF EXISTS view_1_tab2_782", () => {
     driver.runRecord({
@@ -79717,22 +69285,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6017 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_782') DROP VIEW view_2_tab2_782",
-      line: 23953,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23952,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6018 statement ok: DROP VIEW IF EXISTS view_2_tab2_782", () => {
     driver.runRecord({
@@ -79745,22 +69297,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 23956,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6019 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_782') DROP VIEW view_3_tab2_782",
-      line: 23961,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 23960,
         },
       ],
     })
@@ -80011,22 +69547,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6038 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_782') DROP VIEW view_1_tab3_782",
-      line: 24042,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24041,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6039 statement ok: DROP VIEW IF EXISTS view_1_tab3_782", () => {
     driver.runRecord({
@@ -80043,22 +69563,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6040 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_782') DROP VIEW view_2_tab3_782",
-      line: 24050,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24049,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6041 statement ok: DROP VIEW IF EXISTS view_2_tab3_782", () => {
     driver.runRecord({
@@ -80071,22 +69575,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24053,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6042 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_782') DROP VIEW view_3_tab3_782",
-      line: 24058,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24057,
         },
       ],
     })
@@ -80337,22 +69825,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6061 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_782') DROP VIEW view_1_tab4_782",
-      line: 24139,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24138,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6062 statement ok: DROP VIEW IF EXISTS view_1_tab4_782", () => {
     driver.runRecord({
@@ -80369,22 +69841,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6063 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_782') DROP VIEW view_2_tab4_782",
-      line: 24147,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24146,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6064 statement ok: DROP VIEW IF EXISTS view_2_tab4_782", () => {
     driver.runRecord({
@@ -80397,22 +69853,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24150,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6065 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_782') DROP VIEW view_3_tab4_782",
-      line: 24155,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24154,
         },
       ],
     })
@@ -80663,22 +70103,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6084 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_783') DROP VIEW view_1_tab0_783",
-      line: 24236,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24235,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6085 statement ok: DROP VIEW IF EXISTS view_1_tab0_783", () => {
     driver.runRecord({
@@ -80695,22 +70119,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6086 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_783') DROP VIEW view_2_tab0_783",
-      line: 24244,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24243,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6087 statement ok: DROP VIEW IF EXISTS view_2_tab0_783", () => {
     driver.runRecord({
@@ -80723,22 +70131,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24247,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6088 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_783') DROP VIEW view_3_tab0_783",
-      line: 24252,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24251,
         },
       ],
     })
@@ -80989,22 +70381,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6107 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_783') DROP VIEW view_1_tab1_783",
-      line: 24333,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24332,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6108 statement ok: DROP VIEW IF EXISTS view_1_tab1_783", () => {
     driver.runRecord({
@@ -81021,22 +70397,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6109 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_783') DROP VIEW view_2_tab1_783",
-      line: 24341,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24340,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6110 statement ok: DROP VIEW IF EXISTS view_2_tab1_783", () => {
     driver.runRecord({
@@ -81049,22 +70409,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24344,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6111 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_783') DROP VIEW view_3_tab1_783",
-      line: 24349,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24348,
         },
       ],
     })
@@ -81315,22 +70659,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6130 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_783') DROP VIEW view_1_tab2_783",
-      line: 24430,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24429,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6131 statement ok: DROP VIEW IF EXISTS view_1_tab2_783", () => {
     driver.runRecord({
@@ -81347,22 +70675,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6132 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_783') DROP VIEW view_2_tab2_783",
-      line: 24438,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24437,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6133 statement ok: DROP VIEW IF EXISTS view_2_tab2_783", () => {
     driver.runRecord({
@@ -81375,22 +70687,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24441,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6134 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_783') DROP VIEW view_3_tab2_783",
-      line: 24446,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24445,
         },
       ],
     })
@@ -81641,22 +70937,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6153 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_783') DROP VIEW view_1_tab3_783",
-      line: 24527,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24526,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6154 statement ok: DROP VIEW IF EXISTS view_1_tab3_783", () => {
     driver.runRecord({
@@ -81673,22 +70953,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6155 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_783') DROP VIEW view_2_tab3_783",
-      line: 24535,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24534,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6156 statement ok: DROP VIEW IF EXISTS view_2_tab3_783", () => {
     driver.runRecord({
@@ -81701,22 +70965,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24538,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6157 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_783') DROP VIEW view_3_tab3_783",
-      line: 24543,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24542,
         },
       ],
     })
@@ -81967,22 +71215,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6176 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_783') DROP VIEW view_1_tab4_783",
-      line: 24624,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24623,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6177 statement ok: DROP VIEW IF EXISTS view_1_tab4_783", () => {
     driver.runRecord({
@@ -81999,22 +71231,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6178 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_783') DROP VIEW view_2_tab4_783",
-      line: 24632,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24631,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6179 statement ok: DROP VIEW IF EXISTS view_2_tab4_783", () => {
     driver.runRecord({
@@ -82027,22 +71243,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24635,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6180 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_783') DROP VIEW view_3_tab4_783",
-      line: 24640,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24639,
         },
       ],
     })
@@ -82293,22 +71493,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6199 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_784') DROP VIEW view_1_tab0_784",
-      line: 24721,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24720,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6200 statement ok: DROP VIEW IF EXISTS view_1_tab0_784", () => {
     driver.runRecord({
@@ -82325,22 +71509,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6201 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_784') DROP VIEW view_2_tab0_784",
-      line: 24729,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24728,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6202 statement ok: DROP VIEW IF EXISTS view_2_tab0_784", () => {
     driver.runRecord({
@@ -82353,22 +71521,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24732,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6203 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_784') DROP VIEW view_3_tab0_784",
-      line: 24737,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24736,
         },
       ],
     })
@@ -82619,22 +71771,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6222 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_784') DROP VIEW view_1_tab1_784",
-      line: 24818,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24817,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6223 statement ok: DROP VIEW IF EXISTS view_1_tab1_784", () => {
     driver.runRecord({
@@ -82651,22 +71787,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6224 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_784') DROP VIEW view_2_tab1_784",
-      line: 24826,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24825,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6225 statement ok: DROP VIEW IF EXISTS view_2_tab1_784", () => {
     driver.runRecord({
@@ -82679,22 +71799,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24829,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6226 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_784') DROP VIEW view_3_tab1_784",
-      line: 24834,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24833,
         },
       ],
     })
@@ -82945,22 +72049,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6245 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_784') DROP VIEW view_1_tab2_784",
-      line: 24915,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24914,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6246 statement ok: DROP VIEW IF EXISTS view_1_tab2_784", () => {
     driver.runRecord({
@@ -82977,22 +72065,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6247 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_784') DROP VIEW view_2_tab2_784",
-      line: 24923,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24922,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6248 statement ok: DROP VIEW IF EXISTS view_2_tab2_784", () => {
     driver.runRecord({
@@ -83005,22 +72077,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 24926,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6249 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_784') DROP VIEW view_3_tab2_784",
-      line: 24931,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 24930,
         },
       ],
     })
@@ -83271,22 +72327,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6268 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_784') DROP VIEW view_1_tab3_784",
-      line: 25012,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25011,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6269 statement ok: DROP VIEW IF EXISTS view_1_tab3_784", () => {
     driver.runRecord({
@@ -83303,22 +72343,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6270 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_784') DROP VIEW view_2_tab3_784",
-      line: 25020,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25019,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6271 statement ok: DROP VIEW IF EXISTS view_2_tab3_784", () => {
     driver.runRecord({
@@ -83331,22 +72355,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25023,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6272 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_784') DROP VIEW view_3_tab3_784",
-      line: 25028,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25027,
         },
       ],
     })
@@ -83597,22 +72605,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6291 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_784') DROP VIEW view_1_tab4_784",
-      line: 25109,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25108,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6292 statement ok: DROP VIEW IF EXISTS view_1_tab4_784", () => {
     driver.runRecord({
@@ -83629,22 +72621,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6293 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_784') DROP VIEW view_2_tab4_784",
-      line: 25117,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25116,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6294 statement ok: DROP VIEW IF EXISTS view_2_tab4_784", () => {
     driver.runRecord({
@@ -83657,22 +72633,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25120,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6295 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_784') DROP VIEW view_3_tab4_784",
-      line: 25125,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25124,
         },
       ],
     })
@@ -83923,22 +72883,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6314 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_785') DROP VIEW view_1_tab0_785",
-      line: 25206,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25205,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6315 statement ok: DROP VIEW IF EXISTS view_1_tab0_785", () => {
     driver.runRecord({
@@ -83955,22 +72899,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6316 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_785') DROP VIEW view_2_tab0_785",
-      line: 25214,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25213,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6317 statement ok: DROP VIEW IF EXISTS view_2_tab0_785", () => {
     driver.runRecord({
@@ -83983,22 +72911,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25217,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6318 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_785') DROP VIEW view_3_tab0_785",
-      line: 25222,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25221,
         },
       ],
     })
@@ -84249,22 +73161,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6337 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_785') DROP VIEW view_1_tab1_785",
-      line: 25303,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25302,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6338 statement ok: DROP VIEW IF EXISTS view_1_tab1_785", () => {
     driver.runRecord({
@@ -84281,22 +73177,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6339 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_785') DROP VIEW view_2_tab1_785",
-      line: 25311,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25310,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6340 statement ok: DROP VIEW IF EXISTS view_2_tab1_785", () => {
     driver.runRecord({
@@ -84309,22 +73189,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25314,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6341 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_785') DROP VIEW view_3_tab1_785",
-      line: 25319,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25318,
         },
       ],
     })
@@ -84575,22 +73439,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6360 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_785') DROP VIEW view_1_tab2_785",
-      line: 25400,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25399,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6361 statement ok: DROP VIEW IF EXISTS view_1_tab2_785", () => {
     driver.runRecord({
@@ -84607,22 +73455,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6362 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_785') DROP VIEW view_2_tab2_785",
-      line: 25408,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25407,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6363 statement ok: DROP VIEW IF EXISTS view_2_tab2_785", () => {
     driver.runRecord({
@@ -84635,22 +73467,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25411,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6364 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_785') DROP VIEW view_3_tab2_785",
-      line: 25416,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25415,
         },
       ],
     })
@@ -84901,22 +73717,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6383 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_785') DROP VIEW view_1_tab3_785",
-      line: 25497,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25496,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6384 statement ok: DROP VIEW IF EXISTS view_1_tab3_785", () => {
     driver.runRecord({
@@ -84933,22 +73733,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6385 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_785') DROP VIEW view_2_tab3_785",
-      line: 25505,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25504,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6386 statement ok: DROP VIEW IF EXISTS view_2_tab3_785", () => {
     driver.runRecord({
@@ -84961,22 +73745,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25508,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6387 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_785') DROP VIEW view_3_tab3_785",
-      line: 25513,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25512,
         },
       ],
     })
@@ -85227,22 +73995,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6406 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_785') DROP VIEW view_1_tab4_785",
-      line: 25594,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25593,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6407 statement ok: DROP VIEW IF EXISTS view_1_tab4_785", () => {
     driver.runRecord({
@@ -85259,22 +74011,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6408 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_785') DROP VIEW view_2_tab4_785",
-      line: 25602,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25601,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6409 statement ok: DROP VIEW IF EXISTS view_2_tab4_785", () => {
     driver.runRecord({
@@ -85287,22 +74023,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25605,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6410 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_785') DROP VIEW view_3_tab4_785",
-      line: 25610,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25609,
         },
       ],
     })
@@ -85553,22 +74273,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6429 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_786') DROP VIEW view_1_tab0_786",
-      line: 25691,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25690,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6430 statement ok: DROP VIEW IF EXISTS view_1_tab0_786", () => {
     driver.runRecord({
@@ -85585,22 +74289,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6431 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_786') DROP VIEW view_2_tab0_786",
-      line: 25699,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25698,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6432 statement ok: DROP VIEW IF EXISTS view_2_tab0_786", () => {
     driver.runRecord({
@@ -85613,22 +74301,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25702,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6433 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_786') DROP VIEW view_3_tab0_786",
-      line: 25707,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25706,
         },
       ],
     })
@@ -85877,22 +74549,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6452 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_786') DROP VIEW view_1_tab1_786",
-      line: 25786,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25785,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6453 statement ok: DROP VIEW IF EXISTS view_1_tab1_786", () => {
     driver.runRecord({
@@ -85909,22 +74565,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6454 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_786') DROP VIEW view_2_tab1_786",
-      line: 25794,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25793,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6455 statement ok: DROP VIEW IF EXISTS view_2_tab1_786", () => {
     driver.runRecord({
@@ -85937,22 +74577,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25797,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6456 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_786') DROP VIEW view_3_tab1_786",
-      line: 25802,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25801,
         },
       ],
     })
@@ -86201,22 +74825,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6475 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_786') DROP VIEW view_1_tab2_786",
-      line: 25881,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25880,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6476 statement ok: DROP VIEW IF EXISTS view_1_tab2_786", () => {
     driver.runRecord({
@@ -86233,22 +74841,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6477 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_786') DROP VIEW view_2_tab2_786",
-      line: 25889,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25888,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6478 statement ok: DROP VIEW IF EXISTS view_2_tab2_786", () => {
     driver.runRecord({
@@ -86261,22 +74853,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25892,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6479 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_786') DROP VIEW view_3_tab2_786",
-      line: 25897,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25896,
         },
       ],
     })
@@ -86525,22 +75101,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6498 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_786') DROP VIEW view_1_tab3_786",
-      line: 25976,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25975,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6499 statement ok: DROP VIEW IF EXISTS view_1_tab3_786", () => {
     driver.runRecord({
@@ -86557,22 +75117,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6500 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_786') DROP VIEW view_2_tab3_786",
-      line: 25984,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25983,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6501 statement ok: DROP VIEW IF EXISTS view_2_tab3_786", () => {
     driver.runRecord({
@@ -86585,22 +75129,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 25987,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6502 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_786') DROP VIEW view_3_tab3_786",
-      line: 25992,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 25991,
         },
       ],
     })
@@ -86849,22 +75377,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6521 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_786') DROP VIEW view_1_tab4_786",
-      line: 26071,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26070,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6522 statement ok: DROP VIEW IF EXISTS view_1_tab4_786", () => {
     driver.runRecord({
@@ -86881,22 +75393,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6523 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_786') DROP VIEW view_2_tab4_786",
-      line: 26079,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26078,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6524 statement ok: DROP VIEW IF EXISTS view_2_tab4_786", () => {
     driver.runRecord({
@@ -86909,22 +75405,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26082,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6525 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_786') DROP VIEW view_3_tab4_786",
-      line: 26087,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26086,
         },
       ],
     })
@@ -87173,22 +75653,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6544 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_787') DROP VIEW view_1_tab0_787",
-      line: 26166,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26165,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6545 statement ok: DROP VIEW IF EXISTS view_1_tab0_787", () => {
     driver.runRecord({
@@ -87205,22 +75669,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6546 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_787') DROP VIEW view_2_tab0_787",
-      line: 26174,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26173,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6547 statement ok: DROP VIEW IF EXISTS view_2_tab0_787", () => {
     driver.runRecord({
@@ -87233,22 +75681,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26177,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6548 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_787') DROP VIEW view_3_tab0_787",
-      line: 26182,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26181,
         },
       ],
     })
@@ -87499,22 +75931,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6567 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_787') DROP VIEW view_1_tab1_787",
-      line: 26263,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26262,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6568 statement ok: DROP VIEW IF EXISTS view_1_tab1_787", () => {
     driver.runRecord({
@@ -87531,22 +75947,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6569 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_787') DROP VIEW view_2_tab1_787",
-      line: 26271,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26270,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6570 statement ok: DROP VIEW IF EXISTS view_2_tab1_787", () => {
     driver.runRecord({
@@ -87559,22 +75959,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26274,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6571 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_787') DROP VIEW view_3_tab1_787",
-      line: 26279,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26278,
         },
       ],
     })
@@ -87825,22 +76209,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6590 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_787') DROP VIEW view_1_tab2_787",
-      line: 26360,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26359,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6591 statement ok: DROP VIEW IF EXISTS view_1_tab2_787", () => {
     driver.runRecord({
@@ -87857,22 +76225,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6592 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_787') DROP VIEW view_2_tab2_787",
-      line: 26368,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26367,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6593 statement ok: DROP VIEW IF EXISTS view_2_tab2_787", () => {
     driver.runRecord({
@@ -87885,22 +76237,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26371,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6594 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_787') DROP VIEW view_3_tab2_787",
-      line: 26376,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26375,
         },
       ],
     })
@@ -88151,22 +76487,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6613 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_787') DROP VIEW view_1_tab3_787",
-      line: 26457,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26456,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6614 statement ok: DROP VIEW IF EXISTS view_1_tab3_787", () => {
     driver.runRecord({
@@ -88183,22 +76503,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6615 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_787') DROP VIEW view_2_tab3_787",
-      line: 26465,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26464,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6616 statement ok: DROP VIEW IF EXISTS view_2_tab3_787", () => {
     driver.runRecord({
@@ -88211,22 +76515,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26468,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6617 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_787') DROP VIEW view_3_tab3_787",
-      line: 26473,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26472,
         },
       ],
     })
@@ -88477,22 +76765,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6636 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_787') DROP VIEW view_1_tab4_787",
-      line: 26554,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26553,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6637 statement ok: DROP VIEW IF EXISTS view_1_tab4_787", () => {
     driver.runRecord({
@@ -88509,22 +76781,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6638 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_787') DROP VIEW view_2_tab4_787",
-      line: 26562,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26561,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6639 statement ok: DROP VIEW IF EXISTS view_2_tab4_787", () => {
     driver.runRecord({
@@ -88537,22 +76793,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26565,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6640 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_787') DROP VIEW view_3_tab4_787",
-      line: 26570,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26569,
         },
       ],
     })
@@ -88803,22 +77043,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6659 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_789') DROP VIEW view_1_tab0_789",
-      line: 26651,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26650,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6660 statement ok: DROP VIEW IF EXISTS view_1_tab0_789", () => {
     driver.runRecord({
@@ -88835,22 +77059,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6661 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_789') DROP VIEW view_2_tab0_789",
-      line: 26659,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26658,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6662 statement ok: DROP VIEW IF EXISTS view_2_tab0_789", () => {
     driver.runRecord({
@@ -88863,22 +77071,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26662,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6663 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_789') DROP VIEW view_3_tab0_789",
-      line: 26667,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26666,
         },
       ],
     })
@@ -89129,22 +77321,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6682 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_789') DROP VIEW view_1_tab1_789",
-      line: 26748,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26747,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6683 statement ok: DROP VIEW IF EXISTS view_1_tab1_789", () => {
     driver.runRecord({
@@ -89161,22 +77337,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6684 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_789') DROP VIEW view_2_tab1_789",
-      line: 26756,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26755,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6685 statement ok: DROP VIEW IF EXISTS view_2_tab1_789", () => {
     driver.runRecord({
@@ -89189,22 +77349,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26759,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6686 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_789') DROP VIEW view_3_tab1_789",
-      line: 26764,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26763,
         },
       ],
     })
@@ -89455,22 +77599,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6705 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_789') DROP VIEW view_1_tab2_789",
-      line: 26845,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26844,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6706 statement ok: DROP VIEW IF EXISTS view_1_tab2_789", () => {
     driver.runRecord({
@@ -89487,22 +77615,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6707 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_789') DROP VIEW view_2_tab2_789",
-      line: 26853,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26852,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6708 statement ok: DROP VIEW IF EXISTS view_2_tab2_789", () => {
     driver.runRecord({
@@ -89515,22 +77627,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26856,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6709 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_789') DROP VIEW view_3_tab2_789",
-      line: 26861,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26860,
         },
       ],
     })
@@ -89781,22 +77877,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6728 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_789') DROP VIEW view_1_tab3_789",
-      line: 26942,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26941,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6729 statement ok: DROP VIEW IF EXISTS view_1_tab3_789", () => {
     driver.runRecord({
@@ -89813,22 +77893,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6730 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_789') DROP VIEW view_2_tab3_789",
-      line: 26950,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26949,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6731 statement ok: DROP VIEW IF EXISTS view_2_tab3_789", () => {
     driver.runRecord({
@@ -89841,22 +77905,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 26953,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6732 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_789') DROP VIEW view_3_tab3_789",
-      line: 26958,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 26957,
         },
       ],
     })
@@ -90107,22 +78155,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6751 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_789') DROP VIEW view_1_tab4_789",
-      line: 27039,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27038,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6752 statement ok: DROP VIEW IF EXISTS view_1_tab4_789", () => {
     driver.runRecord({
@@ -90139,22 +78171,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6753 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_789') DROP VIEW view_2_tab4_789",
-      line: 27047,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27046,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6754 statement ok: DROP VIEW IF EXISTS view_2_tab4_789", () => {
     driver.runRecord({
@@ -90167,22 +78183,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27050,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6755 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_789') DROP VIEW view_3_tab4_789",
-      line: 27055,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27054,
         },
       ],
     })
@@ -90433,22 +78433,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6774 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_790') DROP VIEW view_1_tab0_790",
-      line: 27136,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27135,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6775 statement ok: DROP VIEW IF EXISTS view_1_tab0_790", () => {
     driver.runRecord({
@@ -90465,22 +78449,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6776 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_790') DROP VIEW view_2_tab0_790",
-      line: 27144,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27143,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6777 statement ok: DROP VIEW IF EXISTS view_2_tab0_790", () => {
     driver.runRecord({
@@ -90493,22 +78461,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27147,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6778 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_790') DROP VIEW view_3_tab0_790",
-      line: 27152,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27151,
         },
       ],
     })
@@ -90759,22 +78711,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6797 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_790') DROP VIEW view_1_tab1_790",
-      line: 27233,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27232,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6798 statement ok: DROP VIEW IF EXISTS view_1_tab1_790", () => {
     driver.runRecord({
@@ -90791,22 +78727,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6799 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_790') DROP VIEW view_2_tab1_790",
-      line: 27241,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27240,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6800 statement ok: DROP VIEW IF EXISTS view_2_tab1_790", () => {
     driver.runRecord({
@@ -90819,22 +78739,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27244,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6801 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_790') DROP VIEW view_3_tab1_790",
-      line: 27249,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27248,
         },
       ],
     })
@@ -91085,22 +78989,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6820 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_790') DROP VIEW view_1_tab2_790",
-      line: 27330,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27329,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6821 statement ok: DROP VIEW IF EXISTS view_1_tab2_790", () => {
     driver.runRecord({
@@ -91117,22 +79005,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6822 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_790') DROP VIEW view_2_tab2_790",
-      line: 27338,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27337,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6823 statement ok: DROP VIEW IF EXISTS view_2_tab2_790", () => {
     driver.runRecord({
@@ -91145,22 +79017,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27341,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6824 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_790') DROP VIEW view_3_tab2_790",
-      line: 27346,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27345,
         },
       ],
     })
@@ -91411,22 +79267,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6843 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_790') DROP VIEW view_1_tab3_790",
-      line: 27427,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27426,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6844 statement ok: DROP VIEW IF EXISTS view_1_tab3_790", () => {
     driver.runRecord({
@@ -91443,22 +79283,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6845 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_790') DROP VIEW view_2_tab3_790",
-      line: 27435,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27434,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6846 statement ok: DROP VIEW IF EXISTS view_2_tab3_790", () => {
     driver.runRecord({
@@ -91471,22 +79295,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27438,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6847 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_790') DROP VIEW view_3_tab3_790",
-      line: 27443,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27442,
         },
       ],
     })
@@ -91737,22 +79545,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6866 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_790') DROP VIEW view_1_tab4_790",
-      line: 27524,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27523,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6867 statement ok: DROP VIEW IF EXISTS view_1_tab4_790", () => {
     driver.runRecord({
@@ -91769,22 +79561,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6868 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_790') DROP VIEW view_2_tab4_790",
-      line: 27532,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27531,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6869 statement ok: DROP VIEW IF EXISTS view_2_tab4_790", () => {
     driver.runRecord({
@@ -91797,22 +79573,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27535,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6870 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_790') DROP VIEW view_3_tab4_790",
-      line: 27540,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27539,
         },
       ],
     })
@@ -92063,22 +79823,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6889 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_791') DROP VIEW view_1_tab0_791",
-      line: 27621,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27620,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6890 statement ok: DROP VIEW IF EXISTS view_1_tab0_791", () => {
     driver.runRecord({
@@ -92095,22 +79839,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6891 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_791') DROP VIEW view_2_tab0_791",
-      line: 27629,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27628,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6892 statement ok: DROP VIEW IF EXISTS view_2_tab0_791", () => {
     driver.runRecord({
@@ -92123,22 +79851,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27632,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6893 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_791') DROP VIEW view_3_tab0_791",
-      line: 27637,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27636,
         },
       ],
     })
@@ -92389,22 +80101,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6912 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_791') DROP VIEW view_1_tab1_791",
-      line: 27718,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27717,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6913 statement ok: DROP VIEW IF EXISTS view_1_tab1_791", () => {
     driver.runRecord({
@@ -92421,22 +80117,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6914 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_791') DROP VIEW view_2_tab1_791",
-      line: 27726,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27725,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6915 statement ok: DROP VIEW IF EXISTS view_2_tab1_791", () => {
     driver.runRecord({
@@ -92449,22 +80129,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27729,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6916 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_791') DROP VIEW view_3_tab1_791",
-      line: 27734,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27733,
         },
       ],
     })
@@ -92715,22 +80379,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6935 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_791') DROP VIEW view_1_tab2_791",
-      line: 27815,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27814,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6936 statement ok: DROP VIEW IF EXISTS view_1_tab2_791", () => {
     driver.runRecord({
@@ -92747,22 +80395,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6937 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_791') DROP VIEW view_2_tab2_791",
-      line: 27823,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27822,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6938 statement ok: DROP VIEW IF EXISTS view_2_tab2_791", () => {
     driver.runRecord({
@@ -92775,22 +80407,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27826,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6939 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_791') DROP VIEW view_3_tab2_791",
-      line: 27831,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27830,
         },
       ],
     })
@@ -93041,22 +80657,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6958 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_791') DROP VIEW view_1_tab3_791",
-      line: 27912,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27911,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6959 statement ok: DROP VIEW IF EXISTS view_1_tab3_791", () => {
     driver.runRecord({
@@ -93073,22 +80673,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6960 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_791') DROP VIEW view_2_tab3_791",
-      line: 27920,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27919,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6961 statement ok: DROP VIEW IF EXISTS view_2_tab3_791", () => {
     driver.runRecord({
@@ -93101,22 +80685,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 27923,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6962 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_791') DROP VIEW view_3_tab3_791",
-      line: 27928,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 27927,
         },
       ],
     })
@@ -93367,22 +80935,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#6981 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_791') DROP VIEW view_1_tab4_791",
-      line: 28009,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28008,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6982 statement ok: DROP VIEW IF EXISTS view_1_tab4_791", () => {
     driver.runRecord({
@@ -93399,22 +80951,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#6983 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_791') DROP VIEW view_2_tab4_791",
-      line: 28017,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28016,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#6984 statement ok: DROP VIEW IF EXISTS view_2_tab4_791", () => {
     driver.runRecord({
@@ -93427,22 +80963,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28020,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#6985 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_791') DROP VIEW view_3_tab4_791",
-      line: 28025,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28024,
         },
       ],
     })
@@ -93693,22 +81213,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7004 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_792') DROP VIEW view_1_tab0_792",
-      line: 28106,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28105,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7005 statement ok: DROP VIEW IF EXISTS view_1_tab0_792", () => {
     driver.runRecord({
@@ -93725,22 +81229,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7006 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_792') DROP VIEW view_2_tab0_792",
-      line: 28114,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28113,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7007 statement ok: DROP VIEW IF EXISTS view_2_tab0_792", () => {
     driver.runRecord({
@@ -93753,22 +81241,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28117,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7008 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_792') DROP VIEW view_3_tab0_792",
-      line: 28122,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28121,
         },
       ],
     })
@@ -94019,22 +81491,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7027 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_792') DROP VIEW view_1_tab1_792",
-      line: 28203,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28202,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7028 statement ok: DROP VIEW IF EXISTS view_1_tab1_792", () => {
     driver.runRecord({
@@ -94051,22 +81507,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7029 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_792') DROP VIEW view_2_tab1_792",
-      line: 28211,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28210,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7030 statement ok: DROP VIEW IF EXISTS view_2_tab1_792", () => {
     driver.runRecord({
@@ -94079,22 +81519,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28214,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7031 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_792') DROP VIEW view_3_tab1_792",
-      line: 28219,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28218,
         },
       ],
     })
@@ -94345,22 +81769,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7050 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_792') DROP VIEW view_1_tab2_792",
-      line: 28300,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28299,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7051 statement ok: DROP VIEW IF EXISTS view_1_tab2_792", () => {
     driver.runRecord({
@@ -94377,22 +81785,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7052 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_792') DROP VIEW view_2_tab2_792",
-      line: 28308,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28307,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7053 statement ok: DROP VIEW IF EXISTS view_2_tab2_792", () => {
     driver.runRecord({
@@ -94405,22 +81797,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28311,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7054 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_792') DROP VIEW view_3_tab2_792",
-      line: 28316,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28315,
         },
       ],
     })
@@ -94671,22 +82047,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7073 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_792') DROP VIEW view_1_tab3_792",
-      line: 28397,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28396,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7074 statement ok: DROP VIEW IF EXISTS view_1_tab3_792", () => {
     driver.runRecord({
@@ -94703,22 +82063,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7075 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_792') DROP VIEW view_2_tab3_792",
-      line: 28405,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28404,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7076 statement ok: DROP VIEW IF EXISTS view_2_tab3_792", () => {
     driver.runRecord({
@@ -94731,22 +82075,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28408,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7077 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_792') DROP VIEW view_3_tab3_792",
-      line: 28413,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28412,
         },
       ],
     })
@@ -94997,22 +82325,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7096 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_792') DROP VIEW view_1_tab4_792",
-      line: 28494,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28493,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7097 statement ok: DROP VIEW IF EXISTS view_1_tab4_792", () => {
     driver.runRecord({
@@ -95029,22 +82341,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7098 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_792') DROP VIEW view_2_tab4_792",
-      line: 28502,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28501,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7099 statement ok: DROP VIEW IF EXISTS view_2_tab4_792", () => {
     driver.runRecord({
@@ -95057,22 +82353,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28505,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7100 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_792') DROP VIEW view_3_tab4_792",
-      line: 28510,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28509,
         },
       ],
     })
@@ -95323,22 +82603,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7119 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_793') DROP VIEW view_1_tab0_793",
-      line: 28591,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28590,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7120 statement ok: DROP VIEW IF EXISTS view_1_tab0_793", () => {
     driver.runRecord({
@@ -95355,22 +82619,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7121 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_793') DROP VIEW view_2_tab0_793",
-      line: 28599,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28598,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7122 statement ok: DROP VIEW IF EXISTS view_2_tab0_793", () => {
     driver.runRecord({
@@ -95383,22 +82631,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28602,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7123 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_793') DROP VIEW view_3_tab0_793",
-      line: 28607,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28606,
         },
       ],
     })
@@ -95649,22 +82881,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7142 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_793') DROP VIEW view_1_tab1_793",
-      line: 28688,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28687,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7143 statement ok: DROP VIEW IF EXISTS view_1_tab1_793", () => {
     driver.runRecord({
@@ -95681,22 +82897,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7144 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_793') DROP VIEW view_2_tab1_793",
-      line: 28696,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28695,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7145 statement ok: DROP VIEW IF EXISTS view_2_tab1_793", () => {
     driver.runRecord({
@@ -95709,22 +82909,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28699,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7146 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_793') DROP VIEW view_3_tab1_793",
-      line: 28704,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28703,
         },
       ],
     })
@@ -95975,22 +83159,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7165 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_793') DROP VIEW view_1_tab2_793",
-      line: 28785,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28784,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7166 statement ok: DROP VIEW IF EXISTS view_1_tab2_793", () => {
     driver.runRecord({
@@ -96007,22 +83175,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7167 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_793') DROP VIEW view_2_tab2_793",
-      line: 28793,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28792,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7168 statement ok: DROP VIEW IF EXISTS view_2_tab2_793", () => {
     driver.runRecord({
@@ -96035,22 +83187,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28796,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7169 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_793') DROP VIEW view_3_tab2_793",
-      line: 28801,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28800,
         },
       ],
     })
@@ -96301,22 +83437,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7188 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_793') DROP VIEW view_1_tab3_793",
-      line: 28882,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28881,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7189 statement ok: DROP VIEW IF EXISTS view_1_tab3_793", () => {
     driver.runRecord({
@@ -96333,22 +83453,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7190 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_793') DROP VIEW view_2_tab3_793",
-      line: 28890,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28889,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7191 statement ok: DROP VIEW IF EXISTS view_2_tab3_793", () => {
     driver.runRecord({
@@ -96361,22 +83465,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28893,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7192 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_793') DROP VIEW view_3_tab3_793",
-      line: 28898,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28897,
         },
       ],
     })
@@ -96627,22 +83715,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7211 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_793') DROP VIEW view_1_tab4_793",
-      line: 28979,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28978,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7212 statement ok: DROP VIEW IF EXISTS view_1_tab4_793", () => {
     driver.runRecord({
@@ -96659,22 +83731,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7213 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_793') DROP VIEW view_2_tab4_793",
-      line: 28987,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28986,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7214 statement ok: DROP VIEW IF EXISTS view_2_tab4_793", () => {
     driver.runRecord({
@@ -96687,22 +83743,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 28990,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7215 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_793') DROP VIEW view_3_tab4_793",
-      line: 28995,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 28994,
         },
       ],
     })
@@ -96953,22 +83993,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7234 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_794') DROP VIEW view_1_tab0_794",
-      line: 29076,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29075,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7235 statement ok: DROP VIEW IF EXISTS view_1_tab0_794", () => {
     driver.runRecord({
@@ -96985,22 +84009,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7236 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_794') DROP VIEW view_2_tab0_794",
-      line: 29084,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29083,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7237 statement ok: DROP VIEW IF EXISTS view_2_tab0_794", () => {
     driver.runRecord({
@@ -97013,22 +84021,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29087,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7238 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_794') DROP VIEW view_3_tab0_794",
-      line: 29092,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29091,
         },
       ],
     })
@@ -97279,22 +84271,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7257 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_794') DROP VIEW view_1_tab1_794",
-      line: 29173,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29172,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7258 statement ok: DROP VIEW IF EXISTS view_1_tab1_794", () => {
     driver.runRecord({
@@ -97311,22 +84287,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7259 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_794') DROP VIEW view_2_tab1_794",
-      line: 29181,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29180,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7260 statement ok: DROP VIEW IF EXISTS view_2_tab1_794", () => {
     driver.runRecord({
@@ -97339,22 +84299,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29184,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7261 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_794') DROP VIEW view_3_tab1_794",
-      line: 29189,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29188,
         },
       ],
     })
@@ -97605,22 +84549,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7280 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_794') DROP VIEW view_1_tab2_794",
-      line: 29270,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29269,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7281 statement ok: DROP VIEW IF EXISTS view_1_tab2_794", () => {
     driver.runRecord({
@@ -97637,22 +84565,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7282 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_794') DROP VIEW view_2_tab2_794",
-      line: 29278,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29277,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7283 statement ok: DROP VIEW IF EXISTS view_2_tab2_794", () => {
     driver.runRecord({
@@ -97665,22 +84577,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29281,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7284 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_794') DROP VIEW view_3_tab2_794",
-      line: 29286,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29285,
         },
       ],
     })
@@ -97931,22 +84827,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7303 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_794') DROP VIEW view_1_tab3_794",
-      line: 29367,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29366,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7304 statement ok: DROP VIEW IF EXISTS view_1_tab3_794", () => {
     driver.runRecord({
@@ -97963,22 +84843,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7305 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_794') DROP VIEW view_2_tab3_794",
-      line: 29375,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29374,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7306 statement ok: DROP VIEW IF EXISTS view_2_tab3_794", () => {
     driver.runRecord({
@@ -97991,22 +84855,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29378,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7307 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_794') DROP VIEW view_3_tab3_794",
-      line: 29383,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29382,
         },
       ],
     })
@@ -98257,22 +85105,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7326 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_794') DROP VIEW view_1_tab4_794",
-      line: 29464,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29463,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7327 statement ok: DROP VIEW IF EXISTS view_1_tab4_794", () => {
     driver.runRecord({
@@ -98289,22 +85121,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7328 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_794') DROP VIEW view_2_tab4_794",
-      line: 29472,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29471,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7329 statement ok: DROP VIEW IF EXISTS view_2_tab4_794", () => {
     driver.runRecord({
@@ -98317,22 +85133,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29475,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7330 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_794') DROP VIEW view_3_tab4_794",
-      line: 29480,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29479,
         },
       ],
     })
@@ -98583,22 +85383,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7349 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_795') DROP VIEW view_1_tab0_795",
-      line: 29561,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29560,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7350 statement ok: DROP VIEW IF EXISTS view_1_tab0_795", () => {
     driver.runRecord({
@@ -98615,22 +85399,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7351 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_795') DROP VIEW view_2_tab0_795",
-      line: 29569,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29568,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7352 statement ok: DROP VIEW IF EXISTS view_2_tab0_795", () => {
     driver.runRecord({
@@ -98643,22 +85411,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29572,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7353 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_795') DROP VIEW view_3_tab0_795",
-      line: 29577,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29576,
         },
       ],
     })
@@ -98904,22 +85656,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7372 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_795') DROP VIEW view_1_tab1_795",
-      line: 29653,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29652,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7373 statement ok: DROP VIEW IF EXISTS view_1_tab1_795", () => {
     driver.runRecord({
@@ -98936,22 +85672,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7374 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_795') DROP VIEW view_2_tab1_795",
-      line: 29661,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29660,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7375 statement ok: DROP VIEW IF EXISTS view_2_tab1_795", () => {
     driver.runRecord({
@@ -98964,22 +85684,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29664,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7376 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_795') DROP VIEW view_3_tab1_795",
-      line: 29669,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29668,
         },
       ],
     })
@@ -99225,22 +85929,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7395 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_795') DROP VIEW view_1_tab2_795",
-      line: 29745,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29744,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7396 statement ok: DROP VIEW IF EXISTS view_1_tab2_795", () => {
     driver.runRecord({
@@ -99257,22 +85945,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7397 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_795') DROP VIEW view_2_tab2_795",
-      line: 29753,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29752,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7398 statement ok: DROP VIEW IF EXISTS view_2_tab2_795", () => {
     driver.runRecord({
@@ -99285,22 +85957,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29756,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7399 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_795') DROP VIEW view_3_tab2_795",
-      line: 29761,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29760,
         },
       ],
     })
@@ -99546,22 +86202,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7418 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_795') DROP VIEW view_1_tab3_795",
-      line: 29837,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29836,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7419 statement ok: DROP VIEW IF EXISTS view_1_tab3_795", () => {
     driver.runRecord({
@@ -99578,22 +86218,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7420 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_795') DROP VIEW view_2_tab3_795",
-      line: 29845,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29844,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7421 statement ok: DROP VIEW IF EXISTS view_2_tab3_795", () => {
     driver.runRecord({
@@ -99606,22 +86230,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29848,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7422 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_795') DROP VIEW view_3_tab3_795",
-      line: 29853,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29852,
         },
       ],
     })
@@ -99867,22 +86475,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7441 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_795') DROP VIEW view_1_tab4_795",
-      line: 29929,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29928,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7442 statement ok: DROP VIEW IF EXISTS view_1_tab4_795", () => {
     driver.runRecord({
@@ -99899,22 +86491,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7443 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_795') DROP VIEW view_2_tab4_795",
-      line: 29937,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29936,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7444 statement ok: DROP VIEW IF EXISTS view_2_tab4_795", () => {
     driver.runRecord({
@@ -99927,22 +86503,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 29940,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7445 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_795') DROP VIEW view_3_tab4_795",
-      line: 29945,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 29944,
         },
       ],
     })
@@ -100188,22 +86748,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7464 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_796') DROP VIEW view_1_tab0_796",
-      line: 30021,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30020,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7465 statement ok: DROP VIEW IF EXISTS view_1_tab0_796", () => {
     driver.runRecord({
@@ -100220,22 +86764,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7466 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_796') DROP VIEW view_2_tab0_796",
-      line: 30029,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30028,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7467 statement ok: DROP VIEW IF EXISTS view_2_tab0_796", () => {
     driver.runRecord({
@@ -100248,22 +86776,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30032,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7468 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_796') DROP VIEW view_3_tab0_796",
-      line: 30037,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30036,
         },
       ],
     })
@@ -100514,22 +87026,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7487 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_796') DROP VIEW view_1_tab1_796",
-      line: 30118,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30117,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7488 statement ok: DROP VIEW IF EXISTS view_1_tab1_796", () => {
     driver.runRecord({
@@ -100546,22 +87042,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7489 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_796') DROP VIEW view_2_tab1_796",
-      line: 30126,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30125,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7490 statement ok: DROP VIEW IF EXISTS view_2_tab1_796", () => {
     driver.runRecord({
@@ -100574,22 +87054,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30129,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7491 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_796') DROP VIEW view_3_tab1_796",
-      line: 30134,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30133,
         },
       ],
     })
@@ -100840,22 +87304,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7510 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_796') DROP VIEW view_1_tab2_796",
-      line: 30215,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30214,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7511 statement ok: DROP VIEW IF EXISTS view_1_tab2_796", () => {
     driver.runRecord({
@@ -100872,22 +87320,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7512 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_796') DROP VIEW view_2_tab2_796",
-      line: 30223,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30222,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7513 statement ok: DROP VIEW IF EXISTS view_2_tab2_796", () => {
     driver.runRecord({
@@ -100900,22 +87332,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30226,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7514 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_796') DROP VIEW view_3_tab2_796",
-      line: 30231,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30230,
         },
       ],
     })
@@ -101166,22 +87582,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7533 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_796') DROP VIEW view_1_tab3_796",
-      line: 30312,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30311,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7534 statement ok: DROP VIEW IF EXISTS view_1_tab3_796", () => {
     driver.runRecord({
@@ -101198,22 +87598,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7535 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_796') DROP VIEW view_2_tab3_796",
-      line: 30320,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30319,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7536 statement ok: DROP VIEW IF EXISTS view_2_tab3_796", () => {
     driver.runRecord({
@@ -101226,22 +87610,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30323,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7537 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_796') DROP VIEW view_3_tab3_796",
-      line: 30328,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30327,
         },
       ],
     })
@@ -101492,22 +87860,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7556 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_796') DROP VIEW view_1_tab4_796",
-      line: 30409,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30408,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7557 statement ok: DROP VIEW IF EXISTS view_1_tab4_796", () => {
     driver.runRecord({
@@ -101524,22 +87876,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7558 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_796') DROP VIEW view_2_tab4_796",
-      line: 30417,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30416,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7559 statement ok: DROP VIEW IF EXISTS view_2_tab4_796", () => {
     driver.runRecord({
@@ -101552,22 +87888,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30420,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7560 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_796') DROP VIEW view_3_tab4_796",
-      line: 30425,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30424,
         },
       ],
     })
@@ -101818,22 +88138,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7579 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab0_797') DROP VIEW view_1_tab0_797",
-      line: 30506,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30505,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7580 statement ok: DROP VIEW IF EXISTS view_1_tab0_797", () => {
     driver.runRecord({
@@ -101850,22 +88154,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7581 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab0_797') DROP VIEW view_2_tab0_797",
-      line: 30514,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30513,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7582 statement ok: DROP VIEW IF EXISTS view_2_tab0_797", () => {
     driver.runRecord({
@@ -101878,22 +88166,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30517,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7583 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab0_797') DROP VIEW view_3_tab0_797",
-      line: 30522,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30521,
         },
       ],
     })
@@ -102139,22 +88411,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7602 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab1_797') DROP VIEW view_1_tab1_797",
-      line: 30598,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30597,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7603 statement ok: DROP VIEW IF EXISTS view_1_tab1_797", () => {
     driver.runRecord({
@@ -102171,22 +88427,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7604 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab1_797') DROP VIEW view_2_tab1_797",
-      line: 30606,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30605,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7605 statement ok: DROP VIEW IF EXISTS view_2_tab1_797", () => {
     driver.runRecord({
@@ -102199,22 +88439,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30609,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7606 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab1_797') DROP VIEW view_3_tab1_797",
-      line: 30614,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30613,
         },
       ],
     })
@@ -102460,22 +88684,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7625 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab2_797') DROP VIEW view_1_tab2_797",
-      line: 30690,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30689,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7626 statement ok: DROP VIEW IF EXISTS view_1_tab2_797", () => {
     driver.runRecord({
@@ -102492,22 +88700,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7627 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab2_797') DROP VIEW view_2_tab2_797",
-      line: 30698,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30697,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7628 statement ok: DROP VIEW IF EXISTS view_2_tab2_797", () => {
     driver.runRecord({
@@ -102520,22 +88712,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30701,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7629 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab2_797') DROP VIEW view_3_tab2_797",
-      line: 30706,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30705,
         },
       ],
     })
@@ -102781,22 +88957,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7648 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab3_797') DROP VIEW view_1_tab3_797",
-      line: 30782,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30781,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7649 statement ok: DROP VIEW IF EXISTS view_1_tab3_797", () => {
     driver.runRecord({
@@ -102813,22 +88973,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7650 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab3_797') DROP VIEW view_2_tab3_797",
-      line: 30790,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30789,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7651 statement ok: DROP VIEW IF EXISTS view_2_tab3_797", () => {
     driver.runRecord({
@@ -102841,22 +88985,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30793,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7652 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab3_797') DROP VIEW view_3_tab3_797",
-      line: 30798,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30797,
         },
       ],
     })
@@ -103102,22 +89230,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       conditions: [],
     })
   })
-  // onlyif mssql
-  test.skip("#7671 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_1_tab4_797') DROP VIEW view_1_tab4_797",
-      line: 30874,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30873,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7672 statement ok: DROP VIEW IF EXISTS view_1_tab4_797", () => {
     driver.runRecord({
@@ -103134,22 +89246,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
       ],
     })
   })
-  // onlyif mssql
-  test.skip("#7673 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_2_tab4_797') DROP VIEW view_2_tab4_797",
-      line: 30882,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30881,
-        },
-      ],
-    })
-  })
   // skipif mssql
   test("#7674 statement ok: DROP VIEW IF EXISTS view_2_tab4_797", () => {
     driver.runRecord({
@@ -103162,22 +89258,6 @@ describe("vendor/submodule/sqllogictest/test/index/view/1000/slt_good_0.test", (
           kind: "skipif",
           engine: "mssql",
           line: 30885,
-        },
-      ],
-    })
-  })
-  // onlyif mssql
-  test.skip("#7675 statement ok: IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS…", () => {
-    driver.runRecord({
-      type: "statement",
-      expect: "ok",
-      sql: "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'view_3_tab4_797') DROP VIEW view_3_tab4_797",
-      line: 30890,
-      conditions: [
-        {
-          kind: "onlyif",
-          engine: "mssql",
-          line: 30889,
         },
       ],
     })
