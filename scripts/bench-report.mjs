@@ -23,6 +23,8 @@
 /**
  * @typedef {Object} TrialRun
  * @property {TrialStats} [stats]
+ * @property {string} name
+ * @property {*} [error]
  */
 
 /**
@@ -47,6 +49,13 @@
  */
 
 /**
+ * @typedef {Object} ProbeFailure
+ * @property {string} label
+ * @property {string} competitor
+ * @property {string} message
+ */
+
+/**
  * Walk a mitata `benchmarks` list and produce `{label, competitor, avg}`
  * rows. `alias` looks like `"<label> / <competitor>"`; split on the
  * last ` / ` so labels containing slashes survive.
@@ -56,38 +65,202 @@
 function extractTrials(benchmarks) {
   const out = []
   for (const t of benchmarks) {
-    const idx = t.alias.lastIndexOf(" / ")
-    if (idx < 0) continue
+    const parsed = parseAlias(t.alias)
+    if (!parsed) continue
     const avg = t.runs[0]?.stats?.avg
     if (avg === undefined) continue
-    out.push({ label: t.alias.slice(0, idx), competitor: t.alias.slice(idx + 3), avg })
+    out.push({ ...parsed, avg })
   }
   return out
+}
+
+/**
+ * Walk mitata results and extract benchmark functions that threw during
+ * measurement. These are different from probe failures: the parser
+ * accepted a one-shot sanity parse, then failed under timed iteration.
+ * @param {readonly Trial[]} benchmarks
+ * @returns {ProbeFailure[]}
+ */
+function extractBenchmarkFailures(benchmarks) {
+  const out = []
+  for (const t of benchmarks) {
+    for (const r of t.runs) {
+      if (!r.error) continue
+      const parsed = parseAlias(r.name ?? t.alias)
+      if (!parsed) continue
+      out.push({ ...parsed, message: errorMessage(r.error) })
+    }
+  }
+  return out
+}
+
+/** @param {unknown} error */
+function errorMessage(error) {
+  if (error && typeof error === "object" && "message" in error) {
+    return String(error.message)
+  }
+  return String(error)
+}
+
+/** @param {string} alias */
+function parseAlias(alias) {
+  const idx = alias.lastIndexOf(" / ")
+  if (idx < 0) return undefined
+  return { label: alias.slice(0, idx), competitor: alias.slice(idx + 3) }
 }
 
 const BASELINE = "ours"
 
 /**
+ * @param {readonly string[]} captured
+ * @param {readonly Trial[]} benchmarks
+ * @returns {string[]}
+ */
+export function printMarkdownRunHeaderAndLeader(captured, benchmarks) {
+  const bodyStart = captured.findIndex((line) => line.startsWith("| ") || line.startsWith("### "))
+  const header = bodyStart === -1 ? captured : captured.slice(0, bodyStart)
+  const body = bodyStart === -1 ? [] : captured.slice(bodyStart)
+  const print = (/** @type {string} */ s) => process.stdout.write(s + "\n")
+
+  for (const line of header) print(line)
+  if (header.length > 0 && header[header.length - 1] !== "") print("")
+  printLeaderSummary(benchmarks, true)
+  return body
+}
+
+/**
+ * @param {readonly Trial[]} benchmarks
+ * @param {boolean} [codeblock]
+ */
+export function printLeaderSummary(benchmarks, codeblock = false) {
+  const summary = leaderSummary(benchmarks)
+  if (!summary) return
+
+  const print = (/** @type {string} */ s) => process.stdout.write(s + "\n")
+  const width = Math.max(...summary.rows.map((r) => r.ratioText.length), 0)
+
+  print(`summary (${summary.method} across ${summary.caseCount} bench cases):`)
+  print("")
+  if (codeblock) print("```")
+  print(`leader ${summary.leader}`)
+  for (const row of summary.rows) {
+    print(`${row.ratioText.padStart(width)}x faster than ${row.competitor}`)
+  }
+  if (codeblock) print("```")
+}
+
+/**
+ * @param {readonly Trial[]} benchmarks
+ */
+function leaderSummary(benchmarks) {
+  const trials = extractTrials(benchmarks)
+  if (trials.length === 0) return undefined
+
+  const labels = [...new Set(trials.map((t) => t.label))]
+  const byCompetitor = new Map()
+  for (const t of trials) {
+    let byLabel = byCompetitor.get(t.competitor)
+    if (!byLabel) {
+      byLabel = new Map()
+      byCompetitor.set(t.competitor, byLabel)
+    }
+    byLabel.set(t.label, t.avg)
+  }
+
+  const competitors = [...byCompetitor.keys()]
+  const fullCoverage = competitors.filter((c) => byCompetitor.get(c).size === labels.length)
+  const leaderCandidates = fullCoverage.length > 0 ? fullCoverage : competitors
+  const geomeanAvg = (/** @type {string} */ c, /** @type {readonly string[]} */ ls = labels) =>
+    geomean(ls.map((l) => byCompetitor.get(c).get(l)).filter((v) => v !== undefined))
+
+  const leader = leaderCandidates.sort((a, b) => geomeanAvg(a) - geomeanAvg(b))[0]
+  if (!leader) return undefined
+
+  const rows = []
+  for (const competitor of competitors) {
+    if (competitor === leader) continue
+    const overlap = labels.filter(
+      (label) =>
+        byCompetitor.get(leader).get(label) !== undefined &&
+        byCompetitor.get(competitor).get(label) !== undefined,
+    )
+    if (overlap.length === 0) continue
+    const ratio = geomean(
+      overlap.map(
+        (label) => byCompetitor.get(competitor).get(label) / byCompetitor.get(leader).get(label),
+      ),
+    )
+    rows.push({ competitor, ratio, ratioText: ratio.toFixed(2) })
+  }
+
+  rows.sort((a, b) => a.ratio - b.ratio)
+
+  return {
+    leader,
+    rows,
+    caseCount: labels.length,
+    method: "geomean of successful per-case avg-time ratios",
+  }
+}
+
+/** @param {readonly number[]} values */
+function geomean(values) {
+  if (values.length === 0) return Infinity
+  return Math.exp(values.reduce((sum, value) => sum + Math.log(value), 0) / values.length)
+}
+
+/**
+ * @param {readonly { label: string }[]} trials
+ * @param {readonly ProbeFailure[]} failures
+ */
+function failuresForTrialLabels(trials, failures = []) {
+  const labels = new Set(trials.map((t) => t.label))
+  return uniqueFailures(failures.filter((f) => labels.has(f.label)))
+}
+
+/** @param {readonly ProbeFailure[]} failures */
+function failureMap(failures) {
+  const byKey = new Map()
+  for (const f of failures) byKey.set(`${f.label}\0${f.competitor}`, f)
+  return byKey
+}
+
+/** @param {readonly ProbeFailure[]} failures */
+function uniqueFailures(failures) {
+  const byKey = new Map()
+  for (const f of failures) byKey.set(`${f.label}\0${f.competitor}`, f)
+  return [...byKey.values()]
+}
+
+/**
  * Markdown table matching the `### Results` block in README.md: rows
  * are parsers, columns are inputs, each non-baseline cell carries a
  * `(N.N×)` slowdown factor relative to `ours`. Intended as a copy-
- * paste-into-README summary at the top of `bench-compare --md`.
+ * paste-into-README summary in `bench-compare --md`.
  * @param {readonly Trial[]} benchmarks
+ * @param {readonly ProbeFailure[]} [failures]
  */
-export function printReadmeSummaryTable(benchmarks) {
+export function printReadmeSummaryTable(benchmarks, failures = []) {
   const trials = extractTrials(benchmarks)
   if (trials.length === 0) return
 
   const labels = [...new Set(trials.map((t) => t.label))]
+  const visibleFailures = failuresForTrialLabels(trials, [
+    ...failures,
+    ...extractBenchmarkFailures(benchmarks),
+  ])
   const byKey = new Map()
   for (const t of trials) byKey.set(`${t.label}\0${t.competitor}`, t.avg)
+  const failedByKey = failureMap(visibleFailures)
 
   // Order competitors the way the README does: baseline first, then
   // the rest sorted by geometric mean of avg-time across inputs so the
   // fastest-next-to-ours lands near the top. Geometric mean because
   // sizes span four orders of magnitude (ns to ms) and an arithmetic
   // mean would be dominated by LARGE/MEDIUM.
-  const allCompetitors = [...new Set(trials.map((t) => t.competitor))]
+  const allCompetitors = [
+    ...new Set([...trials.map((t) => t.competitor), ...visibleFailures.map((f) => f.competitor)]),
+  ]
   const geomean = (/** @type {string} */ c) => {
     let log = 0
     let n = 0
@@ -121,6 +294,10 @@ export function printReadmeSummaryTable(benchmarks) {
     const row = [parserDisplay(c)]
     for (const l of labels) {
       const avg = byKey.get(`${l}\0${c}`)
+      if (failedByKey.has(`${l}\0${c}`)) {
+        row.push("FAILED")
+        continue
+      }
       if (avg === undefined) {
         row.push("—")
         continue
@@ -145,7 +322,7 @@ export function printReadmeSummaryTable(benchmarks) {
   print("### Results (README-compatible summary)")
   print("")
   print(
-    "Avg per-iteration parse time across the five inputs. Parentheticals show the slowdown factor vs ours (lower = closer to ours; ours is the baseline so it has no parenthetical).",
+    "Avg per-iteration parse time across the inputs. Parentheticals show the slowdown factor vs ours (lower = closer to ours; ours is the baseline so it has no parenthetical).",
   )
   print("")
   print(formatRow(header))
@@ -158,26 +335,36 @@ export function printReadmeSummaryTable(benchmarks) {
  * characters otherwise. Covers every competitor that produced a trial.
  * @param {readonly Trial[]} benchmarks
  * @param {boolean} [md]
+ * @param {readonly ProbeFailure[]} [failures]
  */
-export function printAggregateTable(benchmarks, md = false) {
+export function printAggregateTable(benchmarks, md = false, failures = []) {
   const trials = extractTrials(benchmarks)
   if (trials.length === 0) return
 
   const labels = [...new Set(trials.map((t) => t.label))]
-  const allCompetitors = [...new Set(trials.map((t) => t.competitor))]
+  const visibleFailures = failuresForTrialLabels(trials, [
+    ...failures,
+    ...extractBenchmarkFailures(benchmarks),
+  ])
+  const allCompetitors = [
+    ...new Set([...trials.map((t) => t.competitor), ...visibleFailures.map((f) => f.competitor)]),
+  ]
   const byKey = new Map()
   for (const t of trials) byKey.set(`${t.label}\0${t.competitor}`, t.avg)
+  const failedByKey = failureMap(visibleFailures)
 
   const cols = [{ header: "input", cell: (/** @type {string} */ l) => l }]
   for (const c of allCompetitors) {
     cols.push({
       header: c,
-      cell: (/** @type {string} */ l) => formatAvg(byKey.get(`${l}\0${c}`)),
+      cell: (/** @type {string} */ l) =>
+        failedByKey.has(`${l}\0${c}`) ? "FAILED" : formatAvg(byKey.get(`${l}\0${c}`)),
     })
     if (c !== BASELINE) {
       cols.push({
         header: `vs ${BASELINE}`,
-        cell: (/** @type {string} */ l) => formatRatio(byKey, l, c, BASELINE),
+        cell: (/** @type {string} */ l) =>
+          failedByKey.has(`${l}\0${c}`) ? "failed" : formatRatio(byKey, l, c, BASELINE),
       })
     }
   }

@@ -69,7 +69,13 @@ import applandPkg from "@appland/sql-parser/package.json" with { type: "json" }
 import nodeSqlParserPkg from "node-sql-parser/package.json" with { type: "json" }
 import pgsqlAstParserPkg from "pgsql-ast-parser/package.json" with { type: "json" }
 import { runScript } from "./utils.ts"
-import { printAggregateTable, printParserHeader, printReadmeSummaryTable } from "./bench-report.mjs"
+import {
+  printAggregateTable,
+  printLeaderSummary,
+  printMarkdownRunHeaderAndLeader,
+  printParserHeader,
+  printReadmeSummaryTable,
+} from "./bench-report.mjs"
 
 // Some packages' `exports` maps don't expose `./package.json`, which
 // Node enforces but Bun tolerates. Read directly to keep both runtimes
@@ -155,6 +161,11 @@ interface Competitor {
   readonly parse: (sql: string) => unknown
   readonly pkg: PkgInfo
 }
+interface ProbeFailure {
+  readonly label: string
+  readonly competitor: string
+  readonly message: string
+}
 const competitors: readonly Competitor[] = [
   { label: "ours", parse: (sql) => ourParse(sql), pkg: ourPkg },
   ...(liteparser && liteparserPkg
@@ -199,6 +210,7 @@ const cases = [
 // *our* parser regresses and (b) omit inputs that individual
 // competitors can't handle from the mitata runs.
 const canHandle = new Map<string, Set<string>>()
+const probeFailures: ProbeFailure[] = []
 function probe(label: string, sql: string): void {
   const ok = new Set<string>()
   for (const c of competitors) {
@@ -207,7 +219,9 @@ function probe(label: string, sql: string): void {
       ok.add(c.label)
     } catch (e) {
       if (c.label === "ours") throw e
-      console.warn(`${label}: skipping ${c.label} (${(e as Error).message})`)
+      const message = e instanceof Error ? e.message : String(e)
+      probeFailures.push({ label, competitor: c.label, message })
+      console.warn(`${label}: ${c.label} failed probe (${message})`)
     }
   }
   canHandle.set(label, ok)
@@ -223,8 +237,13 @@ function groupFor(label: string, sql: string): void {
   group(label, () => {
     summary(() => {
       for (const c of competitors) {
-        if (!ok.has(c.label)) continue
-        const b = bench(`${label} / ${c.label}`, () => do_not_optimize(c.parse(sql)))
+        const name = `${label} / ${c.label}`
+        const failure = probeFailures.find((f) => f.label === label && f.competitor === c.label)
+        const b = ok.has(c.label)
+          ? bench(name, () => do_not_optimize(c.parse(sql)))
+          : bench(name, () => {
+              throw new Error(failure?.message ?? "probe failed")
+            })
         if (c.label === "ours") b.baseline(true)
       }
     })
@@ -245,12 +264,10 @@ await runScript(
   async ({ values }) => {
     const filter = values.filter as string | undefined
     const md = Boolean(values.md)
-    if (md) printParserHeader(competitors)
 
     // Capture mitata's per-line output via its `print` hook (src/main.mjs:318)
-    // so we can emit a README-compatible summary table FIRST. Without the
-    // reorder the summary lands below five per-input tables in the CI job
-    // summary, defeating the copy-paste-into-README workflow.
+    // so markdown mode can front-load the run metadata and cross-case
+    // leader summary before the detailed per-input tables.
     const captured: string[] = []
     const result = await run({
       ...(filter ? { filter: new RegExp(filter) } : {}),
@@ -264,11 +281,20 @@ await runScript(
     })
 
     if (md) {
-      printReadmeSummaryTable(result.benchmarks)
+      const body = printMarkdownRunHeaderAndLeader(captured, result.benchmarks)
       process.stdout.write("\n")
-      for (const line of captured) process.stdout.write(line + "\n")
+      printReadmeSummaryTable(result.benchmarks, probeFailures)
+      process.stdout.write("\n")
+      for (const line of body) process.stdout.write(line + "\n")
     }
-    printAggregateTable(result.benchmarks, md)
+    printAggregateTable(result.benchmarks, md, probeFailures)
+    if (md) {
+      process.stdout.write("\n")
+      printParserHeader(competitors)
+    } else {
+      process.stdout.write("\n")
+      printLeaderSummary(result.benchmarks)
+    }
   },
 )
 

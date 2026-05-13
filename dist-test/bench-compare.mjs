@@ -10,6 +10,8 @@ import { run, bench, group, summary, do_not_optimize } from "mitata"
 import * as ours from "sqlite3-parser"
 import {
   printAggregateTable,
+  printLeaderSummary,
+  printMarkdownRunHeaderAndLeader,
   printParserHeader,
   printReadmeSummaryTable,
 } from "../scripts/bench-report.mjs"
@@ -112,6 +114,7 @@ const cases = [
 ]
 
 const canHandle = new Map()
+const probeFailures = []
 function probe(label, sql) {
   const ok = new Set()
   for (const c of competitors) {
@@ -120,7 +123,9 @@ function probe(label, sql) {
       ok.add(c.label)
     } catch (e) {
       if (c.label === "ours") throw e
-      console.warn(`${label}: skipping ${c.label} (${e.message})`)
+      const message = e instanceof Error ? e.message : String(e)
+      probeFailures.push({ label, competitor: c.label, message })
+      console.warn(`${label}: ${c.label} failed probe (${message})`)
     }
   }
   canHandle.set(label, ok)
@@ -133,8 +138,13 @@ function groupFor(label, sql) {
   group(label, () => {
     summary(() => {
       for (const c of competitors) {
-        if (!ok.has(c.label)) continue
-        const b = bench(`${label} / ${c.label}`, () => do_not_optimize(c.parse(sql)))
+        const name = `${label} / ${c.label}`
+        const failure = probeFailures.find((f) => f.label === label && f.competitor === c.label)
+        const b = ok.has(c.label)
+          ? bench(name, () => do_not_optimize(c.parse(sql)))
+          : bench(name, () => {
+              throw new Error(failure?.message ?? "probe failed")
+            })
         if (c.label === "ours") b.baseline(true)
       }
     })
@@ -153,12 +163,10 @@ const { values } = parseArgs({
 })
 
 const md = Boolean(values.md)
-if (md) printParserHeader(competitors)
 
 // Capture mitata's per-line output via its `print` hook so we can emit
-// a README-compatible summary table FIRST. Without the reorder the
-// summary would land below the five per-input tables in the CI job
-// summary, defeating the copy-paste-into-README workflow.
+// the run metadata and cross-case leader summary before the detailed
+// per-input tables in markdown mode.
 const captured = []
 const result = await run({
   ...(values.filter ? { filter: new RegExp(values.filter) } : {}),
@@ -172,8 +180,17 @@ const result = await run({
 })
 
 if (md) {
-  printReadmeSummaryTable(result.benchmarks)
+  const body = printMarkdownRunHeaderAndLeader(captured, result.benchmarks)
   process.stdout.write("\n")
-  for (const line of captured) process.stdout.write(line + "\n")
+  printReadmeSummaryTable(result.benchmarks, probeFailures)
+  process.stdout.write("\n")
+  for (const line of body) process.stdout.write(line + "\n")
 }
-printAggregateTable(result.benchmarks, md)
+printAggregateTable(result.benchmarks, md, probeFailures)
+if (md) {
+  process.stdout.write("\n")
+  printParserHeader(competitors)
+} else {
+  process.stdout.write("\n")
+  printLeaderSummary(result.benchmarks)
+}
