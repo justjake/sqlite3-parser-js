@@ -69,6 +69,17 @@ function polyglotParse(sql) {
   return result.ast
 }
 
+function formatSqlBytes(sql) {
+  const bytes = Buffer.byteLength(sql, "utf8")
+  if (bytes < 1024) return `${bytes}b`
+  const kb = bytes / 1024
+  return `${kb < 10 ? kb.toFixed(1) : kb.toFixed(0)}kb`
+}
+
+function caseLabel(name, sql) {
+  return `${name} (${formatSqlBytes(sql)})`
+}
+
 const competitors = [
   { label: "ours", parse: (sql) => ourParse(sql), pkg: ourPkg },
   { label: "sqlite-parser", parse: (sql) => sqliteParser(sql), pkg: sqliteParserPkg },
@@ -91,6 +102,14 @@ const competitors = [
   },
 ]
 
+const cases = [
+  ["tiny", TINY],
+  ["small", SMALL],
+  ["medium", MEDIUM],
+  ["large", LARGE],
+  ["deep", DEEP],
+]
+
 const canHandle = new Map()
 function probe(label, sql) {
   const ok = new Set()
@@ -106,11 +125,7 @@ function probe(label, sql) {
   canHandle.set(label, ok)
 }
 
-probe("tiny", TINY)
-probe("small", SMALL)
-probe("medium", MEDIUM)
-probe("large (wide create table)", LARGE)
-probe("deep (nested expr + subquery)", DEEP)
+for (const [name, sql] of cases) probe(caseLabel(name, sql), sql)
 
 function groupFor(label, sql) {
   const ok = canHandle.get(label) ?? new Set()
@@ -125,11 +140,7 @@ function groupFor(label, sql) {
   })
 }
 
-groupFor("tiny", TINY)
-groupFor("small", SMALL)
-groupFor("medium", MEDIUM)
-groupFor("large (wide create table)", LARGE)
-groupFor("deep (nested expr + subquery)", DEEP)
+for (const [name, sql] of cases) groupFor(caseLabel(name, sql), sql)
 
 const { values } = parseArgs({
   args: process.argv.slice(2),

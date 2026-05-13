@@ -116,6 +116,17 @@ function polyglotParse(sql: string): unknown {
   return result.ast
 }
 
+function formatSqlBytes(sql: string): string {
+  const bytes = Buffer.byteLength(sql, "utf8")
+  if (bytes < 1024) return `${bytes}b`
+  const kb = bytes / 1024
+  return `${kb < 10 ? kb.toFixed(1) : kb.toFixed(0)}kb`
+}
+
+function caseLabel(name: string, sql: string): string {
+  return `${name} (${formatSqlBytes(sql)})`
+}
+
 // Each competitor: a label, an invoker, and the package metadata used
 // for the markdown header. `ours` must come first so it becomes the
 // baseline row. The sanity loop below also uses this list to skip
@@ -167,6 +178,14 @@ const competitors: readonly Competitor[] = [
   },
 ]
 
+const cases = [
+  ["tiny", TINY],
+  ["small", SMALL],
+  ["medium", MEDIUM],
+  ["large", LARGE],
+  ["deep", DEEP],
+] as const
+
 // Probe sanity once per (input, competitor) so we (a) fail loudly if
 // *our* parser regresses and (b) omit inputs that individual
 // competitors can't handle from the mitata runs.
@@ -185,11 +204,7 @@ function probe(label: string, sql: string): void {
   canHandle.set(label, ok)
 }
 
-probe("tiny", TINY)
-probe("small", SMALL)
-probe("medium", MEDIUM)
-probe("large (wide create table)", LARGE)
-probe("deep (nested expr + subquery)", DEEP)
+for (const [name, sql] of cases) probe(caseLabel(name, sql), sql)
 
 // Each group uses mitata's `summary` wrapper so it prints a
 // "N.NNx faster/slower than <baseline>" line at the end. We mark
@@ -207,11 +222,7 @@ function groupFor(label: string, sql: string): void {
   })
 }
 
-groupFor("tiny", TINY)
-groupFor("small", SMALL)
-groupFor("medium", MEDIUM)
-groupFor("large (wide create table)", LARGE)
-groupFor("deep (nested expr + subquery)", DEEP)
+for (const [name, sql] of cases) groupFor(caseLabel(name, sql), sql)
 
 await runScript(
   import.meta.main,
