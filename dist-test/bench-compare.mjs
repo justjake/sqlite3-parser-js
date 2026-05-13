@@ -23,7 +23,7 @@ import nodeSqlParserModule from "node-sql-parser"
 import { parse as pgAstParse } from "pgsql-ast-parser"
 import { Parser as SqlParserTs, init as sqlParserTsInit } from "@guanmingchiu/sqlparser-ts"
 import { Dialect as PolyglotDialect, parse as polyglotParseRaw } from "@polyglot-sql/sdk"
-import { DEEP, LARGE, LARGE_DEEP, MEDIUM, SMALL, TINY } from "./bench-fixtures.mjs"
+import { BENCH_CASES, benchCaseLabel } from "./bench-fixtures.mjs"
 
 const { Parser: NodeSqlParser } = nodeSqlParserModule
 
@@ -71,17 +71,6 @@ function polyglotParse(sql) {
   return result.ast
 }
 
-function formatSqlBytes(sql) {
-  const bytes = Buffer.byteLength(sql, "utf8")
-  if (bytes < 1024) return `${bytes}b`
-  const kb = bytes / 1024
-  return `${kb < 10 ? kb.toFixed(1) : kb.toFixed(0)}kb`
-}
-
-function caseLabel(name, sql) {
-  return `${name} (${formatSqlBytes(sql)})`
-}
-
 const competitors = [
   { label: "ours", parse: (sql) => ourParse(sql), pkg: ourPkg },
   { label: "sqlite-parser", parse: (sql) => sqliteParser(sql), pkg: sqliteParserPkg },
@@ -104,15 +93,6 @@ const competitors = [
   },
 ]
 
-const cases = [
-  ["tiny", TINY],
-  ["small", SMALL],
-  ["medium", MEDIUM],
-  ["large", LARGE],
-  ["large-deep", LARGE_DEEP],
-  ["deep", DEEP],
-]
-
 const canHandle = new Map()
 const probeFailures = []
 function probe(label, sql) {
@@ -131,7 +111,7 @@ function probe(label, sql) {
   canHandle.set(label, ok)
 }
 
-for (const [name, sql] of cases) probe(caseLabel(name, sql), sql)
+for (const [name, sql] of BENCH_CASES) probe(benchCaseLabel(name, sql), sql)
 
 function groupFor(label, sql) {
   const ok = canHandle.get(label) ?? new Set()
@@ -151,7 +131,7 @@ function groupFor(label, sql) {
   })
 }
 
-for (const [name, sql] of cases) groupFor(caseLabel(name, sql), sql)
+for (const [name, sql] of BENCH_CASES) groupFor(benchCaseLabel(name, sql), sql)
 
 const { values } = parseArgs({
   args: process.argv.slice(2),

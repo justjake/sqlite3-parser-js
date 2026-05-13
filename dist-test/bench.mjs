@@ -6,7 +6,7 @@
 import { parseArgs } from "node:util"
 import { run, bench, group, do_not_optimize } from "mitata"
 import { parse, tokenize, lineColAt, renderCodeBlock } from "sqlite3-parser"
-import { BROKEN, LARGE, MEDIUM, SMALL, TINY } from "./bench-fixtures.mjs"
+import { BENCH_CASES, BROKEN, MEDIUM, benchCaseLabel } from "./bench-fixtures.mjs"
 
 function drainTokens(sql) {
   let count = 0
@@ -29,17 +29,15 @@ function parseErrored(sql) {
 }
 
 group("tokenize", () => {
-  bench("tiny", () => do_not_optimize(drainTokens(TINY)))
-  bench("small", () => do_not_optimize(drainTokens(SMALL)))
-  bench("medium", () => do_not_optimize(drainTokens(MEDIUM)))
-  bench("large (wide create table)", () => do_not_optimize(drainTokens(LARGE)))
+  for (const [name, sql] of BENCH_CASES) {
+    bench(benchCaseLabel(name, sql), () => do_not_optimize(drainTokens(sql)))
+  }
 })
 
 group("parse", () => {
-  bench("tiny", () => do_not_optimize(parseAccepted(TINY)))
-  bench("small", () => do_not_optimize(parseAccepted(SMALL)))
-  bench("medium", () => do_not_optimize(parseAccepted(MEDIUM)))
-  bench("large (wide create table)", () => do_not_optimize(parseAccepted(LARGE)))
+  for (const [name, sql] of BENCH_CASES) {
+    bench(benchCaseLabel(name, sql), () => do_not_optimize(parseAccepted(sql)))
+  }
 })
 
 group("error path", () => {
@@ -50,7 +48,7 @@ group("renderCodeBlock", () => {
   const commaPos = MEDIUM.indexOf(",")
   const start = lineColAt(MEDIUM, commaPos, undefined)
   const span = { offset: commaPos, length: 1, line: start.line, col: start.col }
-  bench("medium, single-char span", () =>
+  bench(`${benchCaseLabel("medium", MEDIUM)}, single-char span`, () =>
     do_not_optimize(renderCodeBlock({ source: MEDIUM }, span)))
 })
 

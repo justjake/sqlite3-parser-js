@@ -85,6 +85,26 @@ export const DEEP = `${DEEP_SUBQUERY};`
 // heuristics and renderCodeBlock-oriented diagnostics.
 export const BROKEN = "SELECT a,\n       b,\n       FROM t"
 
+export const BENCH_CASES = [
+  ["tiny", TINY],
+  ["small", SMALL],
+  ["medium", MEDIUM],
+  ["large", LARGE],
+  ["large-deep", LARGE_DEEP],
+  ["deep", DEEP],
+] as const
+
+export function formatSqlBytes(sql: string): string {
+  const bytes = Buffer.byteLength(sql, "utf8")
+  if (bytes < 1024) return `${bytes}b`
+  const kb = bytes / 1024
+  return `${kb < 10 ? kb.toFixed(1) : kb.toFixed(0)}kb`
+}
+
+export function benchCaseLabel(name: string, sql: string): string {
+  return `${name} (${formatSqlBytes(sql)})`
+}
+
 const parser = parserModuleForGrammar(parserDefs, keywordDefsJson as KeywordDefs, {})
 
 export const parse = parser.parse

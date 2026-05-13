@@ -165,13 +165,13 @@ jobs:
         shell: bash
         run: |
           {
-            echo "## Bench (${{ matrix.runtime }})"
-            echo ""
-            cat bench.md
-            echo ""
             echo "## Bench:compare (${{ matrix.runtime }})"
             echo ""
             cat bench-compare.md
+            echo ""
+            echo "## Bench (${{ matrix.runtime }})"
+            echo ""
+            cat bench.md
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload bench output

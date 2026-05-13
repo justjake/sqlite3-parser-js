@@ -67,3 +67,23 @@ const DEEP_SUBQUERY = (() => {
 export const DEEP = `${DEEP_SUBQUERY};`
 
 export const BROKEN = "SELECT a,\n       b,\n       FROM t"
+
+export const BENCH_CASES = [
+  ["tiny", TINY],
+  ["small", SMALL],
+  ["medium", MEDIUM],
+  ["large", LARGE],
+  ["large-deep", LARGE_DEEP],
+  ["deep", DEEP],
+]
+
+export function formatSqlBytes(sql) {
+  const bytes = Buffer.byteLength(sql, "utf8")
+  if (bytes < 1024) return `${bytes}b`
+  const kb = bytes / 1024
+  return `${kb < 10 ? kb.toFixed(1) : kb.toFixed(0)}kb`
+}
+
+export function benchCaseLabel(name, sql) {
+  return `${name} (${formatSqlBytes(sql)})`
+}
