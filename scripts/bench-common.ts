@@ -16,7 +16,7 @@ export const SMALL =
 
 // MEDIUM intentionally avoids window functions (`… OVER (…)`) and
 // `FILTER (WHERE …)` so every parser in bench-compare.ts can handle
-// it — sqlite-parser (2015-2017) predates both.  Everything else —
+// it — sqlite-parser (2015-2017) predates both. Everything else —
 // CTE, joins, IN lists, correlated subqueries, CASE, date() — is
 // supported across the board.
 export const MEDIUM = `
@@ -57,6 +57,13 @@ CREATE TABLE analytics_events (
   ${LARGE_METRICS}
 );
 `.trim()
+
+const LARGE_DEEP_EXPR = (() => {
+  let e = "a"
+  for (let i = 0; i < 260; i++) e = `(${e} + ${i})`
+  return e
+})()
+export const LARGE_DEEP = `SELECT ${LARGE_DEEP_EXPR} FROM t;`
 
 // Deep expression + subquery nesting. Stresses the engine's LALR
 // stack, the reducer's recursive construction, and each parser's

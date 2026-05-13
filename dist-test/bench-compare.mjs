@@ -21,7 +21,7 @@ import nodeSqlParserModule from "node-sql-parser"
 import { parse as pgAstParse } from "pgsql-ast-parser"
 import { Parser as SqlParserTs, init as sqlParserTsInit } from "@guanmingchiu/sqlparser-ts"
 import { Dialect as PolyglotDialect, parse as polyglotParseRaw } from "@polyglot-sql/sdk"
-import { DEEP, LARGE, MEDIUM, SMALL, TINY } from "./bench-fixtures.mjs"
+import { DEEP, LARGE, LARGE_DEEP, MEDIUM, SMALL, TINY } from "./bench-fixtures.mjs"
 
 const { Parser: NodeSqlParser } = nodeSqlParserModule
 
@@ -107,6 +107,7 @@ const cases = [
   ["small", SMALL],
   ["medium", MEDIUM],
   ["large", LARGE],
+  ["large-deep", LARGE_DEEP],
   ["deep", DEEP],
 ]
 

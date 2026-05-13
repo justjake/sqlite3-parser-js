@@ -41,7 +41,15 @@
 
 import { readFileSync } from "node:fs"
 import { run, bench, group, summary, do_not_optimize } from "mitata"
-import { DEEP, LARGE, MEDIUM, SMALL, TINY, parseAccepted as ourParse } from "./bench-common.ts"
+import {
+  DEEP,
+  LARGE,
+  LARGE_DEEP,
+  MEDIUM,
+  SMALL,
+  TINY,
+  parseAccepted as ourParse,
+} from "./bench-common.ts"
 // @ts-expect-error — no types shipped
 import sqliteParser from "sqlite-parser"
 // @ts-expect-error — no types shipped
@@ -183,6 +191,7 @@ const cases = [
   ["small", SMALL],
   ["medium", MEDIUM],
   ["large", LARGE],
+  ["large-deep", LARGE_DEEP],
   ["deep", DEEP],
 ] as const
 

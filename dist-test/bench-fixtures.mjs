@@ -1,4 +1,4 @@
-// Shared SQL fixtures for dist-test benchmarks.  Kept in sync with
+// Shared SQL fixtures for dist-test benchmarks. Kept in sync with
 // scripts/bench-common.ts by hand — these inputs rarely change, and
 // duplicating them keeps dist-test self-contained (no `..` imports
 // into the repo's scripts tree).
@@ -46,6 +46,13 @@ CREATE TABLE analytics_events (
   ${LARGE_METRICS}
 );
 `.trim()
+
+const LARGE_DEEP_EXPR = (() => {
+  let e = "a"
+  for (let i = 0; i < 260; i++) e = `(${e} + ${i})`
+  return e
+})()
+export const LARGE_DEEP = `SELECT ${LARGE_DEEP_EXPR} FROM t;`
 
 const DEEP_EXPR = (() => {
   let e = "a"
