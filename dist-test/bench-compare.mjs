@@ -1,8 +1,8 @@
 // Dist-test comparative benchmarks: ours (published package) vs other
-// JS/WASM SQL parsers from npm.  Omits liteparser (TypeScript ESM
+// JS/WASM SQL parsers from npm. Omits liteparser (TypeScript ESM
 // wrapper with .js-extension imports that Node can't resolve); the
 // full compare with liteparser runs via `bun run bench:compare` from
-// source.  Runs under Bun or Node — see scripts/dist-bench.ts.
+// source. Runs under Bun or Node — see scripts/dist-bench.ts.
 
 import { readFileSync } from "node:fs"
 import { parseArgs } from "node:util"
@@ -20,6 +20,7 @@ import applandParse from "@appland/sql-parser"
 import nodeSqlParserModule from "node-sql-parser"
 import { parse as pgAstParse } from "pgsql-ast-parser"
 import { Parser as SqlParserTs, init as sqlParserTsInit } from "@guanmingchiu/sqlparser-ts"
+import { Dialect as PolyglotDialect, parse as polyglotParseRaw } from "@polyglot-sql/sdk"
 import { DEEP, LARGE, MEDIUM, SMALL, TINY } from "./bench-fixtures.mjs"
 
 const { Parser: NodeSqlParser } = nodeSqlParserModule
@@ -48,6 +49,7 @@ const applandPkg = readPkg("@appland/sql-parser")
 const nodeSqlParserPkg = readPkg("node-sql-parser")
 const pgsqlAstParserPkg = readPkg("pgsql-ast-parser")
 const sqlParserTsPkg = readPkg("@guanmingchiu/sqlparser-ts")
+const polyglotPkg = readPkg("@polyglot-sql/sdk")
 
 await sqlParserTsInit()
 const nodeSql = new NodeSqlParser()
@@ -57,6 +59,14 @@ function ourParse(sql) {
   const r = ours.parse(sql)
   if (r.status !== "ok") throw new Error(`ours parse failed: ${r.errors[0]?.message}`)
   return r
+}
+
+function polyglotParse(sql) {
+  const result = polyglotParseRaw(sql, PolyglotDialect.SQLite)
+  if (!result.success) {
+    throw new Error(result.error ?? "Polyglot SQL parse failed")
+  }
+  return result.ast
 }
 
 const competitors = [
@@ -73,6 +83,11 @@ const competitors = [
     label: "@guanmingchiu/sqlparser-ts (wasm)",
     parse: (sql) => SqlParserTs.parse(sql, "sqlite"),
     pkg: sqlParserTsPkg,
+  },
+  {
+    label: "@polyglot-sql/sdk (wasm)",
+    parse: (sql) => polyglotParse(sql),
+    pkg: polyglotPkg,
   },
 ]
 

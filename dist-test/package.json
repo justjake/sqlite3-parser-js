@@ -12,6 +12,7 @@
   "devDependencies": {
     "@appland/sql-parser": "^1.5.1",
     "@guanmingchiu/sqlparser-ts": "^0.61.1",
+    "@polyglot-sql/sdk": "^0.3.9",
     "mitata": "^1.0.34",
     "node-sql-parser": "^5.4.0",
     "pgsql-ast-parser": "^12.0.2",

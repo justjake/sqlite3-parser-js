@@ -8,10 +8,10 @@
 //   2. dist-test/node_modules/sqlite3-parser is a symlink to REPO_ROOT,
 //      so the dist-test bench files resolve the package the way
 //      consumers would — through node_modules — while reading the
-//      repo's dist/ output.  CI installs the tarball instead; this
+//      repo's dist/ output. CI installs the tarball instead; this
 //      script just makes dev look the same.
 //   3. dist-test's own devDependencies (mitata + competitor parsers)
-//      are installed in dist-test/node_modules.  Uses the existing
+//      are installed in dist-test/node_modules. Uses the existing
 //      lockfile if present; runs `npm install --no-package-lock` on
 //      first setup.
 //
@@ -30,6 +30,15 @@ import { CliUsageError, REPO_ROOT, runScript } from "./utils.ts"
 
 const DIST_TEST = join(REPO_ROOT, "dist-test")
 const DIST_DIR = join(REPO_ROOT, "dist")
+const DIST_TEST_DEPS = [
+  "@appland/sql-parser",
+  "@guanmingchiu/sqlparser-ts",
+  "@polyglot-sql/sdk",
+  "mitata",
+  "node-sql-parser",
+  "pgsql-ast-parser",
+  "sqlite-parser",
+] as const
 
 function run(cmd: string, args: string[], cwd: string): void {
   const r = spawnSync(cmd, args, { cwd, stdio: "inherit" })
@@ -58,7 +67,7 @@ function ensurePackageSymlink(): void {
     const stat = lstatSync(linkPath)
     if (stat.isSymbolicLink()) return
     // A real directory is sitting where the symlink should be (probably
-    // from a prior `npm install <tarball>` run).  Replace it.
+    // from a prior `npm install <tarball>` run). Replace it.
     console.log("[dist-bench] replacing dist-test/node_modules/sqlite3-parser with repo symlink…")
     run("rm", ["-rf", linkPath], REPO_ROOT)
   }
@@ -68,8 +77,7 @@ function ensurePackageSymlink(): void {
 /** Ensure dist-test's own devDependencies are installed. */
 function ensureDistTestDeps(): void {
   const modules = join(DIST_TEST, "node_modules")
-  // Presence of mitata is a good proxy for a completed install.
-  if (existsSync(join(modules, "mitata"))) return
+  if (DIST_TEST_DEPS.every((dep) => existsSync(join(modules, ...dep.split("/"))))) return
   console.log("[dist-bench] installing dist-test devDependencies…")
   // `npm install --no-package-lock` picks up devDependencies from
   // package.json without touching or creating a lockfile in dist-test/.
@@ -77,7 +85,7 @@ function ensureDistTestDeps(): void {
   // treats extraneous modules as untracked unless --prune is passed.
   run("npm", ["install", "--no-package-lock", "--no-save"], DIST_TEST)
   // npm install may have nuked the symlink while reconciling
-  // node_modules.  Re-create it defensively.
+  // node_modules. Re-create it defensively.
   ensurePackageSymlink()
 }
 
