@@ -374,6 +374,13 @@ exports[`test/examples/create-table.sqllogictest #17 statement ok: CREATE TABLE 
           (SortedColumn
             (Id :name "b"))))
       (NamedTableConstraint
+        (Name :text "uq")
+        (UniqueTableConstraint :conflictClause "Replace"
+          (SortedColumn
+            (Id :name "a"))
+          (SortedColumn
+            (Id :name "b"))))
+      (NamedTableConstraint
         (Name :text "chk1")
         (CheckTableConstraint :conflictClause "Rollback"
           (BinaryExpr :op "Greater"

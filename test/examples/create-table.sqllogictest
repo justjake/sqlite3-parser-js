@@ -137,10 +137,12 @@ CREATE TABLE ai1(
 )
 
 # #83 tcons ::= CONSTRAINT nm (named table constraint)
+# #85 tcons ::= UNIQUE LP sortlist RP onconf
 # #86 tcons ::= CHECK LP expr RP onconf
 # #89 defer_subclause_opt ::= defer_subclause
 # #91 onconf ::= ON CONFLICT resolvetype
 # #94 resolvetype ::= IGNORE
+# #95 resolvetype ::= REPLACE
 # #397 tconscomma ::= (empty)  (fires when a named constraint has no
 #                               trailing comma before the next constraint)
 # #398 resolvetype ::= raisetype
@@ -149,6 +151,7 @@ CREATE TABLE tc1(
   a INTEGER,
   b INTEGER,
   CONSTRAINT pk PRIMARY KEY (a, b) ON CONFLICT IGNORE,
+  CONSTRAINT uq UNIQUE (a, b) ON CONFLICT REPLACE,
   CONSTRAINT chk1 CHECK (a > 0) ON CONFLICT ROLLBACK,
   FOREIGN KEY (a) REFERENCES parent(id) NOT DEFERRABLE
 )

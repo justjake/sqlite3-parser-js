@@ -319,7 +319,7 @@ export function printReadmeSummaryTable(benchmarks, failures = []) {
     "| " + r.map((cell, i) => padCell(cell, widths[i])).join(" | ") + " |"
 
   const print = (/** @type {string} */ s) => process.stdout.write(s + "\n")
-  print("### Results (README-compatible summary)")
+  print("### Results")
   print("")
   print(
     "Avg per-iteration parse time across the inputs. Parentheticals show the slowdown factor vs ours (lower = closer to ours; ours is the baseline so it has no parenthetical).",

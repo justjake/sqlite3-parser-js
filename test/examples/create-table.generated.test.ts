@@ -156,8 +156,8 @@ describe("test/examples/create-table.sqllogictest", () => {
     driver.runRecord({
       type: "statement",
       expect: "ok",
-      sql: "CREATE TABLE tc1(\n  a INTEGER,\n  b INTEGER,\n  CONSTRAINT pk PRIMARY KEY (a, b) ON CONFLICT IGNORE,\n  CONSTRAINT chk1 CHECK (a > 0) ON CONFLICT ROLLBACK,\n  FOREIGN KEY (a) REFERENCES parent(id) NOT DEFERRABLE\n)",
-      line: 147,
+      sql: "CREATE TABLE tc1(\n  a INTEGER,\n  b INTEGER,\n  CONSTRAINT pk PRIMARY KEY (a, b) ON CONFLICT IGNORE,\n  CONSTRAINT uq UNIQUE (a, b) ON CONFLICT REPLACE,\n  CONSTRAINT chk1 CHECK (a > 0) ON CONFLICT ROLLBACK,\n  FOREIGN KEY (a) REFERENCES parent(id) NOT DEFERRABLE\n)",
+      line: 149,
       conditions: [],
     })
   })
@@ -166,7 +166,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE parent_col(id TEXT)",
-      line: 161,
+      line: 164,
       conditions: [],
     })
   })
@@ -175,7 +175,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE fk_collate(\n  ref TEXT REFERENCES parent_col(id COLLATE NOCASE)\n)",
-      line: 164,
+      line: 167,
       conditions: [],
     })
   })
@@ -184,7 +184,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE TABLE t_base(a TEXT, b TEXT)",
-      line: 169,
+      line: 172,
       conditions: [],
     })
   })
@@ -193,7 +193,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "CREATE VIEW v_collate(a COLLATE NOCASE, b COLLATE BINARY DESC) AS\n  SELECT a, b FROM t_base",
-      line: 172,
+      line: 175,
       conditions: [],
     })
   })
@@ -202,7 +202,7 @@ describe("test/examples/create-table.sqllogictest", () => {
       type: "statement",
       expect: "ok",
       sql: "WITH cte_collate(a COLLATE NOCASE) AS (SELECT 'X') SELECT * FROM cte_collate",
-      line: 176,
+      line: 179,
       conditions: [],
     })
   })
